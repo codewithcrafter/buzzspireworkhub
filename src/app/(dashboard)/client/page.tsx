@@ -1,0 +1,1 @@
+export default function ClientDashboard() { return (<div><h1 className="text-3xl font-bold mb-4">Welcome, Client!</h1><p className="text-muted-foreground">Here is an overview of your projects.</p></div>); }

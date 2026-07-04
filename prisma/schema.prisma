@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String
+  role      Role      @default(CLIENT)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projects  Project[]
+  tickets   Ticket[]
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  title       String
+  description String?
+  status      ProjectStatus @default(PLANNING)
+  clientId    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  client      User          @relation(fields: [clientId], references: [id])
+}
+
+model Lead {
+  id        String     @id @default(uuid())
+  name      String
+  email     String
+  company   String?
+  message   String
+  status    LeadStatus @default(NEW)
+  createdAt DateTime   @default(now())
+}
+
+model Ticket {
+  id          String       @id @default(uuid())
+  subject     String
+  description String
+  status      TicketStatus @default(OPEN)
+  clientId    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  client      User         @relation(fields: [clientId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CLOSED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
