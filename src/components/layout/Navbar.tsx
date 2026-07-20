@@ -15,6 +15,7 @@ const navLinks = [
   { name: "Blog", href: "/blog" },
   { name: "Career", href: "/career" },
   { name: "Contact", href: "/contact" },
+  { name: "Client Portal", href: "/login" },
 ];
 
 export default function Navbar() {

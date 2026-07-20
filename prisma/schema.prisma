@@ -7,26 +7,78 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  password  String
-  name      String
-  role      Role      @default(CLIENT)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  projects  Project[]
-  tickets   Ticket[]
+  id                String    @id @default(uuid())
+  email             String    @unique
+  password          String?
+  name              String
+  company           String?
+  phone             String?
+  role              Role      @default(CLIENT)
+  invitationToken   String?   @unique
+  invitationExpires DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  projects          Project[]
+  tickets           Ticket[]
 }
 
 model Project {
-  id          String        @id @default(uuid())
+  id               String           @id @default(uuid())
+  title            String
+  description      String?
+  status           ProjectStatus    @default(PLANNING)
+  progress         Int              @default(0)
+  progressStages   Json?            // Stores stages like { "Planning": "Completed", "Design": "80%" }
+  clientId         String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  client           User             @relation(fields: [clientId], references: [id])
+  
+  // Visibility toggles
+  showTimeline     Boolean          @default(true)
+  showFiles        Boolean          @default(true)
+  showInvoices     Boolean          @default(true)
+  showPayments     Boolean          @default(true)
+  showProgress     Boolean          @default(true)
+  showMessages     Boolean          @default(true)
+  showTickets      Boolean          @default(true)
+  showDownloads    Boolean          @default(true)
+  showDeliverables Boolean          @default(true)
+
+  updates          ProjectUpdate[]
+  files            ProjectFile[]
+  messages         ProjectMessage[]
+}
+
+model ProjectUpdate {
+  id          String   @id @default(uuid())
+  projectId   String
   title       String
-  description String?
-  status      ProjectStatus @default(PLANNING)
-  clientId    String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  client      User          @relation(fields: [clientId], references: [id])
+  description String
+  createdAt   DateTime @default(now())
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ProjectFile {
+  id             String   @id @default(uuid())
+  projectId      String
+  name           String
+  url            String
+  size           Int
+  category       String   // e.g. PDF, ZIP, Image, Video, Source
+  clientVisible  Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ProjectMessage {
+  id          String   @id @default(uuid())
+  projectId   String
+  senderId    String
+  recipientId String
+  text        String
+  createdAt   DateTime @default(now())
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 model Lead {
@@ -40,14 +92,24 @@ model Lead {
 }
 
 model Ticket {
-  id          String       @id @default(uuid())
+  id          String        @id @default(uuid())
   subject     String
   description String
-  status      TicketStatus @default(OPEN)
+  status      TicketStatus  @default(OPEN)
   clientId    String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  client      User         @relation(fields: [clientId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  client      User          @relation(fields: [clientId], references: [id])
+  replies     TicketReply[]
+}
+
+model TicketReply {
+  id        String   @id @default(uuid())
+  ticketId  String
+  senderId  String
+  text      String
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
@@ -75,3 +137,30 @@ enum TicketStatus {
   RESOLVED
   CLOSED
 }
+
+model Blog {
+  id              String     @id @default(uuid())
+  title           String
+  slug            String     @unique
+  excerpt         String
+  content         String
+  featuredImage   String?
+  category        String
+  tags            String[]
+  author          String
+  readTime        Int        @default(5)
+  seoTitle        String?
+  metaDescription String?
+  status          BlogStatus @default(DRAFT)
+  isFeatured      Boolean    @default(false)
+  publishedAt     DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+

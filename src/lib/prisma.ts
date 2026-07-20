@@ -15,5 +15,9 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
+console.log("===== PRISMA DELEGATES =====");
+console.log(Object.keys(prisma).sort());
+console.log("blog delegate:", (prisma as any).blog);
+console.log("============================");
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

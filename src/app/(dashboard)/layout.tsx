@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, Settings, Users, Briefcase, FileText } from "lucide-react";
+import { LayoutDashboard, LogOut, Settings, Users, Briefcase, FileText, Sparkles, UserCheck, GraduationCap, Mail, Bell } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -11,20 +11,27 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const isAdmin = pathname.startsWith("/admin");
-  const prefix = isAdmin ? "/admin" : "/client";
+  const prefix = isAdmin ? "/admin" : "/dashboard/client";
 
   const menuItems = isAdmin
     ? [
       { name: "Dashboard", icon: LayoutDashboard, path: "/admin" },
       { name: "Leads", icon: Users, path: "/admin/leads" },
+      { name: "Clients", icon: UserCheck, path: "/admin/clients" },
+      { name: "Projects", icon: Briefcase, path: "/admin/projects" },
+      { name: "Blog CMS", icon: FileText, path: "/admin/blog" },
+      { name: "Careers", icon: GraduationCap, path: "/admin/careers" },
+      { name: "Inbox", icon: Mail, path: "/admin/inbox" },
+      { name: "Notifications", icon: Bell, path: "/admin/notifications" },
       { name: "Analytics", icon: FileText, path: "/admin/analytics" },
+      { name: "Design System", icon: Sparkles, path: "/admin/design-system" },
       { name: "Settings", icon: Settings, path: "/admin/settings" },
     ]
     : [
-      { name: "Dashboard", icon: LayoutDashboard, path: "/client" },
-      { name: "Projects", icon: Briefcase, path: "/client/projects" },
-      { name: "Invoices", icon: FileText, path: "/client/invoices" },
-      { name: "Support", icon: Users, path: "/client/tickets" },
+      { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard/client" },
+      { name: "Projects", icon: Briefcase, path: "/dashboard/client/projects" },
+      { name: "Invoices", icon: FileText, path: "/dashboard/client/invoices" },
+      { name: "Support", icon: Users, path: "/dashboard/client/tickets" },
     ];
 
   const handleLogout = async () => {

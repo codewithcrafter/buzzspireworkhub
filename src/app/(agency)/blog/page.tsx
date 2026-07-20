@@ -1,100 +1,79 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Calendar, Clock, User, ArrowRight, Tag, BookOpen, Sparkles } from "lucide-react";
+import { Search, Calendar, Clock, User, ArrowRight, Tag, BookOpen, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 
-// Blogs Mock Data
-const blogsData = [
-  {
-    id: 1,
-    title: "Google Core Update 2026: The Tech SEO Checklist Every SaaS Needs",
-    desc: "Google's latest algorithm updates focus heavily on structural rendering speeds and semantic text layouts. Learn how to verify your Next.js page configurations to prevent search drops.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
-    category: "SEO",
-    date: "June 24, 2026",
-    readTime: "8 min read",
-    author: "Devon Carter",
-    featured: true
-  },
-  {
-    id: 2,
-    title: "Meta Ads Scaling: Moving Beyond Lookalike Audiences in 2026",
-    desc: "With browser tracking limitations tightening, we reveal how to deploy first-party server-side conversion tags to maintain low CPA costs during high ad spend scales.",
-    image: "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=600&q=80",
-    category: "Paid Ads",
-    date: "June 18, 2026",
-    readTime: "6 min read",
-    author: "Marcus Vane",
-    featured: false
-  },
-  {
-    id: 3,
-    title: "The Death of Lorem Ipsum: Direct Response Copywriting Strategies",
-    desc: "Generic design text ruins conversion ratios. Learn our step-by-step copywriting audit checklist to capture commercial intent directly from search entry points.",
-    image: "https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&w=600&q=80",
-    category: "Strategy",
-    date: "June 10, 2026",
-    readTime: "5 min read",
-    author: "Elena Rostova",
-    featured: false
-  },
-  {
-    id: 4,
-    title: "Why Awwwards-Level UI/UX Directly Correlates With Low Ad Costs",
-    desc: "Landing page conversion ratios dictate Paid CPC margins. Here is how premium animations and intuitive layouts decrease marketing CPA by up to 40%.",
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=600&q=80",
-    category: "Design",
-    date: "May 28, 2026",
-    readTime: "7 min read",
-    author: "Elena Rostova",
-    featured: false
-  },
-  {
-    id: 5,
-    title: "HubSpot vs Salesforce: Choosing The Right Stack For Mid-Market Growth",
-    desc: "We analyze tracking parameters, migration complexities, and annual licensing structures to map the optimal CRM suite for scaling marketing pipeline leads.",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80",
-    category: "MarTech",
-    date: "May 15, 2026",
-    readTime: "9 min read",
-    author: "Marcus Vane",
-    featured: false
-  },
-  {
-    id: 6,
-    title: "Reducing Checkout Abandonment by 22% With automated Email Flow Tuning",
-    desc: "A review of transactional notification schedules and custom SMS triggers that convert lost e-commerce carts back into finished sales without ad retargeting.",
-    image: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&w=600&q=80",
-    category: "MarTech",
-    date: "May 04, 2026",
-    readTime: "5 min read",
-    author: "Devon Carter",
-    featured: false
-  }
-];
-
-// Categories
+// Categories list
 const categories = ["All", "SEO", "Paid Ads", "Strategy", "Design", "MarTech"];
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [featuredBlog, setFeaturedBlog] = useState<any | null>(null);
+  const [meta, setMeta] = useState<any>(null);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  // Filtering blogs
-  const filteredBlogs = blogsData.filter((blog) => {
-    const matchesCategory = selectedCategory === "All" || blog.category === selectedCategory;
-    const matchesSearch = blog.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          blog.desc.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Fetch featured post on mount
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const res = await fetch("/api/blogs?featured=true&limit=1");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.blogs && data.blogs.length > 0) {
+            setFeaturedBlog(data.blogs[0]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load featured post:", err);
+      }
+    };
+    fetchFeatured();
+  }, []);
 
-  const featuredBlog = blogsData.find((b) => b.featured);
+  // Fetch paginated blogs on category, search, or page transition
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      setLoading(true);
+      try {
+        const categoryQuery = selectedCategory !== "All" ? `&category=${encodeURIComponent(selectedCategory)}` : "";
+        const searchQueryParam = searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : "";
+        
+        // Fetch posts. Exclude featured post in normal listing if search is empty
+        const isFeaturedParam = selectedCategory === "All" && !searchQuery ? "&featured=false" : "";
+
+        const res = await fetch(`/api/blogs?page=${page}&limit=6${categoryQuery}${searchQueryParam}${isFeaturedParam}`);
+        if (res.ok) {
+          const data = await res.json();
+          setBlogs(data.blogs || []);
+          setMeta(data.meta || null);
+        }
+      } catch (err) {
+        console.error("Failed to load blogs list:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, [page, selectedCategory, searchQuery]);
+
+  const handleCategoryChange = (cat: string) => {
+    setSelectedCategory(cat);
+    setPage(1);
+  };
+
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    setPage(1);
+  };
 
   return (
     <main className="w-full bg-background select-none bg-grid-pattern relative">
@@ -128,7 +107,7 @@ export default function BlogPage() {
               type="text"
               placeholder="Search growth tactics..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-12 pr-4 rounded-full border-border bg-background focus-visible:ring-primary focus-visible:border-primary/50 text-sm h-11"
             />
           </div>
@@ -140,8 +119,8 @@ export default function BlogPage() {
               return (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all focus:outline-none ${
+                  onClick={() => handleCategoryChange(cat)}
+                  className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all focus:outline-none cursor-pointer ${
                     isSelected
                       ? "bg-primary text-white shadow-sm"
                       : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
@@ -162,31 +141,36 @@ export default function BlogPage() {
             <div className="group rounded-[2.5rem] bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-500 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-6 md:p-8 lg:p-12 items-center">
               
               <div className="lg:col-span-6 h-[300px] md:h-[400px] rounded-2xl overflow-hidden bg-muted relative">
-                <img
-                  src={featuredBlog.image}
-                  alt={featuredBlog.title}
-                  className="object-cover w-full h-full group-hover:scale-102 transition-transform duration-500"
-                />
+                {featuredBlog.featuredImage && (
+                  <img
+                    src={featuredBlog.featuredImage}
+                    alt={featuredBlog.title}
+                    className="object-cover w-full h-full group-hover:scale-102 transition-transform duration-500"
+                  />
+                )}
                 <span className="absolute top-4 left-4 text-xs font-bold text-white bg-primary px-3 py-1 rounded-full">{featuredBlog.category}</span>
               </div>
 
               <div className="lg:col-span-6 space-y-6">
                 <div className="flex items-center gap-4 text-xs text-muted-foreground font-semibold">
-                  <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{featuredBlog.date}</span>
-                  <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{featuredBlog.readTime}</span>
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {featuredBlog.publishedAt ? new Date(featuredBlog.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : new Date(featuredBlog.createdAt).toLocaleDateString()}
+                  </span>
+                  <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{featuredBlog.readTime} min read</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground group-hover:text-primary transition-colors leading-tight">
                   {featuredBlog.title}
                 </h2>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  {featuredBlog.desc}
+                  {featuredBlog.excerpt}
                 </p>
                 <div className="pt-2 border-t border-border flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-xs text-primary">{featuredBlog.author[0]}</div>
                     <span className="text-xs font-bold text-foreground">By {featuredBlog.author}</span>
                   </div>
-                  <Link href={`/blog/${featuredBlog.id}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-primary group-hover:text-secondary transition-colors">
+                  <Link href={`/blog/${featuredBlog.slug}`} className="inline-flex items-center gap-1.5 text-sm font-bold text-primary group-hover:text-secondary transition-colors">
                     Read Article
                     <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -204,58 +188,95 @@ export default function BlogPage() {
           <div className="mb-10 flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-primary" />
             <h3 className="font-heading font-bold text-xl text-foreground">
-              {searchQuery || selectedCategory !== "All" ? `Search Results (${filteredBlogs.length})` : "Latest Growth Articles"}
+              {searchQuery || selectedCategory !== "All" ? `Search Results (${blogs.length})` : "Latest Growth Articles"}
             </h3>
           </div>
         </ScrollReveal>
 
-        {filteredBlogs.length === 0 ? (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 text-primary animate-spin" />
+            <p className="text-xs text-muted-foreground font-semibold mt-3">Fetching articles catalog...</p>
+          </div>
+        ) : blogs.length === 0 ? (
           <div className="text-center py-20 bg-muted/20 border border-dashed border-border rounded-3xl">
-            <p className="text-muted-foreground text-lg">No articles match your search query or filters.</p>
+            <p className="text-muted-foreground text-lg font-semibold">No articles match your search query or filters.</p>
             <Button variant="link" onClick={() => { setSelectedCategory("All"); setSearchQuery(""); }} className="mt-2 text-primary font-bold">Reset Search Filters</Button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBlogs
-              .filter((b) => selectedCategory !== "All" || searchQuery || !b.featured) // exclude featured only in default index view
-              .map((blog, idx) => (
+          <div className="space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {blogs.map((blog, idx) => (
                 <ScrollReveal key={blog.id} delay={idx * 0.08}>
                   <div className="group rounded-3xl overflow-hidden bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-500 flex flex-col h-full justify-between">
                     <div>
                       <div className="h-52 relative overflow-hidden bg-muted">
-                        <img
-                          src={blog.image}
-                          alt={blog.title}
-                          className="object-cover w-full h-full group-hover:scale-103 transition-transform duration-500"
-                        />
+                        {blog.featuredImage && (
+                          <img
+                            src={blog.featuredImage}
+                            alt={blog.title}
+                            className="object-cover w-full h-full group-hover:scale-103 transition-transform duration-500"
+                          />
+                        )}
                         <span className="absolute top-4 left-4 text-xs font-bold text-white bg-primary/95 px-2.5 py-1 rounded-full">{blog.category}</span>
                       </div>
-                      <div className="p-8 space-y-4">
+                      <div className="p-8 space-y-4 font-sans">
                         <div className="flex items-center gap-4 text-[10px] text-muted-foreground font-semibold">
-                          <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{blog.date}</span>
-                          <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{blog.readTime}</span>
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : new Date(blog.createdAt).toLocaleDateString()}
+                          </span>
+                          <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{blog.readTime} min read</span>
                         </div>
                         <h3 className="font-heading font-extrabold text-xl text-foreground group-hover:text-primary transition-colors leading-snug">
                           {blog.title}
                         </h3>
                         <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                          {blog.desc}
+                          {blog.excerpt}
                         </p>
                       </div>
                     </div>
-                    <div className="px-8 pb-8 pt-4 border-t border-border/50 flex items-center justify-between">
+                    <div className="px-8 pb-8 pt-4 border-t border-border/50 flex items-center justify-between font-sans">
                       <span className="text-[11px] font-bold text-foreground flex items-center gap-1.5">
                         <User className="w-3 h-3 text-muted-foreground" />
                         {blog.author}
                       </span>
-                      <Link href={`/blog/${blog.id}`} className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:text-secondary transition-colors">
-                        Read Card
+                      <Link href={`/blog/${blog.slug}`} className="inline-flex items-center gap-1 text-xs font-bold text-primary group-hover:text-secondary transition-colors">
+                        Read Article
                         <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
                     </div>
                   </div>
                 </ScrollReveal>
               ))}
+            </div>
+
+            {/* Pagination Controls */}
+            {meta && meta.totalPages > 1 && (
+              <div className="flex justify-center items-center gap-4 pt-4 select-none font-semibold">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === 1}
+                  onClick={() => setPage(page - 1)}
+                  className="rounded-full cursor-pointer h-10 px-4"
+                >
+                  Previous
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  Page {page} of {meta.totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page === meta.totalPages}
+                  onClick={() => setPage(page + 1)}
+                  className="rounded-full cursor-pointer h-10 px-4"
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -274,7 +295,7 @@ export default function BlogPage() {
               </p>
               <div className="max-w-md mx-auto pt-4">
                 <Link href="/contact">
-                  <Button className="rounded-full bg-white text-primary hover:bg-white/95 font-bold shadow-lg w-full py-6">
+                  <Button className="rounded-full bg-white text-primary hover:bg-white/95 font-bold shadow-lg w-full py-6 cursor-pointer border-0">
                     Join the Strategy List
                   </Button>
                 </Link>

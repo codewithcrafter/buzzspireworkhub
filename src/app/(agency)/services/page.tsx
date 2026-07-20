@@ -34,9 +34,9 @@ const servicesData = [
     icon: Search,
     title: "Search Engine Optimization",
     tagline: "Drive high-intent buyers organically",
-    desc: "Our SEO services go beyond simple rankings. We align keyword clusters with search intent, optimizing your page architecture to capture organic traffic and convert queries into sales pipeline value.",
-    features: ["Technical SEO & Core Web Vitals Audit", "Semantic Keyword Mapping", "Premium Editorial Outreach", "Competitor Share-of-Voice Audits"],
-    benefits: ["Zero ongoing cost-per-click ad expenditures", "Compounding organic lead traffic over time", "Enhanced search credibility and brand authority"],
+    desc: "Our SEO services are designed to improve your online visibility, attract qualified organic traffic, and drive sustainable business growth. We combine technical SEO, strategic keyword research, on-page optimization, and authoritative link building to help your website rank higher on search engines and generate long-term results.",
+    features: ["Technical SEO Audit & Website Performance Optimization", "Comprehensive Keyword Research & Search Intent Analysis", "On-Page & Off-Page SEO Optimization", "Content Strategy & SEO Copywriting"],
+    benefits: ["Increased Organic Traffic & Search Visibility", "Higher Search Engine Rankings", "More Qualified Leads & Conversions"],
     pricing: {
       standard: "$2,800/mo",
       enterprise: "$5,500/mo",
@@ -243,13 +243,13 @@ export default function ServicesPage() {
             Our Specialties
           </span>
           <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tighter leading-none text-foreground mt-6">
-            Elite marketing tools <br />
+            Strategic marketing driving visibility, <br />
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              built for commercial velocity.
+              leads, and business growth.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            Explore our comprehensive suite of 12 core digital marketing and engineering specialties. Use the interactive switcher below to inspect key features, business benefits, and transparent pricing.
+            Discover strategic digital marketing solutions that increase visibility, generate qualified leads, and drive sustainable business growth. Use the interactive switcher below to discover key features, business benefits, and transparent pricing.
           </p>
         </ScrollReveal>
       </section>
@@ -257,7 +257,7 @@ export default function ServicesPage() {
       {/* 2. INTERACTIVE SERVICE DASHBOARD */}
       <section className="pb-24 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* Left: Sidebar Selector */}
           <div className="lg:col-span-4 bg-white border border-border p-4 rounded-3xl shadow-premium space-y-1 lg:sticky lg:top-28">
             <h3 className="font-heading font-bold text-sm text-muted-foreground uppercase tracking-widest px-4 pb-3 border-b border-border mb-3">
@@ -273,11 +273,10 @@ export default function ServicesPage() {
                       setActiveServiceIdx(idx);
                       setActiveFaq(null);
                     }}
-                    className={`w-full px-4 py-3 rounded-2xl text-left font-semibold text-sm transition-all flex items-center gap-3 focus:outline-none ${
-                      isSelected
-                        ? "bg-primary text-white shadow-md"
-                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
-                    }`}
+                    className={`w-full px-4 py-3 rounded-2xl text-left font-semibold text-sm transition-all flex items-center gap-3 focus:outline-none ${isSelected
+                      ? "bg-primary text-white shadow-md"
+                      : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                      }`}
                   >
                     <service.icon className={`w-5 h-5 shrink-0 ${isSelected ? "text-white" : "text-primary"}`} />
                     <span className="truncate">{service.title}</span>
@@ -314,7 +313,7 @@ export default function ServicesPage() {
 
                 {/* Grid details */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-border">
-                  
+
                   {/* Features */}
                   <div className="space-y-4">
                     <h4 className="font-heading font-bold text-base text-foreground uppercase tracking-wider flex items-center gap-2">
@@ -353,10 +352,10 @@ export default function ServicesPage() {
                 <div className="p-8 rounded-3xl bg-muted/50 border border-border grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <h4 className="font-heading font-bold text-lg text-foreground mb-1">Pricing Guide</h4>
-                    <p className="text-xs text-muted-foreground mb-4">Select the operational scale that matches your company requirements.</p>
+                    <p className="text-xs text-muted-foreground mb-4">Choose the SEO solution that best matches your business goals, industry, and growth ambitions.</p>
                     <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground">Standard Retainer: <span className="text-primary font-bold text-base">{activeService.pricing.standard}</span></p>
-                      <p className="text-sm font-semibold text-foreground">Enterprise Retainer: <span className="text-secondary font-bold text-base">{activeService.pricing.enterprise}</span></p>
+                      <p className="text-sm font-semibold text-foreground">Starter Package: <span className="text-primary font-bold text-base">{activeService.pricing.standard}</span></p>
+                      <p className="text-sm font-semibold text-foreground">Growth Package: <span className="text-secondary font-bold text-base">{activeService.pricing.enterprise}</span></p>
                     </div>
                   </div>
                   <div className="space-y-4">

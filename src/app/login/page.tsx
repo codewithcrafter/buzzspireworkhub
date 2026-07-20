@@ -66,7 +66,7 @@ export default function LoginPage() {
             if (data.user.role === "ADMIN") {
                 router.replace("/admin");
             } else {
-                router.replace("/client");
+                router.replace("/dashboard/client");
             }
         } catch {
             setError("Unable to connect to server.");

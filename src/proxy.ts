@@ -3,8 +3,9 @@ import type { NextRequest } from "next/server";
 import { verifyJwt } from "./lib/auth";
 
 // Define protected routes that require authentication
-const protectedRoutes = ["/dashboard", "/client", "/admin"];
+const protectedRoutes = ["/dashboard/client", "/admin"];
 const adminRoutes = ["/admin"];
+const clientRoutes = ["/dashboard/client"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -40,6 +41,12 @@ export async function proxy(request: NextRequest) {
     // Role-based access control for admin routes
     const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
     if (isAdminRoute && payload.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+
+    // Role-based access control for client routes
+    const isClientRoute = clientRoutes.some((route) => pathname.startsWith(route));
+    if (isClientRoute && payload.role !== "CLIENT") {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
   }

@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { 
-  Heart, 
-  Target, 
-  Eye, 
-  Award, 
-  MapPin, 
-  ChevronRight, 
-  Sparkles, 
-  Users, 
-  BookOpen, 
+import {
+  Heart,
+  Target,
+  Eye,
+  Award,
+  MapPin,
+  ChevronRight,
+  Sparkles,
+  Users,
+  BookOpen,
   CheckCircle2,
   Code2
 } from "lucide-react";
@@ -21,51 +21,53 @@ import Magnetic from "@/components/ui/magnetic";
 
 // Values list
 const values = [
-  { icon: Heart, title: "Obsessive Client Empathy", text: "We treat your marketing capital as our own. Every dollar spent must map back to commercial outcome." },
-  { icon: Target, title: "Ruthless Execution", text: "No excuses. We optimize campaigns daily, write clean code, and ship projects with maximum velocity." },
-  { icon: Eye, title: "Radical Transparency", text: "Absolute clarity. You get live dashboard access to every metric, keyword cost, and creative file." }
+  {
+    icon: Heart, title: "Business-First Mindset", text: "Every strategy begins with your goals. We create digital marketing solutions that maximize ROI, generate qualified leads, and support long-term business growth."
+  },
+  { icon: Target, title: "Excellence in Execution", text: "From SEO and performance marketing to website development and branding, we deliver every project with precision, quality, and measurable results." },
+  { icon: Eye, title: "Full Transparency", text: "We believe in honest communication, transparent reporting, and real-time insights, giving you complete confidence in every marketing decision." }
 ];
 
 // Timeline milestones
 const timeline = [
-  { year: "2021", title: "The Inception", desc: "BuzzSpire was founded by three developers and media buyers aiming to replace traditional slow agencies with code-first growth workflows." },
-  { year: "2023", title: "Enterprise Scaling", desc: "We scaled our first SaaS and FinTech partners past $10M in annual revenue, expanding our team to 24 local strategists." },
-  { year: "2025", title: "Awwwards Recognition", desc: "Awarded 'Best Corporate Agency' and recognized for high-performance engineering achievements in Next.js development." },
-  { year: "2026", title: "Global Expansion", desc: "Opened secondary office hubs in London and Singapore to service international enterprise brand networks." }
+  { year: "2021", title: "Our Vision", desc: "Delivering innovative digital marketing solutions that help businesses build a stronger online presence and achieve measurable growth." },
+  { year: "2023", title: "Digital Solutions", desc: "Providing SEO, performance marketing, website development, branding, and creative services under one trusted partner." },
+  { year: "2025", title: "Client Commitment", desc: "Creating customized strategies focused on transparency, quality, measurable results, and long-term business success." },
+  { year: "2026", title: "What's Next", desc: "Continuing to innovate, adapt, and empower businesses with cutting-edge digital solutions and growth-focused strategies." }
 ];
 
 // Team Members
 const team = [
   {
     name: "Marcus Vane",
-    role: "CEO & Founder",
+    role: "Digital Marketing Strategist",
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
-    bio: "Ex-Meta Ads engineer and growth consultant. Marcus guides the marketing architecture for BuzzSpire's enterprise client list."
+    bio: "SEO, performance marketing, and business growth specialist dedicated to creating data-driven strategies that generate qualified leads and measurable results."
   },
   {
     name: "Elena Rostova",
-    role: "Creative Director",
+    role: "Creative Design Specialist",
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-    bio: "Awwwards jury member and brand strategist. Elena designs the visual systems and conversion layouts that define our premium feel."
+    bio: "Expert in branding, UI/UX design, and visual storytelling, creating impactful digital experiences that strengthen brand identity and engagement."
   },
   {
     name: "Devon Carter",
-    role: "Head of Engineering",
+    role: "Web Development Expert",
     image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
-    bio: "Next.js core contributor and technical architect. Devon ensures our clients' landing pages achieve perfect 100/100 Core Web Vitals."
+    bio: "Skilled in website development, performance optimization, and user experience, building fast, responsive, and conversion-focused digital solutions."
   }
 ];
 
 // Technology Stack
 const technologies = [
-  { name: "Next.js", category: "Framework" },
-  { name: "Tailwind CSS", category: "Styling" },
-  { name: "Framer Motion", category: "Animation" },
+  { name: "Google Analytics", category: "Analytics" },
+  { name: "Google Ads", category: "Advertising" },
+  { name: "Meta Ads Manager", category: "Social Advertising" },
+  { name: "Google Search Console", category: "SEO" },
+  { name: "WordPress", category: "Website Development" },
   { name: "HubSpot CRM", category: "Automation" },
-  { name: "Google Analytics 4", category: "Measurement" },
-  { name: "Meta Conversion API", category: "Tracking" },
-  { name: "Salesforce Marketing Cloud", category: "Enterprise" },
-  { name: "Figma", category: "Design UI/UX" }
+  { name: "Tailwind CSS", category: "Frontend" },
+  { name: "Next.js", category: "Web Framework" }
 ];
 
 export default function AboutPage() {
@@ -80,13 +82,14 @@ export default function AboutPage() {
             Our Story & Vision
           </span>
           <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tighter leading-none text-foreground mt-6">
-            We are built to <br />
+            Empowering Businesses<br />
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              outperform the status quo.
+              Through Digital Excellence.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            Founded in 2021, BuzzSpire Media was created to eliminate the typical digital agency bloat. We replace bloated account managers and vague quarterly reports with direct-response media buyers, elite UI designers, and high-performance engineers.
+            Established in 2026, BuzzSpire Media was built to transform ambitious ideas into measurable success. By combining SEO, performance marketing, branding, website development, and creative strategy, we help businesses strengthen their digital presence and achieve sustainable growth.
+
           </p>
         </ScrollReveal>
       </section>
@@ -95,10 +98,10 @@ export default function AboutPage() {
       <section className="py-16 bg-muted/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {[
-            { value: "45+", label: "Elite Growth Experts" },
-            { value: "$62M+", label: "Client Revenue Generated" },
-            { value: "94%", label: "Client Retainer Retention" },
-            { value: "3", label: "Global Hub Locations" }
+            { value: "2026", label: "FOUNDED" },
+            { value: "360°", label: "DIGITAL MARKETING SERVICES" },
+            { value: "100%", label: "TRANSPARENT APPROACH" },
+            { value: "RESULTS", label: "DRIVEN GROWTH" }
           ].map((stat, idx) => (
             <ScrollReveal key={idx} delay={idx * 0.08}>
               <h3 className="text-4xl lg:text-5xl font-heading font-black text-primary mb-1">{stat.value}</h3>
@@ -115,10 +118,10 @@ export default function AboutPage() {
             <ScrollReveal direction="left">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Core Principles</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground mt-3">
-                Values that drive campaign performance.
+                The foundation of every successful digital campaign.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                We believe marketing is a science, not a guess. We do not design websites based on personal opinion, and we do not run ads without precise statistical tracking. These core values govern every single page, line of code, and ad copy we create.
+                At BuzzSpire Media, every decision is driven by purpose, performance, and innovation. From SEO and performance marketing to website development and branding, we create data-driven digital solutions that deliver measurable results, build lasting relationships, and help businesses grow with confidence.
               </p>
             </ScrollReveal>
           </div>
@@ -148,7 +151,7 @@ export default function AboutPage() {
             <div className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Journey</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                Timeline of milestone achievements
+                Empowering Businesses Through Digital Excellence.
               </p>
             </div>
           </ScrollReveal>
@@ -173,7 +176,7 @@ export default function AboutPage() {
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <ScrollReveal>
           <div className="rounded-[3rem] bg-white border border-border shadow-premium p-8 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             <div className="lg:col-span-5 flex justify-center">
               <div className="w-full max-w-[320px] aspect-[4/5] rounded-[2rem] overflow-hidden bg-muted border border-border shadow-xl relative">
                 <img
@@ -187,10 +190,10 @@ export default function AboutPage() {
             <div className="lg:col-span-7 space-y-6">
               <span className="text-xs font-bold text-primary uppercase tracking-widest">Message from our Founder</span>
               <p className="font-heading font-extrabold text-2xl md:text-3xl text-foreground leading-snug">
-                "Marketing isn't a cost center. It is an engineering asset. We build campaign architectures that convert attention into cash."
+                "Every successful business deserves a digital strategy that inspires growth, builds trust, and delivers measurable results."
               </p>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Our philosophy is simple: we build systems that generate customer revenue. If a marketing project doesn't drive measurable conversions, it is a decoration. We started BuzzSpire to prove that design, performance marketing, and software engineering can merge to form the ultimate business growth engine.
+                BuzzSpire Media was founded with a clear vision—to help businesses grow through innovative digital marketing, creative branding, website development, and data-driven strategies. We believe in building long-term partnerships, delivering transparent solutions, and creating meaningful results that support sustainable business growth.
               </p>
               <div>
                 <h4 className="font-heading font-bold text-base text-foreground">Marcus Vane</h4>
@@ -207,9 +210,9 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-20">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Strategists</h2>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Expert Teams</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                Meet the minds behind the growth
+                Meet the professionals driving your digital success
               </p>
             </div>
           </ScrollReveal>
@@ -245,12 +248,12 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-5 space-y-6">
             <ScrollReveal direction="left">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Our Tech Stack</h2>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-primary">OUR TECHNOLOGY STACK</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground mt-3">
-                Modern tools for elite media buying
+                Powered by industry-leading tools for digital growth
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                We believe standard templates are conversion bottlenecks. That is why we write customized software scripts and Next.js assets, integrating directly into enterprise automation ecosystems for maximum tracking fidelity.
+                We leverage trusted marketing, analytics, design, SEO, and web development platforms to create data-driven strategies, optimize campaign performance, improve user experiences, and deliver measurable business results.
               </p>
             </ScrollReveal>
           </div>
@@ -277,16 +280,16 @@ export default function AboutPage() {
           <div className="rounded-[3rem] bg-gradient-to-tr from-primary via-secondary to-accent p-12 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl">
             <div className="relative z-10 max-w-3xl mx-auto space-y-8">
               <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tighter">
-                Partner with real growth specialists.
+                Partner with Digital Growth Experts.
               </h2>
               <p className="text-lg text-white/80 max-w-xl mx-auto leading-relaxed">
-                Schedule a confidential audit on your performance setup. Learn where your account bids are wasting budgets.
+                Book a free consultation with BuzzSpire Media to explore customized SEO, performance marketing, branding, and website development solutions designed to grow your business and deliver measurable results.
               </p>
               <div>
                 <Magnetic>
                   <Link href="/contact">
                     <Button size="lg" className="rounded-full px-8 py-7 text-lg bg-white text-primary hover:bg-white/95 font-bold shadow-lg transition-transform">
-                      Schedule Discovery Consultation
+                      Schedule a Free Consultation
                     </Button>
                   </Link>
                 </Magnetic>
