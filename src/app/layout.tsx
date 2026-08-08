@@ -7,34 +7,58 @@ import AiChatbot from "@/components/chat/AiChatbot";
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 const outfit = Outfit({
   variable: "--font-heading",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://buzzspiremedia.com"),
   title: {
-    default: "BuzzSpire Media | High-End Digital Marketing Agency",
+    default: "BuzzSpire Media | Digital Marketing Agency in Delhi",
     template: "%s | BuzzSpire Media"
   },
-  description: "Award-winning digital marketing agency creating visually impressive and highly interactive digital experiences. Elevate your brand with BuzzSpire Media.",
-  keywords: ["Digital Marketing", "Web Development", "UI/UX Design", "SEO", "Branding", "Agency"],
+  description: "BuzzSpire Media is a digital marketing agency in Delhi NCR helping local businesses show up on Google, grow social presence, and win more customers with SEO, GMB management, Google Ads, web development, and ecommerce services.",
+  alternates: {
+    canonical: "https://buzzspiremedia.com",
+  },
+  keywords: [
+    "digital marketing agency Delhi",
+    "SEO services Delhi",
+    "Google Business Profile management Delhi",
+    "social media marketing Delhi",
+    "PPC Google Ads Delhi",
+    "web development Delhi",
+    "ecommerce management Delhi",
+    "product photography Delhi",
+    "video editing Delhi",
+    "graphic design Delhi",
+    "Delhi NCR",
+    "West Delhi",
+    "Uttam Nagar",
+    "Janakpuri",
+    "Dwarka"
+  ],
   authors: [{ name: "BuzzSpire Media" }],
   creator: "BuzzSpire Media",
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://buzzspire.media",
-    title: "BuzzSpire Media | High-End Digital Marketing Agency",
-    description: "Award-winning digital marketing agency creating visually impressive and highly interactive digital experiences.",
+    locale: "en_IN",
+    url: "https://buzzspiremedia.com",
+    title: "BuzzSpire Media | Digital Marketing Agency in Delhi",
+    description: "Digital marketing agency in Delhi helping local businesses grow online with SEO, GMB management, paid ads, and web development.",
     siteName: "BuzzSpire Media",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BuzzSpire Media",
-    description: "Award-winning digital marketing agency creating visually impressive and highly interactive digital experiences.",
+    title: "BuzzSpire Media | Digital Marketing Agency in Delhi",
+    description: "Digital marketing agency in Delhi helping local businesses grow online with SEO, GMB management, paid ads, and web development.",
   },
   robots: {
     index: true,
@@ -57,9 +81,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`light ${inter.variable} ${outfit.variable} h-full antialiased`}
+      className={`light ${inter.variable} ${outfit.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-screen flex flex-col">
         <SmoothScroll>
           {children}
         </SmoothScroll>

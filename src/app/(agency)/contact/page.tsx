@@ -39,6 +39,7 @@ const contactFaqs = [
 export default function ContactPage() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -46,17 +47,35 @@ export default function ContactPage() {
   const [budget, setBudget] = useState("$5,000 - $10,000 / mo");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setName("");
-      setEmail("");
-      setCompany("");
-      setBudget("$5,000 - $10,000 / mo");
-      setMessage("");
-    }, 4000);
+    setIsSubmitting(true);
+    
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, company, budget, message })
+      });
+      
+      if (res.ok) {
+        setFormSubmitted(true);
+        setTimeout(() => {
+          setFormSubmitted(false);
+          setName("");
+          setEmail("");
+          setCompany("");
+          setBudget("$5,000 - $10,000 / mo");
+          setMessage("");
+        }, 4000);
+      } else {
+        alert("There was an error submitting your brief. Please try again.");
+      }
+    } catch (error) {
+      alert("Network error. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -255,9 +274,9 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full rounded-full bg-primary text-white font-semibold py-6 text-sm">
-                    Submit Growth Brief
-                    <Send className="ml-2 w-4 h-4" />
+                  <Button type="submit" disabled={isSubmitting} className="w-full rounded-full bg-primary text-white font-semibold py-6 text-sm disabled:opacity-70 disabled:cursor-not-allowed">
+                    {isSubmitting ? "Submitting..." : "Submit Growth Brief"}
+                    {!isSubmitting && <Send className="ml-2 w-4 h-4" />}
                   </Button>
                 </form>
               )}

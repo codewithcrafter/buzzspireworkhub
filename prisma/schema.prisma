@@ -20,6 +20,9 @@ model User {
   updatedAt         DateTime  @updatedAt
   projects          Project[]
   tickets           Ticket[]
+  invoices          Invoice[]
+  aiUsage           AiUsageHistory[]
+  employeeProfile   Employee?
 }
 
 model Project {
@@ -48,6 +51,10 @@ model Project {
   updates          ProjectUpdate[]
   files            ProjectFile[]
   messages         ProjectMessage[]
+  invoices         Invoice[]
+
+  @@index([clientId])
+  @@index([createdAt])
 }
 
 model ProjectUpdate {
@@ -57,6 +64,8 @@ model ProjectUpdate {
   description String
   createdAt   DateTime @default(now())
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
 }
 
 model ProjectFile {
@@ -69,6 +78,8 @@ model ProjectFile {
   clientVisible  Boolean  @default(true)
   createdAt      DateTime @default(now())
   project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
 }
 
 model ProjectMessage {
@@ -79,6 +90,8 @@ model ProjectMessage {
   text        String
   createdAt   DateTime @default(now())
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
 }
 
 model Lead {
@@ -86,6 +99,7 @@ model Lead {
   name      String
   email     String
   company   String?
+  budget    String?
   message   String
   status    LeadStatus @default(NEW)
   createdAt DateTime   @default(now())
@@ -101,6 +115,9 @@ model Ticket {
   updatedAt   DateTime      @updatedAt
   client      User          @relation(fields: [clientId], references: [id])
   replies     TicketReply[]
+
+  @@index([clientId])
+  @@index([status])
 }
 
 model TicketReply {
@@ -110,6 +127,8 @@ model TicketReply {
   text      String
   createdAt DateTime @default(now())
   ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
 }
 
 enum Role {
@@ -156,11 +175,220 @@ model Blog {
   publishedAt     DateTime?
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+
+  @@index([slug])
+  @@index([status])
 }
 
 enum BlogStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+model Invoice {
+  id          String        @id @default(uuid())
+  clientId    String
+  projectId   String?
+  amount      Float
+  status      InvoiceStatus @default(DRAFT)
+  dueDate     DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  client      User          @relation(fields: [clientId], references: [id])
+  project     Project?      @relation(fields: [projectId], references: [id])
+  payments    Payment[]
+
+  @@index([clientId])
+  @@index([projectId])
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  invoiceId   String
+  amount      Float
+  method      String?
+  status      PaymentStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  invoice     Invoice       @relation(fields: [invoiceId], references: [id])
+
+  @@index([invoiceId])
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model AdminTask {
+  id          String   @id @default(uuid())
+  title       String
+  completed   Boolean  @default(false)
+  dueDate     String?
+  priority    String   @default("low") // "high", "medium", "low"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  user        String
+  avatar      String
+  action      String
+  target      String
+  type        String   // "lead", "project", "payment", "alert"
+  createdAt   DateTime @default(now())
+}
+
+// ==========================================
+// PHASE 4 ENTERPRISE EXPANSION MODELS
+// ==========================================
+
+// --- MODULE 1: AI Marketing Assistant ---
+model AiPromptTemplate {
+  id        String   @id @default(uuid())
+  name      String
+  category  String
+  prompt    String
+  createdAt DateTime @default(now())
+}
+
+model AiUsageHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  tokens    Int
+  prompt    String
+  response  String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+}
+
+// --- MODULE 2: Marketing Automation ---
+model AutomationWorkflow {
+  id          String   @id @default(uuid())
+  name        String
+  trigger     String
+  conditions  Json?
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  actions     WorkflowAction[]
+}
+
+model WorkflowAction {
+  id          String             @id @default(uuid())
+  workflowId  String
+  type        String
+  config      Json
+  workflow    AutomationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  
+  @@index([workflowId])
+}
+
+// --- MODULE 3 & 4: Campaigns & CRM Expansion ---
+model Campaign {
+  id          String   @id @default(uuid())
+  title       String
+  budget      Float
+  status      String   @default("DRAFT")
+  channels    String[]
+  roi         Float?
+  createdAt   DateTime @default(now())
+}
+
+model Prospect {
+  id          String   @id @default(uuid())
+  name        String
+  company     String?
+  email       String
+  score       Int      @default(0)
+  stage       String   @default("LEAD")
+  createdAt   DateTime @default(now())
+  meetings    Meeting[]
+  calls       CallLog[]
+}
+
+model Meeting {
+  id          String   @id @default(uuid())
+  prospectId  String
+  date        DateTime
+  notes       String?
+  prospect    Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+  
+  @@index([prospectId])
+}
+
+model CallLog {
+  id          String   @id @default(uuid())
+  prospectId  String
+  duration    Int
+  outcome     String
+  prospect    Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+  
+  @@index([prospectId])
+}
+
+// --- MODULE 5: Employee Management ---
+model Department {
+  id          String     @id @default(uuid())
+  name        String
+  employees   Employee[]
+}
+
+model Employee {
+  id           String      @id @default(uuid())
+  userId       String      @unique
+  departmentId String
+  salary       Float
+  role         String
+  user         User        @relation(fields: [userId], references: [id])
+  department   Department  @relation(fields: [departmentId], references: [id])
+}
+
+// --- MODULE 9 & 12: Knowledge Base & Files ---
+model KbArticle {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  category  String
+  isSop     Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model CloudFolder {
+  id        String       @id @default(uuid())
+  name      String
+  parentId  String?
+  files     CloudFile[]
+}
+
+model CloudFile {
+  id        String       @id @default(uuid())
+  folderId  String
+  url       String
+  size      Int
+  mimeType  String
+  folder    CloudFolder  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  
+  @@index([folderId])
+}
+
+// --- MODULE 11: Integrations ---
+model IntegrationConfig {
+  id        String   @id @default(uuid())
+  provider  String   @unique
+  apiKey    String?
+  status    String   @default("DISCONNECTED")
 }
 

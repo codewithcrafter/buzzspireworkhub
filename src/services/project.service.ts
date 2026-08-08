@@ -138,3 +138,38 @@ export async function getClientProjectDetails(projectId: string, clientId: strin
         messages,
     };
 }
+
+// ADMIN METHODS
+
+export async function getAdminProjects() {
+    return prisma.project.findMany({
+        orderBy: { createdAt: "desc" },
+        include: { client: true },
+    });
+}
+
+export async function getAdminProjectDetails(projectId: string) {
+    return prisma.project.findUnique({
+        where: { id: projectId },
+        include: {
+            client: true,
+            updates: { orderBy: { createdAt: "desc" } },
+            files: { orderBy: { createdAt: "desc" } },
+            messages: { orderBy: { createdAt: "asc" } },
+            invoices: true,
+        },
+    });
+}
+
+export async function createProject(data: any) {
+    return prisma.project.create({
+        data,
+    });
+}
+
+export async function deleteProject(projectId: string) {
+    return prisma.project.delete({
+        where: { id: projectId },
+    });
+}
+

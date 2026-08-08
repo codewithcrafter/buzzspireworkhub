@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Heart,
@@ -179,10 +180,14 @@ export default function AboutPage() {
 
             <div className="lg:col-span-5 flex justify-center">
               <div className="w-full max-w-[320px] aspect-[4/5] rounded-[2rem] overflow-hidden bg-muted border border-border shadow-xl relative">
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80"
                   alt="Marcus Vane"
+                  width={320}
+                  height={400}
+                  sizes="(max-width: 768px) 100vw, 320px"
                   className="object-cover w-full h-full"
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -222,10 +227,14 @@ export default function AboutPage() {
               <ScrollReveal key={idx} delay={idx * 0.1}>
                 <div className="group rounded-3xl overflow-hidden bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-500 flex flex-col h-full">
                   <div className="h-72 relative overflow-hidden bg-muted">
-                    <img
+                    <Image
                       src={member.image}
                       alt={member.name}
+                      width={400}
+                      height={288}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-50" />
                   </div>

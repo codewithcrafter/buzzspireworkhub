@@ -1,10 +1,20 @@
+import { ApiResponse } from "@/lib/api-response";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { signJwt } from "@/lib/auth";
+import { rateLimit } from "@/lib/rate-limit";
+
+const limiter = rateLimit({
+  uniqueTokenPerInterval: 500,
+  interval: 60000,
+});
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
+    await limiter.check(10, ip); // Max 10 logins per minute per IP
+    
     const { email, password } = await req.json();
 
     const normalizedEmail = email.trim().toLowerCase();
@@ -75,9 +85,6 @@ export async function POST(req: Request) {
     return response;
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return ApiResponse.serverError("Login Error", error);
   }
 }

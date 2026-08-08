@@ -37,13 +37,13 @@ function AnimatedSphere() {
 export default function HeroScene() {
   return (
     <div className="absolute inset-0 z-0 h-full w-full pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+      <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 1.5]}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1.5} />
         <directionalLight position={[-10, -10, -5]} intensity={1} color="#ff3366" />
         <directionalLight position={[0, -10, 10]} intensity={1} color="#3366ff" />
         <AnimatedSphere />
-        <Environment preset="city" />
+        <Environment files="/hdri/city.hdr" />
         <ContactShadows position={[0, -2, 0]} opacity={0.5} scale={10} blur={2} far={4} />
       </Canvas>
     </div>

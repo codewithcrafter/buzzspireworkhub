@@ -90,41 +90,48 @@ function DashboardContent() {
   // Tab State for Revenue Card Chart
   const [chartTab, setChartTab] = React.useState("revenue-area")
 
-  // Interactive Checklist Tasks
-  const [tasks, setTasks] = React.useState<TaskItem[]>([
-    { id: "task-1", title: "Review campaign proposal for Nexus Labs", completed: false, dueDate: "Today, 5 PM", priority: "high" },
-    { id: "task-2", title: "Approve rebranding mockups from designers", completed: true, dueDate: "Yesterday", priority: "medium" },
-    { id: "task-3", title: "Send digital invoice to Acme Corp", completed: false, dueDate: "Tomorrow", priority: "high" },
-    { id: "task-4", title: "Sync with marketing coordinators", completed: false, dueDate: "July 6", priority: "low" },
-  ])
+  const [tasks, setTasks] = React.useState<TaskItem[]>([])
+  const [recentLeads, setRecentLeads] = React.useState<any[]>([])
+  const [recentClients, setRecentClients] = React.useState<any[]>([])
+  const [activities, setActivities] = React.useState<ActivityItem[]>([])
+  const [dashboardStats, setDashboardStats] = React.useState({
+    revenue: 0,
+    clients: 0,
+    leads: 0,
+    projects: 0
+  })
+  const [isLoading, setIsLoading] = React.useState(true)
 
   // New Lead state fields
   const [newLeadName, setNewLeadName] = React.useState("")
   const [newLeadCompany, setNewLeadCompany] = React.useState("")
   const [newLeadValue, setNewLeadValue] = React.useState("")
 
-  // Recent Leads state
-  const [recentLeads, setRecentLeads] = React.useState([
-    { id: "lead-1", name: "Sarah Connor", company: "Cyberdyne Systems", value: "₹4,50,000", status: "contacted", time: "10m ago" },
-    { id: "lead-2", name: "Bruce Wayne", company: "Wayne Enterprises", value: "₹12,000,000", status: "new", time: "1h ago" },
-    { id: "lead-3", name: "Peter Parker", company: "Daily Bugle", value: "₹65,000", status: "qualified", time: "4h ago" },
-    { id: "lead-4", name: "Tony Stark", company: "Stark Industries", value: "₹8,50,000", status: "proposal", time: "1d ago" },
-  ])
-
-  // Recent Clients state
-  const [recentClients, setRecentClients] = React.useState([
-    { id: "client-1", name: "Aria Mercer", company: "Vercel Labs", status: "active", revenue: "₹1,20,000", joined: "Jan 2026" },
-    { id: "client-2", name: "John Doe", company: "Acme Corporation", status: "active", revenue: "₹4,80,000", joined: "Feb 2026" },
-    { id: "client-3", name: "David Miller", company: "Nexus Labs", status: "inactive", revenue: "₹85,000", joined: "Mar 2026" },
-  ])
-
-  // Recent Activity Feed
-  const [activities, setActivities] = React.useState<ActivityItem[]>([
-    { id: "act-1", user: "Sarah Connor", avatar: "SC", action: "submitted a response via", target: "Inbound Leads Form", time: "10 mins ago", type: "lead" },
-    { id: "act-2", user: "John Doe", avatar: "JD", action: "approved project milestone for", target: "BuzzSpire Rebranding", time: "1 hour ago", type: "project" },
-    { id: "act-3", user: "Aria Mercer", avatar: "AM", action: "paid monthly retainer invoice", target: "#INV-2026-004", time: "3 hours ago", type: "payment" },
-    { id: "act-4", user: "System Monitor", avatar: "SM", action: "generated automated weekly analytics for", target: "Ad Campaigns Panel", time: "6 hours ago", type: "alert" },
-  ])
+  React.useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch("/api/admin/dashboard")
+        const data = await res.json()
+        if (data.success) {
+          setDashboardStats({
+            revenue: data.stats.revenue,
+            clients: data.stats.clients,
+            leads: data.stats.leads,
+            projects: data.stats.projects
+          })
+          setTasks(data.stats.tasks || [])
+          setRecentLeads(data.stats.recentLeads || [])
+          setRecentClients(data.stats.recentClients || [])
+          setActivities(data.stats.activities || [])
+        }
+      } catch (err) {
+        console.error("Failed to load dashboard stats", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchDashboard()
+  }, [])
 
   const toggleTask = (id: string) => {
     setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
@@ -138,7 +145,7 @@ function DashboardContent() {
     }
   }
 
-  const handleCreateLead = (e: React.FormEvent) => {
+  const handleCreateLead = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newLeadName || !newLeadCompany) {
       toast({
@@ -149,41 +156,61 @@ function DashboardContent() {
       return
     }
 
-    const valueFormatted = newLeadValue ? `₹${parseFloat(newLeadValue).toLocaleString("en-IN")}` : "₹0"
-    const newLead = {
-      id: `lead-${Date.now()}`,
-      name: newLeadName,
-      company: newLeadCompany,
-      value: valueFormatted,
-      status: "new",
-      time: "Just now",
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newLeadName,
+          company: newLeadCompany,
+          budget: newLeadValue ? `₹${newLeadValue}` : undefined,
+          email: "pending@example.com", // Admin added lead default or optional
+          message: "Lead added via Admin Dashboard",
+        })
+      });
+
+      if (!res.ok) throw new Error("Failed to create lead");
+      const data = await res.json();
+      
+      const newLead = {
+        id: data.id,
+        name: data.name,
+        company: data.company || "N/A",
+        value: data.budget || "₹0",
+        status: data.status.toLowerCase(),
+        time: "Just now",
+      }
+
+      setRecentLeads([newLead, ...recentLeads])
+      
+      const newAct: ActivityItem = {
+        id: `act-${Date.now()}`,
+        user: newLeadName,
+        avatar: newLeadName.split(" ").map(w => w[0]).join("").toUpperCase(),
+        action: "was added as a new lead under",
+        target: newLeadCompany,
+        time: "Just now",
+        type: "lead",
+      }
+      setActivities([newAct, ...activities])
+
+      toast({
+        title: "Lead added successfully",
+        description: `${newLeadName} from ${newLeadCompany} is now in your pipeline.`,
+        type: "success",
+      })
+
+      setNewLeadName("")
+      setNewLeadCompany("")
+      setNewLeadValue("")
+      setIsLeadModalOpen(false)
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Could not save lead to database.",
+        type: "error",
+      })
     }
-
-    setRecentLeads([newLead, ...recentLeads])
-    
-    // Add activity entry
-    const newAct: ActivityItem = {
-      id: `act-${Date.now()}`,
-      user: newLeadName,
-      avatar: newLeadName.split(" ").map(w => w[0]).join("").toUpperCase(),
-      action: "was added as a new lead under",
-      target: newLeadCompany,
-      time: "Just now",
-      type: "lead",
-    }
-    setActivities([newAct, ...activities])
-
-    toast({
-      title: "Lead added successfully",
-      description: `${newLeadName} from ${newLeadCompany} is now in your pipeline.`,
-      type: "success",
-    })
-
-    // Reset fields & close modal
-    setNewLeadName("")
-    setNewLeadCompany("")
-    setNewLeadValue("")
-    setIsLeadModalOpen(false)
   }
 
   const activeTasksCount = tasks.filter(t => !t.completed).length
@@ -255,28 +282,28 @@ function DashboardContent() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <StatCard
             title="Total Revenue"
-            value="₹18,45,000"
+            value={`₹${dashboardStats.revenue.toLocaleString("en-IN")}`}
             icon={<IndianRupee className="size-4 text-emerald-500" />}
             trend={{ value: 18.2, direction: "up", label: "vs last month" }}
             sparklineData={[30, 42, 38, 55, 68, 65, 80]}
           />
           <StatCard
             title="Lead Conversion Rate"
-            value="24.8%"
+            value={`${dashboardStats.leads}`}
             icon={<UserPlus className="size-4 text-primary" />}
             trend={{ value: 4.3, direction: "up", label: "vs last week" }}
             sparklineData={[48, 52, 50, 58, 60, 68, 70]}
           />
           <StatCard
             title="Active Projects"
-            value="12"
+            value={`${dashboardStats.projects}`}
             icon={<Briefcase className="size-4 text-secondary" />}
             trend={{ value: 8.5, direction: "down", label: "vs yesterday" }}
             sparklineData={[60, 58, 55, 45, 48, 42, 38]}
           />
           <StatCard
             title="Active Clients"
-            value="38"
+            value={`${dashboardStats.clients}`}
             icon={<Users className="size-4 text-indigo-500" />}
             trend={{ value: 12.4, direction: "up", label: "vs last month" }}
             sparklineData={[20, 24, 28, 30, 32, 35, 38]}
