@@ -1,0 +1,192 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "lenis/dist/lenis.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+
+  /* Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
+:root {
+  /* Premium Light Mode Enforced as default */
+  --background: oklch(1 0 0); /* Pure White #FFFFFF */
+  --foreground: oklch(0.13 0.02 250); /* Near Black / Dark Indigo #111827 */
+  
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.13 0.02 250);
+  
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0.02 250);
+  
+  --primary: oklch(0.51 0.26 277); /* primary brand blue #2563EB */
+  --primary-foreground: oklch(1 0 0);
+  
+  --secondary: oklch(0.5 0.21 275); /* brand purple #7C3AED */
+  --secondary-foreground: oklch(1 0 0);
+  
+  --muted: oklch(0.98 0.01 256); /* Slate light-blue background #F8FAFC */
+  --muted-foreground: oklch(0.45 0.02 254); /* Soft Slate text #374151 or #475569 */
+  
+  --accent: oklch(0.72 0.16 220); /* Cyan Accent #06B6D4 */
+  --accent-foreground: oklch(0.13 0.02 250);
+  
+  --destructive: oklch(0.58 0.23 27.25); /* Success red */
+  --destructive-foreground: oklch(1 0 0);
+  
+  --border: oklch(0.92 0.01 256); /* Light border slate #E2E8F0 */
+  --input: oklch(0.92 0.01 256);
+  --ring: oklch(0.51 0.26 277);
+  
+  --radius: 1rem; /* High-end rounded corners */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground tracking-tight selection:bg-primary/20 selection:text-primary overflow-x-clip;
+  }
+  html {
+    @apply font-sans antialiased scroll-smooth;
+  }
+  
+  /* Custom Scrollbar for Premium Feel */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/20 hover:bg-primary/40 rounded-full border-2 border-muted transition-colors;
+  }
+  
+  /* Text Selection */
+  ::selection {
+    @apply bg-primary/10 text-primary;
+  }
+}
+
+/* Premium Gradient Text Utility */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent;
+}
+
+/* Subtle Modern Grid Background Pattern */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Radial Gradient Overlay for modern Awwwards glow */
+.bg-glow-radial {
+  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.05), transparent 70%);
+}
+
+/* Blob Floating Animation */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 6s ease-in-out infinite;
+}
+
+/* Magnetic Button Hover styles */
+.btn-magnetic {
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Custom shadow effects for luxury agency cards */
+.shadow-premium {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.shadow-premium-hover {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shadow-premium-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -15px rgba(37, 99, 235, 0.1), 0 0 1px rgba(37, 99, 235, 0.05);
+}
+
+/* Infinite Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Text underline reveal */
+.hover-underline-animation {
+  position: relative;
+}
+
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--primary);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
