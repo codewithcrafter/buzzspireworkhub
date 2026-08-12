@@ -12,9 +12,12 @@ export interface FaqItem {
 
 interface FaqSectionProps {
   faqs: FaqItem[];
+  sectionLabel?: string;
+  heading?: string;
+  description?: string;
 }
 
-export default function FaqSection({ faqs }: FaqSectionProps) {
+export default function FaqSection({ faqs, sectionLabel, heading, description }: FaqSectionProps) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   return (
@@ -22,13 +25,13 @@ export default function FaqSection({ faqs }: FaqSectionProps) {
       <ScrollReveal>
         <div className="text-center mb-16 space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-1.5 rounded-full">
-            Common Questions
+            {sectionLabel || "Common Questions"}
           </span>
           <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground">
-            Frequently Asked Questions
+            {heading || "Frequently Asked Questions"}
           </h2>
           <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-            Clear answers to help you make informed decisions about digital marketing in Delhi.
+            {description || "Clear answers to help you make informed decisions about digital marketing in Delhi."}
           </p>
         </div>
       </ScrollReveal>

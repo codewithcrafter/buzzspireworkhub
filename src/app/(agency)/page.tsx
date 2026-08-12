@@ -18,12 +18,8 @@ import { getServiceIcon } from "@/components/services/ServiceIcon";
 import DigitalWallHero from "@/components/hero/DigitalWallHero";
 import FaqSection from "@/components/faq/FaqSection";
 import ResultsPathway from "@/components/results/ResultsPathway";
-
 // Configurable constants
 const YEARS_EXPERIENCE = "5";
-
-// Rotating Words for Hero Section
-const rotatingWords = ["Google Rankings", "Local Footfall", "Social Reach", "Web Growth"];
 
 // Trust Section Categories
 const trustCategories = [
@@ -169,7 +165,7 @@ const testimonials = [
   }
 ];
 
-// 8 FAQs
+// 8 FAQs for Homepage
 const faqs = [
   {
     q: "How can I improve my business's ranking on Google Maps?",
@@ -205,7 +201,7 @@ const faqs = [
   }
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -251,6 +247,7 @@ export default function HomePage() {
       <div className="absolute bottom-[20%] left-10 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] pointer-events-none -z-10 animate-float-slow" />
 
       {/* 1. HERO SECTION (INTERACTIVE DIGITAL WALL) */}
+      {/* 1. HERO SECTION (INTERACTIVE DIGITAL WALL) */}
       <DigitalWallHero />
 
       {/* 2. TRUST SECTION */}
@@ -293,15 +290,12 @@ export default function HomePage() {
                 <p>
                   We measure our work the same way you measure yours - by real numbers, not promises.
                 </p>
-                <p>
-                  Over 5+ years, we've helped businesses across Delhi improve their Google visibility, grow their social following, and turn more website visitors into paying customers.
-                </p>
-                <p>
-                  Most clients see steady, measurable movement in search rankings and traffic within 3 to 6 months.
-                </p>
-                <p>
-                  We're honest about timelines because that's how digital marketing actually works - no shortcuts, no guarantees, just consistent effort that adds up.
-                </p>
+                    <p>
+                      Over 5+ years, we've helped businesses across Delhi improve their Google visibility, grow their social following, and turn more website visitors into paying customers.
+                    </p>
+                    <p>
+                      We're honest about timelines because that's how digital marketing actually works - no shortcuts, no guarantees, just consistent effort that adds up.
+                    </p>
               </div>
             </div>
 
@@ -397,7 +391,7 @@ export default function HomePage() {
                   </div>
 
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={`/${service.slug}`}
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-primary group-hover:text-secondary transition-colors text-left"
                   >
                     <span>{service.ctaText}</span>

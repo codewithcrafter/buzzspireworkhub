@@ -20,6 +20,32 @@ import {
 import { Button } from "@/components/ui/button";
 import Magnetic from "@/components/ui/magnetic";
 
+interface DigitalWallHeroProps {
+  heroBadge?: string;
+  heading?: string;
+  description?: string;
+  primaryCtaText?: string;
+  primaryCtaUrl?: string;
+  secondaryCtaText?: string;
+  secondaryCtaUrl?: string;
+}
+
+function isSafeHref(value?: string) {
+  if (!value) {
+    return false;
+  }
+
+  try {
+    if (value.startsWith("/")) {
+      return true;
+    }
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export interface WallService {
   id: string;
   code: string;
@@ -74,7 +100,15 @@ export const WALL_SERVICES: WallService[] = [
 
 const AUTOPLAY_INTERVAL = 4500; // 4.5 seconds
 
-export default function DigitalWallHero() {
+export default function DigitalWallHero({
+  heroBadge,
+  heading,
+  description,
+  primaryCtaText,
+  primaryCtaUrl,
+  secondaryCtaText,
+  secondaryCtaUrl,
+}: DigitalWallHeroProps) {
   const [activeId, setActiveId] = useState<string>("seo");
   const [isPaused, setIsPaused] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -148,7 +182,7 @@ export default function DigitalWallHero() {
           className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-semibold shadow-xs backdrop-blur-md"
         >
           <MapPin className="w-3.5 h-3.5 text-secondary shrink-0" />
-          <span>Digital Marketing Agency in Delhi / Delhi NCR</span>
+          <span>{heroBadge || "Digital Marketing Agency in Delhi / Delhi NCR"}</span>
         </motion.div>
 
         <div className="hidden sm:flex items-center gap-3">

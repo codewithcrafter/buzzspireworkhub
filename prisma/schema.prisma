@@ -7,17 +7,17 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(uuid())
-  email             String    @unique
+  id                String           @id @default(uuid())
+  email             String           @unique
   password          String?
   name              String
   company           String?
   phone             String?
-  role              Role      @default(CLIENT)
-  invitationToken   String?   @unique
+  role              Role             @default(CLIENT)
+  invitationToken   String?          @unique
   invitationExpires DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
   projects          Project[]
   tickets           Ticket[]
   invoices          Invoice[]
@@ -26,32 +26,32 @@ model User {
 }
 
 model Project {
-  id               String           @id @default(uuid())
-  title            String
-  description      String?
-  status           ProjectStatus    @default(PLANNING)
-  progress         Int              @default(0)
-  progressStages   Json?            // Stores stages like { "Planning": "Completed", "Design": "80%" }
-  clientId         String
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  client           User             @relation(fields: [clientId], references: [id])
-  
-  // Visibility toggles
-  showTimeline     Boolean          @default(true)
-  showFiles        Boolean          @default(true)
-  showInvoices     Boolean          @default(true)
-  showPayments     Boolean          @default(true)
-  showProgress     Boolean          @default(true)
-  showMessages     Boolean          @default(true)
-  showTickets      Boolean          @default(true)
-  showDownloads    Boolean          @default(true)
-  showDeliverables Boolean          @default(true)
+  id             String        @id @default(uuid())
+  title          String
+  description    String?
+  status         ProjectStatus @default(PLANNING)
+  progress       Int           @default(0)
+  progressStages Json? // Stores stages like { "Planning": "Completed", "Design": "80%" }
+  clientId       String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  client         User          @relation(fields: [clientId], references: [id])
 
-  updates          ProjectUpdate[]
-  files            ProjectFile[]
-  messages         ProjectMessage[]
-  invoices         Invoice[]
+  // Visibility toggles
+  showTimeline     Boolean @default(true)
+  showFiles        Boolean @default(true)
+  showInvoices     Boolean @default(true)
+  showPayments     Boolean @default(true)
+  showProgress     Boolean @default(true)
+  showMessages     Boolean @default(true)
+  showTickets      Boolean @default(true)
+  showDownloads    Boolean @default(true)
+  showDeliverables Boolean @default(true)
+
+  updates  ProjectUpdate[]
+  files    ProjectFile[]
+  messages ProjectMessage[]
+  invoices Invoice[]
 
   @@index([clientId])
   @@index([createdAt])
@@ -69,15 +69,15 @@ model ProjectUpdate {
 }
 
 model ProjectFile {
-  id             String   @id @default(uuid())
-  projectId      String
-  name           String
-  url            String
-  size           Int
-  category       String   // e.g. PDF, ZIP, Image, Video, Source
-  clientVisible  Boolean  @default(true)
-  createdAt      DateTime @default(now())
-  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id            String   @id @default(uuid())
+  projectId     String
+  name          String
+  url           String
+  size          Int
+  category      String // e.g. PDF, ZIP, Image, Video, Source
+  clientVisible Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
 }
@@ -133,6 +133,7 @@ model TicketReply {
 
 enum Role {
   ADMIN
+  EDITOR
   CLIENT
 }
 
@@ -186,31 +187,32 @@ enum BlogStatus {
   ARCHIVED
 }
 
+
 model Invoice {
-  id          String        @id @default(uuid())
-  clientId    String
-  projectId   String?
-  amount      Float
-  status      InvoiceStatus @default(DRAFT)
-  dueDate     DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  client      User          @relation(fields: [clientId], references: [id])
-  project     Project?      @relation(fields: [projectId], references: [id])
-  payments    Payment[]
+  id        String        @id @default(uuid())
+  clientId  String
+  projectId String?
+  amount    Float
+  status    InvoiceStatus @default(DRAFT)
+  dueDate   DateTime?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  client    User          @relation(fields: [clientId], references: [id])
+  project   Project?      @relation(fields: [projectId], references: [id])
+  payments  Payment[]
 
   @@index([clientId])
   @@index([projectId])
 }
 
 model Payment {
-  id          String        @id @default(uuid())
-  invoiceId   String
-  amount      Float
-  method      String?
-  status      PaymentStatus @default(PENDING)
-  createdAt   DateTime      @default(now())
-  invoice     Invoice       @relation(fields: [invoiceId], references: [id])
+  id        String        @id @default(uuid())
+  invoiceId String
+  amount    Float
+  method    String?
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  invoice   Invoice       @relation(fields: [invoiceId], references: [id])
 
   @@index([invoiceId])
 }
@@ -230,23 +232,23 @@ enum PaymentStatus {
 }
 
 model AdminTask {
-  id          String   @id @default(uuid())
-  title       String
-  completed   Boolean  @default(false)
-  dueDate     String?
-  priority    String   @default("low") // "high", "medium", "low"
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  title     String
+  completed Boolean  @default(false)
+  dueDate   String?
+  priority  String   @default("low") // "high", "medium", "low"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ActivityLog {
-  id          String   @id @default(uuid())
-  user        String
-  avatar      String
-  action      String
-  target      String
-  type        String   // "lead", "project", "payment", "alert"
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  user      String
+  avatar    String
+  action    String
+  target    String
+  type      String // "lead", "project", "payment", "alert"
+  createdAt DateTime @default(now())
 }
 
 // ==========================================
@@ -271,89 +273,89 @@ model AiUsageHistory {
   response  String
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
-  
+
   @@index([userId])
 }
 
 // --- MODULE 2: Marketing Automation ---
 model AutomationWorkflow {
-  id          String   @id @default(uuid())
-  name        String
-  trigger     String
-  conditions  Json?
-  isActive    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  actions     WorkflowAction[]
+  id         String           @id @default(uuid())
+  name       String
+  trigger    String
+  conditions Json?
+  isActive   Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+  actions    WorkflowAction[]
 }
 
 model WorkflowAction {
-  id          String             @id @default(uuid())
-  workflowId  String
-  type        String
-  config      Json
-  workflow    AutomationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
-  
+  id         String             @id @default(uuid())
+  workflowId String
+  type       String
+  config     Json
+  workflow   AutomationWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
   @@index([workflowId])
 }
 
 // --- MODULE 3 & 4: Campaigns & CRM Expansion ---
 model Campaign {
-  id          String   @id @default(uuid())
-  title       String
-  budget      Float
-  status      String   @default("DRAFT")
-  channels    String[]
-  roi         Float?
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  title     String
+  budget    Float
+  status    String   @default("DRAFT")
+  channels  String[]
+  roi       Float?
+  createdAt DateTime @default(now())
 }
 
 model Prospect {
-  id          String   @id @default(uuid())
-  name        String
-  company     String?
-  email       String
-  score       Int      @default(0)
-  stage       String   @default("LEAD")
-  createdAt   DateTime @default(now())
-  meetings    Meeting[]
-  calls       CallLog[]
+  id        String    @id @default(uuid())
+  name      String
+  company   String?
+  email     String
+  score     Int       @default(0)
+  stage     String    @default("LEAD")
+  createdAt DateTime  @default(now())
+  meetings  Meeting[]
+  calls     CallLog[]
 }
 
 model Meeting {
-  id          String   @id @default(uuid())
-  prospectId  String
-  date        DateTime
-  notes       String?
-  prospect    Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
-  
+  id         String   @id @default(uuid())
+  prospectId String
+  date       DateTime
+  notes      String?
+  prospect   Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+
   @@index([prospectId])
 }
 
 model CallLog {
-  id          String   @id @default(uuid())
-  prospectId  String
-  duration    Int
-  outcome     String
-  prospect    Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
-  
+  id         String   @id @default(uuid())
+  prospectId String
+  duration   Int
+  outcome    String
+  prospect   Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+
   @@index([prospectId])
 }
 
 // --- MODULE 5: Employee Management ---
 model Department {
-  id          String     @id @default(uuid())
-  name        String
-  employees   Employee[]
+  id        String     @id @default(uuid())
+  name      String
+  employees Employee[]
 }
 
 model Employee {
-  id           String      @id @default(uuid())
-  userId       String      @unique
+  id           String     @id @default(uuid())
+  userId       String     @unique
   departmentId String
   salary       Float
   role         String
-  user         User        @relation(fields: [userId], references: [id])
-  department   Department  @relation(fields: [departmentId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+  department   Department @relation(fields: [departmentId], references: [id])
 }
 
 // --- MODULE 9 & 12: Knowledge Base & Files ---
@@ -367,28 +369,33 @@ model KbArticle {
 }
 
 model CloudFolder {
-  id        String       @id @default(uuid())
-  name      String
-  parentId  String?
-  files     CloudFile[]
+  id       String      @id @default(uuid())
+  name     String
+  parentId String?
+  files    CloudFile[]
 }
 
 model CloudFile {
-  id        String       @id @default(uuid())
-  folderId  String
-  url       String
-  size      Int
-  mimeType  String
-  folder    CloudFolder  @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  
+  id            String         @id @default(uuid())
+  folderId      String?
+  name          String?
+  fileName      String?
+  url           String
+  altText       String?
+  size          Int
+  mimeType      String
+  width         Int?
+  height        Int?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  folder        CloudFolder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   @@index([folderId])
 }
 
 // --- MODULE 11: Integrations ---
 model IntegrationConfig {
-  id        String   @id @default(uuid())
-  provider  String   @unique
-  apiKey    String?
-  status    String   @default("DISCONNECTED")
+  id       String  @id @default(uuid())
+  provider String  @unique
+  apiKey   String?
+  status   String  @default("DISCONNECTED")
 }
-

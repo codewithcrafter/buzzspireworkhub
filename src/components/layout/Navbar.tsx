@@ -173,7 +173,7 @@ export default function Navbar() {
                             return (
                               <Link
                                 key={service.slug}
-                                href={`/services/${service.slug}`}
+                                href={`/${service.slug}`}
                                 onClick={() => setIsServicesHovered(false)}
                                 className="group p-3 rounded-2xl hover:bg-primary/5 transition-all duration-200 flex items-start gap-3 border border-transparent hover:border-primary/10"
                               >
@@ -345,7 +345,7 @@ export default function Navbar() {
                           return (
                             <Link
                               key={service.slug}
-                              href={`/services/${service.slug}`}
+                              href={`/${service.slug}`}
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-muted text-sm font-semibold text-foreground"
                             >

@@ -63,7 +63,7 @@ export default function RelatedServices({ currentSlug, relatedSlugs }: RelatedSe
 
                   <div className="pt-6 mt-4 border-t border-border/40">
                     <Link
-                      href={`/services/${service.slug}`}
+                      href={`/${service.slug}`}
                       className="inline-flex items-center gap-1.5 text-sm font-bold text-primary group-hover:text-secondary transition-colors"
                     >
                       <span>Explore Service</span>

@@ -274,7 +274,7 @@ export default function HeroGrowthSlider() {
                 {/* Organic Search Result Card */}
                 <div className="p-3 rounded-xl bg-white border border-border/70 shadow-sm space-y-1">
                   <span className="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide">
-                    https://buzzspire.media/services/seo
+                    https://buzzspire.media/seo-services-in-delhi
                   </span>
                   <h4 className="text-xs font-bold text-primary truncate">
                     SEO Services in Delhi | Organic Search Rankings

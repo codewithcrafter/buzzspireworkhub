@@ -23,14 +23,24 @@ export const logger = {
   },
   error: (message: string, error?: any, meta?: any) => {
     // Standardize error object parsing without leaking full stack traces in production (unless debug mode)
-    const errorDetails = error instanceof Error ? {
-        name: error.name,
-        message: error.message,
-        // Only include stack in non-production environments
-        ...(process.env.NODE_ENV !== 'production' && { stack: error.stack })
-    } : error;
+    let errorDetails: any;
+    try {
+      errorDetails = error instanceof Error ? {
+          name: error.name,
+          message: error.message,
+          // Only include stack in non-production environments
+          ...(process.env.NODE_ENV !== 'production' && { stack: error.stack })
+      } : (typeof error === 'string' ? { message: error } : { message: String(error) });
+    } catch {
+      errorDetails = { message: 'Error object could not be serialized' };
+    }
 
-    console.error(formatMessage('error', message, { error: errorDetails, ...meta }));
+    try {
+      console.error(formatMessage('error', message, { error: errorDetails, ...meta }));
+    } catch {
+      // Fallback if JSON.stringify fails due to circular references
+      console.error(`[ERROR] ${message}:`, errorDetails?.message || 'Unknown error');
+    }
   },
   debug: (message: string, meta?: any) => {
     if (process.env.NODE_ENV !== 'production') {

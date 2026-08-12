@@ -110,12 +110,12 @@ export default function Footer() {
             <h4 className="font-heading font-bold text-base text-foreground tracking-wide uppercase">Services</h4>
             <ul className="space-y-3">
               {[
-                { name: "SEO Optimization", href: "/services#seo" },
-                { name: "Google & Meta Ads", href: "/services#ads" },
-                { name: "Content Strategy", href: "/services#content" },
-                { name: "Branding & Strategy", href: "/services#branding" },
-                { name: "UI/UX & Engineering", href: "/services#web" },
-                { name: "Automation & Analytics", href: "/services#analytics" },
+                { name: "SEO Services", href: "/seo-services-in-delhi" },
+                { name: "PPC & Google Ads", href: "/ppc-services-in-delhi" },
+                { name: "SMO Services", href: "/smo-services-in-delhi" },
+                { name: "Social Media Marketing", href: "/social-media-marketing-services-in-delhi" },
+                { name: "Web Development", href: "/web-development-services-in-delhi" },
+                { name: "GMB Management", href: "/google-business-profile-management-in-delhi" },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link

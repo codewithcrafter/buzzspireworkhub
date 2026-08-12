@@ -31,9 +31,173 @@ export interface ServiceData {
   relatedSlugs: string[];
 }
 
+export const OLD_TO_NEW_SLUG_MAP: Record<string, string> = {
+  // Legacy / Short Slugs -> Final Production Slugs
+  "digital-marketing": "digital-marketing-agency-in-delhi",
+  "digital-marketing-agency": "digital-marketing-agency-in-delhi",
+  "smo": "smo-services-in-delhi",
+  "google-business-profile-management": "google-business-profile-management-in-delhi",
+  "gmb": "google-business-profile-management-in-delhi",
+  "gmb-management": "google-business-profile-management-in-delhi",
+  "sem-paid-ads": "ppc-services-in-delhi",
+  "ppc": "ppc-services-in-delhi",
+  "google-ads": "ppc-services-in-delhi",
+  "ecommerce-management": "ecommerce-management-services-in-delhi",
+  "graphic-design": "graphic-design-services-in-delhi",
+  "seo": "seo-services-in-delhi",
+  "smm": "social-media-marketing-services-in-delhi",
+  "social-media-marketing": "social-media-marketing-services-in-delhi",
+  "product-photography": "product-photography-services-in-delhi",
+  "video-editing": "video-editing-services-in-delhi",
+  "web-development": "web-development-services-in-delhi",
+};
+
 export const servicesData: ServiceData[] = [
   {
-    slug: "google-business-profile-management",
+    slug: "digital-marketing-agency-in-delhi",
+    title: "Digital Marketing Agency Services",
+    navTitle: "Digital Marketing",
+    navShort: "360° digital marketing strategies for scalable growth.",
+    shortDesc: "Get a complete 360° digital marketing strategy combining SEO, paid Ads, social media growth, and content marketing tailored to scale your revenue.",
+    fullContent: [
+      "Running disjointed marketing campaigns often leads to wasted budget and mixed messaging. A complete digital marketing strategy brings search engine optimization, paid ad acquisition, social media, and web conversions under one unified growth plan.",
+      "As a premier digital marketing agency in Delhi NCR, we focus on measurable business performance - driving qualified website traffic, generating phone calls, and converting searchers into long-term loyal clients.",
+      "Whether you are looking to dominate local search in Delhi or expand your brand footprint nationally, our tailored 360° marketing roadmaps deliver consistent, transparent ROI."
+    ],
+    iconName: "Sparkles",
+    ctaText: "Explore Digital Marketing",
+    tag: "360° Growth",
+    gradient: "from-primary/10 via-secondary/10 to-accent/10",
+    heroBadge: "Full-Funnel Digital Marketing Agency",
+    delhiRelevance: "Targeting businesses across West Delhi, Janakpuri, Dwarka, Gurgaon, Noida, and Delhi NCR.",
+    seo: {
+      title: "Digital Marketing Agency in Delhi | BuzzSpire Media",
+      description: "Leading digital marketing agency in Delhi. Performance-driven SEO, Google Ads, SMM, and conversion strategies for growing businesses.",
+      keywords: [
+        "digital marketing agency in Delhi",
+        "digital marketing services Delhi NCR",
+        "best digital marketing company Delhi",
+        "full funnel marketing agency Delhi"
+      ]
+    },
+    features: [
+      {
+        title: "Omnichannel Growth Strategy",
+        description: "Align SEO, Google Ads, and social channels into a unified buyer acquisition engine."
+      },
+      {
+        title: "Conversion Rate Optimization (CRO)",
+        description: "Turn incoming web traffic into active phone calls, inquiry forms, and sales transactions."
+      },
+      {
+        title: "Dedicated Account Management",
+        description: "Direct access to strategic leads and bi-weekly performance updates."
+      },
+      {
+        title: "Full-Funnel Analytics & Tracking",
+        description: "Transparent reporting dashboard tracking cost-per-lead and return on marketing investment."
+      }
+    ],
+    benefits: [
+      {
+        title: "Unified Brand Messaging",
+        description: "Consistent voice and visual identity across all customer acquisition channels."
+      },
+      {
+        title: "Lower Customer Acquisition Cost",
+        description: "Combine fast paid ad conversions with compounding organic search traffic for optimal ROI."
+      },
+      {
+        title: "Scalable Growth Engine",
+        description: "Predictable, repeatable lead volume month after month as your campaign matures."
+      }
+    ],
+    faqs: [
+      {
+        q: "Why hire a full-service digital marketing agency in Delhi?",
+        a: "A full-service agency connects SEO, paid ads, content, and web design under one coordinated strategy, eliminating the delay and confusion of working with multiple separate vendors."
+      }
+    ],
+    relatedSlugs: [
+      "seo-services-in-delhi",
+      "ppc-services-in-delhi",
+      "social-media-marketing-services-in-delhi"
+    ]
+  },
+  {
+    slug: "smo-services-in-delhi",
+    title: "SMO (Social Media Optimization)",
+    navTitle: "SMO",
+    navShort: "Optimize your social presence for stronger visibility.",
+    shortDesc: "Turn casual social scrollers into followers with fully optimized profiles across platforms. We align your branding, bio details, and post structures to improve profile conversion, engagement, and reach.",
+    fullContent: [
+      "A social media profile that isn't optimized looks inactive, even if you're posting - wrong bio, inconsistent branding, no clear way for people to contact or buy from you.",
+      "Our smo services Delhi cover the details most businesses skip: a clear, consistent brand presence across platforms, an optimized profile that converts visitors into followers, and content structured to boost engagement rate and reach.",
+      "As a smo company in Delhi, we focus on building steady social visibility, not just follower counts. The benefit for you is a social presence that actually supports sales - better engagement, more brand recognition, and profiles that reflect your business the way it deserves to be seen."
+    ],
+    iconName: "Share2",
+    ctaText: "Explore SMO",
+    tag: "Profile Conversion",
+    gradient: "from-pink-600/10 via-purple-600/10 to-primary/10",
+    heroBadge: "Social Profile Optimization",
+    delhiRelevance: "Building professional social media profiles for retail shops, service businesses, and brands across Delhi NCR.",
+    seo: {
+      title: "Best SMO Services in Delhi | Boost Engagement Fast",
+      description: "Get real likes, shares & followers with Delhi's trusted SMO experts. Proven strategies, fast growth. Call now for a free SMO consultation!",
+      keywords: [
+        "smo services Delhi",
+        "smo company in Delhi",
+        "social media optimization Delhi",
+        "profile optimization agency Delhi",
+        "social branding Delhi NCR"
+      ]
+    },
+    features: [
+      {
+        title: "Bio & Landing Funnel Links",
+        description: "Craft clear, benefit-driven profile bios and link trees that guide social visitors straight to your phone or website."
+      },
+      {
+        title: "Visual Brand Standardization",
+        description: "Align profile covers, highlight covers, and grid styling with your company logo and color identity."
+      },
+      {
+        title: "Engagement Structure Setup",
+        description: "Structure post templates and pinned posts designed to trigger comments, shares, and direct messages."
+      },
+      {
+        title: "Platform Setup & Verification",
+        description: "Verify business details, map coordinates, and contact action buttons across Instagram, Facebook, and Google."
+      }
+    ],
+    benefits: [
+      {
+        title: "Immediate Credibility",
+        description: "When potential customers check your Instagram or Facebook, clean profiles signal an active, legitimate business."
+      },
+      {
+        title: "Higher Profile Conversion",
+        description: "Turn profile visits into actual inquiries, WhatsApp messages, or website clicks instead of lost scrollers."
+      },
+      {
+        title: "Consistent Brand Voice",
+        description: "Maintain a cohesive visual standard across all social touchpoints your customers visit."
+      }
+    ],
+    faqs: [
+      {
+        q: "What is the difference between SMO and SMM?",
+        a: "SMO focuses on optimizing your profiles, bio layout, branding consistency, and content structure for conversion, while SMM involves managing active marketing campaigns, content calendars, and targeted outreach."
+      }
+    ],
+    relatedSlugs: [
+      "social-media-marketing-services-in-delhi",
+      "graphic-design-services-in-delhi",
+      "video-editing-services-in-delhi"
+    ]
+  },
+  {
+    slug: "google-business-profile-management-in-delhi",
     title: "Google Business Profile (GMB) Management",
     navTitle: "Google Business Profile",
     navShort: "Improve your Google Maps and local search visibility.",
@@ -50,8 +214,8 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Local Search & Maps Pack Specialist",
     delhiRelevance: "Targeting 'near me' local searchers across West Delhi, Uttam Nagar, Janakpuri, Dwarka, and Delhi NCR.",
     seo: {
-      title: "Google Business Profile Management in Delhi | BuzzSpire Media",
-      description: "Professional Google Business Profile (GMB) management in Delhi. Improve local Google Maps rankings, get more calls, and convert nearby searchers.",
+      title: "Google Business Profile Experts in Delhi | Rank #1",
+      description: "Show up first on Google Maps & get more calls with expert GBP management in Delhi. Verified results, real reviews. Book your free audit today!",
       keywords: [
         "google business profile management Delhi",
         "gmb optimization services Delhi",
@@ -102,10 +266,230 @@ export const servicesData: ServiceData[] = [
         a: "Profile fixes and review management often lead to noticeable increases in phone calls and direction requests within the first 30 to 60 days."
       }
     ],
-    relatedSlugs: ["seo", "web-development", "sem-paid-ads"]
+    relatedSlugs: [
+      "seo-services-in-delhi",
+      "web-development-services-in-delhi",
+      "ppc-services-in-delhi"
+    ]
   },
   {
-    slug: "seo",
+    slug: "ppc-services-in-delhi",
+    title: "PPC / Paid Ads (Google Ads)",
+    navTitle: "PPC / Paid Ads",
+    navShort: "Generate targeted leads through Google Ads and paid campaigns.",
+    shortDesc: "Launch well-structured Google Ads campaigns targeted at keywords your customers actually search. We manage your account daily, refining ad copy and bids to lower your cost per click and drive qualified leads.",
+    fullContent: [
+      "Running Google Ads without the right setup means spending money on clicks that never turn into customers - a common and expensive mistake for businesses new to paid search.",
+      "Our sem services Delhi start with clear goals for your ad spend, then build campaigns around the keywords your customers actually search. We manage your Google Ads account daily, testing and adjusting to improve click-through rate and lower your cost per click.",
+      "As a ppc agency Delhi businesses trust for transparent reporting, we make sure every rupee of ad spend is working toward real leads, not just traffic. You get a google ads management agency that treats your budget like it's ours."
+    ],
+    iconName: "TrendingUp",
+    ctaText: "Explore Paid Ads",
+    tag: "Google Ads & PPC",
+    gradient: "from-cyan-600/10 via-blue-600/10 to-primary/10",
+    heroBadge: "PPC & Paid Search Specialists",
+    delhiRelevance: "High-ROI Google Ads campaigns targeted directly to active searchers in Delhi NCR.",
+    seo: {
+      title: "PPC Services in Delhi | Instant Leads, Real ROI",
+      description: "Get instant traffic & qualified leads with Delhi's top PPC experts. Smart bidding, proven ROI, zero guesswork. Call now for a free SEM strategy!",
+      keywords: [
+        "ppc services in Delhi",
+        "sem services Delhi",
+        "ppc agency Delhi",
+        "google ads management agency Delhi",
+        "paid search company Delhi NCR"
+      ]
+    },
+    features: [
+      {
+        title: "Keyword Intent Research",
+        description: "Target commercial search terms while adding negative keyword lists to prevent wasted ad budget."
+      },
+      {
+        title: "Conversion Copywriting",
+        description: "Craft high-CTR ad headlines and extensions that highlight your local business strengths."
+      },
+      {
+        title: "Daily Bid & Budget Optimization",
+        description: "Adjust keyword bids and location radiuses daily to maximize conversions within your budget."
+      },
+      {
+        title: "Transparent Lead Tracking",
+        description: "Map ad clicks directly to phone calls, form submits, and store direction requests."
+      }
+    ],
+    benefits: [
+      {
+        title: "Immediate Traffic & Calls",
+        description: "Start capturing interested local searchers on Google within days of campaign launch."
+      },
+      {
+        title: "Controlled Budgeting",
+        description: "Set strict daily caps so you spend only what you decide, with full reporting on every rupee."
+      },
+      {
+        title: "High-Intent Customer Acquisition",
+        description: "Reach people actively looking to buy or hire your specific service right now."
+      }
+    ],
+    faqs: [
+      {
+        q: "What ad budget do I need to start Google Ads in Delhi?",
+        a: "We tailor budgets to your local competition and goals. We work with flexible budgets designed for small and growing businesses so every rupee spent targets real local leads."
+      }
+    ],
+    relatedSlugs: [
+      "seo-services-in-delhi",
+      "web-development-services-in-delhi",
+      "google-business-profile-management-in-delhi"
+    ]
+  },
+  {
+    slug: "ecommerce-management-services-in-delhi",
+    title: "Ecommerce Management",
+    navTitle: "Ecommerce Management",
+    navShort: "Manage marketplace listings, inventory and ecommerce operations.",
+    shortDesc: "Keep your marketplace listings, inventory, and orders synchronized across Amazon, Flipkart, and your web store. We handle daily account management so your seller accounts stay active, accurate, and error-free.",
+    fullContent: [
+      "Managing your own store on Amazon, Flipkart, and your website at the same time is a full-time job on its own - and mistakes in inventory or listings cost you sales and ratings.",
+      "Our ecommerce management services handle your marketplace listings, inventory updates, and order management, so your seller accounts stay accurate and active across platforms. We also support ecommerce website development Delhi for businesses building or improving their own online store.",
+      "The benefit is fewer errors, faster order handling, and listings that stay optimized without you monitoring them daily. If you need amazon flipkart account management Delhi handled properly, this is exactly what we do."
+    ],
+    iconName: "ShoppingBag",
+    ctaText: "Explore Ecommerce Management",
+    tag: "Marketplace Growth",
+    gradient: "from-emerald-600/10 via-teal-600/10 to-primary/10",
+    heroBadge: "Marketplace & Online Store Operations",
+    delhiRelevance: "Amazon, Flipkart, and store management services for ecommerce sellers in Delhi NCR.",
+    seo: {
+      title: "Ecommerce Management Delhi | Sell More, Stress Less",
+      description: "Boost sales with expert ecommerce management in Delhi. Listings, ads, orders handled end-to-end. Get a free consultation today!",
+      keywords: [
+        "ecommerce management services Delhi",
+        "amazon flipkart account management Delhi",
+        "ecommerce website development Delhi",
+        "marketplace management Delhi NCR",
+        "online store management Delhi"
+      ]
+    },
+    features: [
+      {
+        title: "Listing Optimization & SEO",
+        description: "Write search-optimized product titles, bullet points, and A+ content for maximum search visibility."
+      },
+      {
+        title: "Multi-Channel Inventory Sync",
+        description: "Keep stock counts aligned across Amazon, Flipkart, Shopify, and local warehouse records."
+      },
+      {
+        title: "Seller Account Health Audits",
+        description: "Monitor order defect rates, customer feedback, and listing suspensions to keep accounts healthy."
+      },
+      {
+        title: "Promotion & Ad Campaign Setup",
+        description: "Run marketplace sponsored ads and deal promotions to drive velocity during peak sales periods."
+      }
+    ],
+    benefits: [
+      {
+        title: "Fewer Operational Mistakes",
+        description: "Prevent stockouts and wrong shipments with synchronized multi-platform inventory management."
+      },
+      {
+        title: "Time Savings for Business Owners",
+        description: "Focus on sourcing and business strategy while our team handles daily listing updates."
+      },
+      {
+        title: "Higher Marketplace Ratings",
+        description: "Maintain seller status and positive buyer reviews with fast, accurate account support."
+      }
+    ],
+    faqs: [
+      {
+        q: "Can you help launch our brand on Amazon and Flipkart?",
+        a: "Yes, we handle complete seller account setup, brand registry, initial product catalog uploads, and ad launch setups."
+      }
+    ],
+    relatedSlugs: [
+      "product-photography-services-in-delhi",
+      "web-development-services-in-delhi",
+      "ppc-services-in-delhi"
+    ]
+  },
+  {
+    slug: "graphic-design-services-in-delhi",
+    title: "Graphic Design",
+    navTitle: "Graphic Design",
+    navShort: "Build a consistent and professional visual identity.",
+    shortDesc: "Establish a strong visual identity with custom logos, brand assets, and marketing collateral. We keep your colors, typography, and design templates consistent so your business looks credible everywhere customers see it.",
+    fullContent: [
+      "Inconsistent visuals - a different logo style here, mismatched colours there - make even a good business look unprofessional and harder to remember.",
+      "As a graphic design agency Delhi businesses turn to for consistent branding, we create your full visual identity: logo, brand assets, and marketing collateral that all work together. Our logo design services start with understanding your business before we design anything.",
+      "The result is a brand that looks the same - and looks credible - everywhere your customers see it. Working with a graphic design company in Delhi that keeps your design templates and brand consistency in one place saves you time on every future project."
+    ],
+    iconName: "Palette",
+    ctaText: "Explore Graphic Design",
+    tag: "Brand Identity",
+    gradient: "from-amber-600/10 via-yellow-600/10 to-primary/10",
+    heroBadge: "Brand Identity & Graphic Design",
+    delhiRelevance: "Logo design, marketing collateral, and visual branding systems for businesses in Delhi.",
+    seo: {
+      title: "Graphic Design Services in Delhi | BuzzSpire Media",
+      description: "Graphic design agency and logo design company in Delhi. Custom logos, marketing collateral, brand guidelines, and visual assets.",
+      keywords: [
+        "graphic design services in Delhi",
+        "graphic design agency Delhi",
+        "graphic design company in Delhi",
+        "logo design services Delhi",
+        "brand design agency Delhi NCR"
+      ]
+    },
+    features: [
+      {
+        title: "Logo & Brand Mark Design",
+        description: "Versatile, original logo concepts crafted to reflect your core business values and market positioning."
+      },
+      {
+        title: "Brand Style Guides",
+        description: "Comprehensive color palettes, typography rules, and usage guidelines for brand consistency."
+      },
+      {
+        title: "Marketing Collateral & Print Assets",
+        description: "Brochures, signage, banners, business cards, and packaging designs ready for local print."
+      },
+      {
+        title: "Social Media Design Templates",
+        description: "Editable graphic templates for Instagram, Facebook, and ad banners."
+      }
+    ],
+    benefits: [
+      {
+        title: "Instant Customer Trust",
+        description: "Professional, cohesive visual design gives prospects confidence in your service quality."
+      },
+      {
+        title: "Consistent Brand Recognition",
+        description: "Look recognizable everywhere—from your shop sign to your website and social feeds."
+      },
+      {
+        title: "Time Savings on Future Projects",
+        description: "Pre-built brand templates make creating future posts and ads fast and effortless."
+      }
+    ],
+    faqs: [
+      {
+        q: "What files do I receive with logo and branding projects?",
+        a: "You receive complete master vector source files (AI, EPS, SVG) alongside PNG, JPG, and PDF versions for web and print."
+      }
+    ],
+    relatedSlugs: [
+      "web-development-services-in-delhi",
+      "smo-services-in-delhi",
+      "product-photography-services-in-delhi"
+    ]
+  },
+  {
+    slug: "seo-services-in-delhi",
     title: "SEO Services",
     navTitle: "SEO",
     navShort: "Build long-term organic visibility and qualified traffic.",
@@ -174,80 +558,16 @@ export const servicesData: ServiceData[] = [
         a: "No honest SEO agency can guarantee #1 spots due to search algorithm updates, but our methodologies consistently move target terms onto Page 1 for local businesses in Delhi."
       }
     ],
-    relatedSlugs: ["google-business-profile-management", "sem-paid-ads", "web-development"]
+    relatedSlugs: [
+      "google-business-profile-management-in-delhi",
+      "ppc-services-in-delhi",
+      "web-development-services-in-delhi"
+    ]
   },
   {
-    slug: "smo",
-    title: "SMO (Social Media Optimization)",
-    navTitle: "SMO",
-    navShort: "Optimize your social presence for stronger visibility.",
-    shortDesc: "Turn casual social scrollers into followers with fully optimized profiles across platforms. We align your branding, bio details, and post structures to improve profile conversion, engagement, and reach.",
-    fullContent: [
-      "A social media profile that isn't optimized looks inactive, even if you're posting - wrong bio, inconsistent branding, no clear way for people to contact or buy from you.",
-      "Our smo services Delhi cover the details most businesses skip: a clear, consistent brand presence across platforms, an optimized profile that converts visitors into followers, and content structured to boost engagement rate and reach.",
-      "As a smo company in Delhi, we focus on building steady social visibility, not just follower counts. The benefit for you is a social presence that actually supports sales - better engagement, more brand recognition, and profiles that reflect your business the way it deserves to be seen."
-    ],
-    iconName: "Share2",
-    ctaText: "Explore SMO",
-    tag: "Profile Conversion",
-    gradient: "from-pink-600/10 via-purple-600/10 to-primary/10",
-    heroBadge: "Social Profile Optimization",
-    delhiRelevance: "Building professional social media profiles for retail shops, service businesses, and brands across Delhi NCR.",
-    seo: {
-      title: "SMO Services in Delhi | BuzzSpire Media",
-      description: "Expert Social Media Optimization (SMO) services in Delhi. Convert scrollers into followers and build brand trust across Instagram, Facebook & LinkedIn.",
-      keywords: [
-        "smo services Delhi",
-        "smo company in Delhi",
-        "social media optimization Delhi",
-        "profile optimization agency Delhi",
-        "social branding Delhi NCR"
-      ]
-    },
-    features: [
-      {
-        title: "Bio & Landing Funnel Links",
-        description: "Craft clear, benefit-driven profile bios and link trees that guide social visitors straight to your phone or website."
-      },
-      {
-        title: "Visual Brand Standardization",
-        description: "Align profile covers, highlight covers, and grid styling with your company logo and color identity."
-      },
-      {
-        title: "Engagement Structure Setup",
-        description: "Structure post templates and pinned posts designed to trigger comments, shares, and direct messages."
-      },
-      {
-        title: "Platform Setup & Verification",
-        description: "Verify business details, map coordinates, and contact action buttons across Instagram, Facebook, and Google."
-      }
-    ],
-    benefits: [
-      {
-        title: "Immediate Credibility",
-        description: "When potential customers check your Instagram or Facebook, clean profiles signal a active, legitimate business."
-      },
-      {
-        title: "Higher Profile Conversion",
-        description: "Turn profile visits into actual inquiries, WhatsApp messages, or website clicks instead of lost scrollers."
-      },
-      {
-        title: "Consistent Brand Voice",
-        description: "Maintain a cohesive visual standard across all social touchpoints your customers visit."
-      }
-    ],
-    faqs: [
-      {
-        q: "What is the difference between SMO and SMM?",
-        a: "SMO focuses on optimizing your profiles, bio layout, branding consistency, and content structure for conversion, while SMM involves managing active marketing campaigns, content calendars, and targeted outreach."
-      }
-    ],
-    relatedSlugs: ["smm", "graphic-design", "video-editing"]
-  },
-  {
-    slug: "smm",
-    title: "SMM (Social Media Marketing)",
-    navTitle: "SMM",
+    slug: "social-media-marketing-services-in-delhi",
+    title: "Social Media Marketing (SMM)",
+    navTitle: "Social Media Marketing",
     navShort: "Build consistent social media growth and engagement.",
     shortDesc: "Build a real audience with strategic content calendars and targeted posts designed for engagement. We help you connect with your ideal customers and turn social interactions into genuine leads for your business.",
     fullContent: [
@@ -265,11 +585,11 @@ export const servicesData: ServiceData[] = [
       title: "Social Media Marketing Agency in Delhi | BuzzSpire Media",
       description: "Leading social media marketing agency in Delhi NCR. Creative content calendars, audience targeting, and lead generation on Instagram & Facebook.",
       keywords: [
+        "social media marketing services in Delhi",
         "social media marketing agency Delhi",
         "SMM services Delhi NCR",
         "social media company Delhi",
-        "instagram marketing Delhi",
-        "facebook marketing agency Delhi"
+        "instagram marketing Delhi"
       ]
     },
     features: [
@@ -310,78 +630,14 @@ export const servicesData: ServiceData[] = [
         a: "Most local businesses benefit most from Instagram and Facebook. B2B businesses also benefit greatly from LinkedIn. We help you choose the right platforms for your specific customer base."
       }
     ],
-    relatedSlugs: ["smo", "video-editing", "graphic-design"]
+    relatedSlugs: [
+      "smo-services-in-delhi",
+      "video-editing-services-in-delhi",
+      "graphic-design-services-in-delhi"
+    ]
   },
   {
-    slug: "sem-paid-ads",
-    title: "SEM / Paid Ads",
-    navTitle: "SEM / Paid Ads",
-    navShort: "Generate targeted leads through Google Ads and paid campaigns.",
-    shortDesc: "Launch well-structured Google Ads campaigns targeted at keywords your customers actually search. We manage your account daily, refining ad copy and bids to lower your cost per click and drive qualified leads.",
-    fullContent: [
-      "Running Google Ads without the right setup means spending money on clicks that never turn into customers - a common and expensive mistake for businesses new to paid search.",
-      "Our sem services Delhi start with clear goals for your ad spend, then build campaigns around the keywords your customers actually search. We manage your Google Ads account daily, testing and adjusting to improve click-through rate and lower your cost per click.",
-      "As a ppc agency Delhi businesses trust for transparent reporting, we make sure every rupee of ad spend is working toward real leads, not just traffic. You get a google ads management agency that treats your budget like it's ours."
-    ],
-    iconName: "TrendingUp",
-    ctaText: "Explore Paid Ads",
-    tag: "Google Ads & PPC",
-    gradient: "from-cyan-600/10 via-blue-600/10 to-primary/10",
-    heroBadge: "PPC & Paid Search Specialists",
-    delhiRelevance: "High-ROI Google Ads campaigns targeted directly to active searchers in Delhi NCR.",
-    seo: {
-      title: "Google Ads & SEM Services in Delhi | BuzzSpire Media",
-      description: "PPC agency in Delhi providing transparent Google Ads management. Drive qualified calls and leads while lowering cost per click.",
-      keywords: [
-        "sem services Delhi",
-        "ppc agency Delhi",
-        "google ads management agency Delhi",
-        "paid search company Delhi NCR",
-        "google ads optimization Delhi"
-      ]
-    },
-    features: [
-      {
-        title: "Keyword Intent Research",
-        description: "Target commercial search terms while adding negative keyword lists to prevent wasted ad budget."
-      },
-      {
-        title: "Conversion Copywriting",
-        description: "Craft high-CTR ad headlines and extensions that highlight your local business strengths."
-      },
-      {
-        title: "Daily Bid & Budget Optimization",
-        description: "Adjust keyword bids and location radiuses daily to maximize conversions within your budget."
-      },
-      {
-        title: "Transparent Lead Tracking",
-        description: "Map ad clicks directly to phone calls, form submits, and store direction requests."
-      }
-    ],
-    benefits: [
-      {
-        title: "Immediate Traffic & Calls",
-        description: "Start capturing interested local searchers on Google within days of campaign launch."
-      },
-      {
-        title: "Controlled Budgeting",
-        description: "Set strict daily caps so you spend only what you decide, with full reporting on every rupee."
-      },
-      {
-        title: "High-Intent Customer Acquisition",
-        description: "Reach people actively looking to buy or hire your specific service right now."
-      }
-    ],
-    faqs: [
-      {
-        q: "What ad budget do I need to start Google Ads in Delhi?",
-        a: "We tailor budgets to your local competition and goals. We work with flexible budgets designed for small and growing businesses so every rupee spent targets real local leads."
-      }
-    ],
-    relatedSlugs: ["seo", "web-development", "google-business-profile-management"]
-  },
-  {
-    slug: "product-photography",
+    slug: "product-photography-services-in-delhi",
     title: "Product Photography",
     navTitle: "Product Photography",
     navShort: "Professional product visuals designed to improve trust and conversions.",
@@ -401,10 +657,10 @@ export const servicesData: ServiceData[] = [
       title: "Product Photography Services in Delhi | BuzzSpire Media",
       description: "Professional product photography services in Delhi for Amazon, Flipkart, websites, and catalog shoots. Boost customer trust and online sales.",
       keywords: [
+        "product photography services in Delhi",
         "product photography services Delhi",
         "ecommerce product shoot Delhi",
         "amazon flipkart photography Delhi",
-        "white background product shoot Delhi",
         "catalog photography Delhi NCR"
       ]
     },
@@ -446,78 +702,14 @@ export const servicesData: ServiceData[] = [
         a: "Yes, our photography team understands the exact image resolution, white background, and crop requirements for major marketplaces."
       }
     ],
-    relatedSlugs: ["ecommerce-management", "graphic-design", "web-development"]
+    relatedSlugs: [
+      "ecommerce-management-services-in-delhi",
+      "graphic-design-services-in-delhi",
+      "web-development-services-in-delhi"
+    ]
   },
   {
-    slug: "ecommerce-management",
-    title: "Ecommerce Management",
-    navTitle: "Ecommerce Management",
-    navShort: "Manage marketplace listings, inventory and ecommerce operations.",
-    shortDesc: "Keep your marketplace listings, inventory, and orders synchronized across Amazon, Flipkart, and your web store. We handle daily account management so your seller accounts stay active, accurate, and error-free.",
-    fullContent: [
-      "Managing your own store on Amazon, Flipkart, and your website at the same time is a full-time job on its own - and mistakes in inventory or listings cost you sales and ratings.",
-      "Our ecommerce management services handle your marketplace listings, inventory updates, and order management, so your seller accounts stay accurate and active across platforms. We also support ecommerce website development Delhi for businesses building or improving their own online store.",
-      "The benefit is fewer errors, faster order handling, and listings that stay optimized without you monitoring them daily. If you need amazon flipkart account management Delhi handled properly, this is exactly what we do."
-    ],
-    iconName: "ShoppingBag",
-    ctaText: "Explore Ecommerce Management",
-    tag: "Marketplace Growth",
-    gradient: "from-emerald-600/10 via-teal-600/10 to-primary/10",
-    heroBadge: "Marketplace & Online Store Operations",
-    delhiRelevance: "Amazon, Flipkart, and store management services for ecommerce sellers in Delhi NCR.",
-    seo: {
-      title: "Ecommerce Management Services in Delhi | BuzzSpire Media",
-      description: "Ecommerce management and Amazon Flipkart account management in Delhi NCR. Optimize listings, manage inventory, and grow marketplace revenue.",
-      keywords: [
-        "ecommerce management services Delhi",
-        "amazon flipkart account management Delhi",
-        "ecommerce website development Delhi",
-        "marketplace management Delhi NCR",
-        "online store management Delhi"
-      ]
-    },
-    features: [
-      {
-        title: "Listing Optimization & SEO",
-        description: "Write search-optimized product titles, bullet points, and A+ content for maximum search visibility."
-      },
-      {
-        title: "Multi-Channel Inventory Sync",
-        description: "Keep stock counts aligned across Amazon, Flipkart, Shopify, and local warehouse records."
-      },
-      {
-        title: "Seller Account Health Audits",
-        description: "Monitor order defect rates, customer feedback, and listing suspensions to keep accounts healthy."
-      },
-      {
-        title: "Promotion & Ad Campaign Setup",
-        description: "Run marketplace sponsored ads and deal promotions to drive velocity during peak sales periods."
-      }
-    ],
-    benefits: [
-      {
-        title: "Fewer Operational Mistakes",
-        description: "Prevent stockouts and wrong shipments with synchronized multi-platform inventory management."
-      },
-      {
-        title: "Time Savings for Business Owners",
-        description: "Focus on sourcing and business strategy while our team handles daily listing updates."
-      },
-      {
-        title: "Higher Marketplace Ratings",
-        description: "Maintain seller status and positive buyer reviews with fast, accurate account support."
-      }
-    ],
-    faqs: [
-      {
-        q: "Can you help launch our brand on Amazon and Flipkart?",
-        a: "Yes, we handle complete seller account setup, brand registry, initial product catalog uploads, and ad launch setups."
-      }
-    ],
-    relatedSlugs: ["product-photography", "web-development", "sem-paid-ads"]
-  },
-  {
-    slug: "video-editing",
+    slug: "video-editing-services-in-delhi",
     title: "Video Editing",
     navTitle: "Video Editing",
     navShort: "Turn raw footage into engaging short-form and brand content.",
@@ -537,11 +729,11 @@ export const servicesData: ServiceData[] = [
       title: "Video Editing Services in Delhi | BuzzSpire Media",
       description: "Professional video editing services in Delhi NCR. Expert Reels editing agency, corporate brand videos, captions, and high-engagement cuts.",
       keywords: [
+        "video editing services in Delhi",
         "video editing services Delhi",
         "reels editing agency Delhi",
         "corporate video editing Delhi",
-        "short form video editing Delhi NCR",
-        "youtube video editor Delhi"
+        "short form video editing Delhi NCR"
       ]
     },
     features: [
@@ -582,78 +774,14 @@ export const servicesData: ServiceData[] = [
         a: "You can send raw video clips directly from your phone or camera via Google Drive, Dropbox, or WeTransfer."
       }
     ],
-    relatedSlugs: ["smm", "smo", "graphic-design"]
+    relatedSlugs: [
+      "social-media-marketing-services-in-delhi",
+      "smo-services-in-delhi",
+      "graphic-design-services-in-delhi"
+    ]
   },
   {
-    slug: "graphic-design",
-    title: "Graphic Design",
-    navTitle: "Graphic Design",
-    navShort: "Build a consistent and professional visual identity.",
-    shortDesc: "Establish a strong visual identity with custom logos, brand assets, and marketing collateral. We keep your colors, typography, and design templates consistent so your business looks credible everywhere customers see it.",
-    fullContent: [
-      "Inconsistent visuals - a different logo style here, mismatched colours there - make even a good business look unprofessional and harder to remember.",
-      "As a graphic design agency Delhi businesses turn to for consistent branding, we create your full visual identity: logo, brand assets, and marketing collateral that all work together. Our logo design services start with understanding your business before we design anything.",
-      "The result is a brand that looks the same - and looks credible - everywhere your customers see it. Working with a graphic design company in Delhi that keeps your design templates and brand consistency in one place saves you time on every future project."
-    ],
-    iconName: "Palette",
-    ctaText: "Explore Graphic Design",
-    tag: "Brand Identity",
-    gradient: "from-amber-600/10 via-yellow-600/10 to-primary/10",
-    heroBadge: "Brand Identity & Graphic Design",
-    delhiRelevance: "Logo design, marketing collateral, and visual branding systems for businesses in Delhi.",
-    seo: {
-      title: "Graphic Design Agency in Delhi | BuzzSpire Media",
-      description: "Graphic design agency and logo design company in Delhi. Custom logos, marketing collateral, brand guidelines, and visual assets.",
-      keywords: [
-        "graphic design agency Delhi",
-        "graphic design company in Delhi",
-        "logo design services Delhi",
-        "brand design agency Delhi NCR",
-        "marketing collateral design Delhi"
-      ]
-    },
-    features: [
-      {
-        title: "Logo & Brand Mark Design",
-        description: "Versatile, original logo concepts crafted to reflect your core business values and market positioning."
-      },
-      {
-        title: "Brand Style Guides",
-        description: "Comprehensive color palettes, typography rules, and usage guidelines for brand consistency."
-      },
-      {
-        title: "Marketing Collateral & Print Assets",
-        description: "Brochures, signage, banners, business cards, and packaging designs ready for local print."
-      },
-      {
-        title: "Social Media Design Templates",
-        description: "Editable graphic templates for Instagram, Facebook, and ad banners."
-      }
-    ],
-    benefits: [
-      {
-        title: "Instant Customer Trust",
-        description: "Professional, cohesive visual design gives prospects confidence in your service quality."
-      },
-      {
-        title: "Consistent Brand Recognition",
-        description: "Look recognizable everywhere—from your shop sign to your website and social feeds."
-      },
-      {
-        title: "Time Savings on Future Projects",
-        description: "Pre-built brand templates make creating future posts and ads fast and effortless."
-      }
-    ],
-    faqs: [
-      {
-        q: "What files do I receive with logo and branding projects?",
-        a: "You receive complete master vector source files (AI, EPS, SVG) alongside PNG, JPG, and PDF versions for web and print."
-      }
-    ],
-    relatedSlugs: ["web-development", "smo", "product-photography"]
-  },
-  {
-    slug: "web-development",
+    slug: "web-development-services-in-delhi",
     title: "Web Development",
     navTitle: "Web Development",
     navShort: "Fast, responsive websites designed for performance and conversion.",
@@ -670,14 +798,14 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Custom Web Engineering & Next.js",
     delhiRelevance: "Responsive, high-speed website development for businesses in Uttam Nagar, West Delhi, and across Delhi NCR.",
     seo: {
-      title: "Web Development Company in Delhi | BuzzSpire Media",
+      title: "Web Development Services in Delhi | BuzzSpire Media",
       description: "Leading web development company in Delhi. Fast, mobile-friendly custom Next.js website design company Delhi NCR businesses trust for lead conversions.",
       keywords: [
+        "web development services in Delhi",
         "web development company Delhi",
         "website design agency Delhi NCR",
         "custom website design company Delhi",
-        "web development company in Uttam Nagar",
-        "responsive website developer Delhi"
+        "web development company in Uttam Nagar"
       ]
     },
     features: [
@@ -718,10 +846,25 @@ export const servicesData: ServiceData[] = [
         a: "Yes, all our websites follow a mobile-first engineering approach, optimized for high Core Web Vitals speed scores."
       }
     ],
-    relatedSlugs: ["seo", "sem-paid-ads", "graphic-design"]
+    relatedSlugs: [
+      "seo-services-in-delhi",
+      "ppc-services-in-delhi",
+      "graphic-design-services-in-delhi"
+    ]
   }
 ];
 
 export function getServiceBySlug(slug: string): ServiceData | undefined {
-  return servicesData.find((s) => s.slug === slug);
+  if (!slug) return undefined;
+  // First, check direct match with current production slug
+  let match = servicesData.find((s) => s.slug === slug);
+  if (match) return match;
+
+  // Next, check if it's a mapped legacy/short slug
+  const mappedSlug = OLD_TO_NEW_SLUG_MAP[slug];
+  if (mappedSlug) {
+    return servicesData.find((s) => s.slug === mappedSlug);
+  }
+
+  return undefined;
 }
