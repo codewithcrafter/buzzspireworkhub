@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
     "/about",
-    "/services",
+    "/digital-marketing-agency-in-delhi",
     "/blog",
     "/contact",
     "/career",

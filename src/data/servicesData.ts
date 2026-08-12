@@ -33,8 +33,6 @@ export interface ServiceData {
 
 export const OLD_TO_NEW_SLUG_MAP: Record<string, string> = {
   // Legacy / Short Slugs -> Final Production Slugs
-  "digital-marketing": "digital-marketing-agency-in-delhi",
-  "digital-marketing-agency": "digital-marketing-agency-in-delhi",
   "smo": "smo-services-in-delhi",
   "google-business-profile-management": "google-business-profile-management-in-delhi",
   "gmb": "google-business-profile-management-in-delhi",
@@ -53,77 +51,6 @@ export const OLD_TO_NEW_SLUG_MAP: Record<string, string> = {
 };
 
 export const servicesData: ServiceData[] = [
-  {
-    slug: "digital-marketing-agency-in-delhi",
-    title: "Digital Marketing Agency Services",
-    navTitle: "Digital Marketing",
-    navShort: "360° digital marketing strategies for scalable growth.",
-    shortDesc: "Get a complete 360° digital marketing strategy combining SEO, paid Ads, social media growth, and content marketing tailored to scale your revenue.",
-    fullContent: [
-      "Running disjointed marketing campaigns often leads to wasted budget and mixed messaging. A complete digital marketing strategy brings search engine optimization, paid ad acquisition, social media, and web conversions under one unified growth plan.",
-      "As a premier digital marketing agency in Delhi NCR, we focus on measurable business performance - driving qualified website traffic, generating phone calls, and converting searchers into long-term loyal clients.",
-      "Whether you are looking to dominate local search in Delhi or expand your brand footprint nationally, our tailored 360° marketing roadmaps deliver consistent, transparent ROI."
-    ],
-    iconName: "Sparkles",
-    ctaText: "Explore Digital Marketing",
-    tag: "360° Growth",
-    gradient: "from-primary/10 via-secondary/10 to-accent/10",
-    heroBadge: "Full-Funnel Digital Marketing Agency",
-    delhiRelevance: "Targeting businesses across West Delhi, Janakpuri, Dwarka, Gurgaon, Noida, and Delhi NCR.",
-    seo: {
-      title: "Digital Marketing Agency in Delhi | BuzzSpire Media",
-      description: "Leading digital marketing agency in Delhi. Performance-driven SEO, Google Ads, SMM, and conversion strategies for growing businesses.",
-      keywords: [
-        "digital marketing agency in Delhi",
-        "digital marketing services Delhi NCR",
-        "best digital marketing company Delhi",
-        "full funnel marketing agency Delhi"
-      ]
-    },
-    features: [
-      {
-        title: "Omnichannel Growth Strategy",
-        description: "Align SEO, Google Ads, and social channels into a unified buyer acquisition engine."
-      },
-      {
-        title: "Conversion Rate Optimization (CRO)",
-        description: "Turn incoming web traffic into active phone calls, inquiry forms, and sales transactions."
-      },
-      {
-        title: "Dedicated Account Management",
-        description: "Direct access to strategic leads and bi-weekly performance updates."
-      },
-      {
-        title: "Full-Funnel Analytics & Tracking",
-        description: "Transparent reporting dashboard tracking cost-per-lead and return on marketing investment."
-      }
-    ],
-    benefits: [
-      {
-        title: "Unified Brand Messaging",
-        description: "Consistent voice and visual identity across all customer acquisition channels."
-      },
-      {
-        title: "Lower Customer Acquisition Cost",
-        description: "Combine fast paid ad conversions with compounding organic search traffic for optimal ROI."
-      },
-      {
-        title: "Scalable Growth Engine",
-        description: "Predictable, repeatable lead volume month after month as your campaign matures."
-      }
-    ],
-    faqs: [
-      {
-        q: "Why hire a full-service digital marketing agency in Delhi?",
-        a: "A full-service agency connects SEO, paid ads, content, and web design under one coordinated strategy, eliminating the delay and confusion of working with multiple separate vendors."
-      }
-    ],
-    relatedSlugs: [
-      "seo-services-in-delhi",
-      "ppc-services-in-delhi",
-      "social-media-marketing-services-in-delhi"
-    ]
-  },
   {
     slug: "smo-services-in-delhi",
     title: "SMO (Social Media Optimization)",
@@ -434,8 +361,8 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Brand Identity & Graphic Design",
     delhiRelevance: "Logo design, marketing collateral, and visual branding systems for businesses in Delhi.",
     seo: {
-      title: "Graphic Design Services in Delhi | BuzzSpire Media",
-      description: "Graphic design agency and logo design company in Delhi. Custom logos, marketing collateral, brand guidelines, and visual assets.",
+      title: "Graphic Design Services Delhi | Designs That Convert",
+      description: "Get logos, posts & brand kits that actually get noticed. Delhi's trusted graphic design experts, fast turnaround. Call now for a free quote!",
       keywords: [
         "graphic design services in Delhi",
         "graphic design agency Delhi",
@@ -506,8 +433,8 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Data-Driven SEO Agency",
     delhiRelevance: "Optimizing website rankings for competitive commercial terms across Delhi NCR and local Delhi markets.",
     seo: {
-      title: "SEO Services in Delhi | BuzzSpire Media",
-      description: "Professional SEO services in Delhi focused on search visibility, organic traffic, local relevance, and sustainable business growth.",
+      title: "SEO Services in Delhi | Rank #1 on Google Fast",
+      description: "Get real keywords, real traffic & real growth with Delhi's top SEO experts. Proven strategies, guaranteed results. Book a free SEO audit now!",
       keywords: [
         "seo services in Delhi",
         "seo agency Delhi NCR",
@@ -582,8 +509,8 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Social Media Growth Agency",
     delhiRelevance: "Targeted content marketing and community growth for businesses operating in Delhi NCR markets.",
     seo: {
-      title: "Social Media Marketing Agency in Delhi | BuzzSpire Media",
-      description: "Leading social media marketing agency in Delhi NCR. Creative content calendars, audience targeting, and lead generation on Instagram & Facebook.",
+      title: "SMM Services in Delhi | Build a Brand People Follow",
+      description: "Get scroll-stopping content, smart ads & real engagement with Delhi's top SMM experts. Proven growth strategies. Call now for a free consultation!",
       keywords: [
         "social media marketing services in Delhi",
         "social media marketing agency Delhi",
@@ -654,8 +581,8 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Ecommerce Studio Photography",
     delhiRelevance: "Studio catalog shoots and styled product photography for sellers and brands in Delhi NCR.",
     seo: {
-      title: "Product Photography Services in Delhi | BuzzSpire Media",
-      description: "Professional product photography services in Delhi for Amazon, Flipkart, websites, and catalog shoots. Boost customer trust and online sales.",
+      title: "Product Photography Delhi | Shots That Sell Fast",
+      description: "Get clean, high-converting product shots with Delhi's trusted photography experts. Better listings, higher sales. Book your free shoot today!",
       keywords: [
         "product photography services in Delhi",
         "product photography services Delhi",
@@ -726,14 +653,14 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Reels & Creative Video Editing",
     delhiRelevance: "Short-form video editing for Instagram Reels, YouTube Shorts, and corporate brand videos in Delhi NCR.",
     seo: {
-      title: "Video Editing Services in Delhi | BuzzSpire Media",
-      description: "Professional video editing services in Delhi NCR. Expert Reels editing agency, corporate brand videos, captions, and high-engagement cuts.",
+      title: "Video Editing Services Delhi | Scroll-Stopping Cuts",
+      description: "Turn raw footage into high-quality, scroll-stopping content with Delhi's top video editors. Fast turnaround, real results. Call now for a free quote!",
       keywords: [
         "video editing services in Delhi",
-        "video editing services Delhi",
+        "video editing agency Delhi",
+        "youtube video editor Delhi",
         "reels editing agency Delhi",
-        "corporate video editing Delhi",
-        "short form video editing Delhi NCR"
+        "commercial video editing Delhi NCR"
       ]
     },
     features: [
@@ -798,14 +725,14 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Custom Web Engineering & Next.js",
     delhiRelevance: "Responsive, high-speed website development for businesses in Uttam Nagar, West Delhi, and across Delhi NCR.",
     seo: {
-      title: "Web Development Services in Delhi | BuzzSpire Media",
-      description: "Leading web development company in Delhi. Fast, mobile-friendly custom Next.js website design company Delhi NCR businesses trust for lead conversions.",
+      title: "Website Development Delhi | Fast, Built to Convert",
+      description: "Get a fast, mobile-friendly website that actually converts. Delhi's trusted web development experts. Call now for a free website consultation!",
       keywords: [
-        "web development services in Delhi",
-        "web development company Delhi",
-        "website design agency Delhi NCR",
-        "custom website design company Delhi",
-        "web development company in Uttam Nagar"
+        "web development company in Delhi",
+        "web design agency Delhi NCR",
+        "custom website development Delhi",
+        "ecommerce web development Delhi",
+        "responsive web design services"
       ]
     },
     features: [

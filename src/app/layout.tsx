@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/animations/SmoothScroll";
-import AiChatbot from "@/components/chat/AiChatbot";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
+  adjustFontFallback: true,
+  fallback: ["Arial", "sans-serif"],
 });
 
 const outfit = Outfit({
@@ -16,6 +18,8 @@ const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
   weight: ["600", "700", "800", "900"],
+  adjustFontFallback: true,
+  fallback: ["Arial", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -87,7 +91,7 @@ export default function RootLayout({
         <SmoothScroll>
           {children}
         </SmoothScroll>
-        <AiChatbot />
+        <WhatsAppButton />
       </body>
     </html>
   );

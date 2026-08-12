@@ -198,27 +198,22 @@ export default function DigitalWallHero({
         
         {/* Left Column (42% approx) */}
         <div className="lg:col-span-5 space-y-4 text-left">
-          <motion.h1
-            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
-            animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight leading-[1.08] text-foreground"
+          <h1
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight leading-[1.08] text-foreground ${!shouldReduceMotion && "animate-fade-in-up"}`}
           >
             Grow Your Business <br />
             Online — <br />
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Right Here in Delhi
             </span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="text-xs sm:text-sm md:text-base text-muted-foreground font-sans leading-relaxed max-w-lg"
+          <p
+            className={`text-xs sm:text-sm md:text-base text-muted-foreground font-sans leading-relaxed max-w-lg ${!shouldReduceMotion && "animate-fade-in-up"}`}
+            style={!shouldReduceMotion ? { animationDelay: '150ms', animationFillMode: 'both' } : {}}
           >
             We're a digital marketing agency in Delhi that helps local businesses show up on Google, win more customers, and grow with less guesswork. From SEO to social media to web development, we build a plan around your business - not a template. Whether you run a shop in Uttam Nagar or a growing brand across Delhi NCR, our team understands the local market and what it takes to compete in it.
-          </motion.p>
+          </p>
 
           <div className="flex flex-col sm:flex-row gap-3 pt-1">
             <Magnetic strength={0.2}>
@@ -230,7 +225,7 @@ export default function DigitalWallHero({
               </Link>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <Link href="/services" className="w-full sm:w-auto">
+              <Link href="/digital-marketing-agency-in-delhi" className="w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="rounded-full px-7 py-6 text-base border-border hover:bg-muted/40 transition-all duration-300 w-full sm:w-auto">
                   Explore Services
                 </Button>

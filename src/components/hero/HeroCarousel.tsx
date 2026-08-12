@@ -193,7 +193,7 @@ export default function HeroCarousel() {
               </Link>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <Link href="/services" className="w-full sm:w-auto">
+              <Link href="/digital-marketing-agency-in-delhi" className="w-full sm:w-auto">
                 <Button size="lg" variant="outline" className="rounded-full px-7 py-6 text-base border-border hover:bg-muted/40 transition-all duration-300 w-full sm:w-auto">
                   Explore Services
                 </Button>

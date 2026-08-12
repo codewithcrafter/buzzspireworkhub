@@ -80,82 +80,135 @@ export default function PpcServiceView() {
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* HERO SECTION */}
-      <section className="py-20 px-6 max-w-5xl mx-auto text-center space-y-6">
-        <ScrollReveal>
-          <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-1.5">
-            <TrendingUp className="w-4 h-4" />
-            PPC &amp; Paid Ads Specialist
-          </span>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter leading-tight text-foreground mt-6">
-            Best PPC &amp; SEM (Paid Ads) Services in Delhi
-          </h1>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            <p className="font-semibold text-foreground text-lg md:text-xl">
-              Delhi Businesses Get More Calls From The Same Ad Budget.
-            </p>
-            <p className="font-bold text-primary">
-              No guesswork. No vanity metrics. Just leads that show up.
-            </p>
-            <p>
-              That&apos;s why Buzzspire runs SEM / Paid Ads services built around one thing-calls and leads that actually show up. We&apos;re a SEM service agency in Delhi, working with businesses across Connaught Place, Nehru Place, Karol Bagh, South Delhi, and Rohini. We manage Google Ads and full-funnel paid campaigns for brands that are wasting budget on guesswork. If you&apos;re searching for a PPC agency in Delhi that treats your spend like it&apos;s our own money, you&apos;ve landed in the right place.
-            </p>
-            <p className="font-medium text-foreground">
-              Real accounts. Real numbers. No fluff reports full of vanity metrics.
-            </p>
-          </div>
-          <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Magnetic>
-              <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
-                  <span>Get My Free Audit — Takes 10 Minutes</span>
-                </Button>
-              </a>
-            </Magnetic>
-          </div>
-        </ScrollReveal>
+      <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <ScrollReveal className="space-y-8">
+            <div className="space-y-6">
+              <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-2">
+                <TrendingUp className="w-4 h-4" />
+                PPC &amp; Paid Ads Specialist
+              </span>
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+                Best PPC &amp; SEM (Paid Ads) Services in Delhi
+              </h1>
+              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+                <p className="font-semibold text-foreground text-lg md:text-xl">
+                  Delhi Businesses Get More Calls From The Same Ad Budget.
+                </p>
+                <p className="font-bold text-primary">
+                  No guesswork. No vanity metrics. Just leads that show up.
+                </p>
+                <p>
+                  That&apos;s why Buzzspire runs SEM / Paid Ads services built around one thing-calls and leads that actually show up. We&apos;re a SEM service agency in Delhi, working with businesses across Connaught Place, Nehru Place, Karol Bagh, South Delhi, and Rohini. We manage Google Ads and full-funnel paid campaigns for brands that are wasting budget on guesswork. If you&apos;re searching for a PPC agency in Delhi that treats your spend like it&apos;s our own money, you&apos;ve landed in the right place.
+                </p>
+                <p className="font-medium text-foreground">
+                  Real accounts. Real numbers. No fluff reports full of vanity metrics.
+                </p>
+              </div>
+            </div>
+            <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
+              <Magnetic>
+                <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    <span>Get My Free Audit — Takes 10 Minutes</span>
+                  </Button>
+                </a>
+              </Magnetic>
+            </div>
+          </ScrollReveal>
+          
+          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
+            {/* Custom PPC "Campaign Creative" Visual Composition */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-green-500/5 rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center p-8">
+               <div className="w-full max-w-[360px] relative z-10">
+                 
+                 {/* Floating Conversion Card */}
+                 <div className="absolute -top-8 -right-4 bg-white dark:bg-zinc-900 border border-border rounded-xl p-3 shadow-lg flex flex-col gap-1 animate-float-medium z-20">
+                   <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">ROAS</div>
+                   <div className="text-xl font-black text-green-500 flex items-center gap-1">
+                     420% <ArrowUpRight className="w-4 h-4" />
+                   </div>
+                 </div>
+
+                 {/* Mock Search Ad UI */}
+                 <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-md p-5 w-full mb-6 relative z-10 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+                   <div className="flex items-center gap-2 mb-2">
+                     <span className="text-[11px] font-bold text-foreground">Ad</span>
+                     <span className="text-[11px] text-muted-foreground">•</span>
+                     <span className="text-[11px] text-muted-foreground">buzzspiremedia.com</span>
+                   </div>
+                   <div className="text-blue-600 dark:text-blue-400 font-medium text-lg leading-tight mb-2 hover:underline cursor-pointer">
+                     Top PPC Agency in Delhi | ROI Driven Google Ads
+                   </div>
+                   <div className="text-sm text-muted-foreground leading-relaxed">
+                     Stop wasting budget on clicks that don&apos;t convert. We run high-performance SEM campaigns for businesses in Delhi NCR. Get a free account audit today.
+                   </div>
+                   <div className="mt-3 flex flex-wrap gap-2">
+                     <span className="text-[11px] font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">E-commerce PPC</span>
+                     <span className="text-[11px] font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">B2B Lead Gen</span>
+                   </div>
+                 </div>
+                 
+                 {/* Mock Analytics Bar Chart */}
+                 <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-sm p-5 w-full transform translate-x-4 rotate-2 hover:rotate-0 transition-transform duration-500 flex items-end gap-3 h-40">
+                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/30 h-[20%]" /></div>
+                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/40 h-[35%]" /></div>
+                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/60 h-[50%]" /></div>
+                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/80 h-[75%]" /></div>
+                   <div className="w-full bg-green-500/20 rounded-t flex flex-col justify-end overflow-hidden relative group">
+                     <div className="w-full bg-green-500 h-[95%]" />
+                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Conversions Peak</div>
+                   </div>
+                 </div>
+
+               </div>
+            </div>
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* SECTION 1: WHY DELHI BUSINESSES TRUST BUZZSPIRE */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-8">
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
-              Why Delhi Businesses Trust Buzzspire With Their Ad Spend
-            </h2>
-            <div className="space-y-2 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto">
-              <p className="font-semibold text-foreground">Most agencies set up a campaign and disappear.</p>
-              <p className="font-bold text-primary">We don&apos;t work that way.</p>
-              <p>
-                As a paid search marketing agency, every account gets built around your actual sales cycle, not a generic template. We dig into your industry, your competitors, your average order value. Then we build.
-              </p>
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+        <ScrollReveal>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            <div className="lg:col-span-5 space-y-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight">
+                Why Delhi Businesses Trust Buzzspire With Their Ad Spend
+              </h2>
+              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+                <p className="font-semibold text-foreground">Most agencies set up a campaign and disappear.</p>
+                <p className="font-bold text-primary">We don&apos;t work that way.</p>
+                <p>
+                  As a paid search marketing agency, every account gets built around your actual sales cycle, not a generic template. We dig into your industry, your competitors, your average order value. Then we build.
+                </p>
+                <p className="text-base md:text-lg text-foreground italic border-l-2 border-primary/30 pl-4 mt-6">
+                  Honestly, that last point matters most. You shouldn&apos;t have to wait three months to know if your money&apos;s working.
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-white dark:bg-zinc-900 border border-border/80 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <CheckCircle2 className="w-8 h-8 text-primary mb-4" />
+                  <p className="text-sm md:text-base text-foreground font-medium">A dedicated account manager who actually picks up your call</p>
+                </div>
+                <div className="bg-white dark:bg-zinc-900 border border-border/80 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <CheckCircle2 className="w-8 h-8 text-primary mb-4" />
+                  <p className="text-sm md:text-base text-foreground font-medium">Transparent weekly reporting with real campaign data, not screenshots</p>
+                </div>
+                <div className="bg-white dark:bg-zinc-900 border border-border/80 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <CheckCircle2 className="w-8 h-8 text-primary mb-4" />
+                  <p className="text-sm md:text-base text-foreground font-medium">Upfront clear pricing, no hidden management fees</p>
+                </div>
+                <div className="bg-primary/5 border border-primary/20 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                  <CheckCircle2 className="w-8 h-8 text-primary mb-4" />
+                  <p className="text-sm md:text-base text-foreground font-medium">A 30-day results tracking window so you see direction fast</p>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium max-w-3xl mx-auto space-y-4">
-            <ul className="space-y-3">
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
-                <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span>A dedicated account manager who actually picks up your call</span>
-              </li>
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
-                <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span>Transparent weekly reporting with real campaign data, not screenshots of dashboards</span>
-              </li>
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
-                <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span>Upfront clear pricing, no hidden management fees</span>
-              </li>
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
-                <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span>A 30-day results tracking window so you see direction fast, not after quarter-end</span>
-              </li>
-            </ul>
-          </div>
-
-          <p className="text-base md:text-lg text-muted-foreground text-center max-w-3xl mx-auto italic">
-            Honestly, that last point matters most. You shouldn&apos;t have to wait three months to know if your money&apos;s working.
-          </p>
         </ScrollReveal>
       </section>
 
@@ -401,33 +454,33 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 8: FAQS (EXACT MATCH INCLUDING REPEATED QUESTIONS) */}
-      <section className="py-20 px-6 max-w-4xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-10">
-          <div className="text-center space-y-3">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+        <ScrollReveal className="space-y-12">
+          <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
               Frequently Asked Questions
             </h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {ppcFaqs.map((faq, idx) => {
               const isOpen = activeFaq === idx;
               return (
-                <div key={idx} className="border border-border/80 rounded-2xl bg-white overflow-hidden shadow-sm">
+                <div key={idx} className="border-b border-border/50 bg-transparent group">
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full p-6 text-left font-heading font-bold text-base md:text-lg text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
+                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
                   >
-                    <h3 className="pr-4">{faq.q}</h3>
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full shrink-0">
-                      {isOpen ? "Close" : "Read Answer"}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="p-6 pt-0 text-sm md:text-base text-muted-foreground leading-relaxed border-t border-border/30">
-                      <p>{faq.a}</p>
+                    <h3 className="pr-8">{faq.q}</h3>
+                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
+                      <span className="text-lg leading-none">+</span>
                     </div>
-                  )}
+                  </button>
+                  <div 
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
+                  >
+                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
+                  </div>
                 </div>
               );
             })}
@@ -446,14 +499,16 @@ export default function PpcServiceView() {
       />
 
       {/* SECTION 9: FINAL CTA */}
-      <section className="py-24 px-6 max-w-7xl mx-auto border-t border-border/60">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
         <ScrollReveal>
-          <div className="rounded-[3rem] bg-gradient-to-tr from-primary via-secondary to-accent p-10 md:p-16 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl space-y-8 max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-heading font-black tracking-tighter leading-tight">
+          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-blue-500/10 rounded-full blur-[60px] pointer-events-none" />
+            
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
               Get Started with Buzzspire
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              <p className="font-semibold text-white">
+            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+              <p className="font-semibold text-foreground">
                 You&apos;ve read enough. Numbers convince faster than words.
               </p>
               <p>
@@ -461,10 +516,10 @@ export default function PpcServiceView() {
               </p>
             </div>
 
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-white text-primary hover:bg-white/95 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-foreground text-background hover:bg-foreground/90 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Talk To Buzzspire — No Pitch, Just Numbers</span>
                   </Button>

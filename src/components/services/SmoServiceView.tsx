@@ -75,37 +75,99 @@ export default function SmoServiceView() {
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* 1. HERO SECTION */}
-      <section className="py-20 px-6 max-w-5xl mx-auto text-center space-y-6">
-        <ScrollReveal>
-          <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-1.5">
-            <Share2 className="w-4 h-4" />
-            Social Media Optimization
-          </span>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter leading-tight text-foreground mt-6">
-            SMO Services in Delhi That Actually Grow Your Brand
-          </h1>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            <p className="font-semibold text-foreground text-lg md:text-xl">
-              Your Pages Get Likes. They Don&apos;t Get Leads. That&apos;s The Problem We Fix. That&apos;s where a real SMO (Social Media Optimization) service comes in.
-            </p>
-            <p>
-              At Buzzspire, we run SMO Services in Delhi for brands tired of posting into silence. We&apos;re a Social Media Optimization agency in Delhi built around one idea. Your profiles should work as hard as your sales team does. Not just look good. Actually convert.
-            </p>
-            <p>
-              We&apos;re not another SMO Agency in Delhi throwing hashtags at a wall. We track numbers. We report weekly. And we fix what isn&apos;t working, fast.
-            </p>
-          </div>
-          <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Magnetic>
-              <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
-                  <span>Get My Free Page Audit — 10 Minutes, No Pitch</span>
-                </Button>
-              </a>
-            </Magnetic>
-          </div>
-        </ScrollReveal>
+      <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <ScrollReveal className="space-y-8">
+            <div className="space-y-6">
+              <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-2">
+                <Share2 className="w-4 h-4" />
+                Social Media Optimization
+              </span>
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+                SMO Services in Delhi That Actually Grow Your Brand
+              </h1>
+              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+                <p className="font-semibold text-foreground text-lg md:text-xl">
+                  Your Pages Get Likes. They Don&apos;t Get Leads. That&apos;s The Problem We Fix. That&apos;s where a real SMO (Social Media Optimization) service comes in.
+                </p>
+                <p>
+                  At Buzzspire, we run SMO Services in Delhi for brands tired of posting into silence. We&apos;re a Social Media Optimization agency in Delhi built around one idea. Your profiles should work as hard as your sales team does. Not just look good. Actually convert.
+                </p>
+                <p>
+                  We&apos;re not another SMO Agency in Delhi throwing hashtags at a wall. We track numbers. We report weekly. And we fix what isn&apos;t working, fast.
+                </p>
+              </div>
+            </div>
+            <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
+              <Magnetic>
+                <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    <span>Get My Free Page Audit — 10 Minutes, No Pitch</span>
+                  </Button>
+                </a>
+              </Magnetic>
+            </div>
+          </ScrollReveal>
+          
+          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
+            {/* Custom SMO "Social Engagement" Visual Composition */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-pink-500/5 via-transparent to-primary/5 rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center perspective-[1000px]">
+               <div className="w-full max-w-[320px] relative z-10 transform-style-3d rotate-x-[15deg] rotate-y-[-15deg] group hover:rotate-x-[0deg] hover:rotate-y-[0deg] transition-transform duration-700 ease-out">
+                 
+                 {/* Floating Engagement Icons */}
+                 <div className="absolute -top-12 -right-8 bg-white dark:bg-zinc-900 border border-border rounded-full p-4 shadow-xl flex items-center justify-center animate-bounce z-30" style={{ animationDuration: '3s' }}>
+                   <div className="absolute inset-0 bg-pink-500/20 rounded-full blur-md" />
+                   <Sparkles className="w-6 h-6 text-pink-500 relative z-10" />
+                 </div>
+                 <div className="absolute -bottom-8 -left-8 bg-white dark:bg-zinc-900 border border-border rounded-full p-4 shadow-xl flex items-center justify-center animate-float-medium z-30 delay-150">
+                   <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-md" />
+                   <MessageSquare className="w-6 h-6 text-blue-500 relative z-10" />
+                 </div>
+                 
+                 {/* Stacked Cards */}
+                 <div className="relative">
+                   {/* Background Card */}
+                   <div className="absolute inset-0 bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-sm transform translate-y-8 translate-x-8 scale-90 opacity-40"></div>
+                   
+                   {/* Middle Card */}
+                   <div className="absolute inset-0 bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-md transform translate-y-4 translate-x-4 scale-95 opacity-70"></div>
+                   
+                   {/* Foreground Card */}
+                   <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-xl w-full p-4 relative z-20">
+                     <div className="flex items-center gap-3 mb-4">
+                       <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-orange-400 p-0.5">
+                         <div className="w-full h-full bg-white dark:bg-zinc-900 rounded-full border-2 border-transparent" />
+                       </div>
+                       <div>
+                         <div className="text-sm font-bold text-foreground">your_brand</div>
+                         <div className="text-[10px] text-muted-foreground">Sponsored</div>
+                       </div>
+                     </div>
+                     <div className="w-full aspect-square bg-muted rounded-xl mb-4 overflow-hidden relative">
+                       <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent" />
+                       <div className="absolute inset-0 flex items-center justify-center">
+                         <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+                           <Share2 className="w-6 h-6 text-white" />
+                         </div>
+                       </div>
+                     </div>
+                     <div className="flex items-center gap-4 text-foreground mb-3">
+                       <Sparkles className="w-5 h-5 cursor-pointer hover:text-pink-500 transition-colors" />
+                       <MessageSquare className="w-5 h-5 cursor-pointer hover:text-blue-500 transition-colors" />
+                       <Share2 className="w-5 h-5 cursor-pointer hover:text-primary transition-colors" />
+                     </div>
+                     <div className="space-y-1">
+                       <div className="text-sm font-bold">12,459 likes</div>
+                       <div className="text-xs text-muted-foreground"><span className="font-bold text-foreground">your_brand</span> Scaling your business with organic reach...</div>
+                     </div>
+                   </div>
+                 </div>
+
+               </div>
+            </div>
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* 2. WHAT IS SMO, REALLY? */}
@@ -166,10 +228,10 @@ export default function SmoServiceView() {
       </section>
 
       {/* 4. OUR CORE SMO SERVICES */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-10">
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+        <ScrollReveal className="space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
               Our Core SMO Services
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -177,54 +239,44 @@ export default function SmoServiceView() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
-                Organic Social Media Optimization
-              </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2">
+              <h3 className="text-xl font-heading font-bold text-foreground">Organic Social Media Optimization</h3>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 We build your organic reach the honest way. No bots. No fake followers. Just content that people actually want to engage with.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
-                Social Media Profile Optimization
-              </h3>
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
+              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Profile Optimization</h3>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Your bio, your highlights, your pinned posts, your link-in-bio setup. Small details. Big impact on conversions.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
-                Social Media Management and Optimization
-              </h3>
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
+              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Management</h3>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Daily posting. Community replies. Content calendars that don&apos;t fall apart by week two. We handle the grind so you don&apos;t have to.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
-                Social Media Audit Services
-              </h3>
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2 lg:mt-8">
+              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Audit Services</h3>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Before we touch anything, we look at what&apos;s already there. What&apos;s working. What&apos;s dead weight. You get a clear picture, not guesswork.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 md:col-span-2 max-w-2xl mx-auto w-full">
-              <h3 className="text-xl font-heading font-bold text-foreground">
-                Social Media Strategy Development
-              </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-3">
+              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Strategy Development</h3>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-3xl">
                 Every brand gets a plan built around its actual goals, not a copy-paste template we reuse for everyone.
               </p>
             </div>
           </div>
 
-          <div className="text-center pt-4">
+          <div className="text-center pt-6">
             <Magnetic>
               <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white font-bold shadow-lg">
@@ -520,33 +572,33 @@ export default function SmoServiceView() {
       </section>
 
       {/* 12. FAQS */}
-      <section className="py-20 px-6 max-w-4xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-10">
-          <div className="text-center space-y-3">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+        <ScrollReveal className="space-y-12">
+          <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
-              FAQs
+              Frequently Asked Questions
             </h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {smoFaqs.map((faq, idx) => {
               const isOpen = activeFaq === idx;
               return (
-                <div key={idx} className="border border-border/80 rounded-2xl bg-white overflow-hidden shadow-sm">
+                <div key={idx} className="border-b border-border/50 bg-transparent group">
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full p-6 text-left font-heading font-bold text-base md:text-lg text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
+                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
                   >
-                    <h3 className="pr-4">{faq.q}</h3>
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full shrink-0">
-                      {isOpen ? "Close" : "Read Answer"}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="p-6 pt-0 text-sm md:text-base text-muted-foreground leading-relaxed border-t border-border/30">
-                      <p>{faq.a}</p>
+                    <h3 className="pr-8">{faq.q}</h3>
+                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
+                      <span className="text-lg leading-none">+</span>
                     </div>
-                  )}
+                  </button>
+                  <div 
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
+                  >
+                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
+                  </div>
                 </div>
               );
             })}
@@ -565,17 +617,17 @@ export default function SmoServiceView() {
       />
 
       {/* 14. FINAL CTA */}
-      <section className="py-24 px-6 max-w-7xl mx-auto border-t border-border/60">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
         <ScrollReveal>
-          <div className="rounded-[3rem] bg-gradient-to-tr from-primary via-secondary to-accent p-10 md:p-16 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl space-y-8 max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-heading font-black tracking-tighter leading-tight">
+          <div className="rounded-[2.5rem] bg-white border-2 border-primary/20 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
               Let&apos;s Get Your Social Pages Working
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>
                 You&apos;ve read this far. That means something isn&apos;t clicking with your current setup.
               </p>
-              <p className="font-semibold text-white">
+              <p className="font-semibold text-foreground">
                 Let&apos;s fix that.
               </p>
               <p>
@@ -583,10 +635,10 @@ export default function SmoServiceView() {
               </p>
             </div>
 
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
               <Magnetic>
                 <a href="tel:9205386625">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-white text-primary hover:bg-white/95 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-foreground text-background hover:bg-foreground/90 font-bold shadow-lg flex items-center gap-2">
                     <Phone className="w-5 h-5" />
                     <span>Let&apos;s Fix Your Pages — Free Audit Call</span>
                   </Button>
@@ -594,7 +646,7 @@ export default function SmoServiceView() {
               </Magnetic>
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-base border-white text-white hover:bg-white/10 font-bold flex items-center gap-2">
+                  <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-base border-border bg-white text-foreground hover:bg-muted font-bold flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>WhatsApp Strategy Chat</span>
                   </Button>

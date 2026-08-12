@@ -93,7 +93,7 @@ export default function Footer() {
               {[
                 { name: "Home", href: "/" },
                 { name: "About Us", href: "/about" },
-                { name: "Our Services", href: "/services" },
+                { name: "Our Services", href: "/digital-marketing-agency-in-delhi" },
                 { name: "Latest Blog", href: "/blog" },
                 { name: "Careers", href: "/career" },
                 { name: "Contact Us", href: "/contact" },

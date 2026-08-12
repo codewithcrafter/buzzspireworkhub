@@ -29,6 +29,25 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: '/services',
+        destination: '/digital-marketing-agency-in-delhi',
+        permanent: true,
+      },
+      {
+        source: '/digital-marketing-agency',
+        destination: '/digital-marketing-agency-in-delhi',
+        permanent: true,
+      },
+      {
+        source: '/digital-marketing',
+        destination: '/digital-marketing-agency-in-delhi',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

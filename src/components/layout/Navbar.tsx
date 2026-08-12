@@ -48,7 +48,7 @@ export default function Navbar() {
     setIsMobileServicesOpen(false);
   }, [pathname]);
 
-  const isServicesActive = pathname.startsWith("/services");
+  const isServicesActive = pathname.startsWith("/digital-marketing-agency-in-delhi");
 
   return (
     <>
@@ -126,7 +126,7 @@ export default function Navbar() {
                   onMouseLeave={() => setIsServicesHovered(false)}
                 >
                   <Link
-                    href="/services"
+                    href="/digital-marketing-agency-in-delhi"
                     className={`inline-flex items-center gap-1 font-sans text-sm font-semibold tracking-wide hover-underline-animation py-1 transition-colors ${
                       isServicesActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                     }`}
@@ -159,7 +159,7 @@ export default function Navbar() {
                             </p>
                           </div>
                           <Link
-                            href="/services"
+                            href="/digital-marketing-agency-in-delhi"
                             className="text-xs font-bold text-primary hover:text-secondary inline-flex items-center gap-1 transition-colors"
                             onClick={() => setIsServicesHovered(false)}
                           >
@@ -314,7 +314,7 @@ export default function Navbar() {
                 <div className="border-b border-border/40 py-2">
                   <div className="flex items-center justify-between">
                     <Link
-                      href="/services"
+                      href="/digital-marketing-agency-in-delhi"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="font-heading text-2xl font-bold text-primary"
                     >

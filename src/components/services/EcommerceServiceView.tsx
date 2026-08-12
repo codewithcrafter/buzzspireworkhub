@@ -27,23 +27,23 @@ import RelatedServices from "@/components/services/RelatedServices";
 const ecommerceFaqs = [
   {
     q: "What do ecommerce management services actually include?",
-    a: "Account setup, listing optimization, inventory sync, ad management, SEO, and customer query handling across your marketplaces.",
+    a: "Account setup, listing optimization, inventory sync, ad management, SEO, and customer query handling across your marketplaces. Everything that keeps your store running and growing, not just the flashy stuff.",
   },
   {
     q: "Do you handle Amazon, Flipkart, and Shopify together?",
-    a: "Yes. Most of our clients run all three. We manage them under one dashboard so stock and pricing stay in sync.",
+    a: "Yes. Most of our clients run all three. We manage them under one dashboard so stock and pricing stay in sync. One policy change on one platform doesn't sink your entire revenue.",
   },
   {
     q: "How much do ecommerce account management services cost?",
-    a: "It depends on your catalog size and ad budget. We share the exact number before you commit, not after.",
+    a: "It depends on your catalog size and ad budget. A store with 50 SKUs and ₹50,000 monthly ad spend needs a different plan than one with 500 SKUs and ₹5,00,000. We share the exact number before you commit, not after.",
   },
   {
     q: "Can you help a brand new store with zero sales?",
-    a: "Yes. Our end to end ecommerce management services for small business cover setup from scratch, not just growth for existing sellers.",
+    a: "Yes. Our end to end ecommerce management services cover setup from scratch - store creation, catalog upload, first ads, first reviews. Not just growth for existing sellers. We build the foundation first, then scale it.",
   },
   {
     q: "How soon will I see results?",
-    a: "Our 30-day results tracking guarantee means you'll see measurable movement within the first month, tracked and reported weekly.",
+    a: "Our 30-day results tracking guarantee means you'll see measurable movement within the first month - in rankings, in ad performance, in order volume. Tracked and reported weekly. No vague \"it takes time\" excuses.",
   },
   {
     q: "Do you only work with sellers based in Delhi?",
@@ -80,43 +80,140 @@ export default function EcommerceServiceView() {
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* HERO SECTION */}
-      <section className="py-20 px-6 max-w-5xl mx-auto text-center space-y-6">
-        <ScrollReveal>
-          <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-1.5">
-            <ShoppingBag className="w-4 h-4" />
-            Ecommerce Operations Specialist
-          </span>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter leading-tight text-foreground mt-6">
-            Ecommerce Management Services in Delhi
-          </h1>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            <p className="font-semibold text-foreground text-lg md:text-xl">
-              Running an online store is hard. Real hard.
-            </p>
-            <p>
-              You launch a product. Sales come in slow. Then a competitor undercuts your price. Or your Amazon listing gets suppressed overnight for no reason. Sound familiar?
-            </p>
-            <p className="font-semibold text-foreground">
-              That&apos;s exactly why Buzzspire Media exists.
-            </p>
-            <p>
-              We&apos;re an ecommerce management services team based right here in Delhi. Sellers across Delhi, Gurgaon, and Noida already trust us to run their stores. We handle the accounts, the listings, the ads, the SEO. You handle the business.
-            </p>
-            <p className="font-medium text-foreground">
-              No fluff. No jargon-filled reports you can&apos;t read. Just results you can check every week.
-            </p>
-          </div>
-          <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Magnetic>
-              <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5" />
-                  <span>Call 9205386625 or ping us on WhatsApp for a free ecommerce audit.</span>
-                </Button>
-              </a>
-            </Magnetic>
-          </div>
-        </ScrollReveal>
+      <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <ScrollReveal className="space-y-8">
+            <div className="space-y-6">
+              <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4" />
+                Ecommerce Operations Specialist
+              </span>
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+                Ecommerce Management Services in Delhi
+              </h1>
+              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+                <p className="font-semibold text-foreground text-lg md:text-xl">
+                  Running an online store is hard. Real hard.
+                </p>
+                <p>
+                  You launch a product. Sales come in slow. Then a competitor undercuts your price. Or your Amazon listing gets suppressed overnight for no reason. Sound familiar?
+                </p>
+                <p className="font-semibold text-foreground">
+                  That&apos;s exactly why Buzzspire Media exists.
+                </p>
+                <p>
+                  We&apos;re an ecommerce management services team based right here in Delhi. Sellers across Delhi, Gurgaon, and Noida already trust us to run their stores. We handle the accounts, the listings, the ads, the SEO. You handle the business.
+                </p>
+                <p className="font-medium text-foreground">
+                  No fluff. No jargon-filled reports you can&apos;t read. Just results you can check every week.
+                </p>
+              </div>
+            </div>
+            <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
+              <Magnetic>
+                <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    <span>Get a Free Store Audit</span>
+                  </Button>
+                </a>
+              </Magnetic>
+            </div>
+          </ScrollReveal>
+          
+          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
+            {/* Custom Ecommerce "Store Dashboard" Visual Composition */}
+            <div className="absolute inset-0 bg-white dark:bg-zinc-950 rounded-[2.5rem] border border-border shadow-2xl overflow-hidden flex flex-col p-6">
+               
+               {/* Dashboard Header */}
+               <div className="flex justify-between items-center mb-6 pb-4 border-b border-border/50">
+                 <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+                     <ShoppingBag className="w-5 h-5" />
+                   </div>
+                   <div>
+                     <div className="text-sm font-bold text-foreground">Store Overview</div>
+                     <div className="text-xs text-muted-foreground">Real-time Metrics</div>
+                   </div>
+                 </div>
+                 <div className="flex gap-2">
+                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                   <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Live Sync</div>
+                 </div>
+               </div>
+
+               {/* Metrics Row */}
+               <div className="grid grid-cols-2 gap-4 mb-6">
+                 <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-border flex flex-col gap-2 relative overflow-hidden group">
+                   <div className="text-xs text-muted-foreground font-medium">Total Revenue</div>
+                   <div className="text-2xl font-black text-foreground">₹2,84,500</div>
+                   <div className="text-[10px] text-emerald-500 font-bold flex items-center gap-1">
+                     <TrendingUp className="w-3 h-3" /> +24.8% vs last week
+                   </div>
+                   <div className="absolute right-0 bottom-0 w-16 h-16 bg-emerald-500/5 rounded-tl-full transition-transform group-hover:scale-150"></div>
+                 </div>
+                 <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-border flex flex-col gap-2 relative overflow-hidden group">
+                   <div className="text-xs text-muted-foreground font-medium">Conversion Rate</div>
+                   <div className="text-2xl font-black text-foreground">3.2%</div>
+                   <div className="text-[10px] text-emerald-500 font-bold flex items-center gap-1">
+                     <TrendingUp className="w-3 h-3" /> +0.5% vs last week
+                   </div>
+                   <div className="absolute right-0 bottom-0 w-16 h-16 bg-blue-500/5 rounded-tl-full transition-transform group-hover:scale-150"></div>
+                 </div>
+               </div>
+               
+               {/* Multi-Channel Activity */}
+               <div className="flex-1 rounded-2xl border border-border bg-zinc-50 dark:bg-zinc-900/50 p-4 flex flex-col relative overflow-hidden">
+                 <div className="text-xs font-bold text-foreground mb-4">Channel Performance</div>
+                 
+                 <div className="space-y-4">
+                   {/* Amazon */}
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center font-bold text-xs">AMZ</div>
+                       <div className="text-sm font-medium text-foreground">Amazon India</div>
+                     </div>
+                     <div className="flex items-center gap-4">
+                       <div className="w-32 h-1.5 rounded-full bg-border overflow-hidden">
+                         <div className="w-[75%] h-full bg-orange-500 rounded-full"></div>
+                       </div>
+                       <div className="text-xs font-bold w-12 text-right">45%</div>
+                     </div>
+                   </div>
+                   
+                   {/* Flipkart */}
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center font-bold text-xs">FLK</div>
+                       <div className="text-sm font-medium text-foreground">Flipkart</div>
+                     </div>
+                     <div className="flex items-center gap-4">
+                       <div className="w-32 h-1.5 rounded-full bg-border overflow-hidden">
+                         <div className="w-[45%] h-full bg-blue-500 rounded-full"></div>
+                       </div>
+                       <div className="text-xs font-bold w-12 text-right">30%</div>
+                     </div>
+                   </div>
+
+                   {/* Shopify */}
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold text-xs">SHP</div>
+                       <div className="text-sm font-medium text-foreground">Shopify (D2C)</div>
+                     </div>
+                     <div className="flex items-center gap-4">
+                       <div className="w-32 h-1.5 rounded-full bg-border overflow-hidden">
+                         <div className="w-[35%] h-full bg-emerald-500 rounded-full"></div>
+                       </div>
+                       <div className="text-xs font-bold w-12 text-right">25%</div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+            </div>
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* SECTION 1: FULL-SERVICE ECOMMERCE AGENCY */}
@@ -190,10 +287,10 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 5 & 6 & 7: END TO END STORE MANAGEMENT & MARKETING */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-10">
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-border/40">
+        <ScrollReveal className="space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
               End to End Ecommerce Management Services for Small Business
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -201,8 +298,8 @@ export default function EcommerceServiceView() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Full Service Ecommerce Store Management and Marketing
               </h3>
@@ -216,7 +313,7 @@ export default function EcommerceServiceView() {
               </div>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Ecommerce Store Management Services
               </h3>
@@ -230,35 +327,24 @@ export default function EcommerceServiceView() {
               </div>
             </div>
           </div>
-
-          <div className="text-center pt-2">
-            <Magnetic>
-              <a href="tel:+919205386625">
-                <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white font-bold shadow-lg flex items-center gap-2 mx-auto">
-                  <Phone className="w-5 h-5" />
-                  <span>Want your daily store operations off your plate? Call 9205386625 today.</span>
-                </Button>
-              </a>
-            </Magnetic>
-          </div>
         </ScrollReveal>
       </section>
 
       {/* SECTION 8: ECOMMERCE ACCOUNT MANAGEMENT SERVICES */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-10">
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+        <ScrollReveal className="space-y-12">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
               Ecommerce Account Management Services
             </h2>
-            <div className="space-y-1 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto">
+            <div className="space-y-1 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
               <p>Every marketplace has its own rules. Its own algorithm. Its own way of punishing sellers who don&apos;t play by the book.</p>
               <p className="font-semibold text-foreground">Our ecommerce account management services in Delhi are built platform by platform.</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Amazon Account Management Services
               </h3>
@@ -267,7 +353,7 @@ export default function EcommerceServiceView() {
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Amazon Seller Account Management Services Cost
               </h3>
@@ -276,7 +362,7 @@ export default function EcommerceServiceView() {
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Flipkart Account Management Services
               </h3>
@@ -285,7 +371,7 @@ export default function EcommerceServiceView() {
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Shopify Management Agency
               </h3>
@@ -294,7 +380,7 @@ export default function EcommerceServiceView() {
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 md:col-span-2 max-w-2xl mx-auto w-full">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 lg:col-span-2 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Shopify Store Setup and Management Services
               </h3>
@@ -336,49 +422,38 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 11 & 12 & 13: LISTING, PPC & SEO SERVICES */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+        <ScrollReveal className="space-y-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Ecommerce Listing and Cataloging Services
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 A bad listing loses the sale before the buyer even reads your price. Our ecommerce listing and cataloging services cover titles, bullet points, backend keywords, image specs, and category mapping. Every field, checked.
               </p>
-              <p className="text-sm font-semibold text-foreground">
+              <p className="text-sm md:text-base font-semibold text-foreground">
                 A bad listing quietly costs you sales every single day - we fix that first.We fix it first.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Ecommerce PPC Management Agency
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Ad spend without strategy is just money burning. As an ecommerce PPC management agency in Delhi, we run Sponsored Products, Sponsored Brands, and Sponsored Display campaigns with weekly bid adjustments, not set-and-forget automation. Every rupee spent gets tracked back to a sale. If a campaign isn&apos;t pulling its weight, we cut it. Fast.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-heading font-bold text-foreground">
                 Ecommerce SEO Services
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Marketplace SEO isn&apos;t the same as Google SEO. Different signals. Different ranking factors. Our ecommerce SEO services in Delhi focus on backend search terms, conversion rate, click-through rate, and review velocity, the actual levers that move your organic rank on Amazon and Flipkart. It&apos;s a core part of any ecommerce management services package we run.
               </p>
             </div>
-          </div>
-
-          <div className="text-center pt-2">
-            <Magnetic>
-              <a href="tel:+919205386625">
-                <Button size="lg" className="rounded-full px-8 py-6 text-base bg-emerald-600 text-white hover:bg-emerald-700 font-bold shadow-lg flex items-center gap-2 mx-auto">
-                  <Phone className="w-5 h-5" />
-                  <span>Ask us for a free ad account audit. Call 9205386625.</span>
-                </Button>
-              </a>
-            </Magnetic>
           </div>
         </ScrollReveal>
       </section>
@@ -452,33 +527,33 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 17: FAQS */}
-      <section className="py-20 px-6 max-w-4xl mx-auto border-t border-border/60">
-        <ScrollReveal className="space-y-10">
-          <div className="text-center space-y-3">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+        <ScrollReveal className="space-y-12">
+          <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
               Frequently Asked Questions
             </h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {ecommerceFaqs.map((faq, idx) => {
               const isOpen = activeFaq === idx;
               return (
-                <div key={idx} className="border border-border/80 rounded-2xl bg-white overflow-hidden shadow-sm">
+                <div key={idx} className="border-b border-border/50 bg-transparent group">
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full p-6 text-left font-heading font-bold text-base md:text-lg text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
+                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
                   >
-                    <h3 className="pr-4">{faq.q}</h3>
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full shrink-0">
-                      {isOpen ? "Close" : "Read Answer"}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="p-6 pt-0 text-sm md:text-base text-muted-foreground leading-relaxed border-t border-border/30">
-                      <p>{faq.a}</p>
+                    <h3 className="pr-8">{faq.q}</h3>
+                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
+                      <span className="text-lg leading-none">+</span>
                     </div>
-                  )}
+                  </button>
+                  <div 
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
+                  >
+                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
+                  </div>
                 </div>
               );
             })}
@@ -497,17 +572,21 @@ export default function EcommerceServiceView() {
       />
 
       {/* SECTION 18: FINAL CTA */}
-      <section className="py-24 px-6 max-w-7xl mx-auto border-t border-border/60">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
         <ScrollReveal>
-          <div className="rounded-[3rem] bg-gradient-to-tr from-primary via-secondary to-accent p-10 md:p-16 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl space-y-8 max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-heading font-black tracking-tighter leading-tight">
+          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+            {/* Subtle accent corner */}
+            <div className="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/20 rounded-full blur-[40px] pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
+            
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
               Let&apos;s Fix Your Ecommerce Store, Starting Today
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>
                 Look, you&apos;ve read this far. That means something&apos;s not working with your store right now.
               </p>
-              <p className="font-semibold text-white">
+              <p className="font-semibold text-foreground">
                 Stop losing sales to bad listings, stockouts, or ad spend that&apos;s going nowhere.
               </p>
               <p>
@@ -515,12 +594,12 @@ export default function EcommerceServiceView() {
               </p>
             </div>
 
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
               <Magnetic>
                 <a href="tel:9205386625">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-white text-primary hover:bg-white/95 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-foreground text-background hover:bg-foreground/90 font-bold shadow-lg flex items-center gap-2">
                     <Phone className="w-5 h-5" />
-                    <span>Call 9205386625 or WhatsApp us now for a free ecommerce management consultation in Delhi.</span>
+                    <span>Call +91-9205386625 or WhatsApp</span>
                   </Button>
                 </a>
               </Magnetic>

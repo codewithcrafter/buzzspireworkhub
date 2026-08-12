@@ -41,14 +41,12 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     };
   }, []);
 
-  // During SSR or on mobile/tablet viewports, render children with native browser scrolling
-  if (!mounted || !isDesktop) {
-    return <>{children}</>;
-  }
-
   return (
-    <ReactLenis root options={{ lerp: 0.05, duration: 1.5, smoothWheel: true }}>
+    <>
+      {mounted && isDesktop && (
+        <ReactLenis root options={{ lerp: 0.05, duration: 1.5, smoothWheel: true }} />
+      )}
       {children}
-    </ReactLenis>
+    </>
   );
 }
