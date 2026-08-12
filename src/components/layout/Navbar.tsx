@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, Sparkles, ChevronDown, ArrowUpRight } from "lucide-react";
@@ -86,14 +87,15 @@ export default function Navbar() {
         >
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
             {/* Logo */}
-            <Link
-              href="/"
-              className="font-heading font-extrabold text-2xl md:text-3xl tracking-tighter text-foreground group flex items-center gap-1 select-none"
-            >
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
-                BuzzSpire
-              </span>
-              <span className="text-accent animate-pulse font-black text-3xl">.</span>
+            <Link href="/" className="group flex items-center select-none">
+              <Image
+                src="/logo-full.png"
+                alt="BuzzSpire Media"
+                width={417}
+                height={120}
+                priority
+                className="h-9 md:h-10 w-auto group-hover:opacity-80 transition-opacity"
+              />
             </Link>
 
             {/* Desktop Navigation */}
@@ -173,7 +175,7 @@ export default function Navbar() {
                             return (
                               <Link
                                 key={service.slug}
-                                href={`/${service.slug}`}
+                                href={`/services/${service.slug}`}
                                 onClick={() => setIsServicesHovered(false)}
                                 className="group p-3 rounded-2xl hover:bg-primary/5 transition-all duration-200 flex items-start gap-3 border border-transparent hover:border-primary/10"
                               >
@@ -345,7 +347,7 @@ export default function Navbar() {
                           return (
                             <Link
                               key={service.slug}
-                              href={`/${service.slug}`}
+                              href={`/services/${service.slug}`}
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-muted text-sm font-semibold text-foreground"
                             >

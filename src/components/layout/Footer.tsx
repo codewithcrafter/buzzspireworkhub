@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp, Mail, Send, Globe, CheckCircle2 } from "lucide-react";
-import { Twitter, Linkedin, Instagram, Youtube } from "@/components/ui/social-icons";
+import { Facebook, Linkedin, Instagram } from "@/components/ui/social-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -52,9 +53,14 @@ export default function Footer() {
           
           {/* Logo and Pitch */}
           <div className="lg:col-span-2 space-y-6">
-            <Link href="/" className="font-heading font-extrabold text-3xl tracking-tighter text-foreground flex items-center gap-1">
-              <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">BuzzSpire</span>
-              <span className="text-accent animate-pulse font-black">.</span>
+            <Link href="/" className="group flex items-center select-none">
+              <Image
+                src="/logo-full.png"
+                alt="BuzzSpire Media"
+                width={417}
+                height={120}
+                className="h-9 md:h-10 w-auto group-hover:opacity-80 transition-opacity"
+              />
             </Link>
             <p className="text-muted-foreground text-base max-w-sm leading-relaxed">
               We are an award-winning digital growth agency crafting high-performance digital marketing, premium brand styling, and custom web experiences for global brands.
@@ -62,10 +68,9 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex gap-4">
               {[
-                { icon: Twitter, href: "https://twitter.com", name: "Twitter" },
-                { icon: Linkedin, href: "https://linkedin.com", name: "LinkedIn" },
-                { icon: Instagram, href: "https://instagram.com", name: "Instagram" },
-                { icon: Youtube, href: "https://youtube.com", name: "YouTube" },
+                { icon: Facebook, href: "https://www.facebook.com/buzzspiremedia/", name: "Facebook" },
+                { icon: Instagram, href: "https://www.instagram.com/buzzspiremedia/", name: "Instagram" },
+                { icon: Linkedin, href: "https://www.linkedin.com/company/buzzspire-media-pvt-ltd", name: "LinkedIn" },
               ].map((social, idx) => (
                 <a
                   key={idx}
@@ -110,12 +115,12 @@ export default function Footer() {
             <h4 className="font-heading font-bold text-base text-foreground tracking-wide uppercase">Services</h4>
             <ul className="space-y-3">
               {[
-                { name: "SEO Services", href: "/seo-services-in-delhi" },
-                { name: "PPC & Google Ads", href: "/ppc-services-in-delhi" },
-                { name: "SMO Services", href: "/smo-services-in-delhi" },
-                { name: "Social Media Marketing", href: "/social-media-marketing-services-in-delhi" },
-                { name: "Web Development", href: "/web-development-services-in-delhi" },
-                { name: "GMB Management", href: "/google-business-profile-management-in-delhi" },
+                { name: "SEO Optimization", href: "/services#seo" },
+                { name: "Google & Meta Ads", href: "/services#ads" },
+                { name: "Content Strategy", href: "/services#content" },
+                { name: "Branding & Strategy", href: "/services#branding" },
+                { name: "UI/UX & Engineering", href: "/services#web" },
+                { name: "Automation & Analytics", href: "/services#analytics" },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link
