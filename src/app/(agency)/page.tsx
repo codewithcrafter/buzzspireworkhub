@@ -1,3 +1,4 @@
+import homepageSchema from "@/data/homepageSchema.json";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -202,43 +203,11 @@ const faqs = [
 ];
 
 export default async function HomePage() {
-  const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "BuzzSpire Media",
-    "url": "https://buzzspiremedia.com",
-    "description": "BuzzSpire Media is a digital marketing agency in Delhi NCR helping local businesses show up on Google, grow social presence, and win more customers.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Delhi",
-      "addressRegion": "Delhi NCR",
-      "addressCountry": "IN"
-    },
-    "areaServed": ["Delhi", "West Delhi", "Dwarka", "Janakpuri", "Uttam Nagar", "Delhi NCR"]
-  };
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map((f) => ({
-      "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": f.a
-      }
-    }))
-  };
-
   return (
     <main className="w-full relative bg-background overflow-x-clip select-none bg-grid-pattern">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema) }}
       />
 
       {/* Background glowing decorations */}

@@ -1,0 +1,312 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.buzzspiremedia.com/#organization",
+      "name": "BuzzSpire Media",
+      "url": "https://www.buzzspiremedia.com/",
+      "description": "BuzzSpire Media is a digital marketing agency in Delhi offering SEO, Google Business Profile management, social media marketing, PPC, web development, ecommerce management, graphic design, video editing and product photography services.",
+      "foundingDate": "2026",
+      "email": "sales@buzzspiremedia.com",
+      "telephone": "+919599249586",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.buzzspiremedia.com/#logo",
+        "url": "https://www.buzzspiremedia.com/logo.png",
+        "contentUrl": "https://www.buzzspiremedia.com/logo.png"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.buzzspiremedia.com/#website",
+      "url": "https://www.buzzspiremedia.com/",
+      "name": "BuzzSpire Media",
+      "publisher": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.buzzspiremedia.com/#webpage",
+      "url": "https://www.buzzspiremedia.com/",
+      "name": "Digital Marketing Agency in Delhi | BuzzSpire Media",
+      "description": "BuzzSpire Media is a digital marketing agency in Delhi providing SEO, PPC, social media marketing, Google Business Profile management, web development and other digital marketing services.",
+      "isPartOf": {
+        "@id": "https://www.buzzspiremedia.com/#website"
+      },
+      "about": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.buzzspiremedia.com/#breadcrumb"
+      },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://www.buzzspiremedia.com/#localbusiness",
+      "name": "BuzzSpire Media",
+      "url": "https://www.buzzspiremedia.com/",
+      "description": "Digital marketing agency serving businesses in Delhi.",
+      "telephone": "+919599249586",
+      "email": "sales@buzzspiremedia.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ground Floor, Ram Dutt Enclave, B-16, Block D, Ram Datt Enclave, Uttam Nagar",
+        "addressLocality": "New Delhi",
+        "addressRegion": "Delhi",
+        "postalCode": "110059",
+        "addressCountry": "IN"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "parentOrganization": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#digital-marketing-service",
+      "name": "Digital Marketing Services",
+      "serviceType": "Digital Marketing",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/digital-marketing-agency-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#seo-service",
+      "name": "SEO Services",
+      "serviceType": "Search Engine Optimization",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/seo-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#smo-service",
+      "name": "SMO Services",
+      "serviceType": "Social Media Optimization",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/smo-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#gmb-service",
+      "name": "Google Business Profile Management",
+      "serviceType": "Google Business Profile Management",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/google-business-profile-management-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#ppc-service",
+      "name": "PPC Services",
+      "serviceType": "Pay Per Click Advertising",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/ppc-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#ecommerce-service",
+      "name": "Ecommerce Management Services",
+      "serviceType": "Ecommerce Management",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/ecommerce-management-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#graphic-design-service",
+      "name": "Graphic Design Services",
+      "serviceType": "Graphic Design",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/graphic-design-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#smm-service",
+      "name": "Social Media Marketing Services",
+      "serviceType": "Social Media Marketing",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/social-media-marketing-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#web-development-service",
+      "name": "Web Development Services",
+      "serviceType": "Web Development",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/web-development-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#video-editing-service",
+      "name": "Video Editing Services",
+      "serviceType": "Video Editing",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/video-editing-services-in-delhi"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.buzzspiremedia.com/#product-photography-service",
+      "name": "Product Photography Services",
+      "serviceType": "Product Photography",
+      "provider": {
+        "@id": "https://www.buzzspiremedia.com/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Delhi"
+      },
+      "url": "https://www.buzzspiremedia.com/product-photography-services-in-delhi"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.buzzspiremedia.com/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.buzzspiremedia.com/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.buzzspiremedia.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How can I improve my business's ranking on Google Maps?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Improving your Google Maps ranking mainly comes down to a complete, active, and well-reviewed business profile. This means accurate business hours, photos, categories, and regular posts, along with genuine customer reviews and quick responses to them. Our google business profile management Delhi service handles this setup and upkeep, so your business shows up when nearby customers search."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does SEO cost in Delhi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SEO pricing in Delhi typically depends on your website size, industry competition, and how fast you want results. Most small to mid-sized businesses start with a monthly plan that covers audits, on-page fixes, content, and reporting. We offer a free digital audit first, so you know exactly what's needed before committing to a plan."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the best way to get more customers from Google Maps?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The best way to get more customers from Google Maps is keeping your business profile accurate, active, and full of genuine reviews. Businesses that post updates, respond to reviews, and keep their hours and photos current consistently rank higher in local search results. This is the core of what our local seo service focuses on."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I manage social media for a small business without a big team?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Managing social media for a small business comes down to a simple, consistent content calendar rather than posting randomly. Planning content in advance, focusing on a few platforms instead of all of them, and tracking what actually gets engagement makes it manageable. Our smo services Delhi are built specifically for small teams that don't have time to manage this daily."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I run Google Ads for a local business?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Running Google Ads for a local business starts with targeting the specific searches your customers use, not broad keywords. Setting a realistic ad spend, writing clear ad copy, and reviewing performance weekly keeps costs under control. Our sem services Delhi handle this setup and ongoing management so your ad spend goes toward real leads."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who manages Amazon and Flipkart seller accounts in Delhi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Amazon and Flipkart seller accounts are usually managed by a dedicated ecommerce management team handling listings, inventory, and order updates. This keeps your marketplace presence accurate and reduces errors that can hurt your seller rating. Our ecommerce management services cover amazon flipkart account management Delhi for sellers who don't have time to manage it themselves."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does a website cost in Delhi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Website costs in Delhi vary based on the number of pages, design complexity, and features like ecommerce or booking systems. A simple business website costs less than a full online store with product management. As a web development company Delhi businesses trust for clear pricing, we quote based on what you actually need, not a fixed package."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I design a logo for a new business?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Designing a logo for a new business starts with understanding what the business stands for, not just picking colours and fonts. A good design process includes research into your industry and audience before any visuals are created. Our logo design services follow this approach, so your logo actually reflects your business rather than looking generic."
+          }
+        }
+      ]
+    }
+  ]
+}

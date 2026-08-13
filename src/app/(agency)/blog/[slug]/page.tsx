@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Clock, User, Tag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getBlog } from "@/services/blog.service";
+import BlogSchema from "@/components/seo/BlogSchema";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -28,12 +29,12 @@ export async function generateMetadata(props: BlogPostPageProps) {
     title: `${seoTitle} | BuzzSpire Media`,
     description: seoDesc,
     alternates: {
-      canonical: `https://buzzspire.media/blog/${blog.slug}`,
+      canonical: `https://buzzspiremedia.com/blog/${blog.slug}`,
     },
     openGraph: {
       title: seoTitle,
       description: seoDesc,
-      url: `https://buzzspire.media/blog/${blog.slug}`,
+      url: `https://buzzspiremedia.com/blog/${blog.slug}`,
       siteName: "BuzzSpire Media Insights",
       images: blog.featuredImage ? [{ url: blog.featuredImage, width: 1200, height: 630 }] : [],
       type: "article",
@@ -65,6 +66,16 @@ export default async function BlogPostPage(props: BlogPostPageProps) {
 
   return (
     <main className="w-full min-h-screen bg-background bg-grid-pattern relative pb-24">
+      <BlogSchema
+        slug={blog.slug}
+        title={blog.title}
+        description={blog.metaDescription || blog.excerpt}
+        publishedDate={blog.publishedAt ? new Date(blog.publishedAt).toISOString() : new Date(blog.createdAt).toISOString()}
+        modifiedDate={blog.updatedAt ? new Date(blog.updatedAt).toISOString() : undefined}
+        authorName={blog.author}
+        imageUrl={blog.featuredImage || "https://www.buzzspiremedia.com/logo.png"}
+        category={blog.category}
+      />
       {/* Background radial gradient glow */}
       <div className="absolute top-20 left-10 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
       <div className="absolute top-[40%] right-10 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[150px] pointer-events-none -z-10" />
