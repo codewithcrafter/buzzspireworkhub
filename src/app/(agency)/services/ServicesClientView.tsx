@@ -1,8 +1,4 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   TrendingUp,
@@ -31,6 +27,9 @@ import {
 import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
+import ServicesHeroVisual from "@/components/services/ServicesHeroVisual";
+import ServicesFaqClient from "@/components/services/ServicesFaqClient";
+import ServicesFooterVisual from "@/components/services/ServicesFooterVisual";
 
 // 10 Core Services mapped to production URLs
 const allServices = [
@@ -161,7 +160,6 @@ const clientFaqs = [
 ];
 
 export default function ServicesClientView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   return (
     <main className="w-full bg-background select-none text-foreground font-sans">
@@ -170,7 +168,6 @@ export default function ServicesClientView() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
           {/* Left Side: Content */}
           <div className="space-y-8">
-            <ScrollReveal>
               <div className="space-y-4">
                 <span className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary bg-primary/5 px-3 py-1 rounded-full border border-primary/20">
                   Buzzspire Services
@@ -182,10 +179,8 @@ export default function ServicesClientView() {
                   One Team, Every Service Your Business Actually Needs
                 </h2>
               </div>
-            </ScrollReveal>
 
-            <ScrollReveal delay={0.1}>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed mt-8">
                 <p className="font-semibold text-foreground">
                   Ten agencies. Ten invoices. Ten people to chase for updates.
                 </p>
@@ -197,10 +192,8 @@ export default function ServicesClientView() {
                   If you&apos;ve been Googling a one-stop digital marketing agency in Delhi because juggling freelancers got exhausting, this is the page you were looking for.
                 </p>
               </div>
-            </ScrollReveal>
 
-            <ScrollReveal delay={0.2}>
-              <div className="pt-4 flex flex-col sm:flex-row gap-4">
+              <div className="pt-4 flex flex-col sm:flex-row gap-4 mt-8">
                 <a href="tel:+919205386625" className="w-full sm:w-auto">
                   <Button size="lg" className="px-8 py-6 text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl shadow-sm hover:shadow">
                     <Phone className="w-4 h-4" />
@@ -214,105 +207,10 @@ export default function ServicesClientView() {
                   </Button>
                 </a>
               </div>
-            </ScrollReveal>
           </div>
 
           {/* Right Side: Editorial "Campaign Collage" Visual */}
-          <div className="hidden lg:block relative w-full h-full min-h-[500px]">
-            <ScrollReveal delay={0.3} className="h-full w-full relative">
-              {/* Abstract blurred background glow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-              
-              {/* 1. Search Pillar (Background, offset right) */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-8 right-0 w-[280px] bg-background border border-border/80 rounded-2xl shadow-xl p-4 z-10"
-              >
-                {/* Minimal Browser/Search UI */}
-                <div className="flex items-center gap-2 mb-4 border-b border-border/50 pb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-400/80" />
-                </div>
-                <div className="bg-muted/50 rounded-full flex items-center px-3 py-2 gap-2 mb-4">
-                  <Search className="w-4 h-4 text-muted-foreground" />
-                  <div className="h-2 w-24 bg-muted-foreground/30 rounded-full" />
-                </div>
-                <div className="space-y-3">
-                  <div className="h-2 w-3/4 bg-blue-500/80 rounded-full" />
-                  <div className="h-1.5 w-full bg-muted-foreground/20 rounded-full" />
-                  <div className="h-1.5 w-5/6 bg-muted-foreground/20 rounded-full" />
-                </div>
-              </motion.div>
-
-              {/* 2. Web Pillar (Midground, offset left/center) */}
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute top-32 left-0 w-[320px] bg-background border border-border/80 rounded-2xl shadow-2xl overflow-hidden z-20"
-              >
-                {/* Minimal Website Hero UI */}
-                <div className="bg-muted/30 p-5 border-b border-border/50 flex flex-col items-center text-center">
-                  <div className="w-8 h-8 rounded-lg bg-primary/20 mb-4 flex items-center justify-center">
-                    <LayoutTemplate className="w-4 h-4 text-primary" />
-                  </div>
-                  <div className="h-3 w-3/4 bg-foreground/80 rounded-full mb-3" />
-                  <div className="h-2 w-full bg-muted-foreground/40 rounded-full mb-2" />
-                  <div className="h-2 w-4/5 bg-muted-foreground/40 rounded-full mb-6" />
-                  <div className="h-8 w-24 bg-primary text-primary-foreground rounded-lg flex items-center justify-center text-[10px] font-bold">CTA Button</div>
-                </div>
-                <div className="p-4 grid grid-cols-2 gap-3">
-                  <div className="h-16 bg-muted/50 rounded-xl" />
-                  <div className="h-16 bg-muted/50 rounded-xl" />
-                </div>
-              </motion.div>
-
-              {/* 3. Social Pillar (Foreground, bottom right) */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute bottom-4 right-12 w-[240px] bg-background border border-border/80 rounded-2xl shadow-2xl p-4 z-30"
-              >
-                {/* Minimal Social Post UI */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center">
-                    <Share2 className="w-4 h-4 text-purple-500" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="h-2 w-20 bg-foreground/80 rounded-full" />
-                    <div className="h-1.5 w-12 bg-muted-foreground/40 rounded-full" />
-                  </div>
-                </div>
-                <div className="w-full aspect-[4/3] bg-muted/30 rounded-xl mb-3 flex items-center justify-center overflow-hidden relative">
-                   {/* Abstract creative image placeholder */}
-                   <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-blue-500/10" />
-                   <div className="w-12 h-12 rounded-full border-[3px] border-primary/20 flex items-center justify-center relative z-10 bg-background/50 backdrop-blur-sm">
-                     <div className="w-8 h-8 rounded-full border-[2px] border-primary/40 flex items-center justify-center">
-                        <TrendingUp className="w-4 h-4 text-primary" />
-                     </div>
-                   </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-4 h-4 rounded-full bg-red-500/80" />
-                  <div className="w-4 h-4 rounded-full bg-muted" />
-                  <div className="w-4 h-4 rounded-full bg-muted" />
-                </div>
-              </motion.div>
-
-              {/* Floating Decorative Elements */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/4 right-1/4 w-16 h-16 border border-primary/20 rounded-full border-dashed z-0"
-              />
-              <motion.div
-                animate={{ y: [0, 10, 0], opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute bottom-1/4 left-1/4 w-4 h-4 bg-primary/40 rounded-sm rotate-45 z-0"
-              />
-            </ScrollReveal>
-          </div>
+          <ServicesHeroVisual />
         </div>
       </section>
 
@@ -513,39 +411,7 @@ export default function ServicesClientView() {
               </div>
 
               <div className="space-y-4">
-                {clientFaqs.map((faq, idx) => {
-                  const isOpen = activeFaq === idx;
-                  return (
-                    <div key={idx} className="border border-border/60 rounded-2xl bg-background shadow-sm overflow-hidden transition-all duration-200">
-                      <button
-                        onClick={() => setActiveFaq(isOpen ? null : idx)}
-                        className="w-full p-6 md:p-8 text-left flex items-start justify-between font-heading font-bold text-lg text-foreground hover:text-primary transition-colors focus:outline-none"
-                      >
-                        <span className="pr-6">{faq.q}</span>
-                        <div className={`w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0 transition-colors ${isOpen ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`}>
-                          <span className="text-xl leading-none -mt-0.5">
-                            {isOpen ? '−' : '+'}
-                          </span>
-                        </div>
-                      </button>
-                      <AnimatePresence initial={false}>
-                        {isOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                            className="overflow-hidden"
-                          >
-                            <div className="p-6 md:p-8 pt-0 text-base text-muted-foreground leading-relaxed">
-                              {faq.a}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
+                <ServicesFaqClient faqs={clientFaqs} />
               </div>
             </div>
           </ScrollReveal>
@@ -595,76 +461,7 @@ export default function ServicesClientView() {
               </div>
 
               {/* Right Side: Decorative Growth Panel */}
-              <div className="hidden lg:block lg:col-span-5 h-full">
-                <div className="bg-muted/30 border border-border/50 rounded-2xl p-8 h-full flex flex-col justify-center space-y-6 relative overflow-hidden">
-                  {/* Subtle Background Accent */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-2xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-                  
-                  <div className="flex items-center justify-between border-b border-border/40 pb-4">
-                    <h3 className="font-bold text-foreground text-sm uppercase tracking-wider flex items-center gap-2">
-                      <BarChart3 className="w-4 h-4 text-primary" />
-                      Campaign Overview
-                    </h3>
-                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">Active</span>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {/* Fake progress bars for aesthetic */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs font-semibold text-foreground">
-                        <span>SEO Growth</span>
-                        <TrendingUp className="w-3 h-3 text-green-500" />
-                      </div>
-                      <div className="h-2 w-full bg-border/40 rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: "85%" }}
-                          transition={{ duration: 1.5, ease: "easeOut" }}
-                          viewport={{ once: true }}
-                          className="h-full bg-blue-500 rounded-full"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs font-semibold text-foreground">
-                        <span>PPC Conversions</span>
-                        <TrendingUp className="w-3 h-3 text-green-500" />
-                      </div>
-                      <div className="h-2 w-full bg-border/40 rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: "70%" }}
-                          transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-                          viewport={{ once: true }}
-                          className="h-full bg-green-500 rounded-full"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs font-semibold text-foreground">
-                        <span>Social Engagement</span>
-                        <TrendingUp className="w-3 h-3 text-green-500" />
-                      </div>
-                      <div className="h-2 w-full bg-border/40 rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: "60%" }}
-                          transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 }}
-                          viewport={{ once: true }}
-                          className="h-full bg-purple-500 rounded-full"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-border/40 flex items-center justify-between text-xs font-medium text-muted-foreground">
-                    <span>Multiple Channels</span>
-                    <span>One Unified Team</span>
-                  </div>
-                </div>
-              </div>
+              <ServicesFooterVisual />
 
             </div>
           </div>

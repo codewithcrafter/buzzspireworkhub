@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -13,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const seoFaqs = [
   {
@@ -58,8 +57,6 @@ const seoFaqs = [
 ];
 
 export default function SeoServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -94,65 +91,7 @@ export default function SeoServiceView() {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom SEO "Search Visibility" Visual Composition */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center p-8">
-               <div className="w-full max-w-[340px] space-y-6 relative z-10">
-                 {/* Floating Keyword Chip */}
-                 <div className="absolute -top-12 -left-8 bg-white dark:bg-zinc-900 border border-border rounded-xl p-3 shadow-lg flex items-center gap-3 animate-float-slow">
-                   <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-500">
-                     <TrendingUp className="w-4 h-4" />
-                   </div>
-                   <div>
-                     <div className="text-xs font-bold text-foreground">SEO Agency Delhi</div>
-                     <div className="text-[10px] text-green-500 font-medium">Position #1</div>
-                   </div>
-                 </div>
-                 
-                 {/* Mock Search Interface */}
-                 <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-sm p-4 w-full">
-                   <div className="flex items-center gap-3 bg-muted/50 rounded-full px-4 py-2.5 mb-6">
-                     <Search className="w-4 h-4 text-muted-foreground" />
-                     <div className="w-32 h-2 bg-muted-foreground/30 rounded-full" />
-                   </div>
-                   
-                   <div className="space-y-5">
-                     {/* Result 1 (Highlighted) */}
-                     <div className="space-y-2 border-l-2 border-primary pl-3">
-                       <div className="flex gap-2 items-center">
-                         <div className="w-4 h-4 rounded-full bg-primary/20" />
-                         <div className="w-24 h-1.5 bg-muted-foreground/40 rounded-full" />
-                       </div>
-                       <div className="w-3/4 h-2.5 bg-primary/80 rounded-full" />
-                       <div className="space-y-1.5">
-                         <div className="w-full h-1.5 bg-muted-foreground/20 rounded-full" />
-                         <div className="w-5/6 h-1.5 bg-muted-foreground/20 rounded-full" />
-                       </div>
-                     </div>
-                     
-                     {/* Result 2 */}
-                     <div className="space-y-2 pl-3 opacity-40">
-                       <div className="w-24 h-1.5 bg-muted-foreground/30 rounded-full" />
-                       <div className="w-2/3 h-2.5 bg-muted-foreground/40 rounded-full" />
-                       <div className="space-y-1.5">
-                         <div className="w-full h-1.5 bg-muted-foreground/20 rounded-full" />
-                         <div className="w-4/5 h-1.5 bg-muted-foreground/20 rounded-full" />
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-                 
-                 {/* Analytics Overlay */}
-                 <div className="absolute -bottom-6 -right-6 bg-white dark:bg-zinc-900 border border-border rounded-xl p-4 shadow-xl flex items-end gap-2 animate-float-medium">
-                   <div className="w-3 bg-primary/20 rounded-t-sm h-6" />
-                   <div className="w-3 bg-primary/40 rounded-t-sm h-10" />
-                   <div className="w-3 bg-primary/60 rounded-t-sm h-14" />
-                   <div className="w-3 bg-primary/80 rounded-t-sm h-12" />
-                   <div className="w-3 bg-primary rounded-t-sm h-20" />
-                 </div>
-               </div>
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="seo-services-in-delhi" />
         </div>
       </section>
 
@@ -386,29 +325,7 @@ export default function SeoServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {seoFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={seoFaqs} />
         </ScrollReveal>
       </section>
 

@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   Target,
@@ -12,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const smmFaqs = [
   {
@@ -53,8 +52,6 @@ const smmFaqs = [
 ];
 
 export default function SmmServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -102,66 +99,7 @@ export default function SmmServiceView() {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom SMM "Marketing Dashboard" Visual Composition */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 via-transparent to-primary/5 rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center p-8 bg-[url('/noise.png')]">
-               
-               <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-500/40 via-transparent to-transparent"></div>
-
-               <div className="w-full max-w-[360px] relative z-10 space-y-6 transform translate-x-4">
-                 
-                 {/* Floating Metric Card 1 */}
-                 <div className="absolute -top-12 -left-12 bg-white dark:bg-zinc-900 border border-border rounded-xl p-4 shadow-xl flex items-center gap-4 animate-float-slow z-30 w-56">
-                   <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
-                     <Target className="w-6 h-6 text-emerald-500" />
-                   </div>
-                   <div>
-                     <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Conversion Rate</div>
-                     <div className="text-xl font-black text-foreground">+34.2%</div>
-                   </div>
-                 </div>
-
-                 {/* Main Dashboard UI */}
-                 <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-2xl w-full p-5 relative z-20 space-y-5">
-                   <div className="flex justify-between items-center border-b border-border/50 pb-4">
-                     <div className="font-bold text-foreground">Campaign Performance</div>
-                     <div className="text-xs font-bold bg-primary/10 text-primary px-2 py-1 rounded">Active</div>
-                   </div>
-                   
-                   {/* Bar Chart Mockup */}
-                   <div className="h-32 flex items-end justify-between gap-2 pt-2">
-                     {[40, 65, 45, 80, 55, 90, 75].map((height, i) => (
-                       <div key={i} className="w-full bg-primary/20 rounded-t-sm relative group cursor-pointer" style={{ height: `${height}%` }}>
-                         <div className="absolute bottom-0 w-full bg-primary rounded-t-sm transition-all duration-300 group-hover:opacity-80" style={{ height: `${height}%` }} />
-                       </div>
-                     ))}
-                   </div>
-                   
-                   <div className="flex justify-between text-xs text-muted-foreground pt-2 border-t border-border/50">
-                     <span>Mon</span>
-                     <span>Tue</span>
-                     <span>Wed</span>
-                     <span>Thu</span>
-                     <span>Fri</span>
-                     <span>Sat</span>
-                     <span>Sun</span>
-                   </div>
-                 </div>
-
-                 {/* Floating Metric Card 2 */}
-                 <div className="absolute -bottom-8 -right-8 bg-white dark:bg-zinc-900 border border-border rounded-xl p-4 shadow-xl flex items-center gap-4 animate-float-medium z-30 w-48">
-                   <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
-                     <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                   </div>
-                   <div>
-                     <div className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Impressions</div>
-                     <div className="text-lg font-black text-foreground">1.2M</div>
-                   </div>
-                 </div>
-
-               </div>
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="social-media-marketing-services-in-delhi" />
         </div>
       </section>
 
@@ -354,29 +292,7 @@ export default function SmmServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {smmFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={smmFaqs} />
         </ScrollReveal>
       </section>
 

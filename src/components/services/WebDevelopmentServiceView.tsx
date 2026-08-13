@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   Code,
@@ -12,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const webFaqs = [
   {
@@ -57,8 +56,6 @@ const webFaqs = [
 ];
 
 export default function WebDevelopmentServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -105,100 +102,8 @@ export default function WebDevelopmentServiceView() {
               </Magnetic>
             </div>
           </ScrollReveal>
-          
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom Web Dev "IDE Window" Visual Composition */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-blue-500/5 rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center p-6 bg-[url('/noise.png')]">
-               
-               {/* Abstract Grid Background */}
-               <div className="absolute inset-0 opacity-20 pointer-events-none">
-                 <div className="w-full h-full" style={{ backgroundImage: 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
-               </div>
 
-               {/* Mock IDE Window */}
-               <div className="w-full max-w-[420px] rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl overflow-hidden z-20 flex flex-col transform hover:scale-[1.02] transition-transform duration-500">
-                 {/* IDE Header */}
-                 <div className="h-10 border-b border-zinc-800 bg-zinc-900/50 flex items-center px-4 gap-2">
-                   <div className="flex gap-1.5">
-                     <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                     <div className="w-3 h-3 rounded-full bg-amber-500/80"></div>
-                     <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                   </div>
-                   <div className="flex-1 text-center text-[10px] text-zinc-500 font-mono tracking-wider">
-                     layout.tsx — Buzzspire
-                   </div>
-                 </div>
-                 
-                 {/* IDE Content */}
-                 <div className="p-4 font-mono text-xs leading-relaxed relative flex-1 min-h-[280px]">
-                   <div className="text-zinc-500 absolute left-4 select-none flex flex-col items-end w-4">
-                     {Array.from({length: 12}).map((_, i) => <div key={i}>{i+1}</div>)}
-                   </div>
-                   <div className="pl-8 text-zinc-300">
-                     <span className="text-blue-400">import</span> {'{'} <span className="text-yellow-200">Metadata</span> {'}'} <span className="text-blue-400">from</span> <span className="text-green-300">&apos;next&apos;</span>;
-                     <br/>
-                     <span className="text-blue-400">import</span> <span className="text-yellow-200">Header</span> <span className="text-blue-400">from</span> <span className="text-green-300">&apos;@/components/Header&apos;</span>;
-                     <br/><br/>
-                     <span className="text-blue-400">export default function</span> <span className="text-yellow-200">RootLayout</span>({'{'}
-                     <br/>
-                     <span className="pl-4">children,</span>
-                     <br/>
-                     {'}'}: {'{'} children: React.ReactNode {'}'}) {'{'}
-                     <br/>
-                     <span className="pl-4 text-blue-400">return</span> (
-                     <br/>
-                     <span className="pl-8 text-zinc-500">&lt;</span><span className="text-red-400">html</span> <span className="text-purple-300">lang</span><span className="text-zinc-500">=</span><span className="text-green-300">&quot;en&quot;</span><span className="text-zinc-500">&gt;</span>
-                     <br/>
-                     <span className="pl-12 text-zinc-500">&lt;</span><span className="text-red-400">body</span> <span className="text-purple-300">className</span><span className="text-zinc-500">=</span><span className="text-green-300">&quot;antialiased&quot;</span><span className="text-zinc-500">&gt;</span>
-                     <br/>
-                     <span className="pl-16 text-zinc-500">&lt;</span><span className="text-yellow-200">Header</span> <span className="text-zinc-500">/&gt;</span>
-                     <br/>
-                     <span className="pl-16 text-zinc-500">{'{'}children{'}'}</span>
-                     <br/>
-                     <span className="pl-12 text-zinc-500">&lt;/</span><span className="text-red-400">body</span><span className="text-zinc-500">&gt;</span>
-                     <br/>
-                     <span className="pl-8 text-zinc-500">&lt;/</span><span className="text-red-400">html</span><span className="text-zinc-500">&gt;</span>
-                     <br/>
-                     <span className="pl-4">);</span>
-                     <br/>
-                     {'}'}
-                     <div className="inline-block w-2 h-4 bg-blue-400 animate-pulse ml-1 align-middle"></div>
-                   </div>
-                 </div>
-               </div>
-
-               {/* Performance Badge */}
-               <div className="absolute top-12 left-4 bg-white dark:bg-zinc-900 border border-border rounded-2xl p-4 shadow-xl z-30 animate-float-slow flex flex-col gap-3">
-                 <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Performance</div>
-                 <div className="flex gap-4">
-                   <div className="flex flex-col items-center gap-1">
-                     <div className="w-12 h-12 rounded-full border-4 border-emerald-500 flex items-center justify-center">
-                       <span className="font-bold text-emerald-500 text-sm">99</span>
-                     </div>
-                     <span className="text-[9px] text-muted-foreground font-medium">Lighthouse</span>
-                   </div>
-                   <div className="flex flex-col items-center gap-1">
-                     <div className="w-12 h-12 rounded-full border-4 border-emerald-500 flex items-center justify-center">
-                       <span className="font-bold text-emerald-500 text-sm">A+</span>
-                     </div>
-                     <span className="text-[9px] text-muted-foreground font-medium">Security</span>
-                   </div>
-                 </div>
-               </div>
-               
-               {/* Browser UI Element */}
-               <div className="absolute bottom-12 right-0 translate-x-4 bg-white dark:bg-zinc-900 border border-border rounded-xl p-3 shadow-xl z-30 animate-float-medium flex items-center gap-3">
-                 <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary">
-                   <Code className="w-4 h-4" />
-                 </div>
-                 <div className="flex flex-col pr-4">
-                   <span className="text-xs font-bold text-foreground">Zero Layout Shift</span>
-                   <span className="text-[10px] text-muted-foreground">Optimized Core Web Vitals</span>
-                 </div>
-               </div>
-
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="web-development-services-in-delhi" />
         </div>
       </section>
 
@@ -401,29 +306,7 @@ export default function WebDevelopmentServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {webFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={webFaqs} />
         </ScrollReveal>
       </section>
 

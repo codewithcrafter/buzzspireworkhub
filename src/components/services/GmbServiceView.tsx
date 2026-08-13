@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   MapPin,
@@ -23,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const gmbFaqs = [
   {
@@ -80,8 +79,6 @@ const gmbFaqs = [
 ];
 
 export default function GmbServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -129,67 +126,7 @@ export default function GmbServiceView() {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom GMB "Local Search" Visual Composition */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 to-transparent rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center p-8 bg-[url('/noise.png')]">
-               
-               {/* Abstract Map Background */}
-               <div className="absolute inset-0 opacity-10 pointer-events-none">
-                 <div className="w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, transparent 20%, var(--background) 80%), repeating-linear-gradient(45deg, var(--border) 0%, var(--border) 1px, transparent 1px, transparent 5%)' }}></div>
-               </div>
-
-               <div className="w-full max-w-[340px] relative z-10 space-y-6">
-                 
-                 {/* Floating Review Card */}
-                 <div className="absolute -top-10 -left-6 bg-white dark:bg-zinc-900 border border-border rounded-xl p-3 shadow-lg flex flex-col gap-1.5 animate-float-medium z-20 w-48">
-                   <div className="flex items-center gap-1 text-amber-500">
-                     <Star className="w-3.5 h-3.5 fill-current" />
-                     <Star className="w-3.5 h-3.5 fill-current" />
-                     <Star className="w-3.5 h-3.5 fill-current" />
-                     <Star className="w-3.5 h-3.5 fill-current" />
-                     <Star className="w-3.5 h-3.5 fill-current" />
-                   </div>
-                   <div className="text-xs text-muted-foreground line-clamp-2 leading-tight">
-                     &quot;Best service in Delhi, highly recommended!&quot;
-                   </div>
-                 </div>
-
-                 {/* Mock Maps UI */}
-                 <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-md w-full overflow-hidden">
-                   <div className="h-40 bg-muted relative overflow-hidden flex items-center justify-center">
-                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent opacity-60" />
-                     {/* Map Pin */}
-                     <div className="relative group">
-                       <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl scale-150 animate-pulse" />
-                       <MapPin className="w-12 h-12 text-primary relative z-10 fill-primary/10" />
-                     </div>
-                   </div>
-                   <div className="p-5 space-y-4">
-                     <div className="space-y-1">
-                       <div className="font-bold text-lg text-foreground">Your Business Name</div>
-                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                         <span className="flex items-center text-amber-500 font-medium"><Star className="w-3 h-3 fill-current mr-0.5" /> 4.9 (128)</span>
-                         <span>•</span>
-                         <span>Digital Agency</span>
-                       </div>
-                     </div>
-                     <div className="space-y-2">
-                       <div className="flex gap-2">
-                         <div className="flex-1 bg-primary/10 text-primary py-2 rounded-lg text-xs font-bold text-center">Directions</div>
-                         <div className="flex-1 bg-primary/10 text-primary py-2 rounded-lg text-xs font-bold text-center">Call</div>
-                       </div>
-                       <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2">
-                         <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
-                         <span className="font-medium text-green-600 dark:text-green-400">Open now</span>
-                         <span>• Closes 8 PM</span>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-
-               </div>
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="google-business-profile-management-in-delhi" />
         </div>
       </section>
 
@@ -480,29 +417,7 @@ export default function GmbServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {gmbFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={gmbFaqs} />
         </ScrollReveal>
       </section>
 

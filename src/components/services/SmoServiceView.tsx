@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   Share2,
@@ -22,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const smoFaqs = [
   {
@@ -67,8 +66,6 @@ const smoFaqs = [
 ];
 
 export default function SmoServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -110,63 +107,7 @@ export default function SmoServiceView() {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom SMO "Social Engagement" Visual Composition */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-pink-500/5 via-transparent to-primary/5 rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center perspective-[1000px]">
-               <div className="w-full max-w-[320px] relative z-10 transform-style-3d rotate-x-[15deg] rotate-y-[-15deg] group hover:rotate-x-[0deg] hover:rotate-y-[0deg] transition-transform duration-700 ease-out">
-                 
-                 {/* Floating Engagement Icons */}
-                 <div className="absolute -top-12 -right-8 bg-white dark:bg-zinc-900 border border-border rounded-full p-4 shadow-xl flex items-center justify-center animate-bounce z-30" style={{ animationDuration: '3s' }}>
-                   <div className="absolute inset-0 bg-pink-500/20 rounded-full blur-md" />
-                   <Sparkles className="w-6 h-6 text-pink-500 relative z-10" />
-                 </div>
-                 <div className="absolute -bottom-8 -left-8 bg-white dark:bg-zinc-900 border border-border rounded-full p-4 shadow-xl flex items-center justify-center animate-float-medium z-30 delay-150">
-                   <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-md" />
-                   <MessageSquare className="w-6 h-6 text-blue-500 relative z-10" />
-                 </div>
-                 
-                 {/* Stacked Cards */}
-                 <div className="relative">
-                   {/* Background Card */}
-                   <div className="absolute inset-0 bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-sm transform translate-y-8 translate-x-8 scale-90 opacity-40"></div>
-                   
-                   {/* Middle Card */}
-                   <div className="absolute inset-0 bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-md transform translate-y-4 translate-x-4 scale-95 opacity-70"></div>
-                   
-                   {/* Foreground Card */}
-                   <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-xl w-full p-4 relative z-20">
-                     <div className="flex items-center gap-3 mb-4">
-                       <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-orange-400 p-0.5">
-                         <div className="w-full h-full bg-white dark:bg-zinc-900 rounded-full border-2 border-transparent" />
-                       </div>
-                       <div>
-                         <div className="text-sm font-bold text-foreground">your_brand</div>
-                         <div className="text-[10px] text-muted-foreground">Sponsored</div>
-                       </div>
-                     </div>
-                     <div className="w-full aspect-square bg-muted rounded-xl mb-4 overflow-hidden relative">
-                       <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent" />
-                       <div className="absolute inset-0 flex items-center justify-center">
-                         <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
-                           <Share2 className="w-6 h-6 text-white" />
-                         </div>
-                       </div>
-                     </div>
-                     <div className="flex items-center gap-4 text-foreground mb-3">
-                       <Sparkles className="w-5 h-5 cursor-pointer hover:text-pink-500 transition-colors" />
-                       <MessageSquare className="w-5 h-5 cursor-pointer hover:text-blue-500 transition-colors" />
-                       <Share2 className="w-5 h-5 cursor-pointer hover:text-primary transition-colors" />
-                     </div>
-                     <div className="space-y-1">
-                       <div className="text-sm font-bold">12,459 likes</div>
-                       <div className="text-xs text-muted-foreground"><span className="font-bold text-foreground">your_brand</span> Scaling your business with organic reach...</div>
-                     </div>
-                   </div>
-                 </div>
-
-               </div>
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="smo-services-in-delhi" />
         </div>
       </section>
 
@@ -580,29 +521,7 @@ export default function SmoServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {smoFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={smoFaqs} />
         </ScrollReveal>
       </section>
 

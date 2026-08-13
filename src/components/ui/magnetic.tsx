@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useRef, useState, ReactElement } from "react";
 
 interface MagneticProps {
@@ -42,15 +41,18 @@ export default function Magnetic({ children, strength = 0.35 }: MagneticProps) {
   const { x, y } = position;
 
   return (
-    <motion.div
+    <div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      style={{
+        transform: `translate3d(${x}px, ${y}px, 0)`,
+        transition: x === 0 && y === 0 ? "transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)" : "none",
+        willChange: "transform",
+      }}
       className="inline-block"
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

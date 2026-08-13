@@ -26,14 +26,32 @@ export default function Footer() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) return;
-    setIsSubmitted(true);
-    setEmail("");
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 4000);
+
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Subscriber",
+          email: email,
+          message: "Newsletter Subscription",
+          source: "Footer Newsletter",
+          pageUrl: window.location.pathname
+        })
+      });
+      if (res.ok) {
+        setIsSubmitted(true);
+        setEmail("");
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 4000);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const scrollToTop = () => {

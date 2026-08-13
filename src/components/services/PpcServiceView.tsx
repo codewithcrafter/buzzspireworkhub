@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   TrendingUp,
@@ -23,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const ppcFaqs = [
   {
@@ -72,8 +71,6 @@ const ppcFaqs = [
 ];
 
 export default function PpcServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -118,53 +115,7 @@ export default function PpcServiceView() {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom PPC "Campaign Creative" Visual Composition */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-green-500/5 rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center p-8">
-               <div className="w-full max-w-[360px] relative z-10">
-                 
-                 {/* Floating Conversion Card */}
-                 <div className="absolute -top-8 -right-4 bg-white dark:bg-zinc-900 border border-border rounded-xl p-3 shadow-lg flex flex-col gap-1 animate-float-medium z-20">
-                   <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">ROAS</div>
-                   <div className="text-xl font-black text-green-500 flex items-center gap-1">
-                     420% <ArrowUpRight className="w-4 h-4" />
-                   </div>
-                 </div>
-
-                 {/* Mock Search Ad UI */}
-                 <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-md p-5 w-full mb-6 relative z-10 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
-                   <div className="flex items-center gap-2 mb-2">
-                     <span className="text-[11px] font-bold text-foreground">Ad</span>
-                     <span className="text-[11px] text-muted-foreground">•</span>
-                     <span className="text-[11px] text-muted-foreground">buzzspiremedia.com</span>
-                   </div>
-                   <div className="text-blue-600 dark:text-blue-400 font-medium text-lg leading-tight mb-2 hover:underline cursor-pointer">
-                     Top PPC Agency in Delhi | ROI Driven Google Ads
-                   </div>
-                   <div className="text-sm text-muted-foreground leading-relaxed">
-                     Stop wasting budget on clicks that don&apos;t convert. We run high-performance SEM campaigns for businesses in Delhi NCR. Get a free account audit today.
-                   </div>
-                   <div className="mt-3 flex flex-wrap gap-2">
-                     <span className="text-[11px] font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">E-commerce PPC</span>
-                     <span className="text-[11px] font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded">B2B Lead Gen</span>
-                   </div>
-                 </div>
-                 
-                 {/* Mock Analytics Bar Chart */}
-                 <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-border shadow-sm p-5 w-full transform translate-x-4 rotate-2 hover:rotate-0 transition-transform duration-500 flex items-end gap-3 h-40">
-                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/30 h-[20%]" /></div>
-                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/40 h-[35%]" /></div>
-                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/60 h-[50%]" /></div>
-                   <div className="w-full bg-blue-500/10 rounded-t flex flex-col justify-end overflow-hidden"><div className="w-full bg-blue-500/80 h-[75%]" /></div>
-                   <div className="w-full bg-green-500/20 rounded-t flex flex-col justify-end overflow-hidden relative group">
-                     <div className="w-full bg-green-500 h-[95%]" />
-                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Conversions Peak</div>
-                   </div>
-                 </div>
-
-               </div>
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="ppc-services-in-delhi" />
         </div>
       </section>
 
@@ -462,29 +413,7 @@ export default function PpcServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {ppcFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={ppcFaqs} />
         </ScrollReveal>
       </section>
 

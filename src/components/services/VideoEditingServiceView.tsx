@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   Video,
@@ -12,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const videoFaqs = [
   {
@@ -57,8 +56,6 @@ const videoFaqs = [
 ];
 
 export default function VideoEditingServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -103,92 +100,7 @@ export default function VideoEditingServiceView() {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom Video Editing "Timeline UI" Visual Composition */}
-            <div className="absolute inset-0 bg-zinc-950 rounded-[2.5rem] border border-zinc-800 overflow-hidden shadow-2xl flex flex-col p-6 font-mono text-xs text-zinc-400">
-               
-               {/* Video Preview Panel */}
-               <div className="h-1/2 w-full rounded-xl bg-black border border-zinc-800/50 mb-4 relative overflow-hidden flex items-center justify-center group">
-                 {/* Cinematic gradient background to simulate video */}
-                 <div className="absolute inset-0 bg-gradient-to-tr from-violet-900/40 to-blue-900/40"></div>
-                 {/* Play Button overlay */}
-                 <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform cursor-pointer">
-                   <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-white border-b-[8px] border-b-transparent ml-1"></div>
-                 </div>
-                 {/* Timecode overlay */}
-                 <div className="absolute bottom-3 left-4 text-white/70 tracking-wider">
-                   00:01:24:12
-                 </div>
-                 <div className="absolute bottom-3 right-4 flex gap-1">
-                   <div className="w-2 h-2 rounded-full bg-green-500/80"></div>
-                   <div className="w-2 h-2 rounded-full bg-green-500/80"></div>
-                   <div className="w-2 h-2 rounded-full bg-green-500/80"></div>
-                 </div>
-               </div>
-
-               {/* Timeline Tracks */}
-               <div className="flex-1 flex flex-col gap-2 relative">
-                 {/* Playhead line */}
-                 <div className="absolute top-0 bottom-0 w-px bg-red-500 left-1/3 z-20">
-                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-red-500 rounded-sm"></div>
-                 </div>
-                 
-                 {/* Track Headers */}
-                 <div className="flex w-full h-8 bg-zinc-900/50 rounded-md border border-zinc-800/50 items-center px-2 gap-2 relative overflow-hidden">
-                    <div className="w-8 shrink-0 flex items-center justify-center text-[10px]">V2</div>
-                    <div className="flex-1 h-5 relative">
-                      <div className="absolute left-[10%] w-[30%] h-full bg-blue-500/80 rounded-sm border border-blue-400/50 flex items-center px-1 overflow-hidden">
-                        <span className="text-[8px] text-white/90 truncate">TEXT_OVERLAY.mov</span>
-                      </div>
-                      <div className="absolute left-[45%] w-[40%] h-full bg-blue-500/80 rounded-sm border border-blue-400/50 flex items-center px-1 overflow-hidden">
-                        <span className="text-[8px] text-white/90 truncate">LOGO_ANIM.mov</span>
-                      </div>
-                    </div>
-                 </div>
-
-                 <div className="flex w-full h-8 bg-zinc-900/50 rounded-md border border-zinc-800/50 items-center px-2 gap-2 relative overflow-hidden">
-                    <div className="w-8 shrink-0 flex items-center justify-center text-[10px]">V1</div>
-                    <div className="flex-1 h-5 relative">
-                      <div className="absolute left-0 w-[42%] h-full bg-indigo-500/80 rounded-sm border border-indigo-400/50 flex items-center px-1 overflow-hidden">
-                        <span className="text-[8px] text-white/90 truncate">A_ROLL_MAIN.mp4</span>
-                      </div>
-                      <div className="absolute left-[43%] w-[55%] h-full bg-purple-500/80 rounded-sm border border-purple-400/50 flex items-center px-1 overflow-hidden">
-                        <span className="text-[8px] text-white/90 truncate">B_ROLL_01.mp4</span>
-                      </div>
-                    </div>
-                 </div>
-
-                 <div className="flex w-full h-8 bg-zinc-900/50 rounded-md border border-zinc-800/50 items-center px-2 gap-2 relative overflow-hidden mt-1">
-                    <div className="w-8 shrink-0 flex items-center justify-center text-[10px]">A1</div>
-                    <div className="flex-1 h-5 relative">
-                      <div className="absolute left-0 w-[98%] h-full bg-emerald-600/80 rounded-sm border border-emerald-500/50 flex items-center px-1 overflow-hidden">
-                        <div className="w-full h-full flex items-center justify-center gap-[1px] opacity-50">
-                          {Array.from({ length: 40 }).map((_, i) => (
-                            <div key={i} className="w-[1px] bg-white h-full" style={{ height: `${Math.max(20, Math.random() * 100)}%` }} />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                 </div>
-
-                 <div className="flex w-full h-8 bg-zinc-900/50 rounded-md border border-zinc-800/50 items-center px-2 gap-2 relative overflow-hidden">
-                    <div className="w-8 shrink-0 flex items-center justify-center text-[10px]">A2</div>
-                    <div className="flex-1 h-5 relative">
-                      <div className="absolute left-[20%] w-[70%] h-full bg-teal-600/80 rounded-sm border border-teal-500/50 flex items-center px-1 overflow-hidden">
-                        <span className="text-[8px] text-white/90 truncate ml-1 z-10">SFX_WHOOSH.wav</span>
-                        <div className="absolute inset-0 w-full h-full flex items-center justify-center gap-[1px] opacity-30">
-                          {Array.from({ length: 20 }).map((_, i) => (
-                            <div key={i} className="w-[1px] bg-white h-full" style={{ height: `${Math.max(10, Math.random() * 80)}%` }} />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                 </div>
-
-               </div>
-               
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="video-editing-services-in-delhi" />
         </div>
       </section>
 
@@ -387,29 +299,7 @@ export default function VideoEditingServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {videoFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={videoFaqs} />
         </ScrollReveal>
       </section>
 

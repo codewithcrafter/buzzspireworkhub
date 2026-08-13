@@ -99,17 +99,39 @@ export default function CareerClientView() {
   const faqHeading = "Candidate FAQs";
   const faqsList = defaultCareerFaqs;
 
-  const handleApplySubmit = (e: React.FormEvent) => {
+  const handleApplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setApplyModalPosition(null);
-      setCandidateName("");
-      setCandidateEmail("");
-      setCandidatePortfolio("");
-      setCandidateCover("");
-    }, 3000);
+    if (!selectedPosition) return;
+    
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: candidateName,
+          email: candidateEmail,
+          portfolio: candidatePortfolio,
+          message: candidateCover || "No cover letter provided.",
+          service: selectedPosition.title,
+          source: "Careers Page",
+          pageUrl: "/career"
+        })
+      });
+
+      if (res.ok) {
+        setFormSubmitted(true);
+        setTimeout(() => {
+          setFormSubmitted(false);
+          setApplyModalPosition(null);
+          setCandidateName("");
+          setCandidateEmail("");
+          setCandidatePortfolio("");
+          setCandidateCover("");
+        }, 3000);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const selectedPosition = positions.find(pos => pos.id === applyModalPosition);

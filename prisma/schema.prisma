@@ -100,7 +100,12 @@ model Lead {
   email     String
   company   String?
   budget    String?
+  service   String?
   message   String
+  source    String?
+  pageUrl   String?
+  portfolio String?
+  phone     String?
   status    LeadStatus @default(NEW)
   createdAt DateTime   @default(now())
 }

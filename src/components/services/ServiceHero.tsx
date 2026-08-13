@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Magnetic from "@/components/ui/magnetic";
 import { ServiceData } from "@/data/servicesData";
 import { getServiceIcon } from "@/components/services/ServiceIcon";
+import ServiceHeroVideo, { SERVICE_VIDEO_MAP } from "@/components/services/ServiceHeroVideo";
 
 interface ServiceHeroProps {
   service: ServiceData;
@@ -102,35 +103,39 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
           </motion.div>
         </div>
 
-        {/* Visual Graphic Card */}
-        <div className="lg:col-span-4 flex justify-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="w-full max-w-sm p-8 rounded-3xl bg-white/90 backdrop-blur-xl border border-white/60 shadow-2xl space-y-6 relative overflow-hidden"
-          >
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white shadow-lg">
-              <IconComponent className="w-8 h-8" />
-            </div>
+        {/* Visual Graphic / Video Card */}
+        <div className="lg:col-span-4 flex justify-center items-center">
+          {SERVICE_VIDEO_MAP[service.slug] ? (
+            <ServiceHeroVideo slug={service.slug} />
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="w-full max-w-sm p-8 rounded-3xl bg-white/90 backdrop-blur-xl border border-white/60 shadow-2xl space-y-6 relative overflow-hidden"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white shadow-lg">
+                <IconComponent className="w-8 h-8" />
+              </div>
 
-            <div className="space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
-                {service.tag}
-              </span>
-              <h3 className="font-heading font-extrabold text-xl text-foreground">
-                Built For Delhi NCR Businesses
-              </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                No generic templates. Every strategy is tailored to your target customers and competition.
-              </p>
-            </div>
+              <div className="space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
+                  {service.tag}
+                </span>
+                <h3 className="font-heading font-extrabold text-xl text-foreground">
+                  Built For Delhi NCR Businesses
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  No generic templates. Every strategy is tailored to your target customers and competition.
+                </p>
+              </div>
 
-            <div className="pt-4 border-t border-border/50 flex items-center justify-between text-xs font-semibold text-emerald-600 bg-emerald-50/80 p-3 rounded-2xl">
-              <span>Transparent Reporting</span>
-              <span>100% Honest Timelines</span>
-            </div>
-          </motion.div>
+              <div className="pt-4 border-t border-border/50 flex items-center justify-between text-xs font-semibold text-emerald-600 bg-emerald-50/80 p-3 rounded-2xl">
+                <span>Transparent Reporting</span>
+                <span>100% Honest Timelines</span>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
     </section>

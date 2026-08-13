@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import {
   Camera,
@@ -12,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
+import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
+import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
 
 const photographyFaqs = [
   {
@@ -37,8 +36,6 @@ const photographyFaqs = [
 ];
 
 export default function ProductPhotographyServiceView() {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
@@ -89,49 +86,7 @@ export default function ProductPhotographyServiceView() {
             </div>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.2} className="relative h-[500px] hidden lg:block w-full">
-            {/* Custom Photography "Studio Setup" Visual Composition */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/5 via-transparent to-primary/5 rounded-[2.5rem] border border-border/50 overflow-hidden shadow-2xl flex items-center justify-center bg-[url('/noise.png')] perspective-[1200px]">
-               
-               <div className="w-full h-full relative z-10 flex items-center justify-center transform-style-3d">
-                 
-                 {/* Backdrop */}
-                 <div className="absolute inset-0 flex items-center justify-center opacity-40">
-                   <div className="w-[300px] h-[300px] bg-gradient-to-b from-white/80 to-transparent rounded-full blur-3xl"></div>
-                 </div>
-
-                 {/* Product Pedestal */}
-                 <div className="absolute bottom-20 w-48 h-16 bg-white dark:bg-zinc-800 rounded-[50%] border border-border/50 shadow-[0_20px_50px_rgba(0,0,0,0.1)] transform rotate-x-[60deg] z-10 flex items-center justify-center">
-                   <div className="w-40 h-12 bg-muted/30 rounded-[50%]"></div>
-                 </div>
-
-                 {/* The "Product" (Abstract Bottle) */}
-                 <div className="absolute bottom-[90px] w-16 h-32 bg-gradient-to-br from-primary/80 to-primary rounded-xl shadow-2xl z-30 animate-float-slow backdrop-blur-sm border border-white/20">
-                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-6 h-4 bg-muted rounded-t-sm"></div>
-                   {/* Reflection */}
-                   <div className="absolute top-2 left-2 w-2 h-20 bg-white/30 rounded-full blur-[1px]"></div>
-                 </div>
-
-                 {/* Lighting Setup (Softbox representation) */}
-                 <div className="absolute top-16 -left-4 w-24 h-32 bg-white/90 border border-border/50 shadow-2xl transform rotate-12 z-40 flex items-center justify-center">
-                   <div className="w-full h-full bg-gradient-to-tr from-white to-orange-50/50 relative overflow-hidden">
-                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent opacity-80"></div>
-                   </div>
-                 </div>
-                 
-                 <div className="absolute top-24 right-4 w-16 h-48 bg-white/90 border border-border/50 shadow-2xl transform -rotate-12 z-20 flex items-center justify-center">
-                   <div className="w-full h-full bg-gradient-to-tl from-white to-blue-50/50"></div>
-                 </div>
-
-                 {/* Camera Lens Flare */}
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none z-50 mix-blend-screen flex items-center justify-center opacity-60">
-                   <div className="w-32 h-32 rounded-full border border-orange-400/20 bg-orange-400/5"></div>
-                   <div className="absolute w-48 h-48 rounded-full border border-blue-400/20 bg-blue-400/5 translate-x-8 translate-y-8"></div>
-                 </div>
-
-               </div>
-            </div>
-          </ScrollReveal>
+          <ServiceHeroVideo slug="product-photography-services-in-delhi" />
         </div>
       </section>
 
@@ -410,29 +365,7 @@ export default function ProductPhotographyServiceView() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            {photographyFaqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="border-b border-border/50 bg-transparent group">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-6 text-left font-heading font-bold text-lg md:text-xl text-foreground hover:text-primary flex justify-between items-center focus:outline-none transition-colors"
-                  >
-                    <h3 className="pr-8">{faq.q}</h3>
-                    <div className={`w-8 h-8 rounded-full border border-border flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-primary border-primary text-white rotate-45' : 'group-hover:border-primary text-muted-foreground'}`}>
-                      <span className="text-lg leading-none">+</span>
-                    </div>
-                  </button>
-                  <div 
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 pb-6' : 'max-h-0 opacity-0'}`}
-                  >
-                    <p className="text-base text-muted-foreground leading-relaxed pr-12">{faq.a}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <ServiceFaqAccordion faqs={photographyFaqs} />
         </ScrollReveal>
       </section>
 

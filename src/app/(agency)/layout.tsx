@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import LeadPopupClient from "@/components/ui/LeadPopupClient";
 
 export default function AgencyLayout({
   children,
@@ -13,6 +14,7 @@ export default function AgencyLayout({
         {children}
       </div>
       <Footer />
+      <LeadPopupClient />
     </>
   );
 }

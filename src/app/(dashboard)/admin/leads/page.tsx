@@ -25,6 +25,8 @@ import {
   Layers,
   LayoutGrid,
   List,
+  Download,
+  ChevronDown,
 } from "lucide-react"
 
 // Import custom design system components
@@ -68,9 +70,15 @@ interface LeadTimelineEvent {
 interface Lead {
   id: string
   name: string
-  company: string
+  company: string | null
   email: string
-  value: number
+  phone: string | null
+  budget: string | null
+  service: string | null
+  message: string
+  source: string | null
+  pageUrl: string | null
+  portfolio: string | null
   stage: LeadStage
   priority: LeadPriority
   assignedTo: {
@@ -96,87 +104,50 @@ function LeadsDashboard() {
   // Interactive View selection: "kanban" or "table"
   const [viewMode, setViewMode] = React.useState<"kanban" | "table">("kanban")
 
-  // Mock Database
-  const [leads, setLeads] = React.useState<Lead[]>([
-    {
-      id: "ld-1",
-      name: "Sarah Connor",
-      company: "Cyberdyne Systems",
-      email: "sarah@cyberdyne.com",
-      value: 450000,
-      stage: "new",
-      priority: "high",
-      assignedTo: { name: "John Smith", avatar: "JS" },
-      tags: ["Enterprise", "SaaS"],
-      created: "2026-07-01",
-      activities: [
-        { id: "act-1", text: "Inbound leads form submitted online.", time: "July 1, 10:00 AM", user: "Sarah Connor" },
-        { id: "act-2", text: "Assigned lead to John Smith.", time: "July 1, 10:15 AM", user: "System" },
-      ],
-      timeline: [
-        { id: "t-1", title: "Lead Captured", time: "July 1, 10:00 AM", stage: "new" },
-      ],
-    },
-    {
-      id: "ld-2",
-      name: "Bruce Wayne",
-      company: "Wayne Enterprises",
-      email: "bruce@wayne.co",
-      value: 1200000,
-      stage: "contacted",
-      priority: "high",
-      assignedTo: { name: "Aria Mercer", avatar: "AM" },
-      tags: ["Retainer", "Media Planning"],
-      created: "2026-07-02",
-      activities: [
-        { id: "act-3", text: "Outbound intro email sent via template CRM.", time: "July 2, 11:00 AM", user: "Aria Mercer" },
-        { id: "act-4", text: "Bruce Wayne replied requesting consultation calls.", time: "July 2, 2:30 PM", user: "Bruce Wayne" },
-      ],
-      timeline: [
-        { id: "t-2", title: "Lead Captured", time: "July 2, 10:00 AM", stage: "new" },
-        { id: "t-3", title: "Moved to Contacted stage", time: "July 2, 11:00 AM", stage: "contacted" },
-      ],
-    },
-    {
-      id: "ld-3",
-      name: "Peter Parker",
-      company: "Daily Bugle",
-      email: "peter@bugle.com",
-      value: 65000,
-      stage: "proposal",
-      priority: "low",
-      assignedTo: { name: "Jane Doe", avatar: "JD" },
-      tags: ["Small Business", "SEO Campaign"],
-      created: "2026-07-02",
-      activities: [
-        { id: "act-5", text: "Proposal draft proposal-v1.pdf sent.", time: "July 2, 4:00 PM", user: "Jane Doe" },
-      ],
-      timeline: [
-        { id: "t-4", title: "Lead Captured", time: "July 2, 12:00 PM", stage: "new" },
-        { id: "t-5", title: "Moved to Proposal stage", time: "July 2, 4:00 PM", stage: "proposal" },
-      ],
-    },
-    {
-      id: "ld-4",
-      name: "Tony Stark",
-      company: "Stark Industries",
-      email: "tony@stark.com",
-      value: 850000,
-      stage: "qualified",
-      priority: "high",
-      assignedTo: { name: "John Smith", avatar: "JS" },
-      tags: ["Enterprise", "Ad Campaign"],
-      created: "2026-07-03",
-      activities: [
-        { id: "act-6", text: "Met for consultation. Confirmed budget boundaries.", time: "July 3, 3:00 PM", user: "John Smith" },
-      ],
-      timeline: [
-        { id: "t-6", title: "Lead Captured", time: "July 3, 9:00 AM", stage: "new" },
-        { id: "t-7", title: "Moved to Contacted stage", time: "July 3, 10:00 AM", stage: "contacted" },
-        { id: "t-8", title: "Moved to Qualified stage", time: "July 3, 3:00 PM", stage: "qualified" },
-      ],
-    },
-  ])
+  // Database State
+  const [leads, setLeads] = React.useState<Lead[]>([])
+  const [isLoading, setIsLoading] = React.useState(true)
+
+  const fetchLeads = React.useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const res = await fetch("/api/admin/leads")
+      if (res.ok) {
+        const data = await res.json()
+        if (data.success && data.leads) {
+          const mappedLeads: Lead[] = data.leads.map((l: any) => ({
+            id: l.id,
+            name: l.name,
+            company: l.company || null,
+            email: l.email,
+            phone: l.phone || null,
+            budget: l.budget || null,
+            service: l.service || null,
+            message: l.message || "",
+            source: l.source || null,
+            pageUrl: l.pageUrl || null,
+            portfolio: l.portfolio || null,
+            stage: l.status.toLowerCase() as LeadStage,
+            priority: "medium", // Default or you can add to DB later
+            assignedTo: { name: "System", avatar: "SY" }, // Default
+            tags: l.source ? [l.source] : [],
+            created: new Date(l.createdAt).toLocaleDateString(),
+            activities: [],
+            timeline: []
+          }))
+          setLeads(mappedLeads)
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch leads:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    fetchLeads()
+  }, [fetchLeads])
 
   // Search & Filters state
   const [searchQuery, setSearchQuery] = React.useState("")
@@ -195,6 +166,10 @@ function LeadsDashboard() {
   // Interactive Comment Input in details drawer
   const [commentText, setCommentText] = React.useState("")
 
+  // Export state
+  const [isExporting, setIsExporting] = React.useState(false)
+  const [isExportMenuOpen, setIsExportMenuOpen] = React.useState(false)
+
   // Form Fields
   const [formName, setFormName] = React.useState("")
   const [formCompany, setFormCompany] = React.useState("")
@@ -205,12 +180,62 @@ function LeadsDashboard() {
   const [formAssignee, setFormAssignee] = React.useState("Jane Doe")
   const [formTags, setFormTags] = React.useState("")
 
+  const handleExport = async (format: "excel" | "csv" | "pdf", filterMode: "all" | "filtered") => {
+    setIsExporting(true)
+    setIsExportMenuOpen(false)
+    try {
+      let query = `?format=${format}`
+      if (filterMode === "filtered" && searchQuery) {
+        query += `&search=${encodeURIComponent(searchQuery)}`
+      }
+      
+      const res = await fetch(`/api/admin/export/leads${query}`, {
+        method: "GET",
+      })
+
+      if (!res.ok) {
+        throw new Error("Export failed")
+      }
+
+      const blob = await res.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      const disposition = res.headers.get("Content-Disposition")
+      let filename = `buzzspire-leads-${new Date().toISOString().split("T")[0]}.${format === "excel" ? "xlsx" : format}`
+      if (disposition && disposition.indexOf("filename=") !== -1) {
+        filename = disposition.split("filename=")[1].replace(/"/g, "")
+      }
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      a.remove()
+      
+      toast({
+        title: "Export Successful",
+        description: `Successfully downloaded ${format.toUpperCase()} file.`,
+        type: "success",
+      })
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: "Export Failed",
+        description: "There was an error generating your export file.",
+        type: "error",
+      })
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
   const filteredLeads = React.useMemo(() => {
     return leads.filter((lead) => {
       const matchesSearch =
         lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase())
+        (lead.company || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (lead.source || "").toLowerCase().includes(searchQuery.toLowerCase())
 
       const matchesPriority =
         priorityFilters.length === 0 || priorityFilters.includes(lead.priority)
@@ -285,7 +310,13 @@ function LeadsDashboard() {
       name: formName,
       company: formCompany,
       email: formEmail,
-      value: valueNum,
+      budget: formValue || null,
+      phone: null,
+      service: null,
+      source: null,
+      pageUrl: null,
+      portfolio: null,
+      message: "Lead added manually.",
       stage: formStage,
       priority: formPriority,
       assignedTo: { name: formAssignee, avatar: initials },
@@ -314,9 +345,9 @@ function LeadsDashboard() {
   const triggerEdit = (lead: Lead) => {
     setActiveLead(lead)
     setFormName(lead.name)
-    setFormCompany(lead.company)
+    setFormCompany(lead.company || "")
     setFormEmail(lead.email)
-    setFormValue(lead.value.toString())
+    setFormValue(lead.budget || "")
     setFormStage(lead.stage)
     setFormPriority(lead.priority)
     setFormAssignee(lead.assignedTo.name)
@@ -339,7 +370,7 @@ function LeadsDashboard() {
             name: formName,
             company: formCompany,
             email: formEmail,
-            value: formValue ? parseFloat(formValue) : 0,
+            budget: formValue || null,
             stage: formStage,
             priority: formPriority,
             assignedTo: { name: formAssignee, avatar: initials },
@@ -482,6 +513,47 @@ function LeadsDashboard() {
               </Button>
             </div>
 
+            {/* Export Dropdown */}
+            <div className="relative">
+              <Button
+                variant="outline"
+                onClick={() => setIsExportMenuOpen(!isExportMenuOpen)}
+                disabled={isExporting}
+                className="cursor-pointer bg-white border-border/80 shadow-sm"
+              >
+                <Download className="size-4 mr-1.5 text-muted-foreground" />
+                {isExporting ? "Exporting..." : "Export"}
+                <ChevronDown className="size-3 ml-1" />
+              </Button>
+              
+              {isExportMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-card border border-border rounded-xl shadow-lg z-50 py-2 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Format</div>
+                  <button onClick={() => handleExport("excel", searchQuery ? "filtered" : "all")} className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted font-medium transition-colors cursor-pointer flex items-center justify-between">
+                    Excel (.xlsx)
+                    {searchQuery && <span className="text-[10px] bg-primary/10 text-primary px-1.5 rounded">Filtered</span>}
+                  </button>
+                  <button onClick={() => handleExport("csv", searchQuery ? "filtered" : "all")} className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted font-medium transition-colors cursor-pointer flex items-center justify-between">
+                    CSV (.csv)
+                    {searchQuery && <span className="text-[10px] bg-primary/10 text-primary px-1.5 rounded">Filtered</span>}
+                  </button>
+                  <button onClick={() => handleExport("pdf", searchQuery ? "filtered" : "all")} className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted font-medium transition-colors cursor-pointer flex items-center justify-between">
+                    PDF (.pdf)
+                    {searchQuery && <span className="text-[10px] bg-primary/10 text-primary px-1.5 rounded">Filtered</span>}
+                  </button>
+                  {searchQuery && (
+                    <>
+                      <div className="h-px bg-border/60 my-1.5" />
+                      <div className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">All Records</div>
+                      <button onClick={() => handleExport("excel", "all")} className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-muted font-medium transition-colors cursor-pointer">
+                        Export All to Excel
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+
             <Button
               variant="premium"
               onClick={() => {
@@ -602,7 +674,7 @@ function LeadsDashboard() {
 
                         <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/20">
                           <span className="text-xs font-bold text-foreground">
-                            ₹{lead.value.toLocaleString("en-IN")}
+                            {lead.budget || "N/A"}
                           </span>
 
                           <div className="flex items-center gap-2">
@@ -674,7 +746,7 @@ function LeadsDashboard() {
                     </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground text-xs font-semibold">{lead.company}</TableCell>
-                  <TableCell className="font-bold text-foreground">₹{lead.value.toLocaleString("en-IN")}</TableCell>
+                  <TableCell className="font-bold text-foreground">{lead.budget || "N/A"}</TableCell>
                   <TableCell>
                     <Badge variant={lead.stage === "new" ? "default" : lead.stage === "contacted" ? "warning" : lead.stage === "proposal" ? "secondary" : "success"}>
                       {STAGES.find((s) => s.id === lead.stage)?.label}
@@ -1049,12 +1121,71 @@ function LeadsDashboard() {
 
             <div className="h-px bg-border/40 my-1" />
 
+            {/* Lead Context & Contact Info */}
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              {activeLead.phone && (
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Phone</label>
+                  <p className="text-foreground/80 font-medium">{activeLead.phone}</p>
+                </div>
+              )}
+              {activeLead.email && (
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Email</label>
+                  <p className="text-foreground/80 font-medium truncate" title={activeLead.email}>{activeLead.email}</p>
+                </div>
+              )}
+              {activeLead.budget && (
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Budget</label>
+                  <p className="text-foreground/80 font-medium">{activeLead.budget}</p>
+                </div>
+              )}
+              {activeLead.service && (
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Service / Role</label>
+                  <p className="text-foreground/80 font-medium truncate" title={activeLead.service}>{activeLead.service}</p>
+                </div>
+              )}
+              {activeLead.source && (
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Source</label>
+                  <p className="text-foreground/80 font-medium">{activeLead.source}</p>
+                </div>
+              )}
+              {activeLead.pageUrl && (
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Page URL</label>
+                  <p className="text-foreground/80 font-medium truncate" title={activeLead.pageUrl}>{activeLead.pageUrl}</p>
+                </div>
+              )}
+              {activeLead.portfolio && (
+                <div className="col-span-2 space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Portfolio / Link</label>
+                  <p className="text-foreground/80 font-medium break-all">
+                    <a href={activeLead.portfolio} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                      {activeLead.portfolio}
+                    </a>
+                  </p>
+                </div>
+              )}
+              {activeLead.message && (
+                <div className="col-span-2 space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Message / Cover Letter</label>
+                  <p className="text-foreground/80 font-medium whitespace-pre-wrap p-2 bg-muted/40 rounded-lg border border-border/40">
+                    {activeLead.message}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="h-px bg-border/40 my-1" />
+
             {/* Estimated Value */}
             <div className="p-3.5 bg-primary/5 border border-primary/20 rounded-xl space-y-1">
               <span className="text-[10px] uppercase font-bold text-primary font-heading tracking-wide">Estimated Budget</span>
               <p className="text-base font-bold text-primary flex items-center gap-1">
-                <IndianRupee className="size-4" />
-                {activeLead.value.toLocaleString("en-IN")}
+                {activeLead.budget || "N/A"}
               </p>
             </div>
 

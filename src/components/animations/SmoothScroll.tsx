@@ -7,7 +7,7 @@ interface SmoothScrollProps {
   children: ReactNode;
 }
 
-export default function SmoothScroll({ children }: SmoothScrollProps) {
+function LenisInstance() {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -17,7 +17,6 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     const checkDesktop = () => {
       const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
       const isMobileWidth = window.innerWidth < 1024;
-      // Enable Lenis ONLY on non-touch desktop viewports (width >= 1024px and fine pointer)
       setIsDesktop(!isCoarsePointer && !isMobileWidth);
     };
 
@@ -41,11 +40,14 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     };
   }, []);
 
+  if (!mounted || !isDesktop) return null;
+  return <ReactLenis root options={{ lerp: 0.05, duration: 1.5, smoothWheel: true }} />;
+}
+
+export default function SmoothScroll({ children }: SmoothScrollProps) {
   return (
     <>
-      {mounted && isDesktop && (
-        <ReactLenis root options={{ lerp: 0.05, duration: 1.5, smoothWheel: true }} />
-      )}
+      <LenisInstance />
       {children}
     </>
   );

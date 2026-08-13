@@ -52,7 +52,15 @@ export default function ContactPage() {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, company, budget, message })
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          company, 
+          budget, 
+          message,
+          source: "Contact Form",
+          pageUrl: "/contact" 
+        })
       });
 
       if (res.ok) {

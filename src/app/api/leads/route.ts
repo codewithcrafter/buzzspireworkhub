@@ -14,7 +14,7 @@ export async function POST(req: Request) {
         await limiter.check(5, ip); // Max 5 lead submissions per minute per IP
         
         const body = await req.json();
-        const { name, email, company, budget, message } = body;
+        const { name, email, company, budget, service, message, source, pageUrl, portfolio, phone } = body;
 
         if (!name || !email || !message) {
             return NextResponse.json(
@@ -28,7 +28,12 @@ export async function POST(req: Request) {
             email,
             company,
             budget,
+            service,
             message,
+            source,
+            pageUrl,
+            portfolio,
+            phone
         });
 
         return NextResponse.json({ success: true, ...newLead }, { status: 201 });
