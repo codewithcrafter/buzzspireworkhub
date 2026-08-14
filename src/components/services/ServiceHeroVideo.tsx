@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Code, Zap, Check, Smartphone } from "lucide-react";
 
 export interface ServiceHeroVideoProps {
@@ -69,13 +69,53 @@ export default function ServiceHeroVideo({ slug, fallbackVideoUrl, badgeTitle }:
     urlPath: "buzzspire.dev/services"
   };
 
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {});
+    const enableVideo = () => {
+      setShouldLoadVideo(true);
+    };
+
+    if (typeof window !== "undefined") {
+      const isMobile = window.innerWidth < 768;
+      
+      if (isMobile) {
+        // Mobile: wait for idle or first interaction to prevent choking 4G bandwidth during LCP
+        const handleInteraction = () => {
+          enableVideo();
+          window.removeEventListener("scroll", handleInteraction);
+          window.removeEventListener("touchstart", handleInteraction);
+        };
+
+        window.addEventListener("scroll", handleInteraction, { passive: true, once: true });
+        window.addEventListener("touchstart", handleInteraction, { passive: true, once: true });
+
+        const timer = setTimeout(enableVideo, 1800);
+        return () => {
+          clearTimeout(timer);
+          window.removeEventListener("scroll", handleInteraction);
+          window.removeEventListener("touchstart", handleInteraction);
+        };
+      } else {
+        // Desktop: load in next idle callback
+        if ("requestIdleCallback" in window) {
+          const idleId = (window as any).requestIdleCallback(enableVideo, { timeout: 800 });
+          return () => (window as any).cancelIdleCallback(idleId);
+        } else {
+          const timer = setTimeout(enableVideo, 300);
+          return () => clearTimeout(timer);
+        }
+      }
     }
   }, []);
+
+  useEffect(() => {
+    if (shouldLoadVideo && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [shouldLoadVideo]);
 
   return (
     <div className="w-full flex justify-center lg:justify-end items-center self-center">
@@ -127,16 +167,32 @@ export default function ServiceHeroVideo({ slug, fallbackVideoUrl, badgeTitle }:
 
           {/* Video Container inside Browser Screen */}
           <div className="relative w-full aspect-[16/10] bg-slate-950 flex items-center justify-center overflow-hidden">
-            <video
-              ref={videoRef}
-              src={config.videoUrl}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              className="w-full h-full object-cover block relative z-10"
-            />
+            {/* High-fidelity lightweight placeholder prior to video hydration */}
+            <div className={`absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-zinc-900 flex flex-col items-center justify-center p-6 text-center transition-opacity duration-700 z-10 pointer-events-none ${isVideoReady ? 'opacity-0' : 'opacity-100'}`}>
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-3 shadow-inner">
+                <Code className="w-6 h-6 animate-pulse" />
+              </div>
+              <span className="text-xs font-mono font-bold text-slate-300 tracking-wider uppercase">
+                {config.label}
+              </span>
+              <span className="text-[10px] text-slate-500 font-mono mt-1">
+                BuzzSpire Digital Engine
+              </span>
+            </div>
+
+            {shouldLoadVideo && (
+              <video
+                ref={videoRef}
+                src={config.videoUrl}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="none"
+                onLoadedData={() => setIsVideoReady(true)}
+                className={`w-full h-full object-cover block relative z-10 transition-opacity duration-700 ${isVideoReady ? 'opacity-100' : 'opacity-0'}`}
+              />
+            )}
           </div>
         </div>
 
@@ -147,7 +203,7 @@ export default function ServiceHeroVideo({ slug, fallbackVideoUrl, badgeTitle }:
         </div>
 
         {/* Bottom-Right Badge: RESPONSIVE */}
-        <div className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-4 bg-white/95 backdrop-blur-md border border-border/80 shadow-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl flex items-center gap-2.5 z-20">
+        <div className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:right-4 bg-white/95 backdrop-blur-md border border-border/80 shadow-lg px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl flex items-center gap-2.5 z-20">
           <div className="p-1.5 rounded-lg bg-slate-100 text-slate-700 shrink-0">
             <Smartphone className="w-4 h-4 text-primary" />
           </div>

@@ -37,54 +37,29 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-8 space-y-6">
           {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md border border-primary/20 rounded-full text-primary text-xs md:text-sm font-semibold shadow-sm"
-          >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md border border-primary/20 rounded-full text-primary text-xs md:text-sm font-semibold shadow-sm">
             <IconComponent className="w-4 h-4 text-secondary shrink-0" />
             <span>{service.heroBadge}</span>
-          </motion.div>
+          </div>
 
           {/* Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight leading-[1.1] text-foreground"
-          >
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
             {service.title}
-          </motion.h1>
+          </h1>
 
           {/* Short Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl"
-          >
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
             {service.shortDesc}
-          </motion.p>
+          </p>
 
           {/* Delhi / NCR Relevance banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            className="flex items-center gap-2 text-xs md:text-sm font-medium text-foreground bg-white/60 backdrop-blur-sm p-3.5 rounded-2xl border border-border/50 max-w-xl"
-          >
+          <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-foreground bg-white/60 backdrop-blur-sm p-3.5 rounded-2xl border border-border/50 max-w-xl">
             <MapPin className="w-4 h-4 text-primary shrink-0" />
             <span>{service.delhiRelevance}</span>
-          </motion.div>
+          </div>
 
           {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 pt-4"
-          >
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <Magnetic strength={0.2}>
               <Link href="/contact" className="w-full sm:w-auto">
                 <Button size="lg" className="rounded-full px-8 py-7 text-lg group bg-primary text-white hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto shadow-md">
@@ -100,7 +75,7 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
                 </Button>
               </Link>
             </Magnetic>
-          </motion.div>
+          </div>
         </div>
 
         {/* Visual Graphic / Video Card */}

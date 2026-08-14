@@ -72,7 +72,7 @@ export default function GraphicDesignServiceView() {
       {/* HERO SECTION */}
       <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          <ScrollReveal className="space-y-8">
+          <div className="space-y-8">
             <div className="space-y-6">
               <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-2">
                 <Palette className="w-4 h-4" />
@@ -109,7 +109,7 @@ export default function GraphicDesignServiceView() {
                 </a>
               </Magnetic>
             </div>
-          </ScrollReveal>
+          </div>
           
           <ServiceHeroVideo slug="graphic-design-services-in-delhi" />
         </div>

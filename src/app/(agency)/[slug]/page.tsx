@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
-import { servicesData, getServiceBySlug, OLD_TO_NEW_SLUG_MAP, ServiceData } from "@/data/servicesData";
-import ServiceSchema from "@/components/seo/ServiceSchema";
+import { servicesData, getServiceBySlug, OLD_TO_NEW_SLUG_MAP } from "@/data/servicesData";
 import ServiceHero from "@/components/services/ServiceHero";
 import ServiceOverview from "@/components/services/ServiceOverview";
 import ServiceBenefits from "@/components/services/ServiceBenefits";
@@ -24,22 +23,6 @@ interface ServicePageProps {
   params: Promise<{
     slug: string;
   }>;
-}
-
-function getServiceType(slug: string, title: string): string {
-  switch (slug) {
-    case "smo-services-in-delhi": return "Social Media Optimization";
-    case "google-business-profile-management-in-delhi": return "Google Business Profile Management";
-    case "ppc-services-in-delhi": return "Pay Per Click Advertising";
-    case "ecommerce-management-services-in-delhi": return "Ecommerce Management";
-    case "graphic-design-services-in-delhi": return "Graphic Design";
-    case "seo-services-in-delhi": return "Search Engine Optimization";
-    case "social-media-marketing-services-in-delhi": return "Social Media Marketing";
-    case "product-photography-services-in-delhi": return "Product Photography";
-    case "video-editing-services-in-delhi": return "Video Editing";
-    case "web-development-services-in-delhi": return "Web Development";
-    default: return title;
-  }
 }
 
 // Generate Static Params for all 11 Production Service URLs
@@ -100,24 +83,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
     notFound();
   }
 
-  const schemaFaqs = service.faqs.map((f) => ({
-    question: f.q,
-    answer: f.a,
-  }));
-
-  const schemaProps = {
-    slug: service.slug,
-    serviceName: service.title,
-    serviceType: getServiceType(service.slug, service.title),
-    description: service.seo.description,
-    title: service.seo.title,
-    faqs: schemaFaqs,
-  };
-
   if (service.slug === "smo-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <SmoServiceView />
       </main>
     );
@@ -126,7 +94,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "google-business-profile-management-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <GmbServiceView />
       </main>
     );
@@ -135,7 +102,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "ppc-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <PpcServiceView />
       </main>
     );
@@ -144,7 +110,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "ecommerce-management-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <EcommerceServiceView />
       </main>
     );
@@ -153,7 +118,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "graphic-design-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <GraphicDesignServiceView />
       </main>
     );
@@ -162,7 +126,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "seo-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <SeoServiceView />
       </main>
     );
@@ -171,7 +134,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "social-media-marketing-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <SmmServiceView />
       </main>
     );
@@ -180,7 +142,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "product-photography-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <ProductPhotographyServiceView />
       </main>
     );
@@ -189,7 +150,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "video-editing-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <VideoEditingServiceView />
       </main>
     );
@@ -198,7 +158,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (service.slug === "web-development-services-in-delhi") {
     return (
       <main className="w-full bg-background min-h-screen">
-        <ServiceSchema {...schemaProps} />
         <WebDevelopmentServiceView />
       </main>
     );
@@ -206,7 +165,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
   return (
     <main className="w-full bg-background min-h-screen">
-      <ServiceSchema {...schemaProps} />
       {/* Service Header / Hero */}
       <ServiceHero service={service} />
 

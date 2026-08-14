@@ -79,7 +79,7 @@ export default function PpcServiceView() {
       {/* HERO SECTION */}
       <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          <ScrollReveal className="space-y-8">
+          <div className="space-y-8">
             <div className="space-y-6">
               <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
@@ -108,12 +108,12 @@ export default function PpcServiceView() {
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
                   <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
-                    <span>Get My Free Audit — Takes 10 Minutes</span>
+                    <span>Get Free Ads Audit</span>
                   </Button>
                 </a>
               </Magnetic>
             </div>
-          </ScrollReveal>
+          </div>
           
           <ServiceHeroVideo slug="ppc-services-in-delhi" />
         </div>

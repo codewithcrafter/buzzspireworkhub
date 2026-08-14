@@ -55,7 +55,7 @@ export default function EcommerceServiceView() {
       {/* HERO SECTION */}
       <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          <ScrollReveal className="space-y-8">
+          <div className="space-y-8">
             <div className="space-y-6">
               <span className="text-xs md:text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4" />
@@ -92,7 +92,7 @@ export default function EcommerceServiceView() {
                 </a>
               </Magnetic>
             </div>
-          </ScrollReveal>
+          </div>
           
           <ServiceHeroVideo slug="ecommerce-management-services-in-delhi" />
         </div>
@@ -112,7 +112,6 @@ export default function EcommerceServiceView() {
           </div>
         </ScrollReveal>
       </section>
-
       {/* SECTION 2: ECOMMERCE DIGITAL MARKETING AGENCY */}
       <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
         <ScrollReveal className="space-y-6">

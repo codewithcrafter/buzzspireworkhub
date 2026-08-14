@@ -17,6 +17,7 @@ export default function LeadPopup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   useEffect(() => {
     // Check local storage for persistence
@@ -57,9 +58,23 @@ export default function LeadPopup() {
     localStorage.setItem(POPUP_STORAGE_KEY, JSON.stringify({ status: "submitted", expiresAt }));
   };
 
+  const validateIndianPhone = (input: string) => {
+    const cleaned = input.trim().replace(/[\s\-()]/g, "");
+    // Matches Indian numbers: optional +91/91/0 prefix followed by 10 digits starting with 6, 7, 8, or 9
+    return /^(?:\+91|91|0)?[6-9]\d{9}$/.test(cleaned);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
+    setPhoneError("");
+
+    // Validate phone number
+    if (!validateIndianPhone(phone)) {
+      setPhoneError("Please enter a valid 10-digit Indian phone number (e.g. +91-9876543210)");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -67,10 +82,10 @@ export default function LeadPopup() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
-          email,
-          phone,
-          message,
+          name: name.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          message: message.trim(),
           source: "Website Popup",
           pageUrl: window.location.href,
         }),
@@ -114,6 +129,7 @@ export default function LeadPopup() {
               <button
                 onClick={handleClose}
                 className="absolute top-4 right-4 w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors z-10"
+                aria-label="Close popup"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -137,42 +153,57 @@ export default function LeadPopup() {
                   <form onSubmit={handleSubmit} className="p-8 space-y-5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-1.5">
-                        <label className="text-xs font-semibold text-foreground uppercase tracking-wide">Name</label>
+                        <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                          Name <span className="text-primary font-bold">*</span>
+                        </label>
                         <input
                           type="text"
                           required
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          placeholder="John Doe"
+                          placeholder="Rajesh Kumar"
                           className="w-full bg-muted/30 border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-xs font-semibold text-foreground uppercase tracking-wide">Email</label>
+                        <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                          Email <span className="text-primary font-bold">*</span>
+                        </label>
                         <input
                           type="email"
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="john@company.com"
+                          placeholder="rajesh.kumar@example.com"
                           className="w-full bg-muted/30 border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-foreground uppercase tracking-wide">Phone (Optional)</label>
+                      <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                        Phone <span className="text-primary font-bold">*</span>
+                      </label>
                       <input
                         type="tel"
+                        required
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+91-0000000000"
-                        className="w-full bg-muted/30 border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                        onChange={(e) => {
+                          setPhone(e.target.value);
+                          if (phoneError) setPhoneError("");
+                        }}
+                        placeholder="+91-9876543210"
+                        className={`w-full bg-muted/30 border ${phoneError ? 'border-red-500 ring-1 ring-red-500/30' : 'border-border/50'} rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all`}
                       />
+                      {phoneError && (
+                        <p className="text-xs text-red-500 font-medium">{phoneError}</p>
+                      )}
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-foreground uppercase tracking-wide">What do you need help with?</label>
+                      <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                        What do you need help with? <span className="text-primary font-bold">*</span>
+                      </label>
                       <textarea
                         required
                         value={message}

@@ -131,14 +131,18 @@ export default function Footer() {
           {/* Services Quick Links */}
           <div className="space-y-5">
             <h4 className="font-heading font-bold text-base text-foreground tracking-wide uppercase">Services</h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               {[
-                { name: "SEO Optimization", href: "/services#seo" },
-                { name: "Google & Meta Ads", href: "/services#ads" },
-                { name: "Content Strategy", href: "/services#content" },
-                { name: "Branding & Strategy", href: "/services#branding" },
-                { name: "UI/UX & Engineering", href: "/services#web" },
-                { name: "Automation & Analytics", href: "/services#analytics" },
+                { name: "SEO Services", href: "/seo-services-in-delhi" },
+                { name: "PPC & Paid Ads", href: "/ppc-services-in-delhi" },
+                { name: "SMO / Social Media Optimization", href: "/smo-services-in-delhi" },
+                { name: "Social Media Marketing", href: "/social-media-marketing-services-in-delhi" },
+                { name: "Google Business Profile Management", href: "/google-business-profile-management-in-delhi" },
+                { name: "Ecommerce Operation", href: "/ecommerce-management-services-in-delhi" },
+                { name: "Graphic Design", href: "/graphic-design-services-in-delhi" },
+                { name: "Product Photography", href: "/product-photography-services-in-delhi" },
+                { name: "Video Editing", href: "/video-editing-services-in-delhi" },
+                { name: "Web Development", href: "/web-development-services-in-delhi" },
               ].map((link, idx) => (
                 <li key={idx}>
                   <Link
@@ -201,9 +205,9 @@ export default function Footer() {
             © {new Date().getFullYear()} BuzzSpire Media Inc. All rights reserved. Made for Awwwards inspection.
           </p>
           <div className="flex gap-6 justify-center">
-            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-            <Link href="/sitemap" className="hover:text-primary transition-colors">Sitemap</Link>
+            <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</Link>
+            <Link href="/sitemap.html" className="hover:text-primary transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>
