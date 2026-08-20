@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar, Clock, User, Tag, Sparkles } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, User, Tag, Sparkles, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getBlog } from "@/services/blog.service";
 import BlogSchema from "@/components/seo/BlogSchema";
@@ -75,6 +75,7 @@ export default async function BlogPostPage(props: BlogPostPageProps) {
         authorName={blog.author}
         imageUrl={blog.featuredImage || "https://www.buzzspiremedia.com/logo.png"}
         category={blog.category}
+        faqs={blog.faqs}
       />
       {/* Background radial gradient glow */}
       <div className="absolute top-20 left-10 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
@@ -177,6 +178,30 @@ export default async function BlogPostPage(props: BlogPostPageProps) {
             );
           })}
         </article>
+
+        {/* FAQ Section */}
+        {blog.faqs && blog.faqs.length > 0 && (
+          <div className="pt-12 border-t border-border/50">
+            <h2 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground mb-6">
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-4">
+              {blog.faqs.map((faq: any, index: number) => (
+                <details key={index} className="group bg-muted/20 border border-border/60 rounded-2xl open:bg-muted/40 transition-colors">
+                  <summary className="flex items-center justify-between cursor-pointer p-5 font-bold text-base md:text-lg text-foreground select-none list-none [&::-webkit-details-marker]:hidden">
+                    {faq.question}
+                    <ChevronDown className="w-5 h-5 shrink-0 ml-4 text-muted-foreground transition-transform duration-300 group-open:rotate-180" />
+                  </summary>
+                  <div className="px-5 pb-5 text-muted-foreground text-sm md:text-base leading-relaxed">
+                    <div className="pt-4 mt-2 border-t border-border/40">
+                      {faq.answer}
+                    </div>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Footer structured playbook invite callout banner */}
         <div className="pt-12 border-t border-border/50">

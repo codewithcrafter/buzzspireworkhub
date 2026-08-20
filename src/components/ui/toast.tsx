@@ -24,6 +24,21 @@ interface ToastContextType {
 
 const ToastContext = React.createContext<ToastContextType | undefined>(undefined)
 
+function safeNormalize(val: any): string {
+  if (val === null || val === undefined) return "";
+  if (typeof val === "string") return val;
+  if (typeof val === "number") return String(val);
+  if (val instanceof Error) return val.message;
+  if (typeof val === "object") {
+    if (typeof val.message === "string") return val.message;
+    if (val.error && typeof val.error.message === "string") return val.error.message;
+    if (val.error && typeof val.error === "string") return val.error;
+    if (val.code && typeof val.code === "string") return `Error: ${val.code}`;
+    return "An unknown error occurred";
+  }
+  return String(val);
+}
+
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = React.useState<ToastItem[]>([])
 
@@ -33,7 +48,23 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const toast = React.useCallback((item: Omit<ToastItem, "id">) => {
     const id = Math.random().toString(36).substring(2, 9)
-    const newToast: ToastItem = { ...item, id }
+    
+    // Safely normalize title and description
+    const safeTitle = item.title ? safeNormalize(item.title) : "";
+    let safeDescription = item.description ? safeNormalize(item.description) : undefined;
+    
+    // If normalization resulted in empty string but it wasn't empty originally, fallback
+    if (!safeTitle && item.title) {
+       safeDescription = "An unknown error occurred";
+    }
+
+    const newToast: ToastItem = { 
+      ...item, 
+      id,
+      title: safeTitle || "Notification",
+      description: safeDescription
+    }
+    
     setToasts((prev) => [...prev, newToast])
 
     const duration = item.duration ?? 4000

@@ -178,3 +178,132 @@ This link expires in 24 hours.`,
     throw new Error(error.message);
   }
 }
+
+export async function sendLeadConfirmationEmail(lead: any) {
+  const { name, company, service, email } = lead;
+  
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Thank you for contacting BuzzSpire</title>
+        <style>
+          body { font-family: 'Outfit', 'Inter', -apple-system, sans-serif; color: #1f2937; line-height: 1.6; background-color: #f9fafb; margin: 0; padding: 40px 0; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 40px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+          h2 { color: #7c3aed; margin-top: 0; font-size: 24px; }
+          .details { background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0; }
+          .details ul { list-style: none; padding: 0; margin: 0; }
+          .details li { margin-bottom: 10px; }
+          .footer { margin-top: 30px; font-size: 14px; color: #6b7280; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Thank you for contacting BuzzSpire Media</h2>
+          <p>Hi ${name},</p>
+          <p>We have received your enquiry regarding:</p>
+          <p style="font-size: 18px; font-weight: bold; color: #111827;">${service}</p>
+          <p>Our team has received your details and will get in touch with you shortly.</p>
+          
+          <div class="details">
+            <p style="margin-top: 0; font-weight: bold;">Here are the details we received:</p>
+            <ul>
+              <li><strong>Name:</strong> ${name}</li>
+              <li><strong>Company:</strong> ${company || "N/A"}</li>
+              <li><strong>Service:</strong> ${service}</li>
+            </ul>
+          </div>
+          
+          <p>Thank you for choosing BuzzSpire Media.</p>
+          <div class="footer">
+            Regards,<br><strong>BuzzSpire Team</strong>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const { data, error } = await resend.emails.send({
+    from: "BuzzSpire Sales <sales@buzzspiremedia.com>",
+    to: email,
+    subject: "Thank you for contacting BuzzSpire",
+    html: htmlContent,
+    text: `Hi ${name},\n\nThank you for contacting BuzzSpire Media.\n\nWe have received your enquiry regarding:\n${service}\n\nOur team has received your details and will get in touch with you shortly.\n\nHere are the details we received:\nName: ${name}\nCompany: ${company || "N/A"}\nService: ${service}\n\nThank you for choosing BuzzSpire Media.\n\nRegards,\nBuzzSpire Team`,
+  });
+
+  if (error) {
+    console.error("Resend Confirmation Error:", error);
+    throw new Error(error.message);
+  }
+  return data;
+}
+
+export async function sendLeadNotificationEmail(lead: any) {
+  const adminEmail = process.env.LEADS_NOTIFICATION_EMAIL || "admin@buzzspire.com";
+  let ownerVal = "N/A";
+  if (lead.message && lead.message.includes("Owner:")) {
+    ownerVal = lead.message.split("Owner:")[1].trim();
+  }
+  
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>New Chatbot Lead</title>
+        <style>
+          body { font-family: -apple-system, sans-serif; color: #1f2937; line-height: 1.6; padding: 20px; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 30px; }
+          h2 { color: #d946ef; margin-top: 0; }
+          .section { margin: 20px 0; padding: 15px; background: #f9fafb; border-radius: 8px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>New Chatbot Lead &mdash; ${lead.service}</h2>
+          <p>New website chatbot lead received.</p>
+          
+          <div class="section">
+            <p style="margin-top: 0; font-weight: bold;">Lead Details:</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li><strong>Name:</strong> ${lead.name}</li>
+              <li><strong>Company:</strong> ${lead.company || "N/A"}</li>
+              <li><strong>Service:</strong> ${lead.service}</li>
+              <li><strong>Owner:</strong> ${ownerVal}</li>
+              <li><strong>Phone:</strong> ${lead.phone || "N/A"}</li>
+              <li><strong>Email:</strong> ${lead.email}</li>
+              <li><strong>Source:</strong> ${lead.source}</li>
+            </ul>
+          </div>
+          
+          <div class="section">
+            <p style="margin-top: 0; font-weight: bold;">Page:</p>
+            <p style="margin: 0; word-break: break-all;">${lead.pageUrl || "N/A"}</p>
+          </div>
+          
+          <div class="section">
+            <p style="margin-top: 0; font-weight: bold;">Message:</p>
+            <p style="margin: 0;">${lead.message}</p>
+          </div>
+          
+          <p>Please check: <strong>Admin &rarr; Leads</strong></p>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const { data, error } = await resend.emails.send({
+    from: "BuzzSpire Sales <sales@buzzspiremedia.com>",
+    to: adminEmail,
+    subject: `New Chatbot Lead — ${lead.service}`,
+    html: htmlContent,
+    text: `New website chatbot lead received.\n\nLead Details:\nName: ${lead.name}\nCompany: ${lead.company || "N/A"}\nService: ${lead.service}\nOwner: ${ownerVal}\nPhone: ${lead.phone || "N/A"}\nEmail: ${lead.email}\nSource: ${lead.source}\n\nPage:\n${lead.pageUrl || "N/A"}\n\nMessage:\n${lead.message}\n\nPlease check: Admin -> Leads`,
+  });
+
+  if (error) {
+    console.error("Resend Notification Error:", error);
+    throw new Error(error.message);
+  }
+  return data;
+}

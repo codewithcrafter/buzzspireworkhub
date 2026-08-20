@@ -28,7 +28,9 @@ import { Dialog } from "@/components/ui/dialog"
 import { ToastProvider, useToast } from "@/components/ui/toast"
 import { SearchBar } from "@/components/ui/search-bar"
 import { FilterControls } from "@/components/ui/filter-controls"
-import { RichTextEditor } from "@/components/ui/rich-text-editor"
+import dynamic from "next/dynamic"
+
+const RichTextEditor = dynamic(() => import("@/components/ui/rich-text-editor").then(mod => mod.RichTextEditor), { ssr: false })
 import {
   Card,
   CardHeader,
@@ -56,6 +58,7 @@ interface BlogPost {
   seoTitle: string
   metaDescription: string
   excerpt: string
+  faqs?: { id: string; question: string; answer: string; order: number }[]
 }
 
 function BlogDashboard() {
@@ -93,6 +96,7 @@ function BlogDashboard() {
   const [formIsFeatured, setFormIsFeatured] = React.useState(false)
   const [formAuthor, setFormAuthor] = React.useState("")
   const [formExcerpt, setFormExcerpt] = React.useState("")
+  const [formFaqs, setFormFaqs] = React.useState<{id?: string, question: string, answer: string, order?: number}[]>([])
 
   // Image Uploading States
   const [isUploading, setIsUploading] = React.useState(false)
@@ -124,6 +128,7 @@ function BlogDashboard() {
             seoTitle: b.seoTitle || "",
             metaDescription: b.metaDescription || "",
             excerpt: b.excerpt || "",
+            faqs: b.faqs || [],
           }))
         )
       }
@@ -191,6 +196,16 @@ function BlogDashboard() {
       return
     }
 
+    const hasEmptyFaqs = formFaqs.some(f => !f.question.trim() || !f.answer.trim())
+    if (hasEmptyFaqs) {
+      toast({
+        title: "FAQ Validation Failed",
+        description: "Please ensure all FAQs have both a question and an answer.",
+        type: "error",
+      })
+      return
+    }
+
     const tagsArray = formTags ? formTags.split(",").map(t => t.trim()).filter(Boolean) : ["General"]
 
     try {
@@ -211,6 +226,7 @@ function BlogDashboard() {
           metaDescription: formMetaDescription || undefined,
           status: formStatus.toUpperCase(),
           isFeatured: formIsFeatured,
+          faqs: formFaqs.map((f, i) => ({ ...f, order: i })),
         }),
       })
 
@@ -257,6 +273,7 @@ function BlogDashboard() {
     setFormIsFeatured(post.isFeatured)
     setFormAuthor(post.author.name)
     setFormExcerpt(post.excerpt)
+    setFormFaqs(post.faqs || [])
     setIsEditOpen(true)
   }
 
@@ -266,6 +283,16 @@ function BlogDashboard() {
     if (!activePost) return
 
     const tagsArray = formTags ? formTags.split(",").map(t => t.trim()).filter(Boolean) : ["General"]
+
+    const hasEmptyFaqs = formFaqs.some(f => !f.question.trim() || !f.answer.trim())
+    if (hasEmptyFaqs) {
+      toast({
+        title: "FAQ Validation Failed",
+        description: "Please ensure all FAQs have both a question and an answer.",
+        type: "error",
+      })
+      return
+    }
 
     try {
       const res = await fetch(`/api/admin/blogs/${activePost.id}`, {
@@ -285,6 +312,7 @@ function BlogDashboard() {
           metaDescription: formMetaDescription || null,
           status: formStatus.toUpperCase(),
           isFeatured: formIsFeatured,
+          faqs: formFaqs.map((f, i) => ({ ...f, order: i })),
         }),
       })
 
@@ -368,6 +396,7 @@ function BlogDashboard() {
     setFormIsFeatured(false)
     setFormAuthor("")
     setFormExcerpt("")
+    setFormFaqs([])
     setActivePost(null)
   }
 
@@ -435,6 +464,83 @@ function BlogDashboard() {
       </div>
     )
   }
+
+  // Shared FAQ Section
+  const renderFaqSection = () => {
+    return (
+      <div className="space-y-4 pt-4 border-t border-border/50">
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-bold text-foreground">Frequently Asked Questions (FAQ)</label>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setFormFaqs([...formFaqs, { question: "", answer: "" }])}
+            className="cursor-pointer h-7 text-xs"
+          >
+            <Plus className="size-3 mr-1" /> Add FAQ
+          </Button>
+        </div>
+        
+        {formFaqs.length === 0 ? (
+          <p className="text-xs text-muted-foreground italic">No FAQs added yet.</p>
+        ) : (
+          <div className="space-y-3">
+            {formFaqs.map((faq, index) => (
+              <div key={index} className="p-3 bg-muted/20 border border-border rounded-lg space-y-2 relative group">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-xs"
+                  className="absolute top-2 right-2 text-muted-foreground hover:text-destructive opacity-50 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  onClick={() => {
+                    const newFaqs = [...formFaqs];
+                    newFaqs.splice(index, 1);
+                    setFormFaqs(newFaqs);
+                  }}
+                  title="Delete FAQ"
+                >
+                  <Trash2 className="size-3" />
+                </Button>
+                <div className="pr-6 space-y-2">
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Question *</label>
+                    <input
+                      type="text"
+                      required
+                      value={faq.question}
+                      onChange={(e) => {
+                        const newFaqs = [...formFaqs];
+                        newFaqs[index].question = e.target.value;
+                        setFormFaqs(newFaqs);
+                      }}
+                      placeholder="e.g. What is SEO?"
+                      className="w-full text-xs bg-background border border-border rounded-md p-2 outline-none focus:border-primary/50 text-foreground"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Answer *</label>
+                    <textarea
+                      required
+                      rows={2}
+                      value={faq.answer}
+                      onChange={(e) => {
+                        const newFaqs = [...formFaqs];
+                        newFaqs[index].answer = e.target.value;
+                        setFormFaqs(newFaqs);
+                      }}
+                      placeholder="SEO is..."
+                      className="w-full text-xs bg-background border border-border rounded-md p-2 outline-none focus:border-primary/50 text-foreground resize-none"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6 pb-16">
@@ -700,7 +806,7 @@ function BlogDashboard() {
           </>
         }
       >
-        <form onSubmit={handleAddSubmit} className="space-y-4 text-xs font-semibold max-h-[70vh] overflow-y-auto pr-2">
+        <form onSubmit={handleAddSubmit} className="space-y-4 text-xs font-semibold pr-2 pb-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">Article Title *</label>
@@ -846,6 +952,8 @@ function BlogDashboard() {
               placeholder="Write some premium markdown-friendly paragraph body text here..."
             />
           </div>
+
+          {renderFaqSection()}
         </form>
       </Dialog>
 
@@ -866,7 +974,7 @@ function BlogDashboard() {
           </>
         }
       >
-        <form onSubmit={handleEditSubmit} className="space-y-4 text-xs font-semibold max-h-[70vh] overflow-y-auto pr-2">
+        <form onSubmit={handleEditSubmit} className="space-y-4 text-xs font-semibold pr-2 pb-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">Article Title</label>
@@ -1002,6 +1110,8 @@ function BlogDashboard() {
               onChangeValue={setFormContent}
             />
           </div>
+
+          {renderFaqSection()}
         </form>
       </Dialog>
 

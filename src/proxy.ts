@@ -3,9 +3,10 @@ import type { NextRequest } from "next/server";
 import { verifyJwt } from "./lib/auth";
 
 // Define protected routes that require authentication
-const protectedRoutes = ["/dashboard/client", "/admin"];
+const protectedRoutes = ["/dashboard/client", "/admin", "/employee", "/dashboard/employee"];
 const adminRoutes = ["/admin"];
 const clientRoutes = ["/dashboard/client"];
+const employeeRoutes = ["/employee", "/dashboard/employee"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -18,7 +19,7 @@ export async function proxy(request: NextRequest) {
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set(
     "Permissions-Policy",
-    "camera=(), microphone=(), geolocation=()"
+    "camera=(), microphone=(self), geolocation=()"
   );
 
   // Check if route is protected
@@ -47,6 +48,12 @@ export async function proxy(request: NextRequest) {
     // Role-based access control for client routes
     const isClientRoute = clientRoutes.some((route) => pathname.startsWith(route));
     if (isClientRoute && payload.role !== "CLIENT") {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+
+    // Role-based access control for employee routes
+    const isEmployeeRoute = employeeRoutes.some((route) => pathname.startsWith(route));
+    if (isEmployeeRoute && !["EMPLOYEE", "ADMIN"].includes(payload.role as string)) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
   }

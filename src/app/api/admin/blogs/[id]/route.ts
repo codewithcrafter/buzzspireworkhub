@@ -88,6 +88,7 @@ export async function PUT(
             status: BlogStatus;
             isFeatured: boolean;
             publishedAt: Date | null;
+            faqs: { id?: string; question: string; answer: string; order?: number }[];
         }> = {};
 
         if (body.title !== undefined) data.title = body.title;
@@ -103,6 +104,7 @@ export async function PUT(
         if (body.metaDescription !== undefined) data.metaDescription = body.metaDescription;
         if (body.status !== undefined) data.status = body.status;
         if (body.isFeatured !== undefined) data.isFeatured = body.isFeatured;
+        if (body.faqs !== undefined && Array.isArray(body.faqs)) data.faqs = body.faqs;
 
         const updatedBlog = await updateBlog(id, data);
 

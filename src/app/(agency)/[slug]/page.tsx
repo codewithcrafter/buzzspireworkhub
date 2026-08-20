@@ -41,8 +41,34 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   const service = getServiceBySlug(resolvedSlug);
 
   if (!service) {
+    // Attempt to find a published CMS Page
+    const prisma = (await import("@/lib/prisma")).prisma;
+    const cmsPage = await prisma.page.findFirst({
+      where: { slug: resolvedSlug, status: "PUBLISHED" },
+    });
+
+    if (cmsPage) {
+      const canonicalUrl = `https://buzzspiremedia.com/${cmsPage.slug}`;
+      const publishedContent = cmsPage.publishedContent as any || {};
+      
+      return {
+        title: cmsPage.seoTitle || cmsPage.title,
+        description: cmsPage.metaDescription || undefined,
+        keywords: publishedContent.keywords || undefined,
+        alternates: {
+          canonical: canonicalUrl,
+        },
+        openGraph: {
+          title: cmsPage.seoTitle || cmsPage.title,
+          description: cmsPage.metaDescription || undefined,
+          type: "website",
+          url: canonicalUrl,
+        },
+      };
+    }
+
     return {
-      title: "Service Not Found | BuzzSpire Media",
+      title: "Page Not Found | BuzzSpire Media",
     };
   }
 
@@ -80,6 +106,22 @@ export default async function ServicePage({ params }: ServicePageProps) {
   const service = getServiceBySlug(slug);
 
   if (!service) {
+    // Look up CMS page
+    const prisma = (await import("@/lib/prisma")).prisma;
+    const cmsPage = await prisma.page.findFirst({
+      where: { slug: slug, status: "PUBLISHED" },
+    });
+
+    if (cmsPage && cmsPage.publishedContent) {
+      const { default: CmsPageTemplate } = await import("@/components/cms/CmsPageTemplate");
+      
+      return (
+        <main className="w-full bg-background min-h-screen">
+          <CmsPageTemplate page={cmsPage} />
+        </main>
+      );
+    }
+
     notFound();
   }
 

@@ -70,12 +70,12 @@ function Dialog({
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: "spring", duration: 0.45 }}
             className={cn(
-              "relative w-full overflow-hidden rounded-2xl bg-card border border-border/80 shadow-2xl z-10 flex flex-col",
+              "relative w-full overflow-hidden rounded-2xl bg-card border border-border/80 shadow-2xl z-10 flex flex-col max-h-[calc(100vh-2rem)]",
               sizeClasses[size]
             )}
           >
             {/* Header */}
-            <div className="flex items-start justify-between p-6 pb-4">
+            <div className="flex items-start justify-between p-6 pb-4 shrink-0">
               <div className="space-y-1">
                 <h2 className="text-xl font-bold font-heading tracking-tight text-foreground">
                   {title}
@@ -97,13 +97,13 @@ function Dialog({
             </div>
 
             {/* Content Body */}
-            <div className="px-6 py-4 flex-1 text-sm text-foreground/80 leading-relaxed max-h-[70vh] overflow-y-auto">
+            <div data-lenis-prevent="true" className="px-6 py-4 flex-1 min-h-0 overflow-y-auto text-sm text-foreground/80 leading-relaxed">
               {children}
             </div>
 
             {/* Footer Actions */}
             {footer && (
-              <div className="flex items-center justify-end gap-3 border-t border-border/40 bg-muted/20 p-6">
+              <div className="flex items-center justify-end gap-3 border-t border-border/40 bg-muted/20 p-6 shrink-0">
                 {footer}
               </div>
             )}

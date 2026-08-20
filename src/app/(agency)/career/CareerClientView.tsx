@@ -78,7 +78,7 @@ const defaultCareerFaqs = [
   { q: "How does the performance dividend share work?", a: "When clients beat traffic/sales metrics, the account team receives direct percentages of monthly billing margins. This payout occurs twice yearly." }
 ];
 
-export default function CareerClientView() {
+export default function CareerClientView({ content = {} }: { content?: any }) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [applyModalPosition, setApplyModalPosition] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -88,16 +88,9 @@ export default function CareerClientView() {
   const [candidatePortfolio, setCandidatePortfolio] = useState("");
   const [candidateCover, setCandidateCover] = useState("");
 
-  const heroBadge = "Join the Spire";
-  const heroHeading = "Build high-performance assets";
-  const heroDesc = "We are looking for self-directed builders. We do not track hours worked, and we do not hold unnecessary meetings. We track impact, speed, and client conversion results.";
-
-  const perksHeading = "How we reward category-level impact";
-  const positionsHeading = `Current Open Roles (${positions.length})`;
-  const processHeading = "How we recruit top digital minds";
-
-  const faqHeading = "Candidate FAQs";
-  const faqsList = defaultCareerFaqs;
+  const h1 = content?.h1 || "Build high-performance assets";
+  const h2s = content?.h2s || {};
+  const faqsList = (content?.faqs && content.faqs.length > 0) ? content.faqs : defaultCareerFaqs;
 
   const handleApplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,16 +137,16 @@ export default function CareerClientView() {
       <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-6">
         <ScrollReveal>
           <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full">
-            {heroBadge}
+            Join the Spire
           </span>
           <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tighter leading-none text-foreground mt-6">
-            {heroHeading} <br />
+            {h1} <br />
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               with absolute autonomy.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            {heroDesc}
+            We are looking for self-directed builders. We do not track hours worked, and we do not hold unnecessary meetings. We track impact, speed, and client conversion results.
           </p>
         </ScrollReveal>
       </section>
@@ -165,25 +158,27 @@ export default function CareerClientView() {
             <div className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Core Perks</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                {perksHeading}
+                {h2s?.['culture'] || "How we reward category-level impact"}
               </p>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {perks.map((p, idx) => (
+            {perks.map((p: any, idx: number) => {
+              const Icon = p.icon || Compass;
+              return (
               <ScrollReveal key={idx} delay={idx * 0.1}>
                 <div className="p-8 rounded-3xl bg-white border border-border shadow-premium h-full flex flex-col justify-between group">
                   <div>
                     <div className="w-12 h-12 rounded-2xl bg-primary/5 group-hover:bg-primary/10 flex items-center justify-center text-primary transition-colors mb-6">
-                      <p.icon className="w-6 h-6" />
+                      <Icon className="w-6 h-6" />
                     </div>
                     <h3 className="font-heading font-bold text-lg text-foreground mb-3">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{p.text}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{p.text || p.description}</p>
                   </div>
                 </div>
               </ScrollReveal>
-            ))}
+            )})}
           </div>
         </div>
       </section>
@@ -194,27 +189,27 @@ export default function CareerClientView() {
           <div className="mb-12 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
             <h3 className="font-heading font-bold text-xl text-foreground">
-              {positionsHeading}
+              {h2s?.['roles'] || `Current Open Roles (${positions.length})`}
             </h3>
           </div>
         </ScrollReveal>
 
         <div className="space-y-6">
-          {positions.map((pos, idx) => (
-            <ScrollReveal key={pos.id} delay={idx * 0.1}>
+          {positions.map((pos: any, idx: number) => (
+            <ScrollReveal key={pos.id || idx} delay={idx * 0.1}>
               <div className="p-8 rounded-3xl bg-white border border-border hover:border-primary/40 shadow-premium transition-all duration-300">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
 
                   {/* Info details */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap gap-2">
-                      {pos.tags.map((t, i) => (
+                      {pos.tags?.map((t: string, i: number) => (
                         <span key={i} className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted px-2.5 py-1 rounded-full">{t}</span>
                       ))}
                       <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">{pos.dept}</span>
                     </div>
                     <h4 className="font-heading font-extrabold text-2xl text-foreground">{pos.title}</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">{pos.desc}</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">{pos.desc || pos.description}</p>
 
                     <div className="flex flex-wrap gap-4 text-xs font-semibold text-muted-foreground pt-1">
                       <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-primary" />{pos.location}</span>
@@ -249,18 +244,18 @@ export default function CareerClientView() {
             <div className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Framework</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                {processHeading}
+                How we recruit top digital minds
               </p>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((s, idx) => (
+            {steps.map((s: any, idx: number) => (
               <ScrollReveal key={idx} delay={idx * 0.15}>
                 <div className="p-8 rounded-3xl bg-white border border-border/50 shadow-premium h-full flex flex-col relative">
                   <div className="text-6xl font-heading font-black text-primary/10 mb-4">{s.step}</div>
                   <h3 className="font-heading font-bold text-xl text-foreground mb-3">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{s.desc || s.description}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -274,13 +269,13 @@ export default function CareerClientView() {
           <div className="text-center mb-16">
             <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Hiring Queries</h2>
             <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-              {faqHeading}
+              {h2s?.['faq'] || "Candidate FAQs"}
             </p>
           </div>
         </ScrollReveal>
 
         <div className="space-y-4">
-          {faqsList.map((faq, idx) => {
+          {faqsList.map((faq: any, idx: number) => {
             const isOpen = activeFaq === idx;
             return (
               <ScrollReveal key={idx} delay={idx * 0.05}>

@@ -1,4 +1,6 @@
 import homepageSchema from "@/data/homepageSchema.json";
+export const dynamic = "force-dynamic";
+import { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -19,6 +21,8 @@ import { getServiceIcon } from "@/components/services/ServiceIcon";
 import DigitalWallHero from "@/components/hero/DigitalWallHero";
 import FaqSection from "@/components/faq/FaqSection";
 import ResultsPathway from "@/components/results/ResultsPathway";
+import { prisma } from "@/lib/prisma";
+import { getCmsConfig } from "@/config/cmsConfig";
 // Configurable constants
 const YEARS_EXPERIENCE = "5";
 
@@ -202,12 +206,77 @@ const faqs = [
   }
 ];
 
+export async function generateMetadata(): Promise<Metadata> {
+  const defaultMetadata: Metadata = {
+    title: "BuzzSpire Media | Digital Marketing Agency in Delhi",
+    description: "BuzzSpire Media is a digital marketing agency in Delhi NCR helping local businesses show up on Google.",
+  };
+
+  let pageRecord = null;
+  try {
+    pageRecord = await prisma.page.findUnique({ where: { slug: "home" } });
+  } catch (error) {
+    // Database unreachable or CMS unavailable, safely fallback without spamming the console
+  }
+  
+  if (!pageRecord) return defaultMetadata;
+
+  const content = pageRecord.publishedContent as any || {};
+  const keywords = content.keywords ? content.keywords.split(',').map((k: string) => k.trim()) : undefined;
+
+  return {
+    title: pageRecord.seoTitle || defaultMetadata.title,
+    description: pageRecord.metaDescription || defaultMetadata.description,
+    keywords: keywords,
+  };
+}
+
 export default async function HomePage() {
+  let pageRecord = null;
+  try {
+    pageRecord = await prisma.page.findUnique({
+      where: { slug: "home" },
+    });
+  } catch (error) {
+    // Safely fallback without spamming the console
+  }
+
+  const content = pageRecord?.publishedContent as any || {};
+  const h1 = content?.h1;
+  const h2s = content?.h2s || {};
+  
+  const conf = getCmsConfig("home");
+  let finalFaqs = (content?.faqs && content.faqs.length > 0) ? content.faqs : faqs;
+  
+  if (conf.defaultFaqs && content && !content._faqsSeeded) {
+    const existingFaqs = Array.isArray(content.faqs) ? content.faqs : [];
+    const existingQs = new Set(existingFaqs.map((f: any) => f.q));
+    
+    finalFaqs = [
+      ...conf.defaultFaqs.filter((df: any) => !existingQs.has(df.q)),
+      ...existingFaqs
+    ];
+  }
+
+  // Clone and inject FAQs into Schema
+  const dynamicSchema = JSON.parse(JSON.stringify(homepageSchema));
+  const faqSchemaIndex = dynamicSchema["@graph"].findIndex((g: any) => g["@type"] === "FAQPage");
+  if (faqSchemaIndex >= 0) {
+    dynamicSchema["@graph"][faqSchemaIndex].mainEntity = finalFaqs.map((faq: any) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.a
+      }
+    }));
+  }
+
   return (
     <main className="w-full relative bg-background overflow-x-clip select-none bg-grid-pattern">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dynamicSchema) }}
       />
 
       {/* Background glowing decorations */}
@@ -217,7 +286,7 @@ export default async function HomePage() {
 
       {/* 1. HERO SECTION (INTERACTIVE DIGITAL WALL) */}
       {/* 1. HERO SECTION (INTERACTIVE DIGITAL WALL) */}
-      <DigitalWallHero />
+      <DigitalWallHero heading={h1} />
 
       {/* 2. TRUST SECTION */}
       <section className="py-16 bg-muted/30 border-y border-border/30 overflow-hidden relative">
@@ -253,7 +322,7 @@ export default async function HomePage() {
                 RESULTS
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground leading-[1.12]">
-                Real Numbers. Real Progress.
+                {h2s?.['results'] || "Real Numbers. Real Progress."}
               </h2>
               <div className="text-sm md:text-base text-muted-foreground leading-relaxed space-y-4 pt-2">
                 <p>
@@ -283,7 +352,7 @@ export default async function HomePage() {
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">Why Choose Us</span>
               <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground">
-                Why Businesses Across Delhi Partner With BuzzSpire Media
+                {h2s?.['why-choose-us'] || "Why Businesses Across Delhi Partner With BuzzSpire Media"}
               </h2>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Clear communication, local Delhi insights, and straightforward marketing built for real business growth.
@@ -293,7 +362,7 @@ export default async function HomePage() {
 
           {/* 7 Responsive Grid Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {whyChoosePoints.map((item, idx) => (
+            {whyChoosePoints.map((item: any, idx: number) => (
               <ScrollReveal key={idx} delay={idx * 0.08} className="h-full">
                 <div className="p-8 rounded-3xl bg-white border border-border/60 hover:border-primary/40 shadow-premium hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between group">
                   <div className="space-y-4">
@@ -327,7 +396,7 @@ export default async function HomePage() {
               Full-Spectrum Digital Services
             </span>
             <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground">
-              Our 10 Digital Marketing Services in Delhi
+              {h2s?.['services'] || "Our 10 Digital Marketing Services in Delhi"}
             </h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
               Every service is structured around your real business objectives. Click any service card to view its dedicated page.
@@ -380,7 +449,7 @@ export default async function HomePage() {
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">How We Work</span>
               <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground">
-                Our 4-Step Marketing Process
+                {h2s?.['process'] || "Our 4-Step Marketing Process"}
               </h2>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 A simple, clear workflow with zero guesswork from day one.
@@ -389,7 +458,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-            {processSteps.map((step, idx) => (
+            {processSteps.map((step: any, idx: number) => (
               <ScrollReveal key={idx} delay={idx * 0.12}>
                 <div className="p-8 rounded-3xl bg-white border border-border/60 shadow-premium h-full flex flex-col justify-between group hover:border-primary/40 transition-all duration-300">
                   <div>
@@ -414,7 +483,7 @@ export default async function HomePage() {
               Real Results
             </span>
             <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground max-w-xl mt-3">
-              Local Case Histories Across Delhi
+              {h2s?.['case-studies'] || "Local Case Histories Across Delhi"}
             </h2>
           </ScrollReveal>
           <ScrollReveal direction="right">
@@ -429,7 +498,7 @@ export default async function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {caseStudies.map((study, idx) => (
+          {caseStudies.map((study: any, idx: number) => (
             <ScrollReveal key={idx} delay={idx * 0.1}>
               <div className="group rounded-3xl overflow-hidden bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-500 flex flex-col h-full justify-between">
                 <div className="p-8 space-y-4">
@@ -463,7 +532,7 @@ export default async function HomePage() {
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">Performance Insights</span>
               <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground">
-                What You Can Expect From Our Marketing Strategy
+                {h2s?.['insights'] || "What You Can Expect From Our Marketing Strategy"}
               </h2>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Realistic growth expectations based on consistent, data-driven execution.
@@ -472,28 +541,31 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {performanceInsights.map((insight, idx) => (
-              <ScrollReveal key={idx} delay={idx * 0.1}>
-                <div className="p-8 rounded-3xl bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between group">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                        <insight.icon className="w-6 h-6" />
+            {performanceInsights.map((insight: any, idx: number) => {
+              const Icon = insight.icon || Search;
+              return (
+                <ScrollReveal key={idx} delay={idx * 0.1}>
+                  <div className="p-8 rounded-3xl bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between group">
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                          <Icon className="w-6 h-6" />
+                        </div>
+                        <span className="text-xs font-bold text-primary bg-primary/5 px-3 py-1 rounded-full">
+                          {insight.badge || insight.label}
+                        </span>
                       </div>
-                      <span className="text-xs font-bold text-primary bg-primary/5 px-3 py-1 rounded-full">
-                        {insight.badge}
-                      </span>
+                      <h3 className="font-heading font-bold text-xl text-foreground group-hover:text-primary transition-colors">
+                        {insight.title}
+                      </h3>
+                      <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                        {insight.desc || insight.description}
+                      </p>
                     </div>
-                    <h3 className="font-heading font-bold text-xl text-foreground group-hover:text-primary transition-colors">
-                      {insight.title}
-                    </h3>
-                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-                      {insight.desc}
-                    </p>
                   </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -507,7 +579,7 @@ export default async function HomePage() {
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">Client Feedback</span>
               <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight text-foreground">
-                What Local Business Owners Say
+                {h2s?.['testimonials'] || "What Local Business Owners Say"}
               </h2>
               <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Real feedback from businesses working with us across West Delhi and Delhi NCR.
@@ -516,7 +588,7 @@ export default async function HomePage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((t, idx) => (
+            {testimonials.map((t: any, idx: number) => (
               <ScrollReveal key={idx} delay={idx * 0.1}>
                 <div className="p-8 rounded-3xl bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between">
                   <div className="space-y-4">
@@ -546,7 +618,7 @@ export default async function HomePage() {
       </section>
 
       {/* 11. FAQ ACCORDION */}
-      <FaqSection faqs={faqs} />
+      <FaqSection faqs={finalFaqs} />
 
       {/* 12. READY TO GROW EDITORIAL CTA SECTION */}
       <section className="py-28 px-6 border-t border-border/40 bg-muted/20 relative">
@@ -556,7 +628,7 @@ export default async function HomePage() {
               {/* Left Column: Heading with thin purple accent line */}
               <div className="lg:col-span-5 border-l-4 border-secondary pl-6 md:pl-8 py-1">
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight text-foreground leading-[1.08]">
-                  Ready to Grow?
+                  {h2s?.['cta'] || "Ready to Grow?"}
                 </h2>
               </div>
 

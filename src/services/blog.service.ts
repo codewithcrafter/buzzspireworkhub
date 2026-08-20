@@ -45,6 +45,7 @@ export async function createBlog(data: {
     status?: BlogStatus;
     isFeatured?: boolean;
     publishedAt?: Date;
+    faqs?: { question: string; answer: string; order?: number }[];
 }) {
     const finalSlug = data.slug 
         ? await generateUniqueSlug(data.slug)
@@ -71,6 +72,13 @@ export async function createBlog(data: {
             status: data.status || "DRAFT",
             isFeatured: data.isFeatured ?? false,
             publishedAt: publishedAtVal,
+            faqs: data.faqs && data.faqs.length > 0 ? {
+                create: data.faqs.map((f, i) => ({
+                    question: f.question,
+                    answer: f.answer,
+                    order: f.order ?? i,
+                })),
+            } : undefined,
         },
     });
 }
@@ -92,6 +100,7 @@ export async function updateBlog(
         status: BlogStatus;
         isFeatured: boolean;
         publishedAt: Date | null;
+        faqs: { id?: string; question: string; answer: string; order?: number }[];
     }>
 ) {
     const updateData: any = { ...data };
@@ -108,6 +117,17 @@ export async function updateBlog(
         updateData.publishedAt = null;
     }
 
+    if (data.faqs !== undefined) {
+        updateData.faqs = {
+            deleteMany: {},
+            create: data.faqs.map((f, i) => ({
+                question: f.question,
+                answer: f.answer,
+                order: f.order ?? i,
+            })),
+        };
+    }
+
     return prisma.blog.update({
         where: { id },
         data: updateData,
@@ -118,10 +138,12 @@ export async function getBlog(idOrSlug: string, isSlug: boolean = false) {
     if (isSlug) {
         return prisma.blog.findUnique({
             where: { slug: idOrSlug },
+            include: { faqs: { orderBy: { order: 'asc' } } },
         });
     }
     return prisma.blog.findUnique({
         where: { id: idOrSlug },
+        include: { faqs: { orderBy: { order: 'asc' } } },
     });
 }
 
@@ -168,6 +190,7 @@ export async function getBlogs(options: {
             orderBy: { createdAt: "desc" },
             skip,
             take: limit,
+            include: { faqs: { orderBy: { order: 'asc' } } },
         }),
         prisma.blog.count({ where }),
     ]);

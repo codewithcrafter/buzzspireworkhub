@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { verifyJwt } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { authenticateRequest } from "@/lib/guard";
+import { PERMISSIONS } from "@/lib/permissions";
 import * as xlsx from "xlsx";
 import PDFDocument from "pdfkit-table";
 import fs from "fs";
@@ -35,27 +36,13 @@ const formatDate = (date: Date) => {
 
 export async function GET(req: Request) {
   try {
-    // 1. Authentication & Authorization check
-    let token: string | null = null;
-    const cookieHeader = req.headers.get("cookie");
-    if (cookieHeader) {
-      const match = cookieHeader.split(";").map(c => c.trim()).find(c => c.startsWith("token="));
-      if (match) token = match.split("=")[1];
-    }
-    if (!token) {
-      const authHeader = req.headers.get("authorization");
-      if (authHeader && authHeader.startsWith("Bearer ")) {
-        token = authHeader.substring(7);
-      }
-    }
+    // 1. Authentication & Authorization check (LEADS_EXPORT required)
+    const auth = await authenticateRequest(req, {
+      requiredPermission: PERMISSIONS.LEADS_EXPORT,
+    });
 
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const payload = await verifyJwt(token);
-    if (!payload || payload.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
+    if (!auth.authenticated) {
+      return auth.response;
     }
 
     // 2. Parse query params

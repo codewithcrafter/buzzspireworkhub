@@ -11,47 +11,48 @@ model User {
   email             String           @unique
   password          String?
   name              String
-  company           String?
-  phone             String?
   role              Role             @default(CLIENT)
-  invitationToken   String?          @unique
-  invitationExpires DateTime?
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
-  projects          Project[]
-  tickets           Ticket[]
-  invoices          Invoice[]
+  company           String?
+  invitationExpires DateTime?
+  invitationToken   String?          @unique
+  phone             String?
+  employeeId        String?          @unique
+  permissions       String[]         @default([])
+  status            UserStatus       @default(ACTIVE)
   aiUsage           AiUsageHistory[]
   employeeProfile   Employee?
+  invoices          Invoice[]
+  assignedLeads     Lead[]           @relation("AssignedLeads")
+  projects          Project[]
+  tickets           Ticket[]
 }
 
 model Project {
-  id             String        @id @default(uuid())
-  title          String
-  description    String?
-  status         ProjectStatus @default(PLANNING)
-  progress       Int           @default(0)
-  progressStages Json? // Stores stages like { "Planning": "Completed", "Design": "80%" }
-  clientId       String
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  client         User          @relation(fields: [clientId], references: [id])
-
-  // Visibility toggles
-  showTimeline     Boolean @default(true)
-  showFiles        Boolean @default(true)
-  showInvoices     Boolean @default(true)
-  showPayments     Boolean @default(true)
-  showProgress     Boolean @default(true)
-  showMessages     Boolean @default(true)
-  showTickets      Boolean @default(true)
-  showDownloads    Boolean @default(true)
-  showDeliverables Boolean @default(true)
-
-  updates  ProjectUpdate[]
-  files    ProjectFile[]
-  messages ProjectMessage[]
-  invoices Invoice[]
+  id               String           @id @default(uuid())
+  title            String
+  description      String?
+  status           ProjectStatus    @default(PLANNING)
+  clientId         String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  progress         Int              @default(0)
+  progressStages   Json?
+  showDeliverables Boolean          @default(true)
+  showDownloads    Boolean          @default(true)
+  showFiles        Boolean          @default(true)
+  showInvoices     Boolean          @default(true)
+  showMessages     Boolean          @default(true)
+  showPayments     Boolean          @default(true)
+  showProgress     Boolean          @default(true)
+  showTickets      Boolean          @default(true)
+  showTimeline     Boolean          @default(true)
+  invoices         Invoice[]
+  client           User             @relation(fields: [clientId], references: [id])
+  files            ProjectFile[]
+  messages         ProjectMessage[]
+  updates          ProjectUpdate[]
 
   @@index([clientId])
   @@index([createdAt])
@@ -74,7 +75,7 @@ model ProjectFile {
   name          String
   url           String
   size          Int
-  category      String // e.g. PDF, ZIP, Image, Video, Source
+  category      String
   clientVisible Boolean  @default(true)
   createdAt     DateTime @default(now())
   project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -95,19 +96,29 @@ model ProjectMessage {
 }
 
 model Lead {
-  id        String     @id @default(uuid())
-  name      String
-  email     String
-  company   String?
-  budget    String?
-  service   String?
-  message   String
-  source    String?
-  pageUrl   String?
-  portfolio String?
-  phone     String?
-  status    LeadStatus @default(NEW)
-  createdAt DateTime   @default(now())
+  id                 String     @id @default(uuid())
+  name               String
+  email              String
+  company            String?
+  message            String
+  status             LeadStatus @default(NEW)
+  createdAt          DateTime   @default(now())
+  budget             String?
+  pageUrl            String?
+  phone              String?
+  portfolio          String?
+  service            String?
+  source             String?
+  assignedEmployeeId String?
+  notes              String?
+  followUpAt         DateTime?
+  updatedAt          DateTime   @default(now()) @updatedAt
+  assignedEmployee   User?      @relation("AssignedLeads", fields: [assignedEmployeeId], references: [id])
+  chatSession        ChatSession?
+
+  @@index([assignedEmployeeId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model Ticket {
@@ -136,33 +147,6 @@ model TicketReply {
   @@index([ticketId])
 }
 
-enum Role {
-  ADMIN
-  EDITOR
-  CLIENT
-}
-
-enum ProjectStatus {
-  PLANNING
-  IN_PROGRESS
-  COMPLETED
-  ON_HOLD
-}
-
-enum LeadStatus {
-  NEW
-  CONTACTED
-  QUALIFIED
-  CLOSED
-}
-
-enum TicketStatus {
-  OPEN
-  IN_PROGRESS
-  RESOLVED
-  CLOSED
-}
-
 model Blog {
   id              String     @id @default(uuid())
   title           String
@@ -181,17 +165,24 @@ model Blog {
   publishedAt     DateTime?
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
+  faqs            BlogFAQ[]
 
   @@index([slug])
   @@index([status])
 }
 
-enum BlogStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
-}
+model BlogFAQ {
+  id        String   @id @default(uuid())
+  blogId    String
+  question  String
+  answer    String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
 
+  @@index([blogId])
+}
 
 model Invoice {
   id        String        @id @default(uuid())
@@ -222,26 +213,12 @@ model Payment {
   @@index([invoiceId])
 }
 
-enum InvoiceStatus {
-  DRAFT
-  SENT
-  PAID
-  OVERDUE
-  CANCELLED
-}
-
-enum PaymentStatus {
-  PENDING
-  SUCCESS
-  FAILED
-}
-
 model AdminTask {
   id        String   @id @default(uuid())
   title     String
   completed Boolean  @default(false)
   dueDate   String?
-  priority  String   @default("low") // "high", "medium", "low"
+  priority  String   @default("low")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -252,15 +229,10 @@ model ActivityLog {
   avatar    String
   action    String
   target    String
-  type      String // "lead", "project", "payment", "alert"
+  type      String
   createdAt DateTime @default(now())
 }
 
-// ==========================================
-// PHASE 4 ENTERPRISE EXPANSION MODELS
-// ==========================================
-
-// --- MODULE 1: AI Marketing Assistant ---
 model AiPromptTemplate {
   id        String   @id @default(uuid())
   name      String
@@ -282,7 +254,6 @@ model AiUsageHistory {
   @@index([userId])
 }
 
-// --- MODULE 2: Marketing Automation ---
 model AutomationWorkflow {
   id         String           @id @default(uuid())
   name       String
@@ -303,7 +274,6 @@ model WorkflowAction {
   @@index([workflowId])
 }
 
-// --- MODULE 3 & 4: Campaigns & CRM Expansion ---
 model Campaign {
   id        String   @id @default(uuid())
   title     String
@@ -322,8 +292,8 @@ model Prospect {
   score     Int       @default(0)
   stage     String    @default("LEAD")
   createdAt DateTime  @default(now())
-  meetings  Meeting[]
   calls     CallLog[]
+  meetings  Meeting[]
 }
 
 model Meeting {
@@ -346,24 +316,23 @@ model CallLog {
   @@index([prospectId])
 }
 
-// --- MODULE 5: Employee Management ---
 model Department {
   id        String     @id @default(uuid())
-  name      String
+  name      String     @unique
   employees Employee[]
 }
 
 model Employee {
-  id           String     @id @default(uuid())
-  userId       String     @unique
-  departmentId String
-  salary       Float
-  role         String
-  user         User       @relation(fields: [userId], references: [id])
-  department   Department @relation(fields: [departmentId], references: [id])
+  id           String      @id @default(uuid())
+  userId       String      @unique
+  departmentId String?
+  salary       Float?
+  role         String?
+  designation  String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// --- MODULE 9 & 12: Knowledge Base & Files ---
 model KbArticle {
   id        String   @id @default(uuid())
   title     String
@@ -381,26 +350,204 @@ model CloudFolder {
 }
 
 model CloudFile {
-  id            String         @id @default(uuid())
-  folderId      String?
-  name          String?
-  fileName      String?
-  url           String
-  altText       String?
-  size          Int
-  mimeType      String
-  width         Int?
-  height        Int?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  folder        CloudFolder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  id        String       @id @default(uuid())
+  folderId  String?
+  url       String
+  size      Int
+  mimeType  String
+  altText   String?
+  createdAt DateTime     @default(now())
+  fileName  String?
+  height    Int?
+  name      String?
+  updatedAt DateTime     @updatedAt
+  width     Int?
+  folder    CloudFolder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
   @@index([folderId])
 }
 
-// --- MODULE 11: Integrations ---
 model IntegrationConfig {
   id       String  @id @default(uuid())
   provider String  @unique
   apiKey   String?
   status   String  @default("DISCONNECTED")
+}
+
+model Page {
+  id               String         @id @default(uuid())
+  title            String
+  slug             String         @unique
+  status           PageStatus     @default(DRAFT)
+  seoTitle         String?
+  metaDescription  String?
+  publishedContent Json?
+  publishedAt      DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  revisions        PageRevision[]
+  sections         PageSection[]
+}
+
+model PageSection {
+  id          String   @id @default(uuid())
+  pageId      String
+  sectionType String
+  order       Int
+  isEnabled   Boolean  @default(true)
+  content     Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  page        Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId])
+}
+
+model PageRevision {
+  id        String   @id @default(uuid())
+  pageId    String
+  version   Int
+  content   Json
+  createdAt DateTime @default(now())
+  createdBy String?
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId])
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+  EDITOR
+  EMPLOYEE
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CLOSED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model ChatSession {
+  id           String        @id @default(uuid())
+  leadId       String        @unique
+  status       ChatStatus    @default(WAITING)
+  visitorName  String
+  visitorEmail String
+  visitorPhone String?
+  service      String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  lead         Lead          @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  messages     ChatMessage[]
+  voiceCalls   VoiceCall[]
+
+  @@index([status])
+  @@index([leadId])
+}
+
+model ChatMessage {
+  id          String      @id @default(uuid())
+  sessionId   String
+  senderType  SenderType
+  message     String
+  createdAt   DateTime    @default(now())
+  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+enum ChatStatus {
+  WAITING
+  ACTIVE
+  CLOSED
+}
+
+enum SenderType {
+  VISITOR
+  AGENT
+  SYSTEM
+}
+
+model VoiceCall {
+  id         String          @id @default(uuid())
+  sessionId  String
+  status     VoiceCallStatus @default(RINGING)
+  startedAt  DateTime        @default(now())
+  answeredAt DateTime?
+  endedAt    DateTime?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  session    ChatSession     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  signals    CallSignal[]
+
+  @@index([sessionId])
+  @@index([status])
+}
+
+enum VoiceCallStatus {
+  RINGING
+  ACTIVE
+  ENDED
+  REJECTED
+  MISSED
+}
+
+model CallSignal {
+  id         String     @id @default(uuid())
+  callId     String
+  senderType SenderType
+  type       String
+  payload    Json
+  createdAt  DateTime   @default(now())
+  call       VoiceCall  @relation(fields: [callId], references: [id], onDelete: Cascade)
+
+  @@index([callId])
 }

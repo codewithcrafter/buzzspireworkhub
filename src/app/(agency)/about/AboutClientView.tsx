@@ -2,12 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Heart,
-  Target,
-  Eye,
-  Code2
-} from "lucide-react";
+import { ArrowRight, Trophy, Target, Heart, Award, CheckCircle2, Rocket, ArrowUpRight, Briefcase, Eye, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ui/scroll-reveal";
 import Magnetic from "@/components/ui/magnetic";
@@ -73,18 +68,10 @@ const technologies = [
   { name: "Next.js", category: "Web Framework" }
 ];
 
-export default function AboutClientView() {
-  const heroBadge = "Our Story & Vision";
-  const heroHeading = "Empowering Businesses";
-  const heroDesc = "Established in 2026, BuzzSpire Media was built to transform ambitious ideas into measurable success. By combining SEO, performance marketing, branding, website development, and creative strategy, we help businesses strengthen their digital presence and achieve sustainable growth.";
-
-  const storyHeading = "Core Principles";
-  const storyDesc = "At BuzzSpire Media, every decision is driven by purpose, performance, and innovation. From SEO and performance marketing to website development and branding, we create data-driven digital solutions that deliver measurable results, build lasting relationships, and help businesses grow with confidence.";
-
-  const ctaHeading = "Partner with Digital Growth Experts.";
-  const ctaDesc = "Book a free consultation with BuzzSpire Media to explore customized SEO, performance marketing, branding, and website development solutions designed to grow your business and deliver measurable results.";
-  const ctaText = "Schedule a Free Consultation";
-  const ctaUrl = "/contact";
+export default function AboutClientView({ content = {} }: { content?: any }) {
+  const h1 = content?.h1 || "Empowering Businesses";
+  const h2s = content?.h2s || {};
+  const finalFaqs = (content?.faqs && content.faqs.length > 0) ? content.faqs : [];
 
   return (
     <main className="w-full bg-background select-none bg-grid-pattern relative">
@@ -94,16 +81,16 @@ export default function AboutClientView() {
       <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
         <ScrollReveal>
           <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full">
-            {heroBadge}
+            Our Story & Vision
           </span>
           <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tighter leading-none text-foreground mt-6">
-            {heroHeading}<br />
+            {h1}<br />
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Through Digital Excellence.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            {heroDesc}
+            Established in 2026, BuzzSpire Media was built to transform ambitious ideas into measurable success. By combining SEO, performance marketing, branding, website development, and creative strategy, we help businesses strengthen their digital presence and achieve sustainable growth.
           </p>
         </ScrollReveal>
       </section>
@@ -116,7 +103,7 @@ export default function AboutClientView() {
             { value: "360°", label: "DIGITAL MARKETING SERVICES" },
             { value: "100%", label: "TRANSPARENT APPROACH" },
             { value: "RESULTS", label: "DRIVEN GROWTH" }
-          ].map((stat, idx) => (
+          ].map((stat: any, idx: number) => (
             <ScrollReveal key={idx} delay={idx * 0.08}>
               <h3 className="text-4xl lg:text-5xl font-heading font-black text-primary mb-1">{stat.value}</h3>
               <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{stat.label}</p>
@@ -130,30 +117,33 @@ export default function AboutClientView() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-5 space-y-6">
             <ScrollReveal direction="left">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-primary">{storyHeading}</h2>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Core Principles</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground mt-3">
-                The foundation of every successful digital campaign.
+                {h2s?.['core-principles'] || "The foundation of every successful digital campaign."}
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                {storyDesc}
+                At BuzzSpire Media, every decision is driven by purpose, performance, and innovation. From SEO and performance marketing to website development and branding, we create data-driven digital solutions that deliver measurable results, build lasting relationships, and help businesses grow with confidence.
               </p>
             </ScrollReveal>
           </div>
 
           <div className="lg:col-span-7 space-y-6">
-            {values.map((v, idx) => (
-              <ScrollReveal key={idx} delay={idx * 0.1} direction="right">
-                <div className="p-6 rounded-3xl bg-white border border-border shadow-premium hover:shadow-md transition-all duration-300 flex gap-5 items-start">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary shrink-0">
-                    <v.icon className="w-6 h-6" />
+            {values.map((v: any, idx: number) => {
+              const Icon = v.icon || Heart; // Default icon fallback if it's CMS string data
+              return (
+                <ScrollReveal key={idx} delay={idx * 0.1} direction="right">
+                  <div className="p-6 rounded-3xl bg-white border border-border shadow-premium hover:shadow-md transition-all duration-300 flex gap-5 items-start">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary shrink-0">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-heading font-bold text-lg text-foreground mb-1">{v.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{v.text || v.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-heading font-bold text-lg text-foreground mb-1">{v.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{v.text}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -165,13 +155,13 @@ export default function AboutClientView() {
             <div className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Journey</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                Empowering Businesses Through Digital Excellence.
+                {h2s?.['journey'] || "Empowering Businesses Through Digital Excellence."}
               </p>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {timeline.map((item, idx) => (
+            {timeline.map((item: any, idx: number) => (
               <ScrollReveal key={idx} delay={idx * 0.1}>
                 <div className="p-8 rounded-3xl bg-white border border-border/50 shadow-premium h-full flex flex-col relative overflow-hidden group">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-bl-3xl flex items-center justify-center text-primary font-heading font-extrabold text-sm group-hover:bg-primary group-hover:text-white transition-all duration-300">
@@ -228,13 +218,13 @@ export default function AboutClientView() {
             <div className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Expert Teams</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                Meet the professionals driving your digital success
+                {h2s?.['team'] || "Meet the Experts Driving Your Digital Growth"}
               </p>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member, idx) => (
+            {team.map((member: any, idx: number) => (
               <ScrollReveal key={idx} delay={idx * 0.1}>
                 <div className="group rounded-3xl overflow-hidden bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-500 flex flex-col h-full">
                   <div className="h-72 relative overflow-hidden bg-muted">
@@ -270,7 +260,7 @@ export default function AboutClientView() {
             <ScrollReveal direction="left">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary">OUR TECHNOLOGY STACK</h2>
               <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground mt-3">
-                Powered by industry-leading tools for digital growth
+                {h2s?.['tech-stack'] || "Powered by industry-leading tools for digital growth"}
               </p>
               <p className="text-muted-foreground leading-relaxed">
                 We leverage trusted marketing, analytics, design, SEO, and web development platforms to create data-driven strategies, optimize campaign performance, improve user experiences, and deliver measurable business results.
@@ -300,16 +290,16 @@ export default function AboutClientView() {
           <div className="rounded-[3rem] bg-gradient-to-tr from-primary via-secondary to-accent p-12 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl">
             <div className="relative z-10 max-w-3xl mx-auto space-y-8">
               <h2 className="text-4xl md:text-5xl font-heading font-black tracking-tighter">
-                {ctaHeading}
+                {h2s?.['cta'] || "Partner with Digital Growth Experts."}
               </h2>
               <p className="text-lg text-white/80 max-w-xl mx-auto leading-relaxed">
-                {ctaDesc}
+                Book a free consultation with BuzzSpire Media to explore customized SEO, performance marketing, branding, and website development solutions designed to grow your business and deliver measurable results.
               </p>
               <div>
                 <Magnetic>
-                  <Link href={ctaUrl}>
+                  <Link href="/contact">
                     <Button size="lg" className="rounded-full px-8 py-7 text-lg bg-white text-primary hover:bg-white/95 font-bold shadow-lg transition-transform">
-                      {ctaText}
+                      Schedule a Free Consultation
                     </Button>
                   </Link>
                 </Magnetic>

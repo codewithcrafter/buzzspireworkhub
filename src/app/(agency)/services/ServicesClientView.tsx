@@ -159,7 +159,10 @@ const clientFaqs = [
   },
 ];
 
-export default function ServicesClientView() {
+export default function ServicesClientView({ content = {} }: { content?: any }) {
+  const h1 = content?.h1 || "Digital Marketing Services in Delhi — Everything Under One Roof";
+  const h2s = content?.h2s || {};
+  const finalFaqs = (content?.faqs && content.faqs.length > 0) ? content.faqs : clientFaqs;
 
   return (
     <main className="w-full bg-background select-none text-foreground font-sans">
@@ -173,7 +176,7 @@ export default function ServicesClientView() {
                   Buzzspire Services
                 </span>
                 <h1 className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight leading-[1.15] text-foreground">
-                  Digital Marketing Services in Delhi — Everything Under One Roof
+                  {h1}
                 </h1>
                 <h2 className="text-xl md:text-2xl font-heading font-semibold text-muted-foreground">
                   One Team, Every Service Your Business Actually Needs
@@ -185,11 +188,10 @@ export default function ServicesClientView() {
                   Ten agencies. Ten invoices. Ten people to chase for updates.
                 </p>
                 <p>
-                  That&apos;s what most businesses deal with when they try to cover every part of their marketing.
-                  Buzzspire runs it differently. We&apos;re a full-service digital marketing agency in Delhi, and every digital marketing services list you&apos;d normally split across three vendors sits under one roof here. SEO, ads, design, video, your website. One team. One point of contact.
+                  That's what most businesses deal with when they try to cover every part of their marketing. Buzzspire runs it differently. We're a full-service digital marketing agency in Delhi, and every digital marketing services list you'd normally split across three vendors sits under one roof here. SEO, ads, design, video, your website. One team. One point of contact.
                 </p>
                 <p>
-                  If you&apos;ve been Googling a one-stop digital marketing agency in Delhi because juggling freelancers got exhausting, this is the page you were looking for.
+                  If you've been Googling a one-stop digital marketing agency in Delhi because juggling freelancers got exhausting, this is the page you were looking for.
                 </p>
               </div>
 
@@ -224,25 +226,27 @@ export default function ServicesClientView() {
                   Agency Capabilities
                 </span>
                 <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground tracking-tight">
-                  All Digital Marketing Services
+                  {h2s?.['services-grid'] || "All Digital Marketing Services"}
                 </h2>
                 <p className="text-base md:text-lg text-muted-foreground">
-                  Here&apos;s everything we handle. Click into any service for the full breakdown.
+                  Here's everything we handle. Click into any service for the full breakdown.
                 </p>
               </div>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {allServices.map((service, idx) => (
+            {allServices.map((service: any, idx: number) => {
+              const Icon = service.icon || Target;
+              return (
               <ScrollReveal key={idx} delay={idx * 0.05}>
                 <Link
-                  href={service.href}
+                  href={service.href || "#"}
                   className="block h-full group bg-background border border-border/60 rounded-2xl p-8 hover:shadow-lg hover:border-primary/40 hover:-translate-y-1 transition-all duration-300"
                 >
                   <div className="flex flex-col h-full space-y-5">
                     <div className="w-12 h-12 bg-primary/5 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
-                      <service.icon className="w-6 h-6 stroke-[1.5]" />
+                      <Icon className="w-6 h-6 stroke-[1.5]" />
                     </div>
                     
                     <div className="space-y-3 flex-grow">
@@ -263,7 +267,7 @@ export default function ServicesClientView() {
                   </div>
                 </Link>
               </ScrollReveal>
-            ))}
+            )})}
           </div>
 
           <ScrollReveal>
@@ -299,7 +303,7 @@ export default function ServicesClientView() {
                 What Services Does a Digital Marketing Agency Offer
               </h2>
               <p className="text-base md:text-lg text-muted-foreground">
-                Fair question. And most agencies don&apos;t answer it clearly. Here is exactly what we cover for our partners.
+                Fair question. And most agencies don't answer it clearly. Here is exactly what we cover for our partners.
               </p>
             </div>
 
@@ -320,7 +324,8 @@ export default function ServicesClientView() {
 
               {/* Organic Card Layout */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
-                {serviceOfferItems.map((item, idx) => {
+                {serviceOfferItems.map((item: any, idx: number) => {
+                  const Icon = item.icon || Zap;
                   // Organic Staggering logic (Masonry feel)
                   let translateClass = "";
                   if (idx === 0) translateClass = "sm:-translate-y-4"; // Top left pushed up
@@ -331,7 +336,7 @@ export default function ServicesClientView() {
                   return (
                     <div key={idx} className={`bg-background/80 backdrop-blur-md border border-border/60 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all duration-500 group ${translateClass}`}>
                       <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center text-foreground group-hover:bg-primary/5 group-hover:text-primary transition-colors duration-300 mb-6">
-                        <item.icon className="w-6 h-6 stroke-[1.5]" />
+                        <Icon className="w-6 h-6 stroke-[1.5]" />
                       </div>
                       
                       <div className="space-y-3">
@@ -365,10 +370,12 @@ export default function ServicesClientView() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featureHighlights.map((feat, idx) => (
+            {featureHighlights.map((feat: any, idx: number) => {
+              const Icon = feat.icon || CheckCircle2;
+              return (
               <div key={idx} className="bg-background border border-border/60 rounded-2xl p-8 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
-                  <feat.icon className="w-6 h-6" />
+                  <Icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-heading font-bold text-foreground mb-3">
                   {feat.title}
@@ -377,7 +384,7 @@ export default function ServicesClientView() {
                   {feat.desc}
                 </p>
               </div>
-            ))}
+            )})}
           </div>
 
           <div className="mt-16 bg-muted/30 border border-border/60 rounded-3xl p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -411,7 +418,7 @@ export default function ServicesClientView() {
               </div>
 
               <div className="space-y-4">
-                <ServicesFaqClient faqs={clientFaqs} />
+                <ServicesFaqClient faqs={finalFaqs} />
               </div>
             </div>
           </ScrollReveal>
@@ -427,14 +434,14 @@ export default function ServicesClientView() {
               {/* Left Side: Existing CTA Content */}
               <div className="lg:col-span-7 space-y-8 text-left">
                 <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-foreground leading-tight">
-                  Get Started with Buzzspire — All Your Marketing, One Team
+                  {h2s?.['cta'] || "Get Started with Buzzspire — All Your Marketing, One Team"}
                 </h2>
                 <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
                   <p>
-                    Looking for digital marketing services in Delhi that don&apos;t require managing five different vendors?
+                    Looking for digital marketing services in Delhi that don't require managing five different vendors?
                   </p>
                   <p className="font-semibold text-foreground">
-                    That&apos;s Buzzspire services in one sentence. A full-service digital marketing agency that handles the strategy, the creative, and the execution, without passing you between departments.
+                    That's Buzzspire services in one sentence. A full-service digital marketing agency that handles the strategy, the creative, and the execution, without passing you between departments.
                   </p>
                 </div>
 

@@ -21,9 +21,7 @@ import ScrollReveal from "@/components/ui/scroll-reveal";
 
 // Office Locations
 const offices = [
-  { city: "San Francisco", address: "100 Pine St Suite 1250, San Francisco, CA 94111", phone: "+1 (415) 555-0192" },
-  { city: "London", address: "30 St Mary Axe, London EC3A 8BF, United Kingdom", phone: "+44 20 7946 0958" },
-  { city: "Singapore", address: "8 Marina View, Asia Square Tower 1, Singapore 018960", phone: "+65 6789 0122" }
+  { city: "New Delhi", address: "Ground Floor, Ram Dutt Enclave, B-16, Block D, Ram Dutt Enclave, Uttam Nagar, New Delhi, Delhi, 110059", phone: "+919599249586" }
 ];
 
 // Default Contact FAQs
@@ -33,7 +31,7 @@ const defaultContactFaqs = [
   { q: "What should we prepare for the audit call?", a: "Simply ensure your marketing leads have dashboard access to Google Analytics 4, Search Console, or paid ad portals so we can review performance values together." }
 ];
 
-export default function ContactClientView() {
+export default function ContactClientView({ content = {} }: { content?: any }) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,19 +39,12 @@ export default function ContactClientView() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
-  const [budget, setBudget] = useState("$5,000 - $10,000 / mo");
+  const [budget, setBudget] = useState("₹50,000 - ₹1,00,000 / mo");
   const [message, setMessage] = useState("");
 
-  const heroBadge = "Get In Touch";
-  const heroHeading = "Let's build your";
-  const heroDesc = "Fill out our performance brief below. Our managing partners will review your search ranks and ad setups and present a free audit during our initial call.";
-
-  const formHeading = "Growth Brief";
-  const formSubheading = "Share your target marketing parameters and ad spends.";
-
-  const faqSectionLabel = "Onboarding Info";
-  const faqHeading = "Contact & Scoping FAQs";
-  const faqsList = defaultContactFaqs;
+  const h1 = content?.h1 || "Let's build your";
+  const h2s = content?.h2s || {};
+  const faqsList = (content?.faqs && content.faqs.length > 0) ? content.faqs : defaultContactFaqs;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +72,7 @@ export default function ContactClientView() {
           setName("");
           setEmail("");
           setCompany("");
-          setBudget("$5,000 - $10,000 / mo");
+          setBudget("₹50,000 - ₹1,00,000 / mo");
           setMessage("");
         }, 4000);
       } else {
@@ -102,16 +93,16 @@ export default function ContactClientView() {
       <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-6">
         <ScrollReveal>
           <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full">
-            {heroBadge}
+            Get In Touch
           </span>
           <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tighter leading-none text-foreground mt-6">
-            {heroHeading} <br />
+            {h1} <br />
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               revenue growth engine.
             </span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
-            {heroDesc}
+            Fill out our performance brief below. Our managing partners will review your search ranks and ad setups and present a free audit during our initial call.
           </p>
         </ScrollReveal>
       </section>
@@ -134,7 +125,7 @@ export default function ContactClientView() {
                   </div>
                   <div>
                     <p className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">Work Email</p>
-                    <a href="mailto:growth@buzzspire.media" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">growth@buzzspire.media</a>
+                    <a href="mailto:sales@buzzspiremedia.com" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">sales@buzzspiremedia.com</a>
                   </div>
                 </div>
 
@@ -144,7 +135,7 @@ export default function ContactClientView() {
                   </div>
                   <div>
                     <p className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">Strategy Desk</p>
-                    <a href="tel:+14155550192" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">+1 (415) 555-0192</a>
+                    <a href="tel:+919599249586" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">+919599249586</a>
                   </div>
                 </div>
 
@@ -154,7 +145,7 @@ export default function ContactClientView() {
                   </div>
                   <div>
                     <p className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">Office Hours</p>
-                    <p className="text-sm font-semibold text-foreground">Mon - Fri, 9:00 AM - 6:00 PM EST</p>
+                    <p className="text-sm font-semibold text-foreground">Mon - Sat, 9:00 AM - 6:00 PM EST</p>
                   </div>
                 </div>
               </div>
@@ -184,7 +175,7 @@ export default function ContactClientView() {
 
             {/* Office Coordinates List */}
             <div className="bg-white border border-border p-8 rounded-3xl shadow-premium space-y-6">
-              <h3 className="font-heading font-bold text-xl text-foreground">Global Offices</h3>
+              <h3 className="font-heading font-bold text-xl text-foreground">Our Office</h3>
               <div className="space-y-4">
                 {offices.map((off, idx) => (
                   <div key={idx} className="space-y-1">
@@ -203,8 +194,8 @@ export default function ContactClientView() {
 
           {/* Right: Contact Form */}
           <div className="lg:col-span-7 bg-white border border-border p-8 md:p-12 rounded-3xl shadow-premium">
-            <h3 className="font-heading font-bold text-2xl text-foreground mb-1">{formHeading}</h3>
-            <p className="text-xs text-muted-foreground mb-8">{formSubheading}</p>
+            <h3 className="font-heading font-bold text-2xl text-foreground mb-1">Growth Brief</h3>
+            <p className="text-xs text-muted-foreground mb-8">Share your target marketing parameters and ad spends.</p>
 
             <AnimatePresence>
               {formSubmitted ? (
@@ -232,7 +223,7 @@ export default function ContactClientView() {
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="John Doe"
+                        placeholder="Rahul Sharma"
                         className="text-xs"
                       />
                     </div>
@@ -244,7 +235,7 @@ export default function ContactClientView() {
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="john@company.com"
+                        placeholder="rahul@northstarretail.in"
                         className="text-xs"
                       />
                     </div>
@@ -258,7 +249,7 @@ export default function ContactClientView() {
                         required
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
-                        placeholder="FlowState Technologies"
+                        placeholder="Northstar Retail"
                         className="text-xs"
                       />
                     </div>
@@ -270,10 +261,10 @@ export default function ContactClientView() {
                         onChange={(e) => setBudget(e.target.value)}
                         className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-xs shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
                       >
-                        <option value="$1,000 - $5,000 / mo">$1,000 - $5,000 / mo</option>
-                        <option value="$5,000 - $10,000 / mo">$5,000 - $10,000 / mo</option>
-                        <option value="$10,000 - $50,000 / mo">$10,000 - $50,000 / mo</option>
-                        <option value="$50,000+ / mo">$50,000+ / mo</option>
+                        <option value="₹50,000 - ₹1,00,000 / mo">₹50,000 - ₹1,00,000 / mo</option>
+                        <option value="₹1,00,000 - ₹2,50,000 / mo">₹1,00,000 - ₹2,50,000 / mo</option>
+                        <option value="₹2,50,000 - ₹5,00,000 / mo">₹2,50,000 - ₹5,00,000 / mo</option>
+                        <option value="₹5,00,000+ / mo">₹5,00,000+ / mo</option>
                       </select>
                     </div>
                   </div>
@@ -303,37 +294,36 @@ export default function ContactClientView() {
         </div>
       </section>
 
-      {/* 3. MAP PLACEHOLDER */}
-      <section className="py-12 px-6 max-w-7xl mx-auto">
-        <ScrollReveal>
-          <div className="rounded-[3rem] overflow-hidden border border-border bg-muted shadow-premium aspect-[21/9] flex items-center justify-center relative bg-slate-100">
-            <div className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none" />
-            <div className="z-10 text-center space-y-4 p-8">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mx-auto animate-bounce">
-                <MapPin className="w-6 h-6" />
-              </div>
-              <h3 className="font-heading font-extrabold text-xl text-foreground">Map Coordinates Loaded</h3>
-              <p className="text-xs text-muted-foreground max-w-md mx-auto">
-                Headquarters: Pine Street, San Francisco, CA. Zoom linkages and exact street coordinates will render upon confidential discovery briefing approval.
-              </p>
-            </div>
-          </div>
-        </ScrollReveal>
+      {/* 3. GOOGLE MAP */}
+      <section className="pb-24 px-6 max-w-7xl mx-auto">
+        <div className="w-full h-[350px] md:h-[450px] rounded-3xl overflow-hidden border border-border shadow-premium">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.215673493137!2d77.0658602!3d28.623297500000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0558d309b3c1%3A0xb3da05723cb703fc!2sBuzzspire%20Media%20PVT.LTD!5e0!3m2!1sen!2sin!4v1787135089367!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </div>
       </section>
+
+
 
       {/* 4. CONTACT FAQ */}
       <section className="py-24 px-6 max-w-4xl mx-auto relative">
         <ScrollReveal>
           <div className="text-center mb-16">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">{faqSectionLabel}</h2>
+            <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Onboarding Info</h2>
             <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-              {faqHeading}
+              {h2s?.['faq'] || "Contact & Scoping FAQs"}
             </p>
           </div>
         </ScrollReveal>
 
         <div className="space-y-4">
-          {faqsList.map((faq, idx) => {
+          {faqsList.map((faq: any, idx: number) => {
             const isOpen = activeFaq === idx;
             return (
               <ScrollReveal key={idx} delay={idx * 0.05}>

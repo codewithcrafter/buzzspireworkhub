@@ -110,6 +110,7 @@ export async function POST(req: Request) {
             metaDescription: body.metaDescription,
             status: body.status || "DRAFT",
             isFeatured: body.isFeatured || false,
+            faqs: Array.isArray(body.faqs) ? body.faqs : undefined,
         });
 
         return NextResponse.json(

@@ -50,7 +50,7 @@ import { ToastProvider, useToast } from "@/components/ui/toast"
 import { SearchBar } from "@/components/ui/search-bar"
 import { FilterControls } from "@/components/ui/filter-controls"
 
-type LeadStage = "new" | "contacted" | "proposal" | "qualified"
+type LeadStage = "new" | "contacted" | "qualified" | "closed"
 type LeadPriority = "high" | "medium" | "low"
 
 interface LeadActivity {
@@ -81,12 +81,23 @@ interface Lead {
   portfolio: string | null
   stage: LeadStage
   priority: LeadPriority
+  assignedEmployeeId?: string | null
+  assignedEmployee?: {
+    id: string
+    name: string
+    employeeId?: string
+    email?: string
+  } | null
   assignedTo: {
     name: string
     avatar: string
+    employeeId?: string
   }
   tags: string[]
   created: string
+  notes: string | null
+  followUpAt: string | null
+  chatSessionId: string | null
   activities: LeadActivity[]
   timeline: LeadTimelineEvent[]
 }
@@ -94,8 +105,8 @@ interface Lead {
 const STAGES: { id: LeadStage; label: string; color: string }[] = [
   { id: "new", label: "New Leads", color: "border-primary/30" },
   { id: "contacted", label: "Contacted", color: "border-amber-500/30" },
-  { id: "proposal", label: "Proposal Sent", color: "border-secondary/30" },
   { id: "qualified", label: "Qualified", color: "border-emerald-500/30" },
+  { id: "closed", label: "Closed / Won", color: "border-secondary/30" },
 ]
 
 function LeadsDashboard() {
@@ -106,35 +117,56 @@ function LeadsDashboard() {
 
   // Database State
   const [leads, setLeads] = React.useState<Lead[]>([])
+  const [employees, setEmployees] = React.useState<{ id: string; name: string; employeeId?: string; email: string }[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
 
   const fetchLeads = React.useCallback(async () => {
     try {
       setIsLoading(true)
-      const res = await fetch("/api/admin/leads")
-      if (res.ok) {
-        const data = await res.json()
+      const [leadsRes, empRes] = await Promise.all([
+        fetch("/api/admin/leads"),
+        fetch("/api/admin/employees"),
+      ])
+
+      if (empRes.ok) {
+        const empData = await empRes.json()
+        if (empData.success && Array.isArray(empData.employees)) {
+          setEmployees(empData.employees)
+        }
+      }
+
+      if (leadsRes.ok) {
+        const data = await leadsRes.json()
         if (data.success && data.leads) {
-          const mappedLeads: Lead[] = data.leads.map((l: any) => ({
-            id: l.id,
-            name: l.name,
-            company: l.company || null,
-            email: l.email,
-            phone: l.phone || null,
-            budget: l.budget || null,
-            service: l.service || null,
-            message: l.message || "",
-            source: l.source || null,
-            pageUrl: l.pageUrl || null,
-            portfolio: l.portfolio || null,
-            stage: l.status.toLowerCase() as LeadStage,
-            priority: "medium", // Default or you can add to DB later
-            assignedTo: { name: "System", avatar: "SY" }, // Default
-            tags: l.source ? [l.source] : [],
-            created: new Date(l.createdAt).toLocaleDateString(),
-            activities: [],
-            timeline: []
-          }))
+          const mappedLeads: Lead[] = data.leads.map((l: any) => {
+            const assigneeName = l.assignedEmployee?.name || "Unassigned"
+            const avatar = l.assignedEmployee?.name ? l.assignedEmployee.name.charAt(0) : "—"
+            return {
+              id: l.id,
+              name: l.name,
+              company: l.company || null,
+              email: l.email,
+              phone: l.phone || null,
+              budget: l.budget || null,
+              service: l.service || null,
+              message: l.message || "",
+              source: l.source || null,
+              pageUrl: l.pageUrl || null,
+              portfolio: l.portfolio || null,
+              stage: (l.status ? l.status.toLowerCase() : "new") as LeadStage,
+              priority: "medium",
+              assignedEmployeeId: l.assignedEmployeeId || null,
+              assignedEmployee: l.assignedEmployee || null,
+              assignedTo: { name: assigneeName, avatar, employeeId: l.assignedEmployee?.employeeId },
+              tags: l.source ? [l.source] : [],
+              notes: l.notes || null,
+              followUpAt: l.followUpAt ? new Date(l.followUpAt).toISOString().split('T')[0] : null,
+              chatSessionId: l.chatSession?.id || null,
+              created: new Date(l.createdAt).toLocaleDateString(),
+              activities: [],
+              timeline: [],
+            }
+          })
           setLeads(mappedLeads)
         }
       }
@@ -153,6 +185,7 @@ function LeadsDashboard() {
   const [searchQuery, setSearchQuery] = React.useState("")
   const [priorityFilters, setPriorityFilters] = React.useState<string[]>([])
   const [agentFilters, setAgentFilters] = React.useState<string[]>([])
+  const [featureFilters, setFeatureFilters] = React.useState<string[]>([])
 
   // Modal Dialogs & Drawer state
   const [isAddOpen, setIsAddOpen] = React.useState(false)
@@ -178,7 +211,10 @@ function LeadsDashboard() {
   const [formStage, setFormStage] = React.useState<LeadStage>("new")
   const [formPriority, setFormPriority] = React.useState<LeadPriority>("medium")
   const [formAssignee, setFormAssignee] = React.useState("Jane Doe")
+  const [formAssignedEmployeeId, setFormAssignedEmployeeId] = React.useState<string>("")
   const [formTags, setFormTags] = React.useState("")
+  const [formNotes, setFormNotes] = React.useState("")
+  const [formFollowUp, setFormFollowUp] = React.useState("")
 
   const handleExport = async (format: "excel" | "csv" | "pdf", filterMode: "all" | "filtered") => {
     setIsExporting(true)
@@ -243,9 +279,14 @@ function LeadsDashboard() {
       const matchesAgent =
         agentFilters.length === 0 || agentFilters.includes(lead.assignedTo.name)
 
-      return matchesSearch && matchesPriority && matchesAgent
+      const matchesFeature = 
+        featureFilters.length === 0 || 
+        (featureFilters.includes("hasChat") && lead.chatSessionId) ||
+        (featureFilters.includes("needsFollowUp") && lead.followUpAt)
+
+      return matchesSearch && matchesPriority && matchesAgent && matchesFeature
     })
-  }, [leads, searchQuery, priorityFilters, agentFilters])
+  }, [leads, searchQuery, priorityFilters, agentFilters, featureFilters])
 
   // Move lead stage helper (Quick button on Kanban Card)
   const moveLeadStage = (leadId: string, direction: "next" | "prev") => {
@@ -322,6 +363,9 @@ function LeadsDashboard() {
       assignedTo: { name: formAssignee, avatar: initials },
       tags: tagsArray,
       created: new Date().toISOString().split("T")[0],
+      notes: null,
+      followUpAt: null,
+      chatSessionId: null,
       activities: [
         { id: `act-${Date.now()}`, text: `Lead added manually to pipeline by admin.`, time: "Just now", user: "Jane Doe" },
       ],
@@ -341,6 +385,34 @@ function LeadsDashboard() {
     })
   }
 
+  // Assign Lead to Employee
+  const handleAssignLead = async (leadId: string, employeeId: string | null) => {
+    try {
+      const res = await fetch(`/api/admin/leads/${leadId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignedEmployeeId: employeeId }),
+      })
+
+      if (res.ok) {
+        toast({
+          title: "Lead Assigned",
+          description: "Staff assignment updated successfully.",
+          type: "success",
+        })
+        fetchLeads()
+      } else {
+        toast({
+          title: "Assignment Failed",
+          description: "Could not update lead assignment.",
+          type: "error",
+        })
+      }
+    } catch (error) {
+      console.error("Failed to assign lead:", error)
+    }
+  }
+
   // Edit Lead load trigger
   const triggerEdit = (lead: Lead) => {
     setActiveLead(lead)
@@ -351,43 +423,59 @@ function LeadsDashboard() {
     setFormStage(lead.stage)
     setFormPriority(lead.priority)
     setFormAssignee(lead.assignedTo.name)
+    setFormAssignedEmployeeId(lead.assignedEmployeeId || "")
     setFormTags(lead.tags.join(", "))
+    setFormNotes(lead.notes || "")
+    setFormFollowUp(lead.followUpAt || "")
     setIsEditOpen(true)
   }
 
   // Edit Lead Submit handler
-  const handleEditSubmit = (e: React.FormEvent) => {
+  const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!activeLead) return
 
-    const initials = formAssignee.split(" ").map(w => w[0]).join("").toUpperCase()
-    const tagsArray = formTags ? formTags.split(",").map(t => t.trim()).filter(Boolean) : ["General"]
+    try {
+      const statusMap: Record<LeadStage, string> = {
+        new: "NEW",
+        contacted: "CONTACTED",
+        qualified: "QUALIFIED",
+        closed: "CLOSED",
+      }
 
-    const updated = leads.map((l) =>
-      l.id === activeLead.id
-        ? {
-            ...l,
-            name: formName,
-            company: formCompany,
-            email: formEmail,
-            budget: formValue || null,
-            stage: formStage,
-            priority: formPriority,
-            assignedTo: { name: formAssignee, avatar: initials },
-            tags: tagsArray,
-          }
-        : l
-    )
+      const res = await fetch(`/api/admin/leads/${activeLead.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formName,
+          company: formCompany || null,
+          budget: formValue || null,
+          status: statusMap[formStage] || "NEW",
+          assignedEmployeeId: formAssignedEmployeeId || null,
+          notes: formNotes || null,
+          followUpAt: formFollowUp ? new Date(formFollowUp) : null,
+        }),
+      })
 
-    setLeads(updated)
-    setIsEditOpen(false)
-    resetForm()
-
-    toast({
-      title: "Lead updated",
-      description: "Pipeline parameters updated successfully.",
-      type: "success",
-    })
+      if (res.ok) {
+        fetchLeads()
+        setIsEditOpen(false)
+        resetForm()
+        toast({
+          title: "Lead updated",
+          description: "Pipeline parameters saved to database.",
+          type: "success",
+        })
+      } else {
+        toast({
+          title: "Update Failed",
+          description: "Could not save lead changes.",
+          type: "error",
+        })
+      }
+    } catch (error) {
+      console.error("Failed to edit lead:", error)
+    }
   }
 
   // Delete trigger
@@ -397,18 +485,33 @@ function LeadsDashboard() {
   }
 
   // Delete Action handler
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!activeLead) return
 
-    setLeads(leads.filter((l) => l.id !== activeLead.id))
-    setIsDeleteOpen(false)
-    setActiveLead(null)
+    try {
+      const res = await fetch(`/api/admin/leads/${activeLead.id}`, {
+        method: "DELETE",
+      })
 
-    toast({
-      title: "Lead Removed",
-      description: "Successfully deleted lead card from pipeline.",
-      type: "success",
-    })
+      if (res.ok) {
+        setLeads(leads.filter((l) => l.id !== activeLead.id))
+        setIsDeleteOpen(false)
+        setActiveLead(null)
+        toast({
+          title: "Lead Removed",
+          description: "Successfully deleted lead card from pipeline.",
+          type: "success",
+        })
+      } else {
+        toast({
+          title: "Delete Failed",
+          description: "Could not delete lead record.",
+          type: "error",
+        })
+      }
+    } catch (error) {
+      console.error("Failed to delete lead:", error)
+    }
   }
 
   // Drawer details view trigger
@@ -462,6 +565,8 @@ function LeadsDashboard() {
     setFormPriority("medium")
     setFormAssignee("Jane Doe")
     setFormTags("")
+    setFormNotes("")
+    setFormFollowUp("")
     setActiveLead(null)
   }
 
@@ -475,6 +580,11 @@ function LeadsDashboard() {
     { value: "Jane Doe", label: "Jane Doe" },
     { value: "Aria Mercer", label: "Aria Mercer" },
     { value: "John Smith", label: "John Smith" },
+  ]
+
+  const featureOptions = [
+    { value: "hasChat", label: "Has Active Chat" },
+    { value: "needsFollowUp", label: "Needs Follow-up" },
   ]
 
   return (
@@ -591,7 +701,13 @@ function LeadsDashboard() {
             selectedValues={agentFilters}
             onChange={setAgentFilters}
           />
-          {(searchQuery || priorityFilters.length > 0 || agentFilters.length > 0) && (
+          <FilterControls
+            label="Features"
+            options={featureOptions}
+            selectedValues={featureFilters}
+            onChange={setFeatureFilters}
+          />
+          {(searchQuery || priorityFilters.length > 0 || agentFilters.length > 0 || featureFilters.length > 0) && (
             <Button
               variant="ghost"
               size="sm"
@@ -599,6 +715,7 @@ function LeadsDashboard() {
                 setSearchQuery("")
                 setPriorityFilters([])
                 setAgentFilters([])
+                setFeatureFilters([])
               }}
               className="cursor-pointer text-xs"
             >
@@ -620,7 +737,7 @@ function LeadsDashboard() {
                 {/* Column header title */}
                 <div className="flex items-center justify-between pb-2 border-b border-border/20">
                   <div className="flex items-center gap-2">
-                    <span className={`w-2.5 h-2.5 rounded-full bg-${col.id === "new" ? "primary" : col.id === "contacted" ? "amber-500" : col.id === "proposal" ? "secondary" : "emerald-500"}`} />
+                    <span className={`w-2.5 h-2.5 rounded-full bg-${col.id === "new" ? "primary" : col.id === "contacted" ? "amber-500" : col.id === "closed" ? "secondary" : "emerald-500"}`} />
                     <span className="text-xs font-bold text-foreground font-heading">{col.label}</span>
                   </div>
                   <Badge variant="neutral">{colLeads.length}</Badge>
@@ -748,7 +865,7 @@ function LeadsDashboard() {
                   <TableCell className="text-muted-foreground text-xs font-semibold">{lead.company}</TableCell>
                   <TableCell className="font-bold text-foreground">{lead.budget || "N/A"}</TableCell>
                   <TableCell>
-                    <Badge variant={lead.stage === "new" ? "default" : lead.stage === "contacted" ? "warning" : lead.stage === "proposal" ? "secondary" : "success"}>
+                    <Badge variant={lead.stage === "new" ? "default" : lead.stage === "contacted" ? "warning" : lead.stage === "closed" ? "secondary" : "success"}>
                       {STAGES.find((s) => s.id === lead.stage)?.label}
                     </Badge>
                   </TableCell>
@@ -764,9 +881,19 @@ function LeadsDashboard() {
                     </span>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1.5 text-xs text-foreground/80">
-                      <Avatar fallback={lead.assignedTo.avatar} size="xs" />
-                      <span>{lead.assignedTo.name}</span>
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={lead.assignedEmployeeId || ""}
+                        onChange={(e) => handleAssignLead(lead.id, e.target.value || null)}
+                        className="h-8 rounded-lg bg-background border border-border/80 text-xs px-2 font-medium max-w-[150px] truncate focus:ring-1 focus:ring-primary"
+                      >
+                        <option value="">Unassigned</option>
+                        {employees.map((emp) => (
+                          <option key={emp.id} value={emp.id}>
+                            {emp.name} {emp.employeeId ? `(${emp.employeeId})` : ""}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </TableCell>
                   <TableCell className="w-[80px] text-right">
@@ -1001,15 +1128,18 @@ function LeadsDashboard() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-muted-foreground">Assigned Agent</label>
+              <label className="text-xs font-semibold text-muted-foreground">Assigned Staff</label>
               <select
-                value={formAssignee}
-                onChange={(e) => setFormAssignee(e.target.value)}
+                value={formAssignedEmployeeId}
+                onChange={(e) => setFormAssignedEmployeeId(e.target.value)}
                 className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
               >
-                <option value="Jane Doe">Jane Doe</option>
-                <option value="Aria Mercer">Aria Mercer</option>
-                <option value="John Smith">John Smith</option>
+                <option value="">Unassigned</option>
+                {employees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.name} {emp.employeeId ? `(${emp.employeeId})` : ""}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="space-y-1">
@@ -1021,10 +1151,29 @@ function LeadsDashboard() {
               >
                 <option value="new">New Leads</option>
                 <option value="contacted">Contacted</option>
-                <option value="proposal">Proposal Sent</option>
                 <option value="qualified">Qualified</option>
+                <option value="closed">Closed / Won</option>
               </select>
             </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Follow-up Date</label>
+              <input
+                type="date"
+                value={formFollowUp}
+                onChange={(e) => setFormFollowUp(e.target.value)}
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-muted-foreground">Internal Notes</label>
+            <textarea
+              value={formNotes}
+              onChange={(e) => setFormNotes(e.target.value)}
+              className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground min-h-[60px]"
+              placeholder="Agent notes..."
+            />
           </div>
 
           <div className="space-y-1">
@@ -1094,6 +1243,16 @@ function LeadsDashboard() {
                   </span>
                 </div>
               </div>
+              {activeLead.chatSessionId && (
+                <div className="ml-auto">
+                  <a href={`/admin/chats/${activeLead.chatSessionId}`}>
+                    <Button variant="premium" size="sm" className="cursor-pointer font-bold shadow-sm flex items-center gap-1">
+                      <MessageSquare className="size-3" />
+                      Go to Chat
+                    </Button>
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Stage / Priority Dropdowns */}
@@ -1111,11 +1270,19 @@ function LeadsDashboard() {
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] uppercase font-bold text-muted-foreground">Assignee</label>
-                <div className="flex items-center gap-2 p-2 bg-muted border border-border rounded-lg text-xs text-foreground/80 select-none">
-                  <Avatar fallback={activeLead.assignedTo.avatar} size="xs" />
-                  <span className="truncate">{activeLead.assignedTo.name}</span>
-                </div>
+                <label className="text-[10px] uppercase font-bold text-muted-foreground">Assigned Staff</label>
+                <select
+                  value={activeLead.assignedEmployeeId || ""}
+                  onChange={(e) => handleAssignLead(activeLead.id, e.target.value || null)}
+                  className="w-full bg-muted border border-border rounded-lg p-2.5 text-xs text-foreground font-semibold outline-none"
+                >
+                  <option value="">Unassigned</option>
+                  {employees.map((emp) => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name} {emp.employeeId ? `(${emp.employeeId})` : ""}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -1174,6 +1341,22 @@ function LeadsDashboard() {
                   <label className="text-[10px] uppercase font-bold text-muted-foreground">Message / Cover Letter</label>
                   <p className="text-foreground/80 font-medium whitespace-pre-wrap p-2 bg-muted/40 rounded-lg border border-border/40">
                     {activeLead.message}
+                  </p>
+                </div>
+              )}
+              {activeLead.followUpAt && (
+                <div className="col-span-2 space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Follow-up Date</label>
+                  <p className="text-foreground/80 font-medium font-bold text-amber-600 dark:text-amber-400">
+                    {new Date(activeLead.followUpAt).toLocaleDateString()}
+                  </p>
+                </div>
+              )}
+              {activeLead.notes && (
+                <div className="col-span-2 space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-muted-foreground">Internal Notes</label>
+                  <p className="text-foreground/80 font-medium whitespace-pre-wrap p-2 bg-amber-500/10 rounded-lg border border-amber-500/20 text-amber-900 dark:text-amber-200">
+                    {activeLead.notes}
                   </p>
                 </div>
               )}
