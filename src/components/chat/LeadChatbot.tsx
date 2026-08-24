@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { MessageSquare, X, Send, User, Bot, CheckCircle2, Phone, Mic, MicOff, PhoneOff, MoreVertical } from "lucide-react";
+import { MessageSquare, X, Send, User, Bot, CheckCircle2, Phone, MoreVertical } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { servicesData } from "@/data/servicesData";
 
@@ -65,59 +65,7 @@ export default function LeadChatbot() {
   // Live Chat State
   const [chatSessionId, setChatSessionId] = useState<string | null>(null);
   const [liveMessages, setLiveMessages] = useState<LiveMessage[]>([]);
-  const lastCallStatusRef = useRef<string | null>(null);
-  const [activeCallId, setActiveCallId] = useState<string | null>(null);
 
-  const [rtcConnectionState, setRtcConnectionState] = useState<string>("new");
-  const [voiceError, setVoiceError] = useState<string | null>(null);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isRemoteMuted, setIsRemoteMuted] = useState(false);
-  const [callDuration, setCallDuration] = useState(0);
-  const [voiceCallStatus, setVoiceCallStatus] = useState<string | null>(null);
-  const [isCalling, setIsCalling] = useState(false);
-
-  const pcRef = useRef<RTCPeerConnection | null>(null);
-  const localStreamRef = useRef<MediaStream | null>(null);
-  const remoteAudioRef = useRef<HTMLAudioElement | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const candidateQueue = useRef<RTCIceCandidateInit[]>([]);
-  const visitorRingtoneRef = useRef<HTMLAudioElement | null>(null);
-
-  // Visitor Ringtone
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!visitorRingtoneRef.current) {
-      visitorRingtoneRef.current = new Audio("/ringtone.mp3");
-      visitorRingtoneRef.current.loop = true;
-    }
-    
-    const shouldRing = activeCallId && rtcConnectionState !== "connected" && rtcConnectionState !== "closed" && rtcConnectionState !== "failed" && rtcConnectionState !== "disconnected";
-    
-    if (shouldRing) {
-      if (visitorRingtoneRef.current.paused) {
-        visitorRingtoneRef.current.currentTime = 0;
-        visitorRingtoneRef.current.play().catch(e => console.warn("Visitor ringtone autoplay blocked:", e));
-      }
-    } else {
-      visitorRingtoneRef.current.pause();
-      visitorRingtoneRef.current.currentTime = 0;
-    }
-  }, [activeCallId, rtcConnectionState]);
-
-  useEffect(() => {
-    return () => {
-      if (visitorRingtoneRef.current) {
-        visitorRingtoneRef.current.pause();
-      }
-    };
-  }, []);
-
-  // WebRTC Cleanup
-  useEffect(() => {
-    return () => {
-      handleEndCallLocally();
-    };
-  }, []);
 
   // Scroll to bottom
   const scrollToBottom = () => {
@@ -159,55 +107,6 @@ export default function LeadChatbot() {
                 addBotMessage("Thanks for contacting BuzzSpire. This conversation has been closed.");
               }
 
-              if (data.session.voiceCalls && data.session.voiceCalls.length > 0) {
-                const call = data.session.voiceCalls[0];
-                if (call.status !== lastCallStatusRef.current) {
-                  if (call.status === "REJECTED") {
-                    setLiveMessages(prev => [...prev, {
-                      id: Date.now().toString() + Math.random(),
-                      senderType: "SYSTEM",
-                      message: "Sorry, the agent was unable to take your call.",
-                      createdAt: new Date().toISOString()
-                    }]);
-                  } else if (call.status === "MISSED") {
-                    setLiveMessages(prev => [...prev, {
-                      id: Date.now().toString() + Math.random(),
-                      senderType: "SYSTEM",
-                      message: "The call was not answered. Please try again later or continue chatting.",
-                      createdAt: new Date().toISOString()
-                    }]);
-                  } else if (call.status === "ACTIVE") {
-                    setLiveMessages(prev => [...prev, {
-                      id: Date.now().toString() + Math.random(),
-                      senderType: "SYSTEM",
-                      message: "Call connected. Establishing audio...",
-                      createdAt: new Date().toISOString()
-                    }]);
-                  }
-                  lastCallStatusRef.current = call.status;
-                }
-                
-                if (call.status === "ACTIVE" || call.status === "RINGING") {
-                  if (call.status === "ACTIVE" && !pcRef.current) {
-                    const ageMs = Date.now() - new Date(call.createdAt).getTime();
-                    const isStale = ageMs > 60000 * 5; // 5 minutes
-
-                    if (!isStale) {
-                      console.log(`[VOICE DEBUG][STALE CHECK] call=${call.id} status=${call.status} age=${ageMs}ms stale=false reason=within_timeout`);
-                      setupWebRTCVisitor(call.id, chatSessionId);
-                      setActiveCallId(call.id);
-                    } else {
-                      console.warn(`[VOICE DEBUG][STALE CHECK] call=${call.id} status=${call.status} age=${ageMs}ms stale=true reason=timeout_exceeded`);
-                      fetch(`/api/chat/voice/${call.id}/end`, { method: "POST", body: JSON.stringify({ sessionId: chatSessionId }) }).catch(console.error);
-                      setActiveCallId(null);
-                    }
-                  } else {
-                    setActiveCallId(call.id);
-                  }
-                } else {
-                  setActiveCallId(null);
-                }
-              }
             }
           }
         } catch (error) {
@@ -221,52 +120,7 @@ export default function LeadChatbot() {
     return () => clearInterval(interval);
   }, [chatSessionId, isOpen, currentStep]);
 
-  const handleEndCallLocally = () => {
-    if (pcRef.current) {
-      pcRef.current.close();
-      pcRef.current = null;
-    }
-    if (localStreamRef.current) {
-      localStreamRef.current.getTracks().forEach(t => t.stop());
-      localStreamRef.current = null;
-    }
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-    if (remoteAudioRef.current) {
-      remoteAudioRef.current.pause();
-      remoteAudioRef.current.srcObject = null;
-    }
-    candidateQueue.current = [];
-    setActiveCallId(null);
-    setRtcConnectionState("closed");
-    setIsMuted(false);
-    setIsRemoteMuted(false);
-  };
-
-  const endVoiceCall = async () => {
-    const finalDuration = callDuration;
-    if (activeCallId && chatSessionId) {
-      fetch(`/api/chat/voice/${activeCallId}/end`, { 
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: chatSessionId })
-      }).catch(console.error);
-    }
-    handleEndCallLocally();
-    setLiveMessages(prev => [...prev, {
-      id: Date.now().toString(),
-      senderType: "SYSTEM",
-      message: `Call ended. Duration: ${formatTime(finalDuration)}`,
-      createdAt: new Date().toISOString()
-    }]);
-  };
-
   const endChatSession = async () => {
-    if (activeCallId) {
-      endVoiceCall();
-    }
     if (chatSessionId) {
       fetch(`/api/chat/session/${chatSessionId}/close`, { method: "POST" }).catch(console.error);
     }
@@ -278,221 +132,6 @@ export default function LeadChatbot() {
     setShowEndConfirm(false);
     setShowMenu(false);
   };
-
-  const toggleMute = () => {
-    if (localStreamRef.current) {
-      const audioTrack = localStreamRef.current.getAudioTracks()[0];
-      if (audioTrack) {
-        const newMutedState = !audioTrack.enabled;
-        audioTrack.enabled = !newMutedState;
-        setIsMuted(newMutedState);
-        
-        if (activeCallId && chatSessionId) {
-          fetch(`/api/chat/voice/${activeCallId}/signal`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sessionId: chatSessionId, type: "mute", payload: newMutedState })
-          }).catch(console.error);
-        }
-      }
-    }
-  };
-
-  const setupWebRTCVisitor = async (callId: string, sid: string) => {
-    try {
-      let stream = localStreamRef.current;
-      if (!stream) {
-        console.log("[VOICE DEBUG] getUserMedia called", {
-          location: "LeadChatbot: setupWebRTCVisitor (FALLBACK)",
-          isSecureContext: typeof window !== 'undefined' ? window.isSecureContext : false,
-          protocol: typeof window !== 'undefined' ? window.location.protocol : "",
-          origin: typeof window !== 'undefined' ? window.location.origin : "",
-          mediaDevices: typeof navigator !== 'undefined' ? !!navigator.mediaDevices : false
-        });
-        try {
-          stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          setVoiceError(null);
-        } catch (err) {
-          console.error("Microphone permission denied:", err);
-          setVoiceError("Microphone permission denied. Please allow microphone access to answer calls.");
-          throw err;
-        }
-        console.log("[VOICE DEBUG] getUserMedia SUCCESS", {
-          tracks: stream.getAudioTracks().map(track => ({
-            enabled: track.enabled,
-            readyState: track.readyState,
-            kind: track.kind
-          }))
-        });
-        localStreamRef.current = stream;
-      }
-
-      const pc = new RTCPeerConnection({
-        iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-      });
-      console.log("[WEBRTC][VISITOR] peer connection created");
-      pcRef.current = pc;
-
-      pc.onconnectionstatechange = () => {
-        console.log(`[WEBRTC][VISITOR] Connection state: ${pc.connectionState}`);
-        setRtcConnectionState(pc.connectionState);
-        if (pc.connectionState === "connected") {
-          setVoiceError(null);
-          setCallDuration(0);
-          if (timerRef.current) clearInterval(timerRef.current);
-          timerRef.current = setInterval(() => {
-            setCallDuration(prev => prev + 1);
-          }, 1000);
-        } else if (pc.connectionState === "closed" || pc.connectionState === "failed" || pc.connectionState === "disconnected") {
-          if (pc.connectionState === "failed") setVoiceError("Network connection failed.");
-          else if (pc.connectionState === "disconnected") setVoiceError("Connection interrupted.");
-          
-          if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-          }
-        }
-      };
-
-      pc.oniceconnectionstatechange = () => {
-        console.log(`[WEBRTC][VISITOR] ICE state: ${pc.iceConnectionState}`);
-        if (pc.iceConnectionState === "failed" || pc.iceConnectionState === "disconnected") {
-            setRtcConnectionState(pc.iceConnectionState);
-            setVoiceError(pc.iceConnectionState === "failed" ? "Network connection failed." : "Connection interrupted.");
-        } else if (pc.iceConnectionState === "closed") {
-            handleEndCallLocally();
-        }
-        
-        if (pc.iceConnectionState === "failed") {
-          console.log("[WEBRTC][VISITOR] ICE failed, attempting restart...");
-          pc.createOffer({ iceRestart: true })
-            .then(offer => pc.setLocalDescription(offer))
-            .then(() => {
-              fetch(`/api/chat/voice/${callId}/signal`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sessionId: sid, type: "offer", payload: pc.localDescription })
-              }).catch(console.error);
-            })
-            .catch(err => {
-              console.error("ICE Restart failed", err);
-              handleEndCallLocally();
-            });
-        } else if (pc.iceConnectionState === "closed") {
-          handleEndCallLocally();
-        }
-      };
-
-      pc.ontrack = (event) => {
-        if (remoteAudioRef.current && event.streams && event.streams[0]) {
-          console.log("[WEBRTC][VISITOR] remote track received");
-          remoteAudioRef.current.srcObject = event.streams[0];
-          remoteAudioRef.current.play().catch(console.error);
-        }
-      };
-
-      pc.onicecandidate = async (event) => {
-        if (event.candidate) {
-          console.log("[WEBRTC][VISITOR] ICE candidate generated");
-          await fetch(`/api/chat/voice/${callId}/signal`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sessionId: sid, type: "candidate", payload: event.candidate })
-          }).catch(console.error);
-        }
-      };
-
-      stream.getTracks().forEach(track => pc.addTrack(track, stream!));
-
-      const offer = await pc.createOffer();
-      console.log("[WEBRTC][VISITOR] offer created");
-      await pc.setLocalDescription(offer);
-      console.log("[WEBRTC][VISITOR] local description set");
-
-      await fetch(`/api/chat/voice/${callId}/signal`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: sid, type: "offer", payload: offer })
-      });
-      console.log("[WEBRTC][VISITOR] offer sent");
-      
-    } catch (error) {
-      console.error("WebRTC Setup Error:", error);
-      handleEndCallLocally();
-      setLiveMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        senderType: "SYSTEM",
-        message: "We couldn't establish the voice connection. You can continue chatting with our team.",
-        createdAt: new Date().toISOString()
-      }]);
-    }
-  };
-
-  // Polling for Signals
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (activeCallId && chatSessionId) {
-      let lastSignalDate = new Date(Date.now() - 3000).toISOString();
-      
-      const fetchSignals = async () => {
-        if (!pcRef.current) return;
-        try {
-          const res = await fetch(`/api/chat/voice/${activeCallId}/signal?sessionId=${chatSessionId}&since=${lastSignalDate}`);
-          if (res.ok) {
-            const data = await res.json();
-            if (data.success && data.signals && data.signals.length > 0) {
-              lastSignalDate = data.signals[data.signals.length - 1].createdAt;
-              
-              for (const signal of data.signals) {
-                if (signal.senderType === "AGENT" && pcRef.current) {
-                  if (signal.type === "answer") {
-                    try {
-                      console.log("[WEBRTC][VISITOR] answer received");
-                      await pcRef.current.setRemoteDescription(new RTCSessionDescription(signal.payload));
-                      console.log("[WEBRTC][VISITOR] remote description set");
-                      while (candidateQueue.current.length > 0) {
-                         const candidate = candidateQueue.current.shift();
-                         if (candidate) await pcRef.current.addIceCandidate(new RTCIceCandidate(candidate));
-                      }
-                    } catch (err) { console.error("Error setting remote description", err); }
-                  } else if (signal.type === "candidate") {
-                    try {
-                      if (pcRef.current.remoteDescription && pcRef.current.remoteDescription.type) {
-                        await pcRef.current.addIceCandidate(new RTCIceCandidate(signal.payload));
-                        console.log("[WEBRTC][VISITOR] ICE candidate processed");
-                      } else {
-                        candidateQueue.current.push(signal.payload);
-                      }
-                    } catch (err) { console.error("Error adding candidate", err); }
-                  } else if (signal.type === "mute") {
-                    setIsRemoteMuted(Boolean(signal.payload));
-                  }
-                }
-              }
-            }
-            if (data.status) {
-              setVoiceCallStatus(data.status);
-              if (data.status !== "ACTIVE" && data.status !== "RINGING") {
-                if (data.status === "MISSED" || data.status === "REJECTED") {
-                   setLiveMessages(prev => [...prev, {
-                      id: Date.now().toString(),
-                      senderType: "SYSTEM",
-                      message: data.status === "REJECTED" ? "Call declined by agent." : "No agent is currently available. You can continue chatting with us.",
-                      createdAt: new Date().toISOString()
-                   }]);
-                }
-                handleEndCallLocally();
-              }
-            }
-          }
-        } catch (e) {
-          console.error("Signal polling error:", e);
-        }
-      };
-      interval = setInterval(fetchSignals, 1500);
-    }
-    return () => clearInterval(interval);
-  }, [activeCallId, chatSessionId]);
 
   // Auto-open on first visit in session
   useEffect(() => {
@@ -534,75 +173,6 @@ export default function LeadChatbot() {
     setMessages(prev => [...prev, { id: Date.now().toString() + Math.random(), sender: "user", text }]);
   };
 
-  const handleCall = async () => {
-    if (isCalling || voiceCallStatus === "RINGING" || voiceCallStatus === "ACTIVE") return;
-    if (!chatSessionId) {
-      addBotMessage("Please complete your details to start a chat before initiating a call.");
-      return;
-    }
-    
-    setIsCalling(true);
-    let stream: MediaStream | null = null;
-    try {
-      console.log("[VOICE DEBUG] getUserMedia called", {
-        location: "LeadChatbot: handleCall (ON CLICK)",
-        isSecureContext: typeof window !== 'undefined' ? window.isSecureContext : false,
-        protocol: typeof window !== 'undefined' ? window.location.protocol : "",
-        origin: typeof window !== 'undefined' ? window.location.origin : "",
-        mediaDevices: typeof navigator !== 'undefined' ? !!navigator.mediaDevices : false
-      });
-      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      console.log("[VOICE DEBUG] getUserMedia SUCCESS", {
-        tracks: stream.getAudioTracks().map(track => ({
-          enabled: track.enabled,
-          readyState: track.readyState,
-          kind: track.kind
-        }))
-      });
-      localStreamRef.current = stream;
-      
-      const initRes = await fetch("/api/chat/voice/init", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: chatSessionId })
-      });
-      const initData = await initRes.json();
-      
-      if (initData.success) {
-        setActiveCallId(initData.call.id);
-        setVoiceCallStatus("RINGING");
-        setLiveMessages(prev => [...prev, {
-          id: Date.now().toString(),
-          senderType: "SYSTEM",
-          message: "Calling a BuzzSpire agent...",
-          createdAt: new Date().toISOString()
-        }]);
-        setIsCalling(false);
-      } else {
-        setIsCalling(false);
-        throw new Error(initData.error || "Failed to initialize call");
-      }
-    } catch (err: any) {
-      console.error("Microphone permission error or API error:", err);
-      console.error("[VOICE DEBUG] getUserMedia FAILED", {
-        name: err?.name,
-        message: err?.message
-      });
-      if (stream) {
-        stream.getTracks().forEach(t => t.stop());
-        localStreamRef.current = null;
-      }
-      const errMsg = "Microphone permission denied or call could not be started.";
-      
-      setLiveMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        senderType: "SYSTEM",
-        message: errMsg,
-        createdAt: new Date().toISOString()
-      }]);
-      setIsCalling(false);
-    }
-  };
 
   const handleServiceSelect = (serviceTitle: string) => {
     addUserMessage(serviceTitle);
@@ -853,14 +423,13 @@ export default function LeadChatbot() {
                   </div>
                 )}
                 {chatSessionId && currentStep !== "SUCCESS" && (
-                  <button 
-                    onClick={activeCallId ? endVoiceCall : handleCall}
-                    disabled={isCalling}
-                    className="text-primary-foreground/80 hover:text-primary-foreground transition-colors p-1 disabled:opacity-50"
-                    aria-label="Voice Call"
+                  <a
+                    href="tel:+919599249586"
+                    className="text-primary-foreground/80 hover:text-primary-foreground transition-colors p-1"
+                    aria-label="Phone Call"
                   >
-                    {activeCallId ? <PhoneOff className="w-5 h-5 opacity-50" /> : <Phone className="w-5 h-5" />}
-                  </button>
+                    <Phone className="w-5 h-5" />
+                  </a>
                 )}
                 <button 
                   onClick={() => setIsOpen(false)}
@@ -949,72 +518,6 @@ export default function LeadChatbot() {
                 </>
               )}
               
-              {activeCallId && (
-                <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 flex flex-col gap-3 mt-2 mb-2 shadow-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-sm">
-                        <Phone className="w-5 h-5 text-primary-foreground" />
-                      </div>
-                      {rtcConnectionState === "connected" && (
-                        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-background rounded-full"></span>
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-                        BuzzSpire Agent
-                        {isRemoteMuted && <span className="text-amber-500 text-[10px] uppercase font-bold bg-amber-500/10 px-1.5 py-0.5 rounded">Muted</span>}
-                      </p>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                        {voiceCallStatus === "RINGING" ? (
-                           <>
-                             <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                             Calling...
-                           </>
-                        ) : voiceCallStatus === "ACTIVE" ? (
-                           voiceError ? (
-                             <span className="text-destructive">{voiceError}</span>
-                           ) : rtcConnectionState === "connected" ? (
-                             <>
-                               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                               Connected • {formatTime(callDuration)}
-                             </>
-                           ) : rtcConnectionState === "failed" ? (
-                             "Connection failed."
-                           ) : rtcConnectionState === "disconnected" ? (
-                             "Reconnecting..."
-                           ) : (
-                             <>
-                               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                               Connecting...
-                             </>
-                           )
-                        ) : (
-                           "Call ended"
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex gap-2 mt-1">
-                    <button 
-                      onClick={toggleMute}
-                      aria-label={isMuted ? "Unmute Microphone" : "Mute Microphone"}
-                      className={`flex-1 py-2 rounded-lg text-[13px] font-semibold flex items-center justify-center gap-2 transition-colors ${isMuted ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20' : 'bg-background border border-border text-foreground hover:bg-muted shadow-sm'}`}
-                    >
-                      {isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                      {isMuted ? 'Unmute' : 'Mute'}
-                    </button>
-                    <button 
-                      onClick={endVoiceCall}
-                      aria-label="End Call"
-                      className="flex-1 py-2 bg-destructive/10 text-destructive border border-destructive/20 hover:bg-destructive/20 rounded-lg text-[13px] font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
-                    >
-                      <PhoneOff className="w-4 h-4" /> End Call
-                    </button>
-                  </div>
-                </div>
-              )}
-
               {!chatSessionId && currentStep === "SERVICE" && (
                 <motion.div data-lenis-prevent="true" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-2 mt-2 max-h-[250px] overflow-y-auto pr-1">
                   {servicesData.map(service => (
@@ -1098,7 +601,7 @@ export default function LeadChatbot() {
 
               <div ref={messagesEndRef} />
             </div>
-            <audio ref={remoteAudioRef} autoPlay playsInline className="hidden" />
+
             {/* Input Area */}
             {(["NAME", "COMPANY", "PHONE", "EMAIL", "LIVE_CHAT"].includes(currentStep)) && (
               <div className="p-3 bg-background border-t border-border shrink-0">

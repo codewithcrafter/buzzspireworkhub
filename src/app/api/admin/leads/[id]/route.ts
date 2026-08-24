@@ -111,9 +111,9 @@ export async function DELETE(req: Request, { params }: RouteParams) {
       return ApiResponse.notFound("Lead not found");
     }
 
-    // IDOR protection: Non-admin employees cannot delete leads assigned to others
-    if (auth.user.role !== "ADMIN" && lead.assignedEmployeeId !== auth.user.id) {
-      return ApiResponse.forbidden("Access denied: You can only delete leads assigned to you");
+    // Only admins can delete leads
+    if (auth.user.role !== "ADMIN") {
+      return ApiResponse.forbidden("Access denied: Only admins can delete leads");
     }
 
     await deleteLead(id);

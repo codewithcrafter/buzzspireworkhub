@@ -767,17 +767,30 @@ function LeadsDashboard() {
                               </p>
                               <p className="text-[10px] text-muted-foreground mt-0.5">{lead.company}</p>
                             </div>
-                            <Button
-                              variant="ghost"
-                              size="icon-xs"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                triggerEdit(lead)
-                              }}
-                              className="opacity-0 group-hover/card:opacity-100 rounded-md transition-opacity"
-                            >
-                              <Edit2 className="size-3" />
-                            </Button>
+                            <div className="flex gap-1">
+                              <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  triggerEdit(lead)
+                                }}
+                                className="opacity-0 group-hover/card:opacity-100 rounded-md transition-opacity"
+                              >
+                                <Edit2 className="size-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon-xs"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  triggerDelete(lead)
+                                }}
+                                className="opacity-0 group-hover/card:opacity-100 rounded-md transition-opacity text-destructive hover:bg-destructive/10"
+                              >
+                                <Trash2 className="size-3" />
+                              </Button>
+                            </div>
                           </div>
 
                           <div className="flex flex-wrap gap-1">
