@@ -19,6 +19,7 @@ import {
   ArrowUpDown,
   X,
   Loader2,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,6 +69,17 @@ export default function EmployeeLeadsPage() {
   const [editPhone, setEditPhone] = useState("");
   const [editCompany, setEditCompany] = useState("");
   const [editService, setEditService] = useState("");
+
+  // Add form state
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [addName, setAddName] = useState("");
+  const [addEmail, setAddEmail] = useState("");
+  const [addPhone, setAddPhone] = useState("");
+  const [addCompany, setAddCompany] = useState("");
+  const [addService, setAddService] = useState("");
+  const [addBudget, setAddBudget] = useState("");
+  const [addMessage, setAddMessage] = useState("");
+
 
   const fetchProfileAndLeads = useCallback(async () => {
     try {
@@ -138,6 +150,49 @@ export default function EmployeeLeadsPage() {
       }
     } catch {
       alert("Error saving changes");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCreateLead = async () => {
+    if (!addName || !addEmail || !addMessage) {
+      alert("Name, email, and message are required.");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/admin/leads`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: addName,
+          email: addEmail,
+          phone: addPhone || null,
+          company: addCompany || null,
+          service: addService || null,
+          budget: addBudget || null,
+          message: addMessage,
+          assignedEmployeeId: profile?.id, // Will be overridden or validated by backend, but we send it just in case
+        }),
+      });
+
+      if (res.ok) {
+        setIsAddModalOpen(false);
+        setAddName("");
+        setAddEmail("");
+        setAddPhone("");
+        setAddCompany("");
+        setAddService("");
+        setAddBudget("");
+        setAddMessage("");
+        fetchProfileAndLeads();
+      } else {
+        const err = await res.json();
+        alert(err.message || "Failed to create lead");
+      }
+    } catch {
+      alert("Error creating lead");
     } finally {
       setSaving(false);
     }
@@ -246,28 +301,37 @@ export default function EmployeeLeadsPage() {
           </p>
         </div>
 
-        {hasLeadsExport && (
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleExport("csv")}
-              className="rounded-xl text-xs font-semibold cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5 mr-1.5" />
-              CSV
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleExport("excel")}
-              className="rounded-xl text-xs font-semibold cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5 mr-1.5" />
-              Excel
-            </Button>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => setIsAddModalOpen(true)}
+            className="rounded-xl bg-primary text-white text-xs font-semibold cursor-pointer shadow-sm"
+          >
+            <Plus className="w-4 h-4 mr-1.5" />
+            Add Lead
+          </Button>
+          {hasLeadsExport && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleExport("csv")}
+                className="rounded-xl text-xs font-semibold cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 mr-1.5" />
+                CSV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleExport("excel")}
+                className="rounded-xl text-xs font-semibold cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 mr-1.5" />
+                Excel
+              </Button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Filters Bar */}
@@ -532,6 +596,107 @@ export default function EmployeeLeadsPage() {
         <p className="text-xs text-muted-foreground leading-relaxed">
           Are you sure you want to permanently remove the lead for <strong>{selectedLead?.name}</strong>? This action cannot be undone.
         </p>
+      </Dialog>
+
+      {/* Add Lead Modal */}
+      <Dialog
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title="Add New Lead"
+        size="lg"
+        footer={
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsAddModalOpen(false)}
+              className="rounded-xl cursor-pointer"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateLead}
+              disabled={saving}
+              className="rounded-xl bg-primary text-white cursor-pointer"
+            >
+              {saving ? "Creating..." : "Create Lead"}
+            </Button>
+          </div>
+        }
+      >
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Name *</label>
+              <Input
+                value={addName}
+                onChange={(e) => setAddName(e.target.value)}
+                placeholder="Full name"
+                className="h-10 rounded-xl text-xs"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Email *</label>
+              <Input
+                type="email"
+                value={addEmail}
+                onChange={(e) => setAddEmail(e.target.value)}
+                placeholder="email@example.com"
+                className="h-10 rounded-xl text-xs"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Phone Number</label>
+              <Input
+                value={addPhone}
+                onChange={(e) => setAddPhone(e.target.value)}
+                placeholder="e.g. +91 9876543210"
+                className="h-10 rounded-xl text-xs"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Company</label>
+              <Input
+                value={addCompany}
+                onChange={(e) => setAddCompany(e.target.value)}
+                placeholder="Company name"
+                className="h-10 rounded-xl text-xs"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Service / Feature</label>
+              <Input
+                value={addService}
+                onChange={(e) => setAddService(e.target.value)}
+                placeholder="e.g. SEO, Web Design"
+                className="h-10 rounded-xl text-xs"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">Budget</label>
+              <Input
+                value={addBudget}
+                onChange={(e) => setAddBudget(e.target.value)}
+                placeholder="e.g. ₹50,000"
+                className="h-10 rounded-xl text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-foreground">Message / Notes *</label>
+            <textarea
+              value={addMessage}
+              onChange={(e) => setAddMessage(e.target.value)}
+              placeholder="Initial inquiry or notes about the lead..."
+              className="w-full min-h-[100px] rounded-xl bg-background border border-border px-3 py-2 text-xs focus:ring-primary focus:border-primary resize-y"
+            />
+          </div>
+        </div>
       </Dialog>
     </div>
   );

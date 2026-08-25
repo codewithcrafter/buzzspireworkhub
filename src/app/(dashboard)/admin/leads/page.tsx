@@ -834,7 +834,20 @@ function LeadsDashboard() {
                               </button>
                             </div>
 
-                            <Avatar fallback={lead.assignedTo.avatar} size="xs" title={`Assigned to ${lead.assignedTo.name}`} />
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <select
+                                value={lead.assignedEmployeeId || ""}
+                                onChange={(e) => handleAssignLead(lead.id, e.target.value || null)}
+                                className="h-7 rounded-md bg-background border border-border/80 text-[10px] px-1.5 font-semibold w-[90px] truncate focus:ring-1 focus:ring-primary cursor-pointer"
+                              >
+                                <option value="">Unassigned</option>
+                                {employees.map((emp) => (
+                                  <option key={emp.id} value={emp.id}>
+                                    {emp.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>

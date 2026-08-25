@@ -47,7 +47,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const auth = await authenticateRequest(req, {
-      requiredPermission: PERMISSIONS.LEADS_EDIT,
+      requiredAnyPermission: [PERMISSIONS.LEADS_EDIT, PERMISSIONS.LEADS_VIEW],
     });
 
     if (!auth.authenticated) {
@@ -61,6 +61,8 @@ export async function POST(req: Request) {
       return ApiResponse.badRequest("Name, email, and message are required");
     }
 
+    const finalAssignedEmployeeId = auth.user.role === "ADMIN" ? assignedEmployeeId : auth.user.id;
+
     const newLead = await createLead({
       name,
       email,
@@ -72,7 +74,7 @@ export async function POST(req: Request) {
       pageUrl,
       portfolio,
       phone,
-      assignedEmployeeId,
+      assignedEmployeeId: finalAssignedEmployeeId,
     });
 
     return NextResponse.json(

@@ -63,6 +63,10 @@ export async function PATCH(req: Request, { params }: RouteParams) {
       return ApiResponse.notFound("Lead not found");
     }
 
+    if (isAssigning && auth.user.role !== "ADMIN") {
+      return ApiResponse.forbidden("Access denied: Only admins can assign leads");
+    }
+
     // IDOR protection: Non-admin employees cannot edit leads assigned to others
     if (auth.user.role !== "ADMIN" && lead.assignedEmployeeId !== auth.user.id) {
       return ApiResponse.forbidden("Access denied: You can only modify leads assigned to you");
