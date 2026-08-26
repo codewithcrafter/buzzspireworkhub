@@ -6,6 +6,6 @@ export async function POST() {
     { status: 200 }
   );
 
-  response.cookies.delete("token");
+  response.cookies.delete("employee_token");
   return response;
 }

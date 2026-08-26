@@ -3,16 +3,80 @@ import type { NextRequest } from "next/server";
 import { verifyJwt } from "./lib/auth";
 
 // Define protected routes that require authentication
-const protectedRoutes = ["/dashboard/client", "/admin", "/employee", "/dashboard/employee"];
 const adminRoutes = ["/admin"];
 const clientRoutes = ["/dashboard/client"];
 const employeeRoutes = ["/employee", "/dashboard/employee"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get("token")?.value;
 
-  // Add security headers
+  // 1. Unprotected routes
+  // Do NOT protect login routes
+  if (pathname === "/login" || pathname === "/employee/login") {
+    const response = NextResponse.next();
+    response.headers.set("X-Frame-Options", "DENY");
+    response.headers.set("X-Content-Type-Options", "nosniff");
+    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    return response;
+  }
+
+  // 2. Check if route is protected
+  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
+  const isClientRoute = clientRoutes.some((route) => pathname.startsWith(route));
+  const isEmployeeRoute = employeeRoutes.some((route) => pathname.startsWith(route));
+  
+  const isProtected = isAdminRoute || isClientRoute || isEmployeeRoute;
+
+  if (isProtected) {
+    const adminToken = request.cookies.get("token")?.value;
+    const employeeToken = request.cookies.get("employee_token")?.value;
+
+    let activeToken: string | undefined;
+
+    // Determine which token to use
+    if (isEmployeeRoute) {
+      activeToken = employeeToken || adminToken; // Admin can also access employee routes
+    } else {
+      activeToken = adminToken;
+    }
+
+    if (!activeToken) {
+      const loginUrl = isEmployeeRoute ? "/employee/login" : "/login";
+      return NextResponse.redirect(new URL(loginUrl, request.url));
+    }
+
+    const payload = await verifyJwt(activeToken);
+
+    if (!payload) {
+      // Invalid or expired token
+      const loginUrl = isEmployeeRoute ? "/employee/login" : "/login";
+      const redirectResponse = NextResponse.redirect(new URL(loginUrl, request.url));
+      
+      // Delete the invalid token
+      if (isEmployeeRoute && employeeToken) {
+        redirectResponse.cookies.delete("employee_token");
+      } else {
+        redirectResponse.cookies.delete("token");
+      }
+      return redirectResponse;
+    }
+
+    // Role-based access control for admin routes
+    if (isAdminRoute && payload.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+
+    // Role-based access control for client routes
+    if (isClientRoute && payload.role !== "CLIENT") {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+
+    // Role-based access control for employee routes
+    if (isEmployeeRoute && !["EMPLOYEE", "ADMIN"].includes(payload.role as string)) {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
+  }
+
   const response = NextResponse.next();
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
@@ -22,54 +86,11 @@ export async function proxy(request: NextRequest) {
     "camera=(), microphone=(self), geolocation=()"
   );
 
-  // Check if route is protected
-  const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
-
-  if (isProtected) {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-    const payload = await verifyJwt(token);
-
-    if (!payload) {
-      // Invalid or expired token
-      const redirectResponse = NextResponse.redirect(new URL("/login", request.url));
-      redirectResponse.cookies.delete("token");
-      return redirectResponse;
-    }
-
-    // Role-based access control for admin routes
-    const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
-    if (isAdminRoute && payload.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
-
-    // Role-based access control for client routes
-    const isClientRoute = clientRoutes.some((route) => pathname.startsWith(route));
-    if (isClientRoute && payload.role !== "CLIENT") {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
-
-    // Role-based access control for employee routes
-    const isEmployeeRoute = employeeRoutes.some((route) => pathname.startsWith(route));
-    if (isEmployeeRoute && !["EMPLOYEE", "ADMIN"].includes(payload.role as string)) {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
-  }
-
   return response;
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };
