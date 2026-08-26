@@ -179,6 +179,108 @@ This link expires in 24 hours.`,
   }
 }
 
+export async function sendClientWelcomeEmail(email: string, name: string, passwordText: string, service: string) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const loginUrl = `${appUrl}/login`; // Using the standard login route
+
+  const transporter = getTransporter();
+
+  let serviceSpecificText = "";
+  if (service.toLowerCase().includes("ppc") || service.toLowerCase().includes("ads") || service.toLowerCase().includes("paid")) {
+    serviceSpecificText = "Your account has been set up for PPC / Paid Ads (Google Ads). Our team will work with you on campaign strategy, optimization, performance tracking, and reporting.";
+  } else if (service.toLowerCase().includes("seo")) {
+    serviceSpecificText = "Your account has been set up for SEO services. Our team will work with you on search visibility, keyword strategy, technical optimization, and organic growth.";
+  } else if (service.toLowerCase().includes("social")) {
+    serviceSpecificText = "Your account has been set up for Social Media Marketing. Our team will work with you on content strategy, social media management, engagement, and growth.";
+  } else {
+    serviceSpecificText = `Your account has been set up for ${service || "Digital Marketing"} services. Our team is excited to help you achieve your goals and drive meaningful results.`;
+  }
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Welcome to BuzzSpire Media</title>
+        <style>
+          body { font-family: 'Outfit', 'Inter', -apple-system, sans-serif; background-color: #030712; color: #f3f4f6; margin: 0; padding: 0; }
+          .wrapper { width: 100%; padding: 40px 0; }
+          .container { max-width: 600px; margin: 0 auto; background-color: #0b0f19; border: 1px solid #1f2937; border-radius: 24px; padding: 40px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+          h1 { color: #ffffff; margin-top: 0; font-size: 24px; font-weight: 700; }
+          p { color: #9ca3af; line-height: 1.6; margin-bottom: 20px; }
+          .details { background-color: #111827; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #1f2937; }
+          .details p { margin: 5px 0; color: #e5e7eb; }
+          .btn { display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%); color: #ffffff !important; text-decoration: none; padding: 14px 28px; font-weight: 700; border-radius: 12px; margin-top: 10px; }
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="container">
+            <h1>Welcome to BuzzSpire Media</h1>
+            <p>Hello ${name},</p>
+            <p>Welcome to BuzzSpire Media. We are excited to work with you.</p>
+            <p>Your account has been created successfully.</p>
+            
+            <div style="margin-bottom: 25px;">
+              <h3 style="color: #ffffff; margin-bottom: 10px; font-size: 16px;">Service:</h3>
+              <p>${serviceSpecificText}</p>
+            </div>
+            
+            <div class="details">
+              <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 15px; font-size: 16px;">Your Client Portal Login Details:</h3>
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>Password:</strong> ${passwordText}</p>
+              <p><strong>Client Portal:</strong> <a href="${loginUrl}" style="color: #a78bfa;">${loginUrl}</a></p>
+            </div>
+            
+            <p>Please use these credentials to log in to your Client Portal. We strongly recommend keeping this email secure.</p>
+            <a href="${loginUrl}" class="btn">Log in to Portal</a>
+            
+            <p style="margin-top: 40px; font-size: 14px;">Regards,<br><strong>BuzzSpire Media Team</strong></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const textContent = `Welcome to BuzzSpire Media
+
+Hello ${name},
+
+Welcome to BuzzSpire Media. We are excited to work with you.
+Your account has been created successfully.
+
+Service:
+${serviceSpecificText}
+
+Your Client Portal Login Details:
+
+Email: ${email}
+Password: ${passwordText}
+Client Portal: ${loginUrl}
+
+Please use these credentials to log in to your Client Portal.
+
+Regards,
+BuzzSpire Media Team`;
+
+  const { data, error } = await resend.emails.send({
+    from: "BuzzSpire Media <onboarding@resend.dev>",
+    to: email,
+    subject: "Welcome to BuzzSpire Media",
+    html: htmlContent,
+    text: textContent,
+  });
+
+  console.log("Resend Data:", data);
+
+  if (error) {
+    console.error("Resend Error:", error);
+    throw new Error(error.message);
+  }
+}
+
+
 export async function sendLeadConfirmationEmail(lead: any) {
   const { name, company, service, email } = lead;
   

@@ -48,7 +48,7 @@ export default function AdminChatIdPage() {
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!message.trim()) return;
-        
+
         // Optimistic update
         setSession((prev: any) => ({
             ...prev,
@@ -70,7 +70,7 @@ export default function AdminChatIdPage() {
     return (
         <div className="h-[calc(100vh-140px)] flex flex-col md:flex-row gap-6">
 
-            
+
             <div className="w-full md:w-1/3 flex flex-col gap-6 h-fit shrink-0">
                 <div className="bg-card border border-border shadow-sm rounded-2xl p-6">
                     <Link href="/admin/chats" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
@@ -104,7 +104,7 @@ export default function AdminChatIdPage() {
                             </p>
                         </div>
                     </div>
-                    
+
                     <div className="mt-8 space-y-3">
                         {session.status === "WAITING" && (
                             <button onClick={handleAcceptChat} className="w-full py-2.5 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 shadow-sm transition-opacity">
@@ -126,19 +126,18 @@ export default function AdminChatIdPage() {
                         Live Chat: {session.visitorName}
                     </h3>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-muted/10">
                     {session.messages.map((msg: any) => (
                         <div key={msg.id} className={`flex ${msg.senderType === 'AGENT' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm ${
-                                msg.senderType === 'AGENT' ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-sm' :
-                                msg.senderType === 'SYSTEM' ? 'bg-muted text-muted-foreground text-xs italic mx-auto text-center border border-border/50' :
-                                'bg-background border border-border shadow-sm rounded-tl-sm text-foreground'
-                            }`}>
+                            <div className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm ${msg.senderType === 'AGENT' ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-sm' :
+                                    msg.senderType === 'SYSTEM' ? 'bg-muted text-muted-foreground text-xs italic mx-auto text-center border border-border/50' :
+                                        'bg-background border border-border shadow-sm rounded-tl-sm text-foreground'
+                                }`}>
                                 {msg.message}
                                 {msg.senderType !== 'SYSTEM' && (
                                     <div className={`text-[10px] mt-1 opacity-70 ${msg.senderType === 'AGENT' ? 'text-right' : 'text-left'}`}>
-                                        {new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>
                                 )}
                             </div>
@@ -157,8 +156,8 @@ export default function AdminChatIdPage() {
                                 placeholder="Type your message..."
                                 className="w-full bg-muted/50 border border-border rounded-xl pl-4 pr-12 py-3.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
                             />
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 disabled={!message.trim()}
                                 className="absolute right-2 p-2.5 bg-primary text-primary-foreground rounded-lg disabled:opacity-50 transition-opacity hover:opacity-90"
                             >

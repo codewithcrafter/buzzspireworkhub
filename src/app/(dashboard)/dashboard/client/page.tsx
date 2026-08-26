@@ -18,6 +18,11 @@ import {
   Calendar,
   ShieldAlert,
   Loader2,
+  TrendingUp,
+  DollarSign,
+  CheckCircle,
+  FileText as FileTextIcon,
+  CreditCard
 } from "lucide-react"
 
 // Import custom design system components
@@ -99,6 +104,9 @@ function ClientDashboardContent() {
   const [projectDetails, setProjectDetails] = React.useState<ProjectDetails | null>(null)
   const [loadingProject, setLoadingProject] = React.useState(false)
 
+  // New Dashboard States
+  const [dashboardData, setDashboardData] = React.useState<any>(null);
+
   // Direct chat input
   const [chatText, setChatText] = React.useState("")
   const [sendingMessage, setSendingMessage] = React.useState(false)
@@ -142,6 +150,13 @@ function ClientDashboardContent() {
         const ticketRes = await fetch("/api/client/tickets");
         const ticketData = await ticketRes.json();
         setTickets(ticketData.tickets || []);
+
+        // 4. Fetch unified dashboard data
+        const dashRes = await fetch("/api/client/dashboard");
+        if (dashRes.ok) {
+          const dashData = await dashRes.json();
+          setDashboardData(dashData);
+        }
       } catch (err) {
         console.error("Dashboard initialization failed:", err);
         toast({
@@ -422,104 +437,264 @@ function ClientDashboardContent() {
         {/* PANEL: OVERVIEW */}
         {activeTab === "overview" && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            {/* Summary cards row */}
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <Card>
-                <CardContent className="pt-6 flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground font-bold uppercase">Active Projects</p>
-                    <p className="text-3xl font-extrabold text-foreground">{projects.length}</p>
-                  </div>
-                  <div className="size-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-                    <Briefcase className="size-6" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="pt-6 flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground font-bold uppercase">Open Tickets</p>
-                    <p className="text-3xl font-extrabold text-foreground">
-                      {tickets.filter(t => t.status === "OPEN").length}
-                    </p>
-                  </div>
-                  <div className="size-12 bg-destructive/10 rounded-2xl flex items-center justify-center text-destructive">
-                    <HelpCircle className="size-6" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="pt-6 flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground font-bold uppercase">System Alerts</p>
-                    <p className="text-3xl font-extrabold text-foreground">0</p>
-                  </div>
-                  <div className="size-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500">
-                    <ShieldAlert className="size-6 text-emerald-500" />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Split timeline and updates section */}
-            <div className="grid gap-8 md:grid-cols-3">
-              <div className="md:col-span-2 space-y-4">
-                <SectionHeader title="Latest Activity Updates" description="Milestones and operational events logged by project managers." />
-                
-                {!showTimeline ? (
-                  <Card className="border-dashed">
-                    <CardContent className="py-12 text-center text-muted-foreground text-xs font-semibold">
-                      Timeline updates are currently disabled for this project.
-                    </CardContent>
-                  </Card>
-                ) : loadingProject ? (
-                  <div className="flex justify-center p-8">
-                    <Loader2 className="h-6 w-6 text-primary animate-spin" />
-                  </div>
-                ) : !projectDetails || projectDetails.updates.length === 0 ? (
+            {/* FINANCIAL OVERVIEW */}
+            {dashboardData && dashboardData.financials && (
+              <>
+                <SectionHeader title="Financial Overview" description="Your contract and billing status." />
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   <Card>
-                    <CardContent className="py-10 text-center text-muted-foreground text-xs font-semibold">
-                      No activity updates posted yet.
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card>
-                    <CardContent className="pt-6 space-y-4">
-                      {projectDetails.updates.map((update) => (
-                        <div key={update.id} className="flex gap-3 text-xs pb-3 border-b border-border/20 last:border-0 last:pb-0">
-                          <div className="size-6 bg-muted border border-border/40 rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                            <Clock className="size-3 text-muted-foreground" />
-                          </div>
-                          <div>
-                            <p className="font-bold text-foreground">{update.title}</p>
-                            <p className="font-medium text-muted-foreground leading-relaxed mt-0.5">{update.description}</p>
-                            <p className="text-[10px] text-muted-foreground/60 mt-1">
-                              {new Date(update.createdAt).toLocaleDateString()}
-                            </p>
-                          </div>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Total Budget</p>
+                          <p className="text-2xl font-extrabold text-foreground">₹{(dashboardData.financials.totalBudget || 0).toLocaleString()}</p>
                         </div>
-                      ))}
+                        <div className="size-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+                          <Briefcase className="size-4" />
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
-                )}
-              </div>
 
-              <div className="space-y-4">
-                <SectionHeader title="Portal Status" />
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Total Paid</p>
+                          <p className="text-2xl font-extrabold text-emerald-500">₹{(dashboardData.financials.totalPaid || 0).toLocaleString()}</p>
+                        </div>
+                        <div className="size-8 bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-500">
+                          <TrendingUp className="size-4" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Total Used</p>
+                          <p className="text-2xl font-extrabold text-destructive">₹{(dashboardData.financials.totalUsed || 0).toLocaleString()}</p>
+                        </div>
+                        <div className="size-8 bg-destructive/10 rounded-lg flex items-center justify-center text-destructive">
+                          <DollarSign className="size-4" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1">
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Remaining Balance</p>
+                          <p className="text-2xl font-extrabold text-foreground">₹{(dashboardData.financials.remainingBalance || 0).toLocaleString()}</p>
+                        </div>
+                        <div className="size-8 bg-muted rounded-lg flex items-center justify-center text-foreground">
+                          <CreditCard className="size-4" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Progress Bar for Paid vs Used */}
                 <Card>
-                  <CardContent className="pt-6 space-y-4 text-xs font-semibold">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Account Role</span>
-                      <Badge variant="secondary">CLIENT</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Verification status</span>
-                      <Badge variant="glow">VERIFIED</Badge>
+                  <CardContent className="py-6">
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs font-bold uppercase text-muted-foreground tracking-wider">
+                        <span>Utilization Progress</span>
+                        <span>
+                          {dashboardData.financials.totalPaid > 0
+                            ? Math.round((dashboardData.financials.totalUsed / dashboardData.financials.totalPaid) * 100)
+                            : 0}%
+                        </span>
+                      </div>
+                      <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-primary"
+                          style={{
+                            width: `${dashboardData.financials.totalPaid > 0
+                              ? Math.min(100, (dashboardData.financials.totalUsed / dashboardData.financials.totalPaid) * 100)
+                              : 0}%`,
+                          }}
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
+              </>
+            )}
+
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* WHERE YOUR MONEY IS BEING USED */}
+              <div className="space-y-4">
+                <SectionHeader title="Usage Breakdown" description="Where your money is being used." />
+                <Card className="max-h-80 overflow-y-auto">
+                  <CardContent className="p-0">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted/30">
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Description</TableHead>
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Category</TableHead>
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Date</TableHead>
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2 text-right">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {!(dashboardData?.usages?.length > 0) ? (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-8 text-xs text-muted-foreground">
+                              No usage records available.
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          dashboardData.usages.map((u: any) => (
+                            <TableRow key={u.id}>
+                              <TableCell className="text-xs font-medium">{u.description}</TableCell>
+                              <TableCell className="text-[10px] text-muted-foreground">{u.category}</TableCell>
+                              <TableCell className="text-[10px] text-muted-foreground">{new Date(u.date).toLocaleDateString()}</TableCell>
+                              <TableCell className="text-xs font-bold text-destructive text-right">₹{u.amount.toLocaleString()}</TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* PAYMENT HISTORY */}
+              <div className="space-y-4">
+                <SectionHeader title="Payment History" description="Your deposits and payments." />
+                <Card className="max-h-80 overflow-y-auto">
+                  <CardContent className="p-0">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted/30">
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Description</TableHead>
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Method</TableHead>
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Date</TableHead>
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2 text-right">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {!(dashboardData?.payments?.length > 0) ? (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-8 text-xs text-muted-foreground">
+                              No payment records available.
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          dashboardData.payments.map((p: any) => (
+                            <TableRow key={p.id}>
+                              <TableCell className="text-xs font-medium">{p.description}</TableCell>
+                              <TableCell className="text-[10px] text-muted-foreground">{p.method || "-"}</TableCell>
+                              <TableCell className="text-[10px] text-muted-foreground">{new Date(p.date).toLocaleDateString()}</TableCell>
+                              <TableCell className="text-xs font-bold text-emerald-500 text-right">₹{p.amount.toLocaleString()}</TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* LATEST UPDATES */}
+              <div className="space-y-4">
+                <SectionHeader title="Admin Updates" description="Latest updates and news for you." />
+                <div className="space-y-3">
+                  {!(dashboardData?.updates?.length > 0) ? (
+                    <Card>
+                      <CardContent className="py-10 text-center text-muted-foreground text-xs font-semibold">
+                        No recent updates available.
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    dashboardData.updates.map((update: any) => (
+                      <Card key={update.id}>
+                        <CardContent className="p-4 flex gap-3">
+                          <div className="size-8 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+                            <Clock className="size-4 text-primary" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-foreground">{update.title}</p>
+                            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{update.message}</p>
+                            <div className="flex gap-2 mt-2 items-center">
+                              <span className="text-[10px] text-muted-foreground/60">{new Date(update.createdAt).toLocaleDateString()}</span>
+                              <span className="text-[10px] text-primary/80 font-semibold">• Posted by {update.author}</span>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* PROJECT PROGRESS & MILESTONES */}
+              <div className="space-y-4">
+                <SectionHeader title="Project Milestones" description="Current progress on your active projects." />
+                <div className="space-y-4">
+                  {!(dashboardData?.projects?.length > 0) ? (
+                    <Card>
+                      <CardContent className="py-10 text-center text-muted-foreground text-xs font-semibold">
+                        No active projects to track.
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    dashboardData.projects.map((proj: any) => (
+                      <Card key={proj.id} className="overflow-hidden border border-primary/20">
+                        <div className="p-4 bg-muted/20 border-b border-border/50 flex justify-between items-center">
+                          <p className="text-xs font-bold text-foreground">{proj.title}</p>
+                          <StatusChip status="active">{proj.status}</StatusChip>
+                        </div>
+                        <CardContent className="p-4 space-y-4">
+                          <div className="space-y-1.5 font-semibold">
+                            <div className="flex justify-between items-center text-[10px] text-muted-foreground font-bold">
+                              <span>Overall Completion</span>
+                              <span>{proj.progress}%</span>
+                            </div>
+                            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                              <div className="h-full bg-primary rounded-full" style={{ width: `${proj.progress}%` }} />
+                            </div>
+                          </div>
+                          
+                          {proj.milestones && proj.milestones.length > 0 && (
+                            <div className="space-y-2 mt-4 pt-4 border-t border-border/30">
+                              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2">Milestones</p>
+                              {proj.milestones.map((m: any) => (
+                                <div key={m.id} className="flex justify-between items-center p-2 rounded-lg border bg-card">
+                                  <div className="flex items-center gap-2">
+                                    {m.status === "COMPLETED" ? (
+                                      <CheckCircle className="size-3.5 text-emerald-500" />
+                                    ) : m.status === "IN_PROGRESS" ? (
+                                      <Loader2 className="size-3.5 text-primary animate-spin" />
+                                    ) : (
+                                      <Clock className="size-3.5 text-muted-foreground" />
+                                    )}
+                                    <div>
+                                      <p className="text-xs font-bold">{m.title}</p>
+                                      {m.description && <p className="text-[9px] text-muted-foreground">{m.description}</p>}
+                                    </div>
+                                  </div>
+                                  <Badge variant={m.status === "COMPLETED" ? "default" : "secondary"} className="text-[9px]">
+                                    {m.status.replace("_", " ")}
+                                    {m.status === "IN_PROGRESS" && ` ${m.progress}%`}
+                                  </Badge>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </div>

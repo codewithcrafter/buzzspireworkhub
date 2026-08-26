@@ -39,6 +39,7 @@ import {
   TableCell,
 } from "@/components/ui/table"
 import { Tabs } from "@/components/ui/tabs"
+import { ClientManagementPanel } from "./ClientManagementPanel"
 import { Pagination } from "@/components/ui/pagination"
 import { Dialog } from "@/components/ui/dialog"
 import { Drawer } from "@/components/ui/drawer"
@@ -62,64 +63,26 @@ interface Client {
 function ClientsDashboard() {
   const { toast } = useToast()
 
-  // Initial mockup database
-  const [clients, setClients] = React.useState<Client[]>([
-    {
-      id: "cl-1",
-      name: "Aria Mercer",
-      company: "Vercel Labs",
-      email: "aria@vercel.com",
-      phone: "+91 98765 43210",
-      status: "active",
-      revenue: 120000,
-      joined: "2026-01-15",
-      projectsCount: 2,
-    },
-    {
-      id: "cl-2",
-      name: "John Doe",
-      company: "Acme Corporation",
-      email: "john@acme.com",
-      phone: "+91 87654 32109",
-      status: "active",
-      revenue: 480000,
-      joined: "2026-02-10",
-      projectsCount: 4,
-    },
-    {
-      id: "cl-3",
-      name: "David Miller",
-      company: "Nexus Labs",
-      email: "david@nexus.co",
-      phone: "+91 76543 21098",
-      status: "inactive",
-      revenue: 85000,
-      joined: "2026-03-22",
-      projectsCount: 1,
-    },
-    {
-      id: "cl-4",
-      name: "Sarah Jenkins",
-      company: "Linear Inc",
-      email: "sarah@linear.app",
-      phone: "+91 65432 10987",
-      status: "pending",
-      revenue: 295000,
-      joined: "2026-04-05",
-      projectsCount: 3,
-    },
-    {
-      id: "cl-5",
-      name: "Tony Stark",
-      company: "Stark Enterprises",
-      email: "tony@stark.com",
-      phone: "+91 54321 09876",
-      status: "active",
-      revenue: 1550000,
-      joined: "2026-04-18",
-      projectsCount: 5,
-    },
-  ])
+  // Initial empty state, fetched via useEffect
+  const [clients, setClients] = React.useState<Client[]>([])
+  const [isLoading, setIsLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const res = await fetch("/api/admin/clients")
+        const data = await res.json()
+        if (data.clients) {
+          setClients(data.clients)
+        }
+      } catch (err) {
+        console.error("Failed to fetch clients", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchClients()
+  }, [])
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = React.useState("")
@@ -149,6 +112,15 @@ function ClientsDashboard() {
   const [formPhone, setFormPhone] = React.useState("")
   const [formStatus, setFormStatus] = React.useState<"active" | "inactive" | "pending">("active")
   const [formRevenue, setFormRevenue] = React.useState("")
+  const [formPassword, setFormPassword] = React.useState("")
+  const [formService, setFormService] = React.useState("")
+  const [formTotalBudget, setFormTotalBudget] = React.useState("")
+  const [formInitialPaid, setFormInitialPaid] = React.useState("")
+  const [formProjectName, setFormProjectName] = React.useState("")
+  const [formProjectStart, setFormProjectStart] = React.useState("")
+  const [formExpectedCompletion, setFormExpectedCompletion] = React.useState("")
+  const [formProjectStatus, setFormProjectStatus] = React.useState("PLANNING")
+  const [formCompletionPercentage, setFormCompletionPercentage] = React.useState("0")
 
   // Search & Filters filtering logic
   const filteredClients = React.useMemo(() => {
@@ -230,6 +202,15 @@ function ClientsDashboard() {
           email: formEmail,
           company: formCompany,
           phone: formPhone || "+91 99999 99999",
+          password: formPassword,
+          service: formService,
+          totalBudget: formTotalBudget || formRevenue,
+          initialPaidAmount: formInitialPaid,
+          projectName: formProjectName,
+          projectStartDate: formProjectStart,
+          expectedCompletionDate: formExpectedCompletion,
+          projectStatus: formProjectStatus,
+          completionPercentage: formCompletionPercentage,
         }),
       });
 
@@ -260,11 +241,19 @@ function ClientsDashboard() {
       setIsAddOpen(false)
       resetForm()
 
-      toast({
-        title: "Client Invited",
-        description: `Invitation email sent to ${newClient.name} (${newClient.email}).`,
-        type: "success",
-      })
+      if (data.emailSent) {
+        toast({
+          title: "Client Invited",
+          description: `Invitation email sent to ${newClient.name} (${newClient.email}).`,
+          type: "success",
+        })
+      } else {
+        toast({
+          title: "Client created",
+          description: data.message || `Invitation mail not sent. ${newClient.name} (${newClient.email}).`,
+          type: "warning",
+        })
+      }
     } catch (err) {
       toast({
         title: "Connection Error",
@@ -323,19 +312,42 @@ function ClientsDashboard() {
   }
 
   // Delete Action submit handler
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!activeClient) return
 
-    setClients(clients.filter((c) => c.id !== activeClient.id))
-    setSelectedIds(selectedIds.filter((id) => id !== activeClient.id))
-    setIsDeleteOpen(false)
-    setActiveClient(null)
+    try {
+      const response = await fetch(`/api/admin/clients/${activeClient.id}`, {
+        method: "DELETE",
+      });
 
-    toast({
-      title: "Client Deleted",
-      description: "Account file has been removed from database registries.",
-      type: "success",
-    })
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast({
+          title: "Delete Failed",
+          description: data.error || "Failed to delete client account.",
+          type: "error",
+        });
+        return;
+      }
+
+      setClients(clients.filter((c) => c.id !== activeClient.id))
+      setSelectedIds(selectedIds.filter((id) => id !== activeClient.id))
+      setIsDeleteOpen(false)
+      setActiveClient(null)
+
+      toast({
+        title: "Client Deleted",
+        description: "Account file has been removed from database registries.",
+        type: "success",
+      })
+    } catch (err) {
+      toast({
+        title: "Connection Error",
+        description: "Unable to connect to server to delete client.",
+        type: "error",
+      })
+    }
   }
 
   // Bulk status updates
@@ -353,14 +365,43 @@ function ClientsDashboard() {
   }
 
   // Bulk Delete
-  const handleBulkDelete = () => {
-    setClients(clients.filter((c) => !selectedIds.includes(c.id)))
-    setSelectedIds([])
-    toast({
-      title: "Bulk records deleted",
-      description: "Successfully deleted selected client accounts.",
-      type: "success",
-    })
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+
+    try {
+      const response = await fetch("/api/admin/clients", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedIds }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast({
+          title: "Bulk Delete Failed",
+          description: data.error || "Failed to delete selected clients.",
+          type: "error",
+        });
+        return;
+      }
+
+      setClients(clients.filter((c) => !selectedIds.includes(c.id)))
+      setSelectedIds([])
+      toast({
+        title: "Bulk records deleted",
+        description: "Successfully deleted selected client accounts.",
+        type: "success",
+      })
+    } catch (err) {
+      toast({
+        title: "Connection Error",
+        description: "Unable to connect to server for bulk deletion.",
+        type: "error",
+      })
+    }
   }
 
   // Drawer Details view trigger
@@ -376,6 +417,15 @@ function ClientsDashboard() {
     setFormPhone("")
     setFormStatus("active")
     setFormRevenue("")
+    setFormPassword("")
+    setFormService("")
+    setFormTotalBudget("")
+    setFormInitialPaid("")
+    setFormProjectName("")
+    setFormProjectStart("")
+    setFormExpectedCompletion("")
+    setFormProjectStatus("PLANNING")
+    setFormCompletionPercentage("0")
     setActiveClient(null)
   }
 
@@ -715,25 +765,47 @@ function ClientsDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">            
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-muted-foreground">Email *</label>
+              <label className="text-xs font-semibold text-muted-foreground">Email Address *</label>
               <input
                 type="email"
                 required
                 value={formEmail}
                 onChange={(e) => setFormEmail(e.target.value)}
-                placeholder="aria@vercel.com"
+                placeholder="client@domain.com"
                 className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-muted-foreground">Contact Phone</label>
+              <label className="text-xs font-semibold text-muted-foreground">Initial Password *</label>
+              <input
+                type="password"
+                required
+                value={formPassword}
+                onChange={(e) => setFormPassword(e.target.value)}
+                placeholder="Minimum 6 characters"
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Service / Project Type *</label>
+              <input
+                type="text"
+                required
+                value={formService}
+                onChange={(e) => setFormService(e.target.value)}
+                placeholder="e.g. SEO, Social Media, Google Ads"
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Phone Number</label>
               <input
                 type="text"
                 value={formPhone}
                 onChange={(e) => setFormPhone(e.target.value)}
-                placeholder="+91 99999 99999"
+                placeholder="+1 555-0123"
                 className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
               />
             </div>
@@ -753,12 +825,83 @@ function ClientsDashboard() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-muted-foreground">Initial Revenue Retainer (INR)</label>
+              <label className="text-xs font-semibold text-muted-foreground">Total Budget (INR)</label>
               <input
                 type="number"
-                value={formRevenue}
-                onChange={(e) => setFormRevenue(e.target.value)}
+                value={formTotalBudget}
+                onChange={(e) => setFormTotalBudget(e.target.value)}
                 placeholder="e.g. 150000"
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Initial Paid Amount (INR)</label>
+              <input
+                type="number"
+                value={formInitialPaid}
+                onChange={(e) => setFormInitialPaid(e.target.value)}
+                placeholder="e.g. 50000"
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Project Name</label>
+              <input
+                type="text"
+                value={formProjectName}
+                onChange={(e) => setFormProjectName(e.target.value)}
+                placeholder="e.g. Website Redesign"
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Project Start Date</label>
+              <input
+                type="date"
+                value={formProjectStart}
+                onChange={(e) => setFormProjectStart(e.target.value)}
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Expected Completion Date</label>
+              <input
+                type="date"
+                value={formExpectedCompletion}
+                onChange={(e) => setFormExpectedCompletion(e.target.value)}
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Initial Project Status</label>
+              <select
+                value={formProjectStatus}
+                onChange={(e) => setFormProjectStatus(e.target.value)}
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+              >
+                <option value="PLANNING">Planning</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="ON_HOLD">On Hold</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-muted-foreground">Completion Percentage (%)</label>
+              <input
+                type="number"
+                min="0"
+                max="100"
+                value={formCompletionPercentage}
+                onChange={(e) => setFormCompletionPercentage(e.target.value)}
                 className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
               />
             </div>
@@ -906,85 +1049,11 @@ function ClientsDashboard() {
       <Drawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        title="Client Overview Profile"
-        description="Detailed review records and operational stats."
+        title="Client Management Portal"
+        description="Detailed financials, milestones, and operational updates."
       >
         {activeClient && (
-          <div className="space-y-6">
-            {/* Header info card */}
-            <div className="flex items-center gap-4 p-4 bg-muted/40 border border-border/40 rounded-xl select-none">
-              <Avatar fallback={activeClient.name.split(" ").map(w => w[0]).join("")} size="lg" />
-              <div>
-                <h4 className="text-base font-bold text-foreground font-heading">{activeClient.name}</h4>
-                <p className="text-xs text-muted-foreground">{activeClient.company}</p>
-                <div className="flex items-center gap-1.5 mt-2">
-                  <StatusChip status={activeClient.status}>
-                    {activeClient.status.toUpperCase()}
-                  </StatusChip>
-                  <span className="text-[10px] text-muted-foreground/80 font-bold">Client ID: {activeClient.id}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Core details layout list */}
-            <div className="space-y-3.5">
-              <h5 className="text-xs font-bold text-foreground font-heading uppercase tracking-wide">Contact Details</h5>
-              <div className="space-y-2.5">
-                <div className="flex items-center gap-2.5 text-xs text-foreground/85">
-                  <Mail className="size-4 text-muted-foreground" />
-                  <span>{activeClient.email}</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs text-foreground/85">
-                  <Phone className="size-4 text-muted-foreground" />
-                  <span>{activeClient.phone}</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs text-foreground/85">
-                  <Calendar className="size-4 text-muted-foreground" />
-                  <span>Joined Date: {new Date(activeClient.joined).toLocaleDateString()}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="h-px bg-border/40 my-1" />
-
-            {/* Project logs and retainer earnings */}
-            <div className="space-y-3">
-              <h5 className="text-xs font-bold text-foreground font-heading uppercase tracking-wide">Retainer Account</h5>
-              <div className="grid grid-cols-2 gap-3.5">
-                <div className="p-3 bg-muted/30 border border-border/40 rounded-xl space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground">Earnings Contract</span>
-                  <p className="text-sm font-bold text-foreground">₹{activeClient.revenue.toLocaleString("en-IN")}</p>
-                </div>
-                <div className="p-3 bg-muted/30 border border-border/40 rounded-xl space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-muted-foreground">Active Projects</span>
-                  <p className="text-sm font-bold text-foreground">{activeClient.projectsCount} campaigns</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="h-px bg-border/40 my-1" />
-
-            {/* Support ticket notes audit feed */}
-            <div className="space-y-3">
-              <h5 className="text-xs font-bold text-foreground font-heading uppercase tracking-wide">Recent Milestones</h5>
-              <div className="space-y-2.5 text-xs">
-                <div className="flex gap-2 pb-2 border-b border-border/20">
-                  <CheckCircle className="size-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-foreground">Retainer invoiced paid</p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">3 days ago</p>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <FolderOpen className="size-4 text-primary shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-foreground">Launched rebranding assets draft</p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">1 week ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ClientManagementPanel client={activeClient} />
         )}
       </Drawer>
     </div>

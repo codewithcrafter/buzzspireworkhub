@@ -21,12 +21,16 @@ model User {
   employeeId        String?          @unique
   permissions       String[]         @default([])
   status            UserStatus       @default(ACTIVE)
+  contractAmount    Float            @default(0)
   aiUsage           AiUsageHistory[]
   employeeProfile   Employee?
   invoices          Invoice[]
   assignedLeads     Lead[]           @relation("AssignedLeads")
   projects          Project[]
   tickets           Ticket[]
+  clientPayments    ClientPayment[]
+  clientUsages      ClientUsage[]
+  clientUpdates     ClientUpdate[]
 }
 
 model Project {
@@ -53,6 +57,7 @@ model Project {
   files            ProjectFile[]
   messages         ProjectMessage[]
   updates          ProjectUpdate[]
+  milestones       ProjectMilestone[]
 
   @@index([clientId])
   @@index([createdAt])
@@ -550,4 +555,60 @@ model CallSignal {
   call       VoiceCall  @relation(fields: [callId], references: [id], onDelete: Cascade)
 
   @@index([callId])
+}
+
+model ClientPayment {
+  id          String   @id @default(uuid())
+  clientId    String
+  amount      Float
+  date        DateTime @default(now())
+  description String
+  method      String?
+  status      String   @default("PAID")
+  createdAt   DateTime @default(now())
+  client      User     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+}
+
+model ClientUsage {
+  id          String   @id @default(uuid())
+  clientId    String
+  description String
+  category    String
+  amount      Float
+  date        DateTime @default(now())
+  note        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  client      User     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+}
+
+model ProjectMilestone {
+  id          String   @id @default(uuid())
+  projectId   String
+  title       String
+  description String?
+  status      String   @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED
+  progress    Int      @default(0) // Completion percentage
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model ClientUpdate {
+  id          String   @id @default(uuid())
+  clientId    String
+  title       String
+  message     String
+  author      String
+  createdAt   DateTime @default(now())
+  client      User     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
 }
