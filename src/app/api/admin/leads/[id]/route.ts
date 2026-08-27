@@ -80,6 +80,7 @@ export async function PATCH(req: Request, { params }: RouteParams) {
       service: body.service,
       phone: body.phone,
       notes: body.notes,
+      message: body.message,
       followUpAt: body.followUpAt ? new Date(body.followUpAt) : null,
     });
 

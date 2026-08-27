@@ -190,30 +190,38 @@ model BlogFAQ {
 }
 
 model Invoice {
-  id        String        @id @default(uuid())
-  clientId  String
-  projectId String?
-  amount    Float
-  status    InvoiceStatus @default(DRAFT)
-  dueDate   DateTime?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  client    User          @relation(fields: [clientId], references: [id])
-  project   Project?      @relation(fields: [projectId], references: [id])
-  payments  Payment[]
+  id            String        @id @default(uuid())
+  clientId      String
+  projectId     String?
+  invoiceNumber String?
+  service       String?
+  description   String?
+  amount        Float
+  subtotal      Float?
+  tax           Float?
+  discount      Float?
+  notes         String?
+  status        InvoiceStatus @default(DRAFT)
+  dueDate       DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  client        User          @relation(fields: [clientId], references: [id])
+  project       Project?      @relation(fields: [projectId], references: [id])
+  payments      Payment[]
 
   @@index([clientId])
   @@index([projectId])
 }
 
 model Payment {
-  id        String        @id @default(uuid())
-  invoiceId String
-  amount    Float
-  method    String?
-  status    PaymentStatus @default(PENDING)
-  createdAt DateTime      @default(now())
-  invoice   Invoice       @relation(fields: [invoiceId], references: [id])
+  id            String        @id @default(uuid())
+  invoiceId     String
+  amount        Float
+  method        String?
+  transactionId String?
+  status        PaymentStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id])
 
   @@index([invoiceId])
 }

@@ -30,15 +30,49 @@ export async function POST(req: Request) {
         if (!payload || payload.role !== "ADMIN") return NextResponse.json({ message: "Forbidden" }, { status: 403 });
 
         const body = await req.json();
-        const { clientId, amount, projectId, dueDate } = body;
+        const { clientId, amount, projectId, dueDate, invoiceNumber, service, description, subtotal, tax, discount, notes, paymentMethod, transactionId, paymentDate, status } = body;
         
-        if (!clientId || !amount) {
+        if (!clientId || amount === undefined) {
             return NextResponse.json({ message: "Client ID and amount are required" }, { status: 400 });
         }
 
-        const newInvoice = await createInvoice(clientId, amount, projectId, dueDate ? new Date(dueDate) : undefined);
+        const newInvoice = await createInvoice({
+            clientId,
+            amount,
+            projectId,
+            dueDate: dueDate ? new Date(dueDate) : undefined,
+            invoiceNumber,
+            service,
+            description,
+            subtotal,
+            tax,
+            discount,
+            notes,
+            paymentMethod,
+            transactionId,
+            paymentDate: paymentDate ? new Date(paymentDate) : undefined,
+            status,
+        });
+
+        // Ensure old financial dashboard logic works perfectly
+        if (status === "PAID") {
+            const { prisma } = await import("@/lib/prisma");
+            await prisma.clientPayment.create({
+                data: {
+                    clientId,
+                    amount: newInvoice.amount,
+                    description: service || "Invoice Payment",
+                    method: paymentMethod || "Other",
+                    date: paymentDate ? new Date(paymentDate) : new Date(),
+                    status: "PAID"
+                }
+            });
+        }
+
         return NextResponse.json({ success: true, invoice: newInvoice }, { status: 201 });
-    } catch (error) {
-        return ApiResponse.serverError("API Execution Error", error);
+    } catch (error: any) {
+        console.error("ACTUAL PRISMA EXCEPTION:", error);
+        const errorMessage = error?.message || "Unknown error occurred";
+        return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
     }
 }

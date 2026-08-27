@@ -112,6 +112,7 @@ export async function updateLead(
     phone?: string;
     notes?: string | null;
     followUpAt?: Date | null;
+    message?: string;
   }
 ) {
   return prisma.lead.update({

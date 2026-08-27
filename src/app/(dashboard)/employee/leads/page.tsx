@@ -69,6 +69,7 @@ export default function EmployeeLeadsPage() {
   const [editPhone, setEditPhone] = useState("");
   const [editCompany, setEditCompany] = useState("");
   const [editService, setEditService] = useState("");
+  const [editMessage, setEditMessage] = useState("");
 
   // Add form state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -122,6 +123,7 @@ export default function EmployeeLeadsPage() {
     setEditPhone(lead.phone || "");
     setEditCompany(lead.company || "");
     setEditService(lead.service || "");
+    setEditMessage(lead.message || "");
     setIsEditModalOpen(true);
   };
 
@@ -138,6 +140,7 @@ export default function EmployeeLeadsPage() {
           phone: editPhone || null,
           company: editCompany || null,
           service: editService || null,
+          message: editMessage,
         }),
       });
 
@@ -509,9 +512,17 @@ export default function EmployeeLeadsPage() {
               <span className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
                 Customer Message
               </span>
-              <p className="text-xs text-foreground whitespace-pre-wrap leading-relaxed">
-                {selectedLead.message}
-              </p>
+              {hasLeadsEdit ? (
+                <textarea
+                  value={editMessage}
+                  onChange={(e) => setEditMessage(e.target.value)}
+                  className="w-full min-h-[100px] rounded-xl bg-background border border-border px-3 py-2 text-xs focus:ring-primary focus:border-primary resize-y mt-2"
+                />
+              ) : (
+                <p className="text-xs text-foreground whitespace-pre-wrap leading-relaxed mt-2">
+                  {selectedLead.message}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

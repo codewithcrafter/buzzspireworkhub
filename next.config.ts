@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  serverExternalPackages: ['pdfkit', 'pdfkit-table'],
   async headers() {
     return [
       {
