@@ -54,20 +54,6 @@ export async function POST(req: Request) {
             status,
         });
 
-        // Ensure old financial dashboard logic works perfectly
-        if (status === "PAID") {
-            const { prisma } = await import("@/lib/prisma");
-            await prisma.clientPayment.create({
-                data: {
-                    clientId,
-                    amount: newInvoice.amount,
-                    description: service || "Invoice Payment",
-                    method: paymentMethod || "Other",
-                    date: paymentDate ? new Date(paymentDate) : new Date(),
-                    status: "PAID"
-                }
-            });
-        }
 
         return NextResponse.json({ success: true, invoice: newInvoice }, { status: 201 });
     } catch (error: any) {

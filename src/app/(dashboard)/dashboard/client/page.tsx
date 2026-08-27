@@ -535,6 +535,7 @@ function ClientDashboardContent() {
                         <TableRow className="bg-muted/30">
                           <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Description</TableHead>
                           <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Method</TableHead>
+                          <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Trans. ID</TableHead>
                           <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2">Date</TableHead>
                           <TableHead className="text-[10px] font-bold uppercase tracking-wider py-2 text-right">Amount</TableHead>
                         </TableRow>
@@ -542,7 +543,7 @@ function ClientDashboardContent() {
                       <TableBody>
                         {!(dashboardData?.payments?.length > 0) ? (
                           <TableRow>
-                            <TableCell colSpan={4} className="text-center py-8 text-xs text-muted-foreground">
+                            <TableCell colSpan={5} className="text-center py-8 text-xs text-muted-foreground">
                               No payment records available.
                             </TableCell>
                           </TableRow>
@@ -551,6 +552,7 @@ function ClientDashboardContent() {
                             <TableRow key={p.id}>
                               <TableCell className="text-xs font-medium">{p.description}</TableCell>
                               <TableCell className="text-[10px] text-muted-foreground">{p.method || "-"}</TableCell>
+                              <TableCell className="text-[10px] font-mono text-muted-foreground">{p.transactionId || "-"}</TableCell>
                               <TableCell className="text-[10px] text-muted-foreground">{new Date(p.date).toLocaleDateString()}</TableCell>
                               <TableCell className="text-xs font-bold text-emerald-500 text-right">₹{p.amount.toLocaleString()}</TableCell>
                             </TableRow>

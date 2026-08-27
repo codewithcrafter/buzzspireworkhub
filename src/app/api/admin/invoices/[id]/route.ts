@@ -33,19 +33,6 @@ export async function PATCH(req: Request, { params }: RouteParams) {
 
         const updated = await updateInvoice(id, body);
 
-        // If status changed to PAID, generate a ClientPayment
-        if (existingInvoice && existingInvoice.status !== "PAID" && body.status === "PAID") {
-            await prisma.clientPayment.create({
-                data: {
-                    clientId: updated.clientId,
-                    amount: updated.amount,
-                    description: updated.service || "Invoice Payment",
-                    method: body.paymentMethod || "Other",
-                    date: body.paymentDate ? new Date(body.paymentDate) : new Date(),
-                    status: "PAID"
-                }
-            });
-        }
 
         return NextResponse.json({ success: true, invoice: updated }, { status: 200 });
     } catch (error) {
