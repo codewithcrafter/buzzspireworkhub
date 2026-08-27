@@ -156,7 +156,7 @@ export async function sendInvitationEmail(email: string, name: string, token: st
   `;
 
   const { data, error } = await resend.emails.send({
-    from: "BuzzSpire Media <onboarding@resend.dev>",
+    from: process.env.EMAIL_FROM || "BuzzSpire Sales <sales@buzzspiremedia.com>",
     to: email,
     subject: "Accept Invitation to BuzzSpire Media Portal",
     html: htmlContent,
@@ -265,7 +265,7 @@ Regards,
 BuzzSpire Media Team`;
 
   const { data, error } = await resend.emails.send({
-    from: "BuzzSpire Media <onboarding@resend.dev>",
+    from: process.env.EMAIL_FROM || "BuzzSpire Sales <sales@buzzspiremedia.com>",
     to: email,
     subject: "Welcome to BuzzSpire Media",
     html: htmlContent,
