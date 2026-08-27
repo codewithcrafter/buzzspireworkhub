@@ -61,7 +61,6 @@ export async function GET(req: Request) {
         });
 
         const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
-        const totalUsed = usages.reduce((sum, u) => sum + u.amount, 0);
         const remainingBalance = (user.contractAmount || 0) - totalPaid;
         const remainingContract = (user.contractAmount || 0) - totalPaid;
 
@@ -70,7 +69,6 @@ export async function GET(req: Request) {
             financials: {
                 totalBudget: user.contractAmount,
                 totalPaid,
-                totalUsed,
                 remainingBalance,
                 remainingContract
             },

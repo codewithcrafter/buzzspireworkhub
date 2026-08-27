@@ -441,7 +441,7 @@ function ClientDashboardContent() {
             {dashboardData && dashboardData.financials && (
               <>
                 <SectionHeader title="Financial Overview" description="Your contract and billing status." />
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-6 md:grid-cols-3">
                   <Card>
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start">
@@ -474,20 +474,6 @@ function ClientDashboardContent() {
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
-                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Total Used</p>
-                          <p className="text-2xl font-extrabold text-destructive">₹{(dashboardData.financials.totalUsed || 0).toLocaleString()}</p>
-                        </div>
-                        <div className="size-8 bg-destructive/10 rounded-lg flex items-center justify-center text-destructive">
-                          <DollarSign className="size-4" />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="pt-6">
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1">
                           <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">Remaining Balance</p>
                           <p className="text-2xl font-extrabold text-foreground">₹{(dashboardData.financials.remainingBalance || 0).toLocaleString()}</p>
                         </div>
@@ -498,32 +484,6 @@ function ClientDashboardContent() {
                     </CardContent>
                   </Card>
                 </div>
-
-                {/* Progress Bar for Paid vs Used */}
-                <Card>
-                  <CardContent className="py-6">
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs font-bold uppercase text-muted-foreground tracking-wider">
-                        <span>Utilization Progress</span>
-                        <span>
-                          {dashboardData.financials.totalPaid > 0
-                            ? Math.round((dashboardData.financials.totalUsed / dashboardData.financials.totalPaid) * 100)
-                            : 0}%
-                        </span>
-                      </div>
-                      <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary"
-                          style={{
-                            width: `${dashboardData.financials.totalPaid > 0
-                              ? Math.min(100, (dashboardData.financials.totalUsed / dashboardData.financials.totalPaid) * 100)
-                              : 0}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </>
             )}
 
