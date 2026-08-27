@@ -36,7 +36,7 @@ const getTransporter = () => {
 };
 
 export async function sendInvitationEmail(email: string, name: string, token: string) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const appUrl = process.env.APP_URL || "https://buzzspiremedia.com";
   const inviteUrl = `${appUrl}/invite/accept?token=${token}`;
 
   const transporter = getTransporter();
@@ -180,7 +180,7 @@ This link expires in 24 hours.`,
 }
 
 export async function sendClientWelcomeEmail(email: string, name: string, passwordText: string, service: string) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const appUrl = process.env.APP_URL || "https://buzzspiremedia.com";
   const loginUrl = `${appUrl}/login`; // Using the standard login route
 
   const transporter = getTransporter();
