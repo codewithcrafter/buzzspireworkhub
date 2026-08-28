@@ -1,10 +1,16 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY is missing or undefined.");
+  }
+  return new Resend(apiKey);
+};
 
 async function run() {
     try {
-        const { data, error } = await resend.emails.send({
+        const { data, error } = await getResendClient().emails.send({
             from: process.env.EMAIL_FROM || "BuzzSpire Sales <sales@buzzspiremedia.com>",
             to: "gulshankrs2111@gmail.com",
             subject: "Test from buzzspiremedia.com",

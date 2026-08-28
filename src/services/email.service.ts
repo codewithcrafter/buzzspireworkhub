@@ -1,6 +1,12 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY is missing or undefined.");
+  }
+  return new Resend(apiKey);
+};
 import nodemailer from "nodemailer";
 
 // Initialize transporter lazily using environment variables or a fallback/mock transport
@@ -155,7 +161,7 @@ export async function sendInvitationEmail(email: string, name: string, token: st
     </html>
   `;
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResendClient().emails.send({
     from: process.env.EMAIL_FROM || "BuzzSpire Sales <sales@buzzspiremedia.com>",
     to: email,
     subject: "Accept Invitation to BuzzSpire Media Portal",
@@ -264,7 +270,7 @@ Please use these credentials to log in to your Client Portal.
 Regards,
 BuzzSpire Media Team`;
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResendClient().emails.send({
     from: process.env.EMAIL_FROM || "BuzzSpire Sales <sales@buzzspiremedia.com>",
     to: email,
     subject: "Welcome to BuzzSpire Media",
@@ -326,7 +332,7 @@ export async function sendLeadConfirmationEmail(lead: any) {
     </html>
   `;
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResendClient().emails.send({
     from: "BuzzSpire Sales <sales@buzzspiremedia.com>",
     to: email,
     subject: "Thank you for contacting BuzzSpire",
@@ -395,7 +401,7 @@ export async function sendLeadNotificationEmail(lead: any) {
     </html>
   `;
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResendClient().emails.send({
     from: "BuzzSpire Sales <sales@buzzspiremedia.com>",
     to: adminEmail,
     subject: `New Chatbot Lead — ${lead.service}`,
