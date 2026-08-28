@@ -44,10 +44,49 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: SSH Deploy
-        uses: appleboy/ssh-action@v0.1.6
+      - name: Setup and Verify VPS_USER SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VPS_IP }}
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            VPS_USER="${{ secrets.VPS_USER }}"
+            if [ -n "$VPS_USER" ] && [ "$VPS_USER" != "root" ]; then
+              echo "Configuring SSH for $VPS_USER..."
+              mkdir -p /home/$VPS_USER/.ssh
+              
+              PUB_KEY_FILE="/root/.ssh/github_actions_buzzspire.pub"
+              AUTH_KEYS="/home/$VPS_USER/.ssh/authorized_keys"
+              
+              if [ -f "$PUB_KEY_FILE" ]; then
+                PUB_KEY=$(cat "$PUB_KEY_FILE")
+                if ! grep -qF "$PUB_KEY" "$AUTH_KEYS" 2>/dev/null; then
+                  echo "$PUB_KEY" >> "$AUTH_KEYS"
+                  echo "Public key added to authorized_keys."
+                fi
+              else
+                echo "Warning: Public key file not found at $PUB_KEY_FILE"
+              fi
+              
+              chown -R $VPS_USER:$VPS_USER /home/$VPS_USER/.ssh
+              chmod 700 /home/$VPS_USER/.ssh
+              touch "$AUTH_KEYS"
+              chmod 600 "$AUTH_KEYS"
+              
+              echo "Verifying permissions..."
+              ls -ld /home/$VPS_USER/.ssh
+              ls -l "$AUTH_KEYS"
+              
+              echo "Verifying fingerprints..."
+              ssh-keygen -l -f /root/.ssh/github_actions_buzzspire || true
+              ssh-keygen -l -f "$AUTH_KEYS" || true
+            fi
+
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
