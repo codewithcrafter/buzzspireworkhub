@@ -86,7 +86,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
   };
 
   return (
-    <main className="w-full bg-background select-none bg-grid-pattern relative">
+    <main className="w-full bg-background select-none bg-grid-pattern relative overflow-x-clip">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
 
       {/* 1. HERO HEADER */}

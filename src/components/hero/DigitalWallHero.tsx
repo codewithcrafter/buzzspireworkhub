@@ -24,7 +24,7 @@ export default function DigitalWallHero({
   secondaryCtaUrl,
 }: DigitalWallHeroProps) {
   return (
-    <section className="relative h-[100svh] min-h-[100svh] lg:h-[100vh] lg:min-h-[100vh] w-full flex flex-col justify-between py-5 md:py-7 lg:py-8 px-4 md:px-8 max-w-7xl mx-auto overflow-hidden select-none">
+    <section className="relative min-h-[calc(100svh-120px)] lg:h-[100vh] lg:min-h-[100vh] w-full flex flex-col justify-start lg:justify-between pt-10 pb-5 md:pt-12 md:pb-7 lg:py-8 px-4 md:px-8 max-w-7xl mx-auto overflow-hidden select-none">
       {/* Top Bar Tag */}
       <div className="relative z-10 flex items-center justify-between pt-1">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-semibold shadow-xs backdrop-blur-md">
@@ -41,7 +41,7 @@ export default function DigitalWallHero({
       </div>
 
       {/* Main Grid: Left Copy (Server Rendered) + Right Digital Wall (Client Component) */}
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto py-1">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center mt-6 sm:mt-8 lg:mt-0 lg:my-auto py-1">
         
         {/* Left Column (Server Rendered HTML - Instant Paint) */}
         <div className="lg:col-span-5 space-y-4 text-left">
@@ -81,7 +81,7 @@ export default function DigitalWallHero({
       </div>
 
       {/* Bottom Status Line */}
-      <div className="relative z-10 pt-3 border-t border-border/40 pb-1 flex items-center justify-between text-xs text-muted-foreground font-medium">
+      <div className="relative z-10 pt-3 border-t border-border/40 pb-1 flex items-center justify-between text-xs text-muted-foreground font-medium mt-auto lg:mt-0">
         <span>Click panels to navigate • 4.5s Auto-Rotation</span>
         <span className="text-primary font-bold">5 Active Digital Channels</span>
       </div>

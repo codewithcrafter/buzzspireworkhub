@@ -218,7 +218,7 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch (error) {
     // Database unreachable or CMS unavailable, safely fallback without spamming the console
   }
-  
+
   if (!pageRecord) return defaultMetadata;
 
   const content = pageRecord.publishedContent as any || {};
@@ -244,14 +244,14 @@ export default async function HomePage() {
   const content = pageRecord?.publishedContent as any || {};
   const h1 = content?.h1;
   const h2s = content?.h2s || {};
-  
+
   const conf = getCmsConfig("home");
   let finalFaqs = (content?.faqs && content.faqs.length > 0) ? content.faqs : faqs;
-  
+
   if (conf.defaultFaqs && content && !content._faqsSeeded) {
     const existingFaqs = Array.isArray(content.faqs) ? content.faqs : [];
     const existingQs = new Set(existingFaqs.map((f: any) => f.q));
-    
+
     finalFaqs = [
       ...conf.defaultFaqs.filter((df: any) => !existingQs.has(df.q)),
       ...existingFaqs
@@ -292,7 +292,7 @@ export default async function HomePage() {
       <section className="py-16 bg-muted/30 border-y border-border/30 overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
           <p className="text-sm font-semibold text-foreground max-w-2xl mx-auto leading-relaxed">
-            Trusted by retail, ecommerce, healthcare, education, and local service businesses across Delhi NCR.
+            Trust by retail, ecommerce, healthcare, education, and local service businesses across Delhi NCR.
           </p>
         </div>
 
@@ -328,12 +328,12 @@ export default async function HomePage() {
                 <p>
                   We measure our work the same way you measure yours - by real numbers, not promises.
                 </p>
-                    <p>
-                      Over 5+ years, we've helped businesses across Delhi improve their Google visibility, grow their social following, and turn more website visitors into paying customers.
-                    </p>
-                    <p>
-                      We're honest about timelines because that's how digital marketing actually works - no shortcuts, no guarantees, just consistent effort that adds up.
-                    </p>
+                <p>
+                  Over 5+ years, we've helped businesses across Delhi improve their Google visibility, grow their social following, and turn more website visitors into paying customers.
+                </p>
+                <p>
+                  We're honest about timelines because that's how digital marketing actually works - no shortcuts, no guarantees, just consistent effort that adds up.
+                </p>
               </div>
             </div>
 
