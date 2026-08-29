@@ -44,6 +44,35 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Diagnostic Network and SSH Key
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          echo "1. Checking secrets..."
+          if [ -n "$VPS_HOST" ]; then echo "VPS_HOST is provided."; else echo "VPS_HOST is NOT provided."; fi
+          if [ -n "$VPS_SSH_KEY" ]; then echo "VPS_SSH_KEY is provided."; else echo "VPS_SSH_KEY is NOT provided."; fi
+          
+          echo "2. Testing TCP connectivity on port 22..."
+          if [ -n "$VPS_HOST" ]; then
+            nc -vz -w 10 "$VPS_HOST" 22 || echo "TCP connection failed."
+          fi
+          
+          echo "3 & 4. Testing SSH key parsing and fingerprint..."
+          if [ -n "$VPS_SSH_KEY" ]; then
+            echo "$VPS_SSH_KEY" > /tmp/github_actions_key
+            chmod 600 /tmp/github_actions_key
+            echo "Private key fingerprint:"
+            ssh-keygen -lf /tmp/github_actions_key || echo "ssh-keygen -lf failed on private key"
+            
+            echo "Public key fingerprint (derived):"
+            ssh-keygen -y -f /tmp/github_actions_key | ssh-keygen -lf - || echo "ssh-keygen -y failed"
+            
+            rm -f /tmp/github_actions_key
+          fi
+          
+          echo "Stopping workflow to prevent actual deployment."
+          exit 1
 
       - name: SSH Deploy
         uses: appleboy/ssh-action@v1.0.3
