@@ -292,7 +292,7 @@ export default async function HomePage() {
       <section className="py-16 bg-muted/30 border-y border-border/30 overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
           <p className="text-sm font-semibold text-foreground max-w-2xl mx-auto leading-relaxed">
-            Trust by retail, ecommerce, healthcare, education, and local service businesses across Delhi NCR.
+            Trusted by retail, ecommerce, healthcare, education, and local service businesses across Delhi NCR.
           </p>
         </div>
 
