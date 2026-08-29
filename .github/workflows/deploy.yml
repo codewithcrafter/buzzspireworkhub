@@ -45,7 +45,6 @@ jobs:
 
     steps:
       - name: Setup SSH Key from Base64
-        id: setup_ssh_key
         env:
           VPS_SSH_KEY_B64: ${{ secrets.VPS_SSH_KEY_B64 }}
         run: |
@@ -58,28 +57,32 @@ jobs:
           
           echo "Verifying derived public key fingerprint:"
           ssh-keygen -y -f "$RUNNER_TEMP/github_actions_buzzspire" | ssh-keygen -lf -
-          
-          EOF=$(openssl rand -hex 16)
-          echo "ssh_key<<$EOF" >> "$GITHUB_OUTPUT"
-          cat "$RUNNER_TEMP/github_actions_buzzspire" >> "$GITHUB_OUTPUT"
-          echo "" >> "$GITHUB_OUTPUT"
-          echo "$EOF" >> "$GITHUB_OUTPUT"
 
       - name: SSH Deploy
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ steps.setup_ssh_key.outputs.ssh_key }}
-          script: |
-            cd /var/www/buzzspire
-            git pull origin main
-            npm ci
-            npx prisma generate
-            npx prisma db push
-            export RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}"
-            npm run build
-            pm2 reload ecosystem.config.js --update-env
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          echo "Running native SSH diagnostic..."
+          ssh -vvv -o IdentitiesOnly=yes \
+              -o StrictHostKeyChecking=no \
+              -i "$RUNNER_TEMP/github_actions_buzzspire" \
+              "${VPS_USER}@${VPS_HOST}" "echo SSH_AUTHENTICATION_SUCCESS"
+              
+          echo "Running deployment commands..."
+          ssh -o IdentitiesOnly=yes \
+              -o StrictHostKeyChecking=no \
+              -i "$RUNNER_TEMP/github_actions_buzzspire" \
+              "${VPS_USER}@${VPS_HOST}" << 'EOF'
+          cd /var/www/buzzspire
+          git pull origin main
+          npm ci
+          npx prisma generate
+          npx prisma db push
+          export RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}"
+          npm run build
+          pm2 reload ecosystem.config.js --update-env
+          EOF
 
       - name: Cleanup SSH Key
         if: always()
