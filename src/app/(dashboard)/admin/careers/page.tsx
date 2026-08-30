@@ -102,80 +102,8 @@ function CareersDashboard() {
   const [selectedApplicantId, setSelectedApplicantId] = React.useState<string | null>(null)
 
   // Mock Database
-  const [jobs, setJobs] = React.useState<JobOpening[]>([
-    { id: "job-1", title: "Senior Frontend Architect", department: "Engineering", location: "Remote / Mumbai", status: "open", applicantsCount: 14 },
-    { id: "job-2", title: "Lead Product Designer", department: "Design", location: "Remote / Pune", status: "open", applicantsCount: 8 },
-    { id: "job-3", title: "Marketing Coordinator", department: "Growth", location: "Mumbai Office", status: "closed", applicantsCount: 22 },
-  ])
-
-  const [applicants, setApplicants] = React.useState<Applicant[]>([
-    {
-      id: "app-1",
-      name: "Arthur Dent",
-      email: "arthur@hitchhiker.com",
-      phone: "+91 99999 42424",
-      position: "Senior Frontend Architect",
-      appliedDate: "2026-07-01",
-      status: "interviewing",
-      interviews: [
-        { id: "int-1", title: "Technical Code Review", date: "2026-07-10", time: "3:00 PM", interviewer: "Aria Mercer", link: "https://zoom.us/mock" },
-      ],
-      resume: {
-        bio: "Senior developer with 8+ years specializing in React hydration, performance tuning, and Tailwind setups.",
-        skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Web Workers"],
-        experience: [
-          { role: "Frontend Architect", company: "Megadodo Publications", duration: "2022 - 2026" },
-          { role: "Senior Developer", company: "Heart of Gold Inc", duration: "2018 - 2022" },
-        ],
-        education: [
-          { degree: "B.Tech Computer Science", school: "University of Ursa Minor", year: "2018" },
-        ],
-      },
-    },
-    {
-      id: "app-2",
-      name: "Trillian Astra",
-      email: "trillian@galaxy.org",
-      phone: "+91 88888 77777",
-      position: "Lead Product Designer",
-      appliedDate: "2026-07-02",
-      status: "applied",
-      interviews: [],
-      resume: {
-        bio: "Product designer specializing in high-density SaaS layouts, design tokens, and glassmorphic micro-animations.",
-        skills: ["Figma", "UI Design", "Design Systems", "Prototyping"],
-        experience: [
-          { role: "Product Designer", company: "Sub-Etha Radio", duration: "2023 - 2026" },
-        ],
-        education: [
-          { degree: "Master of Fine Arts (MFA)", school: "Sector 37 Design Academy", year: "2022" },
-        ],
-      },
-    },
-    {
-      id: "app-3",
-      name: "Ford Prefect",
-      email: "ford@guide.com",
-      phone: "+91 77777 66666",
-      position: "Senior Frontend Architect",
-      appliedDate: "2026-06-28",
-      status: "offered",
-      interviews: [
-        { id: "int-2", title: "Initial Screen Call", date: "2026-06-29", time: "11:00 AM", interviewer: "Jane Doe" },
-        { id: "int-3", title: "Technical Board review", date: "2026-07-01", time: "2:00 PM", interviewer: "Aria Mercer" },
-      ],
-      resume: {
-        bio: "Writer and coder. Experienced in setting up clean headless components and compiling large markdown indexes.",
-        skills: ["Markdown", "Next.js", "Headless CMS", "Technical Writing"],
-        experience: [
-          { role: "Field Researcher", company: "Hitchhiker's Guide", duration: "2015 - 2026" },
-        ],
-        education: [
-          { degree: "B.Sc Journalism", school: "Betelgeuse Polytechnic", year: "2015" },
-        ],
-      },
-    },
-  ])
+  const [jobs, setJobs] = React.useState<JobOpening[]>([])
+  const [applicants, setApplicants] = React.useState<Applicant[]>([])
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = React.useState("")
@@ -352,6 +280,25 @@ function CareersDashboard() {
       {/* VIEW MODES CONDITIONAL RENDER */}
       {viewMode === "jobs" ? (
         /* VIEW 1: ACTIVE JOB POSTINGS GALLERY */
+        jobs.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in duration-300">
+            <div className="size-16 bg-muted border border-border/50 rounded-full flex items-center justify-center mb-4">
+              <Briefcase className="size-8 text-muted-foreground/50" />
+            </div>
+            <h3 className="text-lg font-bold text-foreground">No Job Openings</h3>
+            <p className="text-sm text-muted-foreground mt-2 max-w-sm leading-relaxed">
+              There are no active job openings right now.
+            </p>
+            <Button
+              variant="premium"
+              onClick={() => setIsAddJobOpen(true)}
+              className="mt-6 font-bold shadow-md cursor-pointer"
+              icon={<Plus className="size-4" />}
+            >
+              Post Job
+            </Button>
+          </div>
+        ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 animate-in fade-in slide-in-from-bottom-2 duration-300 select-none">
           {jobs.map((job) => (
             <Card key={job.id} className="flex flex-col h-full hover:-translate-y-0.5 duration-300">
@@ -397,6 +344,7 @@ function CareersDashboard() {
             </Card>
           ))}
         </div>
+        )
       ) : (
         /* VIEW 2: APPLICANTS DIRECTORY HUB */
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">

@@ -118,85 +118,8 @@ function ProjectsDashboard() {
   // Inner detail tabs selection
   const [detailTab, setDetailTab] = React.useState("tasks")
 
-  // Mock Database
-  const [projects, setProjects] = React.useState<Project[]>([
-    {
-      id: "pr-1",
-      title: "BuzzSpire Rebranding Campaign",
-      client: "BuzzSpire Media Internal",
-      description: "Overhaul existing identity guidelines, create premium marketing collateral, and align social assets.",
-      status: "active",
-      budget: 150000,
-      deadline: "2026-07-20",
-      tasks: [
-        { id: "task-1", title: "Finalize typography palettes", completed: true },
-        { id: "task-2", title: "Deliver primary social template graphics", completed: false },
-        { id: "task-3", title: "Approve guidelines brief PDF booklet", completed: false },
-      ],
-      milestones: [
-        { id: "m-1", title: "Brand Identity Design Complete", dueDate: "2026-07-05", status: "in_progress" },
-        { id: "m-2", title: "Collateral Print Approvals", dueDate: "2026-07-12", status: "pending" },
-        { id: "m-3", title: "Final Launch Event Delivery", dueDate: "2026-07-20", status: "pending" },
-      ],
-      members: [
-        { id: "mem-1", name: "Jane Doe", role: "Creative Lead", avatar: "JD" },
-        { id: "mem-2", name: "Sarah Jenkins", role: "UI Designer", avatar: "SJ" },
-      ],
-      timeline: [
-        { id: "t-1", text: "Project initialized in workspace board.", time: "July 1, 9:00 AM", type: "system" },
-        { id: "t-2", text: "Jane Doe marked 'Finalize typography palettes' completed.", time: "July 2, 2:00 PM", type: "task" },
-      ],
-    },
-    {
-      id: "pr-2",
-      title: "Aria Mercer Webapp Development",
-      client: "Vercel Labs",
-      description: "Build next-generation SaaS analytics dashboard utilizing server component optimization architectures.",
-      status: "active",
-      budget: 480000,
-      deadline: "2026-08-15",
-      tasks: [
-        { id: "task-4", title: "Initialize Next.js App Router configurations", completed: true },
-        { id: "task-5", title: "Integrate dashboard layout widgets", completed: true },
-        { id: "task-6", title: "Run end-to-end user compile validation checks", completed: false },
-      ],
-      milestones: [
-        { id: "m-4", title: "Prototype Signoff Phase", dueDate: "2026-07-10", status: "completed" },
-        { id: "m-5", title: "Analytics Integrations Testing", dueDate: "2026-07-30", status: "in_progress" },
-        { id: "m-6", title: "Live Workspace Deployment", dueDate: "2026-08-15", status: "pending" },
-      ],
-      members: [
-        { id: "mem-3", name: "John Smith", role: "Developer", avatar: "JS" },
-        { id: "mem-4", name: "David Miller", role: "Project Manager", avatar: "DM" },
-      ],
-      timeline: [
-        { id: "t-3", text: "Project initialized.", time: "June 28, 10:00 AM", type: "system" },
-        { id: "t-4", text: "Prototype Signoff phase achieved.", time: "July 3, 12:00 PM", type: "milestone" },
-      ],
-    },
-    {
-      id: "pr-3",
-      title: "SEO Campaign Launch",
-      client: "Nexus Labs",
-      description: "Audit landing page structures, optimize technical metadata performance, and construct backlink listings.",
-      status: "delayed",
-      budget: 85000,
-      deadline: "2026-07-18",
-      tasks: [
-        { id: "task-7", title: "Execute crawling index scripts", completed: false },
-        { id: "task-8", title: "Deliver keyword density review files", completed: false },
-      ],
-      milestones: [
-        { id: "m-7", title: "Initial SEO Crawling Audit", dueDate: "2026-07-02", status: "pending" },
-      ],
-      members: [
-        { id: "mem-5", name: "Jane Doe", role: "SEO Specialist", avatar: "JD" },
-      ],
-      timeline: [
-        { id: "t-5", text: "Project initialized.", time: "June 30, 4:00 PM", type: "system" },
-      ],
-    },
-  ])
+  // Project Database State
+  const [projects, setProjects] = React.useState<Project[]>([])
 
   // Dialog states
   const [isAddOpen, setIsAddOpen] = React.useState(false)
@@ -477,7 +400,28 @@ function ProjectsDashboard() {
             }
           />
 
-          {viewMode === "cards" ? (
+          {projects.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in duration-300">
+              <div className="size-16 bg-muted border border-border/50 rounded-full flex items-center justify-center mb-4">
+                <Briefcase className="size-8 text-muted-foreground/50" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground">No Projects Yet</h3>
+              <p className="text-sm text-muted-foreground mt-2 max-w-sm leading-relaxed">
+                You haven't created any projects yet.
+              </p>
+              <Button
+                variant="premium"
+                onClick={() => {
+                  resetForm()
+                  setIsAddOpen(true)
+                }}
+                className="mt-6 font-bold shadow-md cursor-pointer"
+                icon={<Plus className="size-4" />}
+              >
+                Create Project
+              </Button>
+            </div>
+          ) : viewMode === "cards" ? (
             /* PROJECT CARDS VIEW */
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {projects.map((project) => {

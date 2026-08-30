@@ -65,7 +65,7 @@ function InboxDashboard() {
   const { toast } = useToast()
 
   // Selected message state (Detail view)
-  const [selectedMessageId, setSelectedMessageId] = React.useState<string | null>("msg-1")
+  const [selectedMessageId, setSelectedMessageId] = React.useState<string | null>(null)
   
   // Mobile details screen switcher
   const [showMobileDetail, setShowMobileDetail] = React.useState(false)
@@ -73,54 +73,56 @@ function InboxDashboard() {
   // Message reply field state
   const [replyText, setReplyText] = React.useState("")
 
-  // Mock Database
-  const [messages, setMessages] = React.useState<MessageItem[]>([
-    {
-      id: "msg-1",
-      sender: "Aria Mercer",
-      email: "aria@vercel.com",
-      phone: "+91 98765 43210",
-      subject: "Partnership Proposal: Next.js Rebranding Assets",
-      body: "Hello, I wanted to reach out regarding a potential collaboration. Vercel Labs is currently auditing social template guidelines, and we are looking for a digital agency to structure custom premium icons and assets. Could we sync for a short Zoom call next Tuesday?",
-      time: "10m ago",
-      unread: true,
-      priority: "high",
-      label: "sales",
-      thread: [
-        { id: "t-1", sender: "Aria Mercer", text: "Hello, I wanted to reach out regarding a potential collaboration. Vercel Labs is currently auditing social template guidelines, and we are looking for a digital agency to structure custom premium icons and assets. Could we sync for a short Zoom call next Tuesday?", time: "July 4, 10:00 AM", isMe: false }
-      ]
-    },
-    {
-      id: "msg-2",
-      sender: "John Doe",
-      email: "john@acme.com",
-      phone: "+91 87654 32109",
-      subject: "Billing Issue: Invoice #INV-2026-004",
-      body: "Hi team, I noticed a discrepancy in our monthly retainer billing statement. The invoice indicates an additional charge of ₹12,000 for ad template designs, but our contract specifies design revisions are included. Could you please review and resend updated payment files?",
-      time: "2h ago",
-      unread: true,
-      priority: "medium",
-      label: "support",
-      thread: [
-        { id: "t-2", sender: "John Doe", text: "Hi team, I noticed a discrepancy in our monthly retainer billing statement. The invoice indicates an additional charge of ₹12,000 for ad template designs, but our contract specifies design revisions are included. Could you please review and resend updated payment files?", time: "July 4, 8:15 AM", isMe: false }
-      ]
-    },
-    {
-      id: "msg-3",
-      sender: "Sarah Connor",
-      email: "sarah@cyberdyne.com",
-      phone: "+91 76543 21098",
-      subject: "Feedback: Digital Campaign Results",
-      body: "Just wanted to send a quick note to say thank you! The search analytics campaign you launched yesterday has already generated 14 high-value enterprise leads for Cyberdyne. We are extremely impressed with the initial conversion margins.",
-      time: "1d ago",
-      unread: false,
-      priority: "low",
-      label: "general",
-      thread: [
-        { id: "t-3", sender: "Sarah Connor", text: "Just wanted to send a quick note to say thank you! The search analytics campaign you launched yesterday has already generated 14 high-value enterprise leads for Cyberdyne. We are extremely impressed with the initial conversion margins.", time: "July 3, 2:00 PM", isMe: false }
-      ]
+  // Database
+  const [messages, setMessages] = React.useState<MessageItem[]>([])
+  const [loading, setLoading] = React.useState(true)
+
+  const fetchTickets = async () => {
+    try {
+      setLoading(true)
+      const res = await fetch("/api/admin/tickets")
+      const data = await res.json()
+      if (res.ok && data.tickets) {
+        const mapped = data.tickets.map((t: any): MessageItem => ({
+          id: t.id,
+          sender: t.client.name,
+          email: t.client.email,
+          phone: t.client.phone || "Not Provided",
+          subject: t.subject,
+          body: t.description,
+          time: new Date(t.createdAt).toLocaleDateString(),
+          unread: t.status === "OPEN",
+          priority: "medium", // default for UI
+          label: "support", // default for UI
+          thread: [
+            {
+              id: t.id,
+              sender: t.client.name,
+              text: t.description,
+              time: new Date(t.createdAt).toLocaleString(),
+              isMe: false
+            },
+            ...(t.replies || []).map((r: any) => ({
+              id: r.id,
+              sender: r.senderId === t.client.id ? t.client.name : "Admin (Me)",
+              text: r.text,
+              time: new Date(r.createdAt).toLocaleString(),
+              isMe: r.senderId !== t.client.id
+            }))
+          ]
+        }))
+        setMessages(mapped)
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
     }
-  ])
+  }
+
+  React.useEffect(() => {
+    fetchTickets()
+  }, [])
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = React.useState("")
@@ -146,32 +148,48 @@ function InboxDashboard() {
     })
   }, [messages, searchQuery, labelFilter, priorityFilter])
 
+  const updateTicketStatus = async (id: string, status: string) => {
+    try {
+      const res = await fetch(`/api/admin/tickets/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+      })
+      if (res.ok) {
+        fetchTickets()
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   // Archive action
-  const handleArchive = (id: string) => {
-    setMessages(messages.filter((m) => m.id !== id))
+  const handleArchive = async (id: string) => {
+    await updateTicketStatus(id, "RESOLVED")
     setSelectedMessageId(null)
     setShowMobileDetail(false)
     toast({
-      title: "Conversation Archived",
-      description: "Moved message to archived storage registries.",
+      title: "Ticket Resolved",
+      description: "Marked ticket as resolved.",
       type: "info",
     })
   }
 
   // Delete action
-  const handleDelete = (id: string) => {
-    setMessages(messages.filter((m) => m.id !== id))
+  const handleDelete = async (id: string) => {
+    await updateTicketStatus(id, "CLOSED")
     setSelectedMessageId(null)
     setShowMobileDetail(false)
     toast({
-      title: "Conversation Deleted",
-      description: "Account message permanently cleared from database.",
+      title: "Ticket Closed",
+      description: "Ticket closed in database.",
       type: "success",
     })
   }
 
   // Toggle Read/Unread
   const toggleUnread = (id: string) => {
+    // We can just toggle the UI state or map to OPEN/IN_PROGRESS if needed, but UI-only is fine here
     setMessages(
       messages.map((m) => (m.id === id ? { ...m, unread: !m.unread } : m))
     )
@@ -183,37 +201,29 @@ function InboxDashboard() {
   }
 
   // Reply submit helper
-  const handleSendReply = (e: React.FormEvent) => {
+  const handleSendReply = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedMsg || !replyText) return
 
-    const newReply: ThreadMessage = {
-      id: `reply-${Date.now()}`,
-      sender: "Jane Doe (Me)",
-      text: replyText,
-      time: "Just now",
-      isMe: true,
-    }
+    try {
+      const res = await fetch(`/api/admin/tickets/${selectedMsg.id}/reply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: replyText })
+      })
 
-    const updated = messages.map((m) => {
-      if (m.id === selectedMsg.id) {
-        return {
-          ...m,
-          unread: false, // Mark read automatically on reply
-          thread: [...m.thread, newReply],
-        }
+      if (res.ok) {
+        setReplyText("")
+        fetchTickets()
+        toast({
+          title: "Reply Transmitted",
+          description: "Sent messaging update to client.",
+          type: "success",
+        })
       }
-      return m
-    })
-
-    setMessages(updated)
-    setReplyText("")
-
-    toast({
-      title: "Reply Transmitted",
-      description: "Sent simulated messaging update to client inbox.",
-      type: "success",
-    })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   // Suggestions helper pills
@@ -286,9 +296,21 @@ function InboxDashboard() {
 
           {/* List content area */}
           <div className="flex-1 overflow-y-auto space-y-1 p-2 scrollbar-thin">
-            {filteredMessages.length === 0 ? (
-              <div className="text-center py-10 text-xs text-muted-foreground">
-                No conversations found.
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in duration-300">
+                <p className="text-sm text-muted-foreground mt-2 max-w-sm leading-relaxed">
+                  Loading conversations...
+                </p>
+              </div>
+            ) : filteredMessages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in duration-300">
+                <div className="size-16 bg-muted border border-border/50 rounded-full flex items-center justify-center mb-4">
+                  <Inbox className="size-8 text-muted-foreground/50" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">Your inbox is empty</h3>
+                <p className="text-sm text-muted-foreground mt-2 max-w-sm leading-relaxed">
+                  You have no messages or inquiries.
+                </p>
               </div>
             ) : (
               filteredMessages.map((msg) => {

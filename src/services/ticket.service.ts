@@ -113,6 +113,9 @@ export async function updateTicketStatus(ticketId: string, status: TicketStatus)
 export async function getAllTickets() {
     return prisma.ticket.findMany({
         include: {
+            replies: {
+                orderBy: { createdAt: "asc" },
+            },
             client: {
                 select: {
                     id: true,
