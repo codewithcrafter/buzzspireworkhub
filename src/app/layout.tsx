@@ -49,6 +49,9 @@ export const metadata: Metadata = {
     title: "BuzzSpire Media | Digital Marketing Agency in Delhi",
     description: "Digital marketing agency in Delhi helping local businesses grow online with SEO, GMB management, paid ads, and web development.",
   },
+  other: {
+    "facebook-domain-verification": "ld3jkr89zb6rmumr1qit7jtpbaxqh1",
+  },
   robots: {
     index: true,
     follow: true,
