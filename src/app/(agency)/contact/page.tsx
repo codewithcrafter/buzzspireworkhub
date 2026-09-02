@@ -11,9 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     console.error("Failed to fetch CMS metadata for contact page:", error);
   }
   
-  if (!pageRecord) return {};
-
-  const content = pageRecord.publishedContent as any || {};
+  const content = (pageRecord?.publishedContent as any) || {};
   const keywords = content.keywords ? content.keywords.split(',').map((k: string) => k.trim()) : undefined;
 
   return {
