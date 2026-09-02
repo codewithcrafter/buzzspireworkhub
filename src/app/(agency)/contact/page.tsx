@@ -17,9 +17,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const keywords = content.keywords ? content.keywords.split(',').map((k: string) => k.trim()) : undefined;
 
   return {
-    title: pageRecord.seoTitle || "Contact Us | Buzzspire Media",
-    description: pageRecord.metaDescription || "Get in touch with Buzzspire Media to accelerate your digital growth.",
+    title: pageRecord?.seoTitle || "Contact Us | Buzzspire Media",
+    description: "Contact BuzzSpire Media in Delhi for expert digital marketing, SEO, and web development services. Get a free consultation and grow your business today.",
     keywords: keywords,
+    alternates: {
+      canonical: "https://www.buzzspiremedia.com/contact",
+    }
   };
 }
 

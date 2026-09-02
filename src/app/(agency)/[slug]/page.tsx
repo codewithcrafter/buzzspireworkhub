@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
     });
 
     if (cmsPage) {
-      const canonicalUrl = `https://buzzspiremedia.com/${cmsPage.slug}`;
+      const canonicalUrl = `https://www.buzzspiremedia.com/${cmsPage.slug}`;
       const publishedContent = cmsPage.publishedContent as any || {};
       
       return {
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
     };
   }
 
-  const canonicalUrl = `https://buzzspiremedia.com/${service.slug}`;
+  const canonicalUrl = `https://www.buzzspiremedia.com/${service.slug}`;
 
   return {
     title: service.seo.title,

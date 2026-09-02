@@ -69,7 +69,7 @@ export const servicesData: ServiceData[] = [
     heroBadge: "Social Profile Optimization",
     delhiRelevance: "Building professional social media profiles for retail shops, service businesses, and brands across Delhi NCR.",
     seo: {
-      title: "Best SMO Services in Delhi | Boost Engagement Fast",
+      title: "SMO Services in Delhi | Boost Engagement",
       description: "Get real likes, shares & followers with Delhi's trusted SMO experts. Proven strategies, fast growth. Call now for a free SMO consultation!",
       keywords: [
         "smo services Delhi",

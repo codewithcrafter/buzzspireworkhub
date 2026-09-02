@@ -37,6 +37,7 @@ export default function LeadPopup() {
     // Set timeout to show after 3 seconds
     const timer = setTimeout(() => {
       setShow(true);
+      window.dispatchEvent(new Event("leadPopupOpened"));
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -44,6 +45,7 @@ export default function LeadPopup() {
 
   const handleClose = () => {
     setShow(false);
+    window.dispatchEvent(new Event("leadPopupClosed"));
     // If not successfully submitted, hide for 24 hours
     if (!isSuccess) {
       const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
@@ -53,6 +55,7 @@ export default function LeadPopup() {
 
   const handleSuccessClose = () => {
     setShow(false);
+    window.dispatchEvent(new Event("leadPopupClosed"));
     // Hide for 7 days
     const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000;
     localStorage.setItem(POPUP_STORAGE_KEY, JSON.stringify({ status: "submitted", expiresAt }));

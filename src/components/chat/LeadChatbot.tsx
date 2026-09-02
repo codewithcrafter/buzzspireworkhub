@@ -62,6 +62,10 @@ export default function LeadChatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Popup coordination state
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const autoOpenTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   // Live Chat State
   const [chatSessionId, setChatSessionId] = useState<string | null>(null);
   const [liveMessages, setLiveMessages] = useState<LiveMessage[]>([]);
@@ -133,17 +137,77 @@ export default function LeadChatbot() {
     setShowMenu(false);
   };
 
-  // Auto-open on first visit in session
+  // Auto-open logic coordinated with LeadPopup
+  useEffect(() => {
+    const handlePopupOpened = () => {
+      setIsPopupOpen(true);
+      setIsOpen(false); // Ensure chatbot closes if popup opens
+      if (autoOpenTimerRef.current) {
+        clearTimeout(autoOpenTimerRef.current);
+        autoOpenTimerRef.current = null;
+      }
+    };
+
+    const handlePopupClosed = () => {
+      setIsPopupOpen(false);
+      
+      const hasOpened = sessionStorage.getItem("buzzspire_chatbot_opened");
+      if (!hasOpened && !chatSessionId) {
+        sessionStorage.setItem("buzzspire_chatbot_opened", "true");
+        if (autoOpenTimerRef.current) clearTimeout(autoOpenTimerRef.current);
+        autoOpenTimerRef.current = setTimeout(() => {
+          setIsOpen((prev) => {
+            // Check again to ensure popup didn't reopen somehow
+            if (!isPopupOpen) return true;
+            return prev;
+          });
+        }, 1500); // 1.5s delay after popup closes
+      }
+    };
+
+    window.addEventListener("leadPopupOpened", handlePopupOpened);
+    window.addEventListener("leadPopupClosed", handlePopupClosed);
+
+    return () => {
+      window.removeEventListener("leadPopupOpened", handlePopupOpened);
+      window.removeEventListener("leadPopupClosed", handlePopupClosed);
+      if (autoOpenTimerRef.current) clearTimeout(autoOpenTimerRef.current);
+    };
+  }, [chatSessionId, isPopupOpen]);
+
+  // Initial auto-open if popup will NOT show
   useEffect(() => {
     const hasOpened = sessionStorage.getItem("buzzspire_chatbot_opened");
-    if (!hasOpened && !chatSessionId) {
+    if (hasOpened || chatSessionId) return;
+
+    let popupWillShow = true;
+    try {
+      const stored = localStorage.getItem("buzzspire_lead_popup_status");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.expiresAt && parsed.expiresAt > Date.now()) {
+          popupWillShow = false;
+        }
+      }
+    } catch (e) {}
+
+    if (!popupWillShow) {
       sessionStorage.setItem("buzzspire_chatbot_opened", "true");
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 1500); // 1.5s delay
-      return () => clearTimeout(timer);
+      if (autoOpenTimerRef.current) clearTimeout(autoOpenTimerRef.current);
+      autoOpenTimerRef.current = setTimeout(() => {
+        setIsOpen((prev) => {
+          if (!isPopupOpen) return true;
+          return prev;
+        });
+      }, 1500);
     }
-  }, [chatSessionId]);
+    
+    return () => {
+      if (autoOpenTimerRef.current) {
+        clearTimeout(autoOpenTimerRef.current);
+      }
+    };
+  }, [chatSessionId]); // isPopupOpen omitted intentionally here to only run on mount/session changes
 
   // Focus input when step changes to a text input step
   useEffect(() => {
@@ -359,7 +423,10 @@ export default function LeadChatbot() {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              if (isPopupOpen) return;
+              setIsOpen(true);
+            }}
             className="fixed bottom-24 right-6 z-50 p-4 rounded-full bg-primary text-primary-foreground shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 flex items-center justify-center"
             aria-label="Open BuzzSpire Chat"
           >

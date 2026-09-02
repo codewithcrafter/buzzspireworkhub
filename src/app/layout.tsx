@@ -8,14 +8,14 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-heading" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://buzzspiremedia.com"),
+  metadataBase: new URL("https://www.buzzspiremedia.com"),
   title: {
     default: "BuzzSpire Media | Digital Marketing Agency in Delhi",
     template: "%s | BuzzSpire Media"
   },
   description: "BuzzSpire Media is a digital marketing agency in Delhi NCR helping local businesses show up on Google, grow social presence, and win more customers with SEO, GMB management, Google Ads, web development, and ecommerce services.",
   alternates: {
-    canonical: "https://buzzspiremedia.com",
+    canonical: "https://www.buzzspiremedia.com/",
   },
   keywords: [
     "digital marketing agency Delhi",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://buzzspiremedia.com",
+    url: "https://www.buzzspiremedia.com/",
     title: "BuzzSpire Media | Digital Marketing Agency in Delhi",
     description: "Digital marketing agency in Delhi helping local businesses grow online with SEO, GMB management, paid ads, and web development.",
     siteName: "BuzzSpire Media",
