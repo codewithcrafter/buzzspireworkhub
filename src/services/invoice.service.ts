@@ -61,13 +61,22 @@ export async function updateInvoice(
 ) {
     const { paymentMethod, transactionId, paymentDate, ...invoiceData } = data;
 
+    // Fetch existing invoice to prevent duplicate payments on repeated PAID updates
+    const existingInvoice = await prisma.invoice.findUnique({
+        where: { id: invoiceId }
+    });
+
+    if (!existingInvoice) {
+        throw new Error("Invoice not found");
+    }
+
     // Build the update payload
     const updatePayload: any = {
         ...invoiceData
     };
 
-    // If the status is changing to PAID, create the nested Payment
-    if (data.status === "PAID") {
+    // If the status is changing to PAID and it wasn't already PAID, create the nested Payment
+    if (data.status === "PAID" && existingInvoice.status !== "PAID") {
         let mappedMethod = "OTHER";
         const pm = (paymentMethod || "").toUpperCase().replace(" ", "_");
         if (pm === "BANK_TRANSFER" || pm === "UPI" || pm === "CASH" || pm === "CARD" || pm === "CHEQUE") {
@@ -76,7 +85,7 @@ export async function updateInvoice(
 
         updatePayload.payments = {
             create: {
-                amount: data.amount || 0, // In real scenario, we should get the existing amount if not provided
+                amount: data.amount !== undefined ? data.amount : existingInvoice.amount,
                 method: mappedMethod,
                 transactionId: transactionId || null,
                 status: "SUCCESS"

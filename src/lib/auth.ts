@@ -1,9 +1,12 @@
 import { SignJWT, jwtVerify } from "jose";
 
 export const getJwtSecretKey = () => {
-  const secret = process.env.JWT_SECRET || "default_super_secret_key_buzzspire_media";
+  const secret = process.env.JWT_SECRET;
   if (!secret) {
-    throw new Error("JWT Secret key is not set");
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("FATAL: JWT_SECRET environment variable is missing in production.");
+    }
+    return new TextEncoder().encode("default_super_secret_key_buzzspire_media");
   }
   return new TextEncoder().encode(secret);
 };

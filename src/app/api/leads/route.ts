@@ -34,9 +34,9 @@ export async function POST(req: Request) {
             phone
         });
 
-        if (source === "Website Chatbot") {
-            let chatSessionId: string | undefined;
+        let chatSessionId: string | undefined;
 
+        if (source === "Website Chatbot") {
             try {
                 // Create a Chat Session for the visitor
                 const chatSession = await prisma.chatSession.create({
@@ -53,17 +53,19 @@ export async function POST(req: Request) {
             } catch (error) {
                 console.error("Failed to create ChatSession:", error);
             }
+        }
 
-            try {
-                await Promise.all([
-                    sendLeadConfirmationEmail(newLead),
-                    sendLeadNotificationEmail(newLead)
-                ]);
-            } catch (emailError) {
-                console.error("Failed to send chatbot emails:", emailError);
-                // Do NOT fail the response, lead was already created
-            }
+        try {
+            await Promise.all([
+                sendLeadConfirmationEmail(newLead),
+                sendLeadNotificationEmail(newLead)
+            ]);
+        } catch (emailError) {
+            console.error("Failed to send lead emails:", emailError);
+            // Do NOT fail the response, lead was already created
+        }
 
+        if (source === "Website Chatbot") {
             return NextResponse.json({ 
                 success: true, 
                 ...newLead, 

@@ -174,21 +174,6 @@ export async function POST(req: Request) {
       return ApiResponse.badRequest("An account with this email address already exists");
     }
 
-    // Check or generate Employee ID
-    if (!employeeId) {
-      employeeId = await generateNextEmployeeId();
-    } else {
-      const existingId = await prisma.user.findFirst({
-        where: {
-          employeeId: { equals: employeeId, mode: "insensitive" },
-        },
-      });
-
-      if (existingId) {
-        return ApiResponse.badRequest(`Employee ID '${employeeId}' is already assigned`);
-      }
-    }
-
     // Hash password securely with bcrypt
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -203,48 +188,94 @@ export async function POST(req: Request) {
       departmentId = dept.id;
     }
 
-    // Create user and employee profile
-    const newEmployee = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        employeeId,
-        phone,
-        role: role as any,
-        status: status as any,
-        permissions,
-        employeeProfile: {
-          create: {
-            designation,
-            departmentId,
-            salary: body.salary ? parseFloat(body.salary) : null,
-          },
-        },
-      },
-      select: {
-        id: true,
-        employeeId: true,
-        name: true,
-        email: true,
-        phone: true,
-        role: true,
-        status: true,
-        permissions: true,
-        createdAt: true,
-        updatedAt: true,
-        employeeProfile: {
-          select: {
-            designation: true,
-            department: {
-              select: {
-                name: true,
+    let newEmployee = null;
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    while (!newEmployee && attempts < maxAttempts) {
+      attempts++;
+      try {
+        let currentEmployeeId = employeeId;
+        
+        // If employeeId is not provided by user, generate one on each attempt to avoid collision
+        if (!body.employeeId || !body.employeeId.trim()) {
+           currentEmployeeId = await generateNextEmployeeId();
+        } else {
+           // If user provided a custom ID, only check it once.
+           if (attempts === 1) {
+               const existingId = await prisma.user.findFirst({
+                 where: {
+                   employeeId: { equals: currentEmployeeId, mode: "insensitive" },
+                 },
+               });
+               if (existingId) {
+                 return ApiResponse.badRequest(`Employee ID '${currentEmployeeId}' is already assigned`);
+               }
+           }
+        }
+
+        // Create user and employee profile
+        newEmployee = await prisma.user.create({
+          data: {
+            name,
+            email,
+            password: hashedPassword,
+            employeeId: currentEmployeeId,
+            phone,
+            role: role as any,
+            status: status as any,
+            permissions,
+            employeeProfile: {
+              create: {
+                designation,
+                departmentId,
+                salary: body.salary ? parseFloat(body.salary) : null,
               },
             },
           },
-        },
-      },
-    });
+          select: {
+            id: true,
+            employeeId: true,
+            name: true,
+            email: true,
+            phone: true,
+            role: true,
+            status: true,
+            permissions: true,
+            createdAt: true,
+            updatedAt: true,
+            employeeProfile: {
+              select: {
+                designation: true,
+                department: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+      } catch (error: any) {
+        // P2002 is Prisma's unique constraint violation error code
+        if (error.code === 'P2002' && error.meta?.target?.includes('employeeId')) {
+           // If the user provided a custom ID that collided, don't retry, just return error
+           if (body.employeeId && body.employeeId.trim()) {
+               return ApiResponse.badRequest(`Employee ID '${body.employeeId}' is already assigned`);
+           }
+           // Otherwise, it was auto-generated, so we loop and try again
+           if (attempts >= maxAttempts) {
+               return ApiResponse.serverError("Failed to generate unique employee ID after multiple attempts", error);
+           }
+           continue;
+        }
+        throw error;
+      }
+    }
+
+    if (!newEmployee) {
+        return ApiResponse.serverError("Failed to create employee due to unknown error", null);
+    }
 
     return NextResponse.json(
       {

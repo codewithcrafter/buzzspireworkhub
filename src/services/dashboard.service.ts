@@ -5,7 +5,7 @@ export async function getDashboardStats() {
         clientsCount,
         leadsCount,
         projectsCount,
-        paidInvoices,
+        successfulPayments,
         recentLeads,
         recentClientsRaw,
         activities,
@@ -14,8 +14,8 @@ export async function getDashboardStats() {
         prisma.user.count({ where: { role: "CLIENT" } }),
         prisma.lead.count(),
         prisma.project.count(),
-        prisma.invoice.aggregate({
-            where: { status: "PAID" },
+        prisma.payment.aggregate({
+            where: { status: "SUCCESS" },
             _sum: { amount: true }
         }),
         prisma.lead.findMany({
@@ -26,7 +26,7 @@ export async function getDashboardStats() {
             where: { role: "CLIENT" },
             take: 5,
             orderBy: { createdAt: "desc" },
-            include: { invoices: { where: { status: "PAID" } } }
+            include: { invoices: { include: { payments: { where: { status: "SUCCESS" } } } } }
         }),
         prisma.activityLog.findMany({
             take: 10,
@@ -37,10 +37,13 @@ export async function getDashboardStats() {
         })
     ]);
 
-    const revenue = paidInvoices._sum.amount || 0;
+    const revenue = successfulPayments._sum.amount || 0;
 
     const recentClients = recentClientsRaw.map(client => {
-        const clientRevenue = client.invoices.reduce((sum, inv) => sum + inv.amount, 0);
+        const clientRevenue = client.invoices.reduce(
+            (sum, inv) => sum + inv.payments.reduce((pSum, p) => pSum + p.amount, 0), 
+            0
+        );
         return {
             id: client.id,
             name: client.name,

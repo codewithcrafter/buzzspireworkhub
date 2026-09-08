@@ -36,6 +36,29 @@ export async function authenticateRequest(
   try {
     const possibleTokens: string[] = [];
 
+    let isEmployeeRoute = false;
+    let isAdminOrClientRoute = false;
+
+    if (req && req.url) {
+      // In next.js server components/route handlers, req.url may be a relative or absolute URL
+      const urlString = req.url.startsWith('/') ? `http://localhost${req.url}` : req.url;
+      try {
+        const url = new URL(urlString);
+        if (url.pathname.startsWith('/employee') || url.pathname.startsWith('/api/employee')) {
+          isEmployeeRoute = true;
+        } else if (
+          url.pathname.startsWith('/admin') || 
+          url.pathname.startsWith('/api/admin') || 
+          url.pathname.startsWith('/client') || 
+          url.pathname.startsWith('/api/client')
+        ) {
+          isAdminOrClientRoute = true;
+        }
+      } catch (e) {
+        console.error("Error parsing URL in guard:", e);
+      }
+    }
+
     // 1. Try Authorization header
     if (req) {
       const authHeader = req.headers.get("authorization");
@@ -46,12 +69,20 @@ export async function authenticateRequest(
       // 2. Try cookie from request headers
       const cookieHeader = req.headers.get("cookie");
       if (cookieHeader) {
-        // We now check for both the standard 'token' and 'employee_token'
         const adminMatch = cookieHeader.match(/(?:^|;\s*)token=([^;]+)/);
         const empMatch = cookieHeader.match(/(?:^|;\s*)employee_token=([^;]+)/);
         
-        if (adminMatch) possibleTokens.push(decodeURIComponent(adminMatch[1]));
-        if (empMatch) possibleTokens.push(decodeURIComponent(empMatch[1]));
+        const adminToken = adminMatch ? decodeURIComponent(adminMatch[1]) : null;
+        const empToken = empMatch ? decodeURIComponent(empMatch[1]) : null;
+
+        if (isEmployeeRoute) {
+          if (empToken) possibleTokens.push(empToken);
+        } else if (isAdminOrClientRoute) {
+          if (adminToken) possibleTokens.push(adminToken);
+        } else {
+          if (adminToken) possibleTokens.push(adminToken);
+          if (empToken) possibleTokens.push(empToken);
+        }
       }
     }
 
@@ -61,8 +92,15 @@ export async function authenticateRequest(
         const cookieStore = await cookies();
         const adminToken = cookieStore.get("token")?.value;
         const empToken = cookieStore.get("employee_token")?.value;
-        if (adminToken) possibleTokens.push(adminToken);
-        if (empToken) possibleTokens.push(empToken);
+        
+        if (isEmployeeRoute) {
+          if (empToken) possibleTokens.push(empToken);
+        } else if (isAdminOrClientRoute) {
+          if (adminToken) possibleTokens.push(adminToken);
+        } else {
+          if (adminToken) possibleTokens.push(adminToken);
+          if (empToken) possibleTokens.push(empToken);
+        }
       } catch {
         // cookies() may throw in non-request contexts
       }

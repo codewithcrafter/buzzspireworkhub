@@ -36,12 +36,17 @@ export async function POST(req: Request) {
 
     // We don't block on this if SMTP is not configured properly in dev
     if (process.env.SMTP_HOST) {
-      await transporter.sendMail({
-        from: `"${name}" <${email}>`,
-        to: process.env.CONTACT_EMAIL || "hello@buzzspire.media",
-        subject: `New Contact Request from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nMessage: ${message}`,
-      });
+      try {
+        await transporter.sendMail({
+          from: `"${name}" <${email}>`,
+          to: process.env.CONTACT_EMAIL || "hello@buzzspire.media",
+          subject: `New Contact Request from ${name}`,
+          text: `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nMessage: ${message}`,
+        });
+      } catch (emailError) {
+        console.error("Failed to send contact email notification:", emailError);
+        // Do NOT fail the response, lead was already successfully created in the database
+      }
     }
 
     return NextResponse.json({ success: true, message: "Message received" }, { status: 200 });

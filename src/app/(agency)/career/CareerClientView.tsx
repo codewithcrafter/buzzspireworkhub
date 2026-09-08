@@ -28,7 +28,7 @@ import Magnetic from "@/components/ui/magnetic";
 const perks = [
   { icon: Compass, title: "100% Remote Flexibility", text: "Work from anywhere in the world. We equip you with high-end Macbook Pros and office budgets." },
   { icon: DollarSign, title: "Performance Dividends", text: "Every team member shares directly in client scale-ups. Direct profit distribution twice a year." },
-  { icon: GraduationCap, title: "$2,500 Learning Stipend", text: "We pay for books, marketing courses, and travel fees for digital strategy conferences." },
+  { icon: GraduationCap, title: "Learning Stipend", text: "We pay for books, marketing courses, and travel fees for digital strategy conferences." },
   { icon: Gift, title: "Unlimited Paid Time Off", text: "Take rest when needed. We enforce a minimum 20 days off annually to prevent burnout." }
 ];
 
@@ -67,7 +67,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
   const handleApplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPosition) return;
-    
+
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
@@ -127,7 +127,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
       <section className="py-32 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
-            
+
             {/* Left Column: Editorial Heading */}
             <div className="w-full lg:w-1/3 lg:sticky lg:top-32 space-y-8">
               <ScrollReveal>
@@ -147,24 +147,24 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
               {perks.map((p: any, idx: number) => {
                 const Icon = p.icon || Compass;
                 const isEven = idx % 2 === 0;
-                
+
                 return (
                   <ScrollReveal key={idx} delay={idx * 0.15}>
                     <div className={`p-8 md:p-10 rounded-3xl bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(79,70,229,0.1)] hover:border-primary/20 hover:-translate-y-1.5 transition-all duration-500 h-full flex flex-col group ${!isEven ? 'md:mt-16' : ''}`}>
-                      
+
                       <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 group-hover:bg-primary/5 group-hover:border-primary/20 flex items-center justify-center text-slate-500 group-hover:text-primary transition-all duration-500 mb-8 group-hover:scale-110">
                         <Icon className="w-7 h-7" />
                       </div>
-                      
+
                       <h3 className="font-heading font-bold text-xl text-slate-900 mb-4 group-hover:text-primary transition-colors duration-300">{p.title}</h3>
                       <p className="text-sm md:text-base text-slate-600 leading-relaxed">{p.text || p.description}</p>
-                      
+
                     </div>
                   </ScrollReveal>
                 )
               })}
             </div>
-            
+
           </div>
         </div>
       </section>
