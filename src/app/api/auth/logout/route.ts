@@ -17,6 +17,7 @@ export async function POST() {
         expires: new Date(0),
         path: "/",
     });
+    response.cookies.delete("employee_token");
 
     return response;
 }

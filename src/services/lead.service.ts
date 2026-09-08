@@ -37,10 +37,14 @@ export interface GetLeadsOptions {
   search?: string;
   take?: number;
   skip?: number;
+  isArchived?: boolean;
+  priority?: "LOW" | "MEDIUM" | "HIGH";
 }
 
 export async function getLeads(options: GetLeadsOptions = {}) {
-  const where: any = {};
+  const where: any = {
+    isArchived: options.isArchived ?? false,
+  };
 
   if (options.status) {
     where.status = options.status;
@@ -48,6 +52,10 @@ export async function getLeads(options: GetLeadsOptions = {}) {
 
   if (options.assignedEmployeeId !== undefined) {
     where.assignedEmployeeId = options.assignedEmployeeId;
+  }
+
+  if (options.priority) {
+    where.priority = options.priority;
   }
 
   if (options.search) {
@@ -97,6 +105,30 @@ export async function getLeadById(id: string) {
           role: true,
         },
       },
+      internalNotes: {
+        orderBy: { createdAt: 'desc' },
+        include: {
+          employee: {
+            select: {
+              id: true,
+              name: true,
+              employeeId: true,
+            }
+          }
+        }
+      },
+      activities: {
+        orderBy: { createdAt: 'desc' },
+        include: {
+          employee: {
+            select: {
+              id: true,
+              name: true,
+              employeeId: true,
+            }
+          }
+        }
+      }
     },
   });
 }
@@ -113,6 +145,8 @@ export async function updateLead(
     notes?: string | null;
     followUpAt?: Date | null;
     message?: string;
+    priority?: "LOW" | "MEDIUM" | "HIGH";
+    isArchived?: boolean;
   }
 ) {
   return prisma.lead.update({
@@ -155,5 +189,67 @@ export async function assignLead(leadId: string, employeeId: string | null) {
 export async function deleteLead(id: string) {
   return prisma.lead.delete({
     where: { id },
+  });
+}
+
+export async function logLeadActivity(data: {
+  leadId: string;
+  action: string;
+  details?: string;
+  employeeId?: string | null;
+}) {
+  return prisma.leadActivity.create({
+    data,
+  });
+}
+
+export async function addLeadNote(data: {
+  leadId: string;
+  content: string;
+  employeeId: string;
+}) {
+  return prisma.leadNote.create({
+    data,
+    include: {
+      employee: {
+        select: {
+          id: true,
+          name: true,
+          employeeId: true,
+        }
+      }
+    }
+  });
+}
+
+export async function getLeadNotes(leadId: string) {
+  return prisma.leadNote.findMany({
+    where: { leadId },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      employee: {
+        select: {
+          id: true,
+          name: true,
+          employeeId: true,
+        }
+      }
+    }
+  });
+}
+
+export async function getLeadActivities(leadId: string) {
+  return prisma.leadActivity.findMany({
+    where: { leadId },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      employee: {
+        select: {
+          id: true,
+          name: true,
+          employeeId: true,
+        }
+      }
+    }
   });
 }

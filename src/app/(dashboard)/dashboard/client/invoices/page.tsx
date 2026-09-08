@@ -40,29 +40,29 @@ export default function ClientInvoices() {
       />
 
       {loading ? (
-        <Card>
-          <CardContent className="py-10 text-center text-muted-foreground text-sm">
+        <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
+          <CardContent className="py-10 text-center text-muted-foreground text-sm font-medium">
             Loading invoices...
           </CardContent>
         </Card>
       ) : error ? (
-        <Card className="border-destructive/50">
-          <CardContent className="py-10 text-center text-destructive text-sm font-semibold">
+        <Card className="border-red-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-red-50/20">
+          <CardContent className="py-10 text-center text-red-500 text-sm font-semibold">
             {error}
           </CardContent>
         </Card>
       ) : invoices.length === 0 ? (
-        <Card>
+        <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
           <CardContent className="py-10 text-center text-muted-foreground text-sm font-semibold">
             No invoices available yet.
           </CardContent>
         </Card>
       ) : (
-        <Card>
+        <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white overflow-hidden">
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/30">
+                <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
                   <TableHead className="font-bold text-xs">Invoice No.</TableHead>
                   <TableHead className="font-bold text-xs">Date</TableHead>
                   <TableHead className="font-bold text-xs">Service</TableHead>

@@ -15,10 +15,10 @@ export default function ServiceBenefits({ service }: ServiceBenefitsProps) {
         <ScrollReveal>
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">Business Outcomes</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-slate-900">
               Real Benefits For Your Business
             </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-sm text-slate-600 leading-relaxed">
               Clear outcomes focused on visibility, inquiries, and customer acquisition.
             </p>
           </div>
@@ -27,15 +27,15 @@ export default function ServiceBenefits({ service }: ServiceBenefitsProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {service.benefits.map((benefit, idx) => (
             <ScrollReveal key={idx} delay={idx * 0.1}>
-              <div className="p-8 rounded-3xl bg-white border border-border/60 shadow-premium hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between group">
+              <div className="p-8 rounded-3xl bg-white border border-slate-200/60 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between group">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
-                  <h3 className="font-heading font-bold text-xl text-foreground group-hover:text-primary transition-colors">
+                  <h3 className="font-heading font-bold text-xl text-slate-900 group-hover:text-primary transition-colors">
                     {benefit.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
                     {benefit.description}
                   </p>
                 </div>

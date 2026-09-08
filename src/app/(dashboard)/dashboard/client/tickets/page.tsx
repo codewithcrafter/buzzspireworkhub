@@ -82,19 +82,19 @@ export default function ClientTickets() {
           <h2 className="text-xl font-bold text-foreground">Your Tickets</h2>
           
           {loading ? (
-            <Card>
-              <CardContent className="py-10 text-center text-muted-foreground text-sm">
+            <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
+              <CardContent className="py-10 text-center text-muted-foreground text-sm font-medium">
                 Loading tickets...
               </CardContent>
             </Card>
           ) : error ? (
-            <Card className="border-destructive/50">
-              <CardContent className="py-10 text-center text-destructive text-sm font-semibold">
+            <Card className="border-red-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-red-50/20">
+              <CardContent className="py-10 text-center text-red-500 text-sm font-semibold">
                 {error}
               </CardContent>
             </Card>
           ) : tickets.length === 0 ? (
-            <Card>
+            <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
               <CardContent className="py-10 text-center text-muted-foreground text-sm font-semibold">
                 No support tickets yet.
               </CardContent>
@@ -102,7 +102,7 @@ export default function ClientTickets() {
           ) : (
             <div className="space-y-4">
               {tickets.map((ticket) => (
-                <Card key={ticket.id} className="overflow-hidden border border-border">
+                <Card key={ticket.id} className="overflow-hidden border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                   <div className="p-4 bg-muted/20 border-b border-border/50 flex justify-between items-start gap-4">
                     <div>
                       <h3 className="font-bold text-foreground">{ticket.subject}</h3>
@@ -140,7 +140,7 @@ export default function ClientTickets() {
         </div>
 
         <div className="md:col-span-1">
-          <Card className="sticky top-6">
+            <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white sticky top-24">
             <CardHeader>
               <CardTitle className="text-lg">Open Support Ticket</CardTitle>
             </CardHeader>

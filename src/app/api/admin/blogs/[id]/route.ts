@@ -1,26 +1,8 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJwt } from "@/lib/auth";
+import { authenticateRequest } from "@/lib/guard";
 import { getBlog, updateBlog, deleteBlog } from "@/services/blog.service";
 import { BlogStatus } from "@prisma/client";
-
-// Helper to authenticate administrator requests
-async function authenticateAdmin() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
-
-    if (!token) {
-        throw new Error("Unauthorized");
-    }
-
-    const payload = await verifyJwt(token);
-
-    if (!payload || payload.role !== "ADMIN") {
-        throw new Error("Forbidden");
-    }
-
-    return payload;
-}
+import { revalidatePath } from "next/cache";
 
 // GET: Fetch a single blog by ID for admin form population
 export async function GET(
@@ -28,7 +10,8 @@ export async function GET(
     props: { params: Promise<{ id: string }> }
 ) {
     try {
-        await authenticateAdmin();
+        const auth = await authenticateRequest(req, { requiredPermission: "BLOG_MANAGE" });
+        if (!auth.authenticated) return auth.response;
         const params = await props.params;
         const id = params.id;
 
@@ -62,7 +45,8 @@ export async function PUT(
     props: { params: Promise<{ id: string }> }
 ) {
     try {
-        await authenticateAdmin();
+        const auth = await authenticateRequest(req, { requiredPermission: "BLOG_MANAGE" });
+        if (!auth.authenticated) return auth.response;
         const params = await props.params;
         const id = params.id;
         const body = await req.json();
@@ -108,6 +92,9 @@ export async function PUT(
 
         const updatedBlog = await updateBlog(id, data);
 
+        revalidatePath("/blog", "page");
+        revalidatePath("/blog/[slug]", "page");
+
         return NextResponse.json(
             { message: "Blog updated successfully", blog: updatedBlog },
             { status: 200 }
@@ -135,7 +122,8 @@ export async function DELETE(
     props: { params: Promise<{ id: string }> }
 ) {
     try {
-        await authenticateAdmin();
+        const auth = await authenticateRequest(req, { requiredRole: "ADMIN" });
+        if (!auth.authenticated) return auth.response;
         const params = await props.params;
         const id = params.id;
 

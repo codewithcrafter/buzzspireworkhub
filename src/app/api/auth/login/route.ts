@@ -81,6 +81,9 @@ export async function POST(req: Request) {
       maxAge: 60 * 60 * 24,
       path: "/",
     });
+    
+    // Clear any stale employee session to avoid session collision
+    response.cookies.delete("employee_token");
 
     return response;
   } catch (error) {

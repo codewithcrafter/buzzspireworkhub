@@ -165,9 +165,9 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
   const finalFaqs = (content?.faqs && content.faqs.length > 0) ? content.faqs : clientFaqs;
 
   return (
-    <main className="w-full bg-background select-none text-foreground font-sans">
+    <main className="w-full bg-slate-50 font-sans select-none text-slate-900 font-sans">
       {/* 1. HERO SECTION (2-Column Balanced) */}
-      <section className="pt-24 pb-16 md:pt-32 md:pb-24 px-6 max-w-7xl mx-auto border-b border-border/40 min-h-[650px] flex items-center">
+      <section className="pt-24 pb-16 md:pt-32 md:pb-24 px-6 max-w-7xl mx-auto border-b border-slate-200/50 min-h-[650px] flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
           {/* Left Side: Content */}
           <div className="space-y-8">
@@ -175,16 +175,16 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
                 <span className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary bg-primary/5 px-3 py-1 rounded-full border border-primary/20">
                   Buzzspire Services
                 </span>
-                <h1 className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight leading-[1.15] text-foreground">
+                <h1 className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight leading-[1.15] text-slate-900">
                   {h1}
                 </h1>
-                <h2 className="text-xl md:text-2xl font-heading font-semibold text-muted-foreground">
+                <h2 className="text-xl md:text-2xl font-heading font-semibold text-slate-600">
                   One Team, Every Service Your Business Actually Needs
                 </h2>
               </div>
 
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed mt-8">
-                <p className="font-semibold text-foreground">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed mt-8">
+                <p className="font-semibold text-slate-900">
                   Ten agencies. Ten invoices. Ten people to chase for updates.
                 </p>
                 <p>
@@ -197,7 +197,7 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
 
               <div className="pt-4 flex flex-col sm:flex-row gap-4 mt-8">
                 <a href="tel:+919205386625" className="w-full sm:w-auto">
-                  <Button size="lg" className="px-8 py-6 text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl shadow-sm hover:shadow">
+                  <Button size="lg" className="px-8 py-6 text-base font-semibold bg-primary text-primary-foreground hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 transition-colors w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl shadow-md shadow-indigo-900/5 hover:shadow">
                     <Phone className="w-4 h-4" />
                     <span>Call +91-9205386625</span>
                   </Button>
@@ -220,15 +220,15 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
       <section className="py-20 md:py-24 bg-muted/20 relative">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           <ScrollReveal>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-border/40">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200/50">
               <div className="space-y-4 max-w-2xl">
                 <span className="text-sm font-bold uppercase tracking-wider text-primary">
                   Agency Capabilities
                 </span>
-                <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground tracking-tight">
+                <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 tracking-tight">
                   {h2s?.['services-grid'] || "All Digital Marketing Services"}
                 </h2>
-                <p className="text-base md:text-lg text-muted-foreground">
+                <p className="text-base md:text-lg text-slate-600">
                   Here's everything we handle. Click into any service for the full breakdown.
                 </p>
               </div>
@@ -242,7 +242,7 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
               <ScrollReveal key={idx} delay={idx * 0.05}>
                 <Link
                   href={service.href || "#"}
-                  className="block h-full group bg-background border border-border/60 rounded-2xl p-8 hover:shadow-lg hover:border-primary/40 hover:-translate-y-1 transition-all duration-300"
+                  className="block h-full group bg-slate-50 font-sans border border-slate-200/60 rounded-2xl p-8 hover:shadow-lg hover:border-primary/40 hover:-translate-y-1 transition-all duration-300"
                 >
                   <div className="flex flex-col h-full space-y-5">
                     <div className="w-12 h-12 bg-primary/5 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
@@ -250,15 +250,15 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
                     </div>
                     
                     <div className="space-y-3 flex-grow">
-                      <h3 className="font-heading font-bold text-xl text-foreground group-hover:text-primary transition-colors duration-300">
+                      <h3 className="font-heading font-bold text-xl text-slate-900 group-hover:text-primary transition-colors duration-300">
                         {service.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-sm text-slate-600 leading-relaxed">
                         {service.desc}
                       </p>
                     </div>
 
-                    <div className="pt-4 border-t border-border/40 flex items-center justify-between text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                    <div className="pt-4 border-t border-slate-200/50 flex items-center justify-between text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">
                       <span>Explore Service</span>
                       <div className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                         <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
@@ -277,8 +277,8 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
                   <HelpCircle className="w-6 h-6 text-primary" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-bold text-foreground">Not sure where to start?</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <h4 className="font-bold text-slate-900">Not sure where to start?</h4>
+                  <p className="text-sm text-slate-600">
                     Call <a href="tel:+919205386625" className="text-primary hover:underline font-semibold">+91-9205386625</a> and we&apos;ll point you to the right service.
                   </p>
                 </div>
@@ -294,15 +294,15 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
       </section>
 
       {/* 3. WHAT SERVICES DOES A DIGITAL MARKETING AGENCY OFFER */}
-      <section className="py-20 md:py-24 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 md:py-24 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             <div className="lg:col-span-5 space-y-6">
               <span className="text-sm font-bold uppercase tracking-wider text-primary">The Standard</span>
-              <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground leading-tight">
+              <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 leading-tight">
                 What Services Does a Digital Marketing Agency Offer
               </h2>
-              <p className="text-base md:text-lg text-muted-foreground">
+              <p className="text-base md:text-lg text-slate-600">
                 Fair question. And most agencies don't answer it clearly. Here is exactly what we cover for our partners.
               </p>
             </div>
@@ -334,16 +334,16 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
                   if (idx === 3) translateClass = "sm:translate-y-8";  // Bottom right pushed down
 
                   return (
-                    <div key={idx} className={`bg-background/80 backdrop-blur-md border border-border/60 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg hover:border-primary/40 transition-all duration-500 group ${translateClass}`}>
-                      <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center text-foreground group-hover:bg-primary/5 group-hover:text-primary transition-colors duration-300 mb-6">
+                    <div key={idx} className={`bg-slate-50 font-sans/80 backdrop-blur-md border border-slate-200/60 rounded-2xl p-6 md:p-8 shadow-md shadow-indigo-900/5 hover:shadow-lg hover:border-primary/40 transition-all duration-500 group ${translateClass}`}>
+                      <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center text-slate-900 group-hover:bg-primary/5 group-hover:text-primary transition-colors duration-300 mb-6">
                         <Icon className="w-6 h-6 stroke-[1.5]" />
                       </div>
                       
                       <div className="space-y-3">
-                        <h3 className="text-xl font-heading font-bold text-foreground leading-tight group-hover:text-primary transition-colors duration-300">
+                        <h3 className="text-xl font-heading font-bold text-slate-900 leading-tight group-hover:text-primary transition-colors duration-300">
                           {item.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-sm text-slate-600 leading-relaxed">
                           {item.desc}
                         </p>
                       </div>
@@ -357,14 +357,14 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
       </section>
 
       {/* 4. DIGITAL MARKETING AGENCY WITH SEO, PPC, AND DESIGN */}
-      <section className="py-20 md:py-24 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 md:py-24 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
           <div className="text-center space-y-4 max-w-3xl mx-auto mb-16">
             <span className="text-sm font-bold uppercase tracking-wider text-primary">The Advantage</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground leading-tight">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 leading-tight">
               Digital Marketing Agency With SEO, PPC, and Design — All in One Place
             </h2>
-            <p className="text-base md:text-lg text-muted-foreground">
+            <p className="text-base md:text-lg text-slate-600">
               Look, anyone can run an ad. Running one that actually pays back is a different thing entirely.
             </p>
           </div>
@@ -373,31 +373,31 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
             {featureHighlights.map((feat: any, idx: number) => {
               const Icon = feat.icon || CheckCircle2;
               return (
-              <div key={idx} className="bg-background border border-border/60 rounded-2xl p-8 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+              <div key={idx} className="bg-slate-50 font-sans border border-slate-200/60 rounded-2xl p-8 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-heading font-bold text-foreground mb-3">
+                <h3 className="text-lg font-heading font-bold text-slate-900 mb-3">
                   {feat.title}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   {feat.desc}
                 </p>
               </div>
             )})}
           </div>
 
-          <div className="mt-16 bg-muted/30 border border-border/60 rounded-3xl p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="mt-16 bg-muted/30 border border-slate-200/60 rounded-3xl p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="space-y-2 max-w-xl text-center md:text-left">
-              <h3 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
+              <h3 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">
                 Ready to Get Started?
               </h3>
-              <p className="text-base md:text-lg text-muted-foreground">
+              <p className="text-base md:text-lg text-slate-600">
                 Talk to Our Team — reply within minutes on WhatsApp.
               </p>
             </div>
             <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer" className="w-full md:w-auto">
-              <Button size="lg" className="px-8 py-6 text-base font-semibold w-full md:w-auto flex items-center justify-center gap-2 rounded-xl shadow-sm">
+              <Button size="lg" className="px-8 py-6 text-base font-semibold w-full md:w-auto flex items-center justify-center gap-2 rounded-xl shadow-md shadow-indigo-900/5">
                 <MessageSquare className="w-4 h-4" />
                 <span>Talk to Our Team on WhatsApp</span>
               </Button>
@@ -407,12 +407,12 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
       </section>
 
       {/* 5. STILL DECIDING? HERE'S WHAT CLIENTS USUALLY ASK (FAQS) */}
-      <section className="py-20 md:py-24 bg-muted/20 border-y border-border/40">
+      <section className="py-20 md:py-24 bg-muted/20 border-y border-slate-200/50">
         <div className="max-w-3xl mx-auto px-6">
           <ScrollReveal>
             <div className="space-y-10">
               <div className="text-center space-y-4">
-                <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+                <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
                   Still Deciding? Here&apos;s What Clients Usually Ask
                 </h2>
               </div>
@@ -428,32 +428,32 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
       {/* 6. GET STARTED WITH BUZZSPIRE */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <ScrollReveal>
-          <div className="bg-background border border-border/80 rounded-[2rem] p-8 md:p-12 lg:p-16 shadow-sm overflow-hidden relative">
+          <div className="bg-slate-50 font-sans border border-slate-200/80 rounded-[2rem] p-8 md:p-12 lg:p-16 shadow-md shadow-indigo-900/5 overflow-hidden relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
               
               {/* Left Side: Existing CTA Content */}
               <div className="lg:col-span-7 space-y-8 text-left">
-                <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-foreground leading-tight">
+                <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-slate-900 leading-tight">
                   {h2s?.['cta'] || "Get Started with Buzzspire — All Your Marketing, One Team"}
                 </h2>
-                <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-2xl">
                   <p>
                     Looking for digital marketing services in Delhi that don't require managing five different vendors?
                   </p>
-                  <p className="font-semibold text-foreground">
+                  <p className="font-semibold text-slate-900">
                     That's Buzzspire services in one sentence. A full-service digital marketing agency that handles the strategy, the creative, and the execution, without passing you between departments.
                   </p>
                 </div>
 
                 <div className="pt-4 flex flex-col sm:flex-row items-center gap-4">
                   <a href="tel:+919205386625" className="w-full sm:w-auto">
-                    <Button size="lg" className="px-8 py-6 text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl shadow-sm">
+                    <Button size="lg" className="px-8 py-6 text-base font-semibold bg-primary text-primary-foreground hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 transition-colors w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl shadow-md shadow-indigo-900/5">
                       <Phone className="w-4 h-4" />
                       <span>Call +91-9205386625 now</span>
                     </Button>
                   </a>
                   <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                    <Button size="lg" variant="outline" className="px-8 py-6 text-base font-semibold border-border hover:bg-muted text-foreground transition-colors w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl">
+                    <Button size="lg" variant="outline" className="px-8 py-6 text-base font-semibold border-border hover:bg-muted text-slate-900 transition-colors w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl">
                       <MessageSquare className="w-4 h-4 text-primary" />
                       <span>WhatsApp us for a strategy call</span>
                     </Button>
@@ -461,7 +461,7 @@ export default function ServicesClientView({ content = {} }: { content?: any }) 
                 </div>
 
                 <div className="pt-4">
-                  <p className="text-sm md:text-base text-muted-foreground/80 font-medium italic">
+                  <p className="text-sm md:text-base text-slate-600/80 font-medium italic">
                     Your marketing, handled by one team that actually talks to each other.
                   </p>
                 </div>

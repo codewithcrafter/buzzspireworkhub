@@ -15,6 +15,7 @@ export interface ToastItem {
   description?: string
   type?: ToastType
   duration?: number
+  onClick?: () => void
 }
 
 interface ToastContextType {
@@ -105,8 +106,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
               className={cn(
                 "flex items-start gap-3 p-4 bg-card border rounded-xl shadow-xl pointer-events-auto",
-                toastBorder[t.type || "info"]
+                toastBorder[t.type || "info"],
+                t.onClick && "cursor-pointer hover:bg-muted/50 transition-colors"
               )}
+              onClick={() => {
+                if (t.onClick) {
+                  t.onClick();
+                  dismiss(t.id);
+                }
+              }}
             >
               {iconMap[t.type || "info"]}
               <div className="flex-1 min-w-0 space-y-0.5">
@@ -118,7 +126,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               <Button
                 variant="ghost"
                 size="icon-xs"
-                onClick={() => dismiss(t.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dismiss(t.id);
+                }}
                 className="text-muted-foreground hover:text-foreground cursor-pointer rounded-full shrink-0"
               >
                 <X className="size-3.5" />

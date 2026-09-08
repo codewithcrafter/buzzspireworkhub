@@ -1,31 +1,13 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJwt } from "@/lib/auth";
+import { authenticateRequest } from "@/lib/guard";
 import { uploadImage } from "@/services/upload.service";
-
-// Helper to authenticate administrator requests
-async function authenticateAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-
-  if (!token) {
-    throw new Error("Unauthorized");
-  }
-
-  const payload = await verifyJwt(token);
-
-  if (!payload || payload.role !== "ADMIN") {
-    throw new Error("Forbidden");
-  }
-
-  return payload;
-}
 
 // POST: Handles secure image upload for blog posts
 export async function POST(req: Request) {
   try {
-    // 1. Authenticate administrator session
-    await authenticateAdmin();
+    // 1. Authenticate administrator or authorized employee session
+    const auth = await authenticateRequest(req, { requiredAnyPermission: ["PAGES_EDIT", "BLOG_MANAGE"] });
+    if (!auth.authenticated) return auth.response;
 
     // 2. Parse Multipart request body
     const formData = await req.formData();

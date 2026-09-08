@@ -6,12 +6,12 @@ import { BarChart3, TrendingUp } from "lucide-react";
 export default function ServicesFooterVisual() {
   return (
     <div className="hidden lg:block lg:col-span-5 h-full">
-      <div className="bg-muted/30 border border-border/50 rounded-2xl p-8 h-full flex flex-col justify-center space-y-6 relative overflow-hidden">
+      <div className="bg-muted/30 border border-slate-200/50 rounded-2xl p-8 h-full flex flex-col justify-center space-y-6 relative overflow-hidden">
         {/* Subtle Background Accent */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-2xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />
         
-        <div className="flex items-center justify-between border-b border-border/40 pb-4">
-          <h3 className="font-bold text-foreground text-sm uppercase tracking-wider flex items-center gap-2">
+        <div className="flex items-center justify-between border-b border-slate-200/50 pb-4">
+          <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider flex items-center gap-2">
             <BarChart3 className="w-4 h-4 text-primary" />
             Campaign Overview
           </h3>
@@ -21,7 +21,7 @@ export default function ServicesFooterVisual() {
         <div className="space-y-4">
           {/* Fake progress bars for aesthetic */}
           <div className="space-y-2">
-            <div className="flex justify-between text-xs font-semibold text-foreground">
+            <div className="flex justify-between text-xs font-semibold text-slate-900">
               <span>SEO Growth</span>
               <TrendingUp className="w-3 h-3 text-green-500" />
             </div>
@@ -37,7 +37,7 @@ export default function ServicesFooterVisual() {
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between text-xs font-semibold text-foreground">
+            <div className="flex justify-between text-xs font-semibold text-slate-900">
               <span>PPC Conversions</span>
               <TrendingUp className="w-3 h-3 text-green-500" />
             </div>
@@ -53,7 +53,7 @@ export default function ServicesFooterVisual() {
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between text-xs font-semibold text-foreground">
+            <div className="flex justify-between text-xs font-semibold text-slate-900">
               <span>Social Engagement</span>
               <TrendingUp className="w-3 h-3 text-green-500" />
             </div>
@@ -69,7 +69,7 @@ export default function ServicesFooterVisual() {
           </div>
         </div>
 
-        <div className="pt-4 border-t border-border/40 flex items-center justify-between text-xs font-medium text-muted-foreground">
+        <div className="pt-4 border-t border-slate-200/50 flex items-center justify-between text-xs font-medium text-slate-600">
           <span>Multiple Channels</span>
           <span>One Unified Team</span>
         </div>

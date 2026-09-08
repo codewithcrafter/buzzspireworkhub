@@ -32,36 +32,7 @@ const perks = [
   { icon: Gift, title: "Unlimited Paid Time Off", text: "Take rest when needed. We enforce a minimum 20 days off annually to prevent burnout." }
 ];
 
-// Open Positions Mock
-const positions = [
-  {
-    id: "fe-architect",
-    title: "Senior Front-End Engineer (Next.js)",
-    dept: "Engineering",
-    location: "Remote (US/EU Timezones)",
-    salary: "$120,000 - $145,000 + equity",
-    tags: ["Full-time", "Next.js", "Tailwind"],
-    desc: "We are looking for a developer who builds websites comparable to Awwwards nominees. You will write code inside Next.js and Framer Motion, designing custom layouts for scaling brands."
-  },
-  {
-    id: "media-buyer",
-    title: "Performance Media Buyer (Meta & Google)",
-    dept: "Marketing Campaigns",
-    location: "Remote (Anywhere)",
-    salary: "$90,000 - $115,000 + profit share",
-    tags: ["Full-time", "Paid Search", "Meta API"],
-    desc: "Scale media budgets safely from $20k to $250k monthly spend. You will perform bidding, audience mapping, direct-response copywriting, and CRM integration tracking."
-  },
-  {
-    id: "copywriter",
-    title: "Senior B2B Copywriter",
-    dept: "Creative Branding",
-    location: "Remote (US/EU Timezones)",
-    salary: "$80,000 - $95,000",
-    tags: ["Full-time", "Direct Response", "SEO Content"],
-    desc: "Write direct-response copies for landing pages, ad hooks, and newsletter systems. You must have a portfolio containing published, commercial-intent articles."
-  }
-];
+// Job positions are now loaded dynamically from the backend
 
 // Hiring Process Timeline
 const steps = [
@@ -88,6 +59,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
   const [candidatePortfolio, setCandidatePortfolio] = useState("");
   const [candidateCover, setCandidateCover] = useState("");
 
+  const genuinePositions = (content?.positions && Array.isArray(content.positions) && content.positions.length > 0) ? content.positions : [];
   const h1 = content?.h1 || "Build high-performance assets";
   const h2s = content?.h2s || {};
   const faqsList = (content?.faqs && content.faqs.length > 0) ? content.faqs : defaultCareerFaqs;
@@ -127,10 +99,10 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
     }
   };
 
-  const selectedPosition = positions.find(pos => pos.id === applyModalPosition);
+  const selectedPosition = genuinePositions.find((pos: any) => pos.id === applyModalPosition);
 
   return (
-    <main className="w-full bg-background select-none bg-grid-pattern relative">
+    <main className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative">
       <div className="absolute top-12 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
 
       {/* 1. HERO HEADER */}
@@ -139,46 +111,60 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
           <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full">
             Join the Spire
           </span>
-          <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tighter leading-none text-foreground mt-6">
+          <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tighter leading-none text-slate-900 mt-6">
             {h1} <br />
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               with absolute autonomy.
             </span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mt-6">
+          <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed mt-6">
             We are looking for self-directed builders. We do not track hours worked, and we do not hold unnecessary meetings. We track impact, speed, and client conversion results.
           </p>
         </ScrollReveal>
       </section>
 
       {/* 2. BENEFITS & PERKS */}
-      <section className="py-24 bg-muted/40 relative">
+      <section className="py-32 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center max-w-3xl mx-auto mb-20">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Core Perks</h2>
-              <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                {h2s?.['culture'] || "How we reward category-level impact"}
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {perks.map((p: any, idx: number) => {
-              const Icon = p.icon || Compass;
-              return (
-              <ScrollReveal key={idx} delay={idx * 0.1}>
-                <div className="p-8 rounded-3xl bg-white border border-border shadow-premium h-full flex flex-col justify-between group">
-                  <div>
-                    <div className="w-12 h-12 rounded-2xl bg-primary/5 group-hover:bg-primary/10 flex items-center justify-center text-primary transition-colors mb-6">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="font-heading font-bold text-lg text-foreground mb-3">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{p.text || p.description}</p>
-                  </div>
+          <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
+            
+            {/* Left Column: Editorial Heading */}
+            <div className="w-full lg:w-1/3 lg:sticky lg:top-32 space-y-8">
+              <ScrollReveal>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 mb-6">
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <span className="text-xs font-bold uppercase tracking-widest text-primary">Our Core Perks</span>
                 </div>
+                <h2 className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+                  {h2s?.['culture'] || "How we reward category-level impact"}
+                </h2>
+                <div className="h-1 w-12 bg-primary rounded-full mt-10 opacity-80" />
               </ScrollReveal>
-            )})}
+            </div>
+
+            {/* Right Column: Staggered Perks Layout */}
+            <div className="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              {perks.map((p: any, idx: number) => {
+                const Icon = p.icon || Compass;
+                const isEven = idx % 2 === 0;
+                
+                return (
+                  <ScrollReveal key={idx} delay={idx * 0.15}>
+                    <div className={`p-8 md:p-10 rounded-3xl bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(79,70,229,0.1)] hover:border-primary/20 hover:-translate-y-1.5 transition-all duration-500 h-full flex flex-col group ${!isEven ? 'md:mt-16' : ''}`}>
+                      
+                      <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 group-hover:bg-primary/5 group-hover:border-primary/20 flex items-center justify-center text-slate-500 group-hover:text-primary transition-all duration-500 mb-8 group-hover:scale-110">
+                        <Icon className="w-7 h-7" />
+                      </div>
+                      
+                      <h3 className="font-heading font-bold text-xl text-slate-900 mb-4 group-hover:text-primary transition-colors duration-300">{p.title}</h3>
+                      <p className="text-sm md:text-base text-slate-600 leading-relaxed">{p.text || p.description}</p>
+                      
+                    </div>
+                  </ScrollReveal>
+                )
+              })}
+            </div>
+            
           </div>
         </div>
       </section>
@@ -188,62 +174,76 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
         <ScrollReveal>
           <div className="mb-12 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
-            <h3 className="font-heading font-bold text-xl text-foreground">
-              {h2s?.['roles'] || `Current Open Roles (${positions.length})`}
+            <h3 className="font-heading font-bold text-xl text-slate-900">
+              {h2s?.['roles'] || `Current Open Roles (${genuinePositions.length})`}
             </h3>
           </div>
         </ScrollReveal>
 
         <div className="space-y-6">
-          {positions.map((pos: any, idx: number) => (
-            <ScrollReveal key={pos.id || idx} delay={idx * 0.1}>
-              <div className="p-8 rounded-3xl bg-white border border-border hover:border-primary/40 shadow-premium transition-all duration-300">
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
-
-                  {/* Info details */}
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap gap-2">
-                      {pos.tags?.map((t: string, i: number) => (
-                        <span key={i} className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted px-2.5 py-1 rounded-full">{t}</span>
-                      ))}
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">{pos.dept}</span>
-                    </div>
-                    <h4 className="font-heading font-extrabold text-2xl text-foreground">{pos.title}</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">{pos.desc || pos.description}</p>
-
-                    <div className="flex flex-wrap gap-4 text-xs font-semibold text-muted-foreground pt-1">
-                      <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-primary" />{pos.location}</span>
-                      <span className="flex items-center gap-1.5"><DollarSign className="w-3.5 h-3.5 text-emerald-600" />{pos.salary}</span>
-                    </div>
-                  </div>
-
-                  {/* Apply trigger */}
-                  <div className="shrink-0 w-full lg:w-auto">
-                    <Magnetic>
-                      <Button
-                        onClick={() => setApplyModalPosition(pos.id)}
-                        className="rounded-full bg-primary text-white font-semibold shadow-md w-full lg:w-auto"
-                      >
-                        Apply For This Role
-                        <ArrowRight className="ml-1.5 w-4 h-4" />
-                      </Button>
-                    </Magnetic>
-                  </div>
-
+          {genuinePositions.length === 0 ? (
+            <ScrollReveal>
+              <div className="py-20 text-center bg-white rounded-3xl border border-slate-200 shadow-xl shadow-indigo-900/5">
+                <div className="w-20 h-20 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Briefcase className="w-8 h-8 text-slate-300" />
                 </div>
+                <h4 className="text-2xl font-heading font-extrabold text-slate-900 mb-3">No Open Positions Right Now</h4>
+                <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+                  We don't have any open positions at the moment, but we're always interested in meeting talented people. Check back later.
+                </p>
               </div>
             </ScrollReveal>
-          ))}
+          ) : (
+            genuinePositions.map((pos: any, idx: number) => (
+              <ScrollReveal key={pos.id || idx} delay={idx * 0.1}>
+                <div className="p-8 rounded-3xl bg-white border border-slate-200 hover:border-primary/40 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300">
+                  <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+
+                    {/* Info details */}
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-2">
+                        {pos.tags?.map((t: string, i: number) => (
+                          <span key={i} className="text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-muted px-2.5 py-1 rounded-full">{t}</span>
+                        ))}
+                        {pos.dept && <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">{pos.dept}</span>}
+                      </div>
+                      <h4 className="font-heading font-extrabold text-2xl text-slate-900">{pos.title}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">{pos.desc || pos.description}</p>
+
+                      <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-600 pt-1">
+                        {pos.location && <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-primary" />{pos.location}</span>}
+                        {pos.salary && <span className="flex items-center gap-1.5"><DollarSign className="w-3.5 h-3.5 text-emerald-600" />{pos.salary.toString().replace(/\$/g, '₹')}</span>}
+                      </div>
+                    </div>
+
+                    {/* Apply trigger */}
+                    <div className="shrink-0 w-full lg:w-auto">
+                      <Magnetic>
+                        <Button
+                          onClick={() => setApplyModalPosition(pos.id)}
+                          className="rounded-full bg-primary hover:bg-indigo-700 hover:-translate-y-0.5 text-white font-semibold shadow-md hover:shadow-xl w-full lg:w-auto transition-all duration-300"
+                        >
+                          Apply For This Role
+                          <ArrowRight className="ml-1.5 w-4 h-4" />
+                        </Button>
+                      </Magnetic>
+                    </div>
+
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))
+          )}
         </div>
       </section>
 
       {/* 4. HIRING PROCESS TIMELINE */}
-      <section className="py-24 bg-muted/40 relative">
+      <section className="py-24 bg-slate-50/80 border-y border-slate-100 relative">
         <div className="max-w-7xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Framework</h2>
-              <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
+              <p className="text-4xl font-heading font-extrabold tracking-tight text-slate-900">
                 How we recruit top digital minds
               </p>
             </div>
@@ -252,10 +252,10 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((s: any, idx: number) => (
               <ScrollReveal key={idx} delay={idx * 0.15}>
-                <div className="p-8 rounded-3xl bg-white border border-border/50 shadow-premium h-full flex flex-col relative">
+                <div className="p-8 rounded-3xl bg-white border border-slate-100 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 h-full flex flex-col relative">
                   <div className="text-6xl font-heading font-black text-primary/10 mb-4">{s.step}</div>
-                  <h3 className="font-heading font-bold text-xl text-foreground mb-3">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{s.desc || s.description}</p>
+                  <h3 className="font-heading font-bold text-xl text-slate-900 mb-3">{s.title}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">{s.desc || s.description}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -268,7 +268,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
         <ScrollReveal>
           <div className="text-center mb-16">
             <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Hiring Queries</h2>
-            <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
+            <p className="text-4xl font-heading font-extrabold tracking-tight text-slate-900">
               {h2s?.['faq'] || "Candidate FAQs"}
             </p>
           </div>
@@ -279,13 +279,13 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
             const isOpen = activeFaq === idx;
             return (
               <ScrollReveal key={idx} delay={idx * 0.05}>
-                <div className="rounded-2xl border border-border bg-white overflow-hidden transition-all duration-300">
+                <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all duration-300">
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full p-6 text-left flex items-center justify-between font-heading font-bold text-base md:text-lg text-foreground hover:text-primary transition-colors focus:outline-none"
+                    className="w-full p-6 text-left flex items-center justify-between font-heading font-bold text-base md:text-lg text-slate-900 hover:text-primary transition-colors focus:outline-none"
                   >
                     <span>{faq.q}</span>
-                    <span className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary transition-colors shrink-0 ml-4">
+                    <span className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-slate-600 hover:text-primary transition-colors shrink-0 ml-4">
                       {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                     </span>
                   </button>
@@ -298,7 +298,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="p-6 pt-0 border-t border-border/30 text-sm text-muted-foreground leading-relaxed">
+                        <div className="p-6 pt-0 border-t border-slate-200/30 text-sm text-slate-600 leading-relaxed">
                           {faq.a}
                         </div>
                       </motion.div>
@@ -319,19 +319,19 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-3xl border border-border shadow-2xl p-6 md:p-8 max-w-xl w-full relative overflow-y-auto max-h-[90vh]"
+              className="bg-white rounded-3xl border border-slate-200 shadow-2xl p-6 md:p-8 max-w-xl w-full relative overflow-y-auto max-h-[90vh]"
             >
               <button
                 onClick={() => setApplyModalPosition(null)}
-                className="absolute right-4 top-4 p-2 text-muted-foreground hover:text-foreground transition-colors"
+                className="absolute right-4 top-4 p-2 text-slate-600 hover:text-slate-900 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="space-y-4 mb-6">
                 <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase">{selectedPosition.dept}</span>
-                <h3 className="font-heading font-extrabold text-2xl text-foreground">{selectedPosition.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">Submit your application details below. We typically review candidates within 3 business days.</p>
+                <h3 className="font-heading font-extrabold text-2xl text-slate-900">{selectedPosition.title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">Submit your application details below. We typically review candidates within 3 business days.</p>
               </div>
 
               {formSubmitted ? (
@@ -343,15 +343,15 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
                   <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
-                  <h4 className="font-heading font-bold text-lg text-foreground">Application Received!</h4>
-                  <p className="text-xs text-muted-foreground">Thank you for applying. Elena from our talent group will follow up shortly via email.</p>
+                  <h4 className="font-heading font-bold text-lg text-slate-900">Application Received!</h4>
+                  <p className="text-xs text-slate-600">Thank you for applying. Elena from our talent group will follow up shortly via email.</p>
                 </motion.div>
               ) : (
                 <form onSubmit={handleApplySubmit} className="space-y-4">
                   <div className="space-y-1">
-                    <Label htmlFor="c-name" className="text-xs font-bold text-foreground">Full Name</Label>
+                    <Label htmlFor="c-name" className="text-xs font-bold text-slate-900">Full Name</Label>
                     <div className="relative">
-                      <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground pointer-events-none" />
+                      <User className="absolute left-3 top-3 w-4 h-4 text-slate-600 pointer-events-none" />
                       <Input
                         id="c-name"
                         required
@@ -364,9 +364,9 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
                   </div>
 
                   <div className="space-y-1">
-                    <Label htmlFor="c-email" className="text-xs font-bold text-foreground">Email Address</Label>
+                    <Label htmlFor="c-email" className="text-xs font-bold text-slate-900">Email Address</Label>
                     <div className="relative">
-                      <FileText className="absolute left-3 top-3 w-4 h-4 text-muted-foreground pointer-events-none" />
+                      <FileText className="absolute left-3 top-3 w-4 h-4 text-slate-600 pointer-events-none" />
                       <Input
                         id="c-email"
                         type="email"
@@ -380,7 +380,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
                   </div>
 
                   <div className="space-y-1">
-                    <Label htmlFor="c-portfolio" className="text-xs font-bold text-foreground">Portfolio/GitHub/LinkedIn URL</Label>
+                    <Label htmlFor="c-portfolio" className="text-xs font-bold text-slate-900">Portfolio/GitHub/LinkedIn URL</Label>
                     <Input
                       id="c-portfolio"
                       required
@@ -392,7 +392,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
                   </div>
 
                   <div className="space-y-1">
-                    <Label htmlFor="c-cover" className="text-xs font-bold text-foreground">Why BuzzSpire? (Optional)</Label>
+                    <Label htmlFor="c-cover" className="text-xs font-bold text-slate-900">Why BuzzSpire? (Optional)</Label>
                     <Textarea
                       id="c-cover"
                       value={candidateCover}
@@ -402,7 +402,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full rounded-full bg-primary text-white font-semibold py-5">
+                  <Button type="submit" className="w-full rounded-full bg-primary hover:bg-indigo-700 hover:-translate-y-0.5 transition-all duration-300 text-white font-semibold py-5 shadow-md hover:shadow-xl">
                     Submit Application
                   </Button>
                 </form>

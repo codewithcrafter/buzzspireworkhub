@@ -41,6 +41,8 @@ interface LeadItem {
   budget?: string;
   service?: string;
   status: string;
+  priority?: "LOW" | "MEDIUM" | "HIGH";
+  isArchived?: boolean;
   createdAt: string;
 }
 
@@ -85,6 +87,7 @@ export default function EmployeeDashboardPage() {
   const contactedLeads = leads.filter((l) => l.status === "CONTACTED").length;
   const qualifiedLeads = leads.filter((l) => l.status === "QUALIFIED").length;
   const closedLeads = leads.filter((l) => l.status === "CLOSED").length;
+  const highPriorityLeads = leads.filter((l) => l.priority === "HIGH").length;
 
   const hasLeadsView = profile?.role === "ADMIN" || profile?.permissions?.includes("LEADS_VIEW");
 
@@ -141,6 +144,23 @@ export default function EmployeeDashboardPage() {
                 {totalLeads}
               </p>
               <p className="text-xs text-muted-foreground">Active in your queue</p>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-2xl border border-border/80 shadow-sm bg-card hover:border-red-500/40 transition-all">
+            <CardContent className="p-5 sm:p-6 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  High Priority
+                </span>
+                <div className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+              </div>
+              <p className="text-2xl sm:text-3xl font-heading font-extrabold text-red-600">
+                {highPriorityLeads}
+              </p>
+              <p className="text-xs text-muted-foreground">Requires attention</p>
             </CardContent>
           </Card>
 
@@ -240,6 +260,11 @@ export default function EmployeeDashboardPage() {
                   <div className="space-y-1 overflow-hidden">
                     <div className="flex items-center gap-2">
                       <p className="font-bold text-sm text-foreground truncate">{lead.name}</p>
+                      {lead.priority === "HIGH" && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-sm bg-red-500/10 text-red-600 font-bold uppercase">
+                          HIGH
+                        </span>
+                      )}
                       <span className="text-xs px-2 py-0.5 rounded-md bg-muted font-mono text-muted-foreground">
                         {lead.status}
                       </span>

@@ -102,6 +102,9 @@ export async function POST(req: Request) {
       maxAge: 60 * 60 * 24, // 24 hours
       path: "/",
     });
+    
+    // Clear any stale admin session
+    response.cookies.delete("token");
 
     return response;
   } catch (error) {

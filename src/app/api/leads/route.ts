@@ -18,12 +18,8 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { name, email, company, budget, service, message, source, pageUrl, portfolio, phone } = body;
 
-        if (!name || !email || !message) {
-            return NextResponse.json(
-                { success: false, message: "Missing required fields" },
-                { status: 400 }
-            );
-        }
+        // Fields are completely optional based on new requirements
+
 
         const newLead = await createLead({
             name,

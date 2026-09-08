@@ -57,7 +57,7 @@ const webFaqs = [
 
 export default function WebDevelopmentServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -70,11 +70,11 @@ export default function WebDevelopmentServiceView() {
                 <Code className="w-4 h-4" />
                 Web Development Specialist
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 Professional Website Development Services in Delhi
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Looking for web development services that actually move the needle? Good. You&apos;ve landed in the right spot.
                 </p>
                 <p>
@@ -86,7 +86,7 @@ export default function WebDevelopmentServiceView() {
                 <p>
                   Professional website development isn&apos;t about a pretty template anymore. It&apos;s about clean code, smart design, and a team that picks up the phone.
                 </p>
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-slate-900">
                   That&apos;s the web design and development services model we run on. Simple. Direct. No fluff.
                 </p>
               </div>
@@ -94,7 +94,7 @@ export default function WebDevelopmentServiceView() {
             <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Talk to our Dev Team</span>
                   </Button>
@@ -108,13 +108,13 @@ export default function WebDevelopmentServiceView() {
       </section>
 
       {/* WEB DEVELOPMENT AGENCY YOU CAN TRUST */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Web Development Agency You Can Trust
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground text-center">Trust isn&apos;t claimed. It&apos;s earned.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900 text-center">Trust isn&apos;t claimed. It&apos;s earned.</p>
             <ul className="space-y-3 text-left">
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
@@ -148,12 +148,12 @@ export default function WebDevelopmentServiceView() {
       </section>
 
       {/* CUSTOM WEB DEVELOPMENT */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
             Custom Web Development Company Built for Your Business
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             <p>
               Off-the-shelf builds break. They slow down. They can&apos;t handle real traffic.
             </p>
@@ -163,7 +163,7 @@ export default function WebDevelopmentServiceView() {
             <p>
               Your industry. Your customers. Your goals. That&apos;s what shapes the build.
             </p>
-            <p className="font-semibold text-foreground">
+            <p className="font-semibold text-slate-900">
               The result? A site that fits your business the way a made-to-order suit fits better than something off the rack.
             </p>
           </div>
@@ -171,63 +171,63 @@ export default function WebDevelopmentServiceView() {
       </section>
 
       {/* OUR WEB DEVELOPMENT SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
               Our Web Development Services
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Here&apos;s what falls under our roof.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Responsive Web Design Agency</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Responsive Web Design Agency</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Your site needs to look right on a phone, a tablet, and a 27-inch monitor. All at once. As a responsive web design agency, that&apos;s the baseline. Not an upgrade. Not an add-on.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">E-commerce Website Development</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">E-commerce Website Development</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Selling online needs more than a shopping cart icon. Our e-commerce website development covers product pages that convert, checkout flows that don&apos;t lose customers halfway, and back-end systems that don&apos;t crash on sale day.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">WordPress Web Development</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">WordPress Web Development</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 WordPress still runs a huge chunk of the internet. And there&apos;s a reason for that. Our WordPress web development work covers custom themes, plugin builds, and migrations that don&apos;t break your SEO in the process.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Full-Stack Web Development</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Full-Stack Web Development</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Front-end. Back-end. Database. Server logic. Full-stack web development means one team handles the whole stack, so nothing gets lost between hand-offs.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Custom CMS Development</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Custom CMS Development</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Generic CMS platforms box you in. Custom CMS development means you get an admin panel built around how your team actually works. Not the other way around.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">UI/UX Web Design Services</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">UI/UX Web Design Services</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Good design isn&apos;t just about looking nice. It&apos;s about getting out of the user&apos;s way. Our UI/UX web design services start with how people actually move through a page. Where they click. Where they drop off. Where they get stuck.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Website Speed Optimization</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Website Speed Optimization</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 A slow site kills conversions before your copy even gets read. Website speed optimization is baked into every build. Not bolted on after launch.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-3 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">SEO-Friendly Website Design</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-3 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">SEO-Friendly Website Design</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 A beautiful site that Google can&apos;t crawl properly is a wasted site. SEO-friendly website design means clean code, proper heading structure, and fast load times from the ground up. Rankings start with the build, not just the content.
               </p>
             </div>
@@ -236,42 +236,42 @@ export default function WebDevelopmentServiceView() {
       </section>
 
       {/* SOLUTIONS FOR EVERY BUSINESS */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Custom Web Development Services for Small Businesses</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Custom Web Development Services for Small Businesses</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Small budgets don&apos;t mean small results. Our custom web development services for small businesses are built to scale. Start lean, add features as revenue grows. No need to rebuild from scratch a year later.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">High Converting B2B Website Development Company</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">High Converting B2B Website Development Company</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 B2B buyers research longer and expect more proof before they reach out. As a high converting B2B website development company, we build sites around trust signals, case studies, and lead capture that actually gets used by your sales team.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Web Development and Digital Marketing Package for Startups</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Web Development and Digital Marketing Package for Startups</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 A website alone doesn&apos;t fill your pipeline. Our web development and digital marketing package for startups pairs the build with the traffic strategy behind it. SEO, ads, content - all pointed at the same goal. Building from zero? Talk to us before you write a single spec.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Affordable Custom WordPress Development Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Affordable Custom WordPress Development Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Custom doesn&apos;t have to mean expensive. Our affordable custom WordPress development services give you a tailored build without enterprise-level pricing. Upfront quotes. No surprise invoices later.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Mobile Responsive Website Redesign Company</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Mobile Responsive Website Redesign Company</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Old site dragging you down? Loading slow on mobile? Losing visitors before they even scroll? As a mobile responsive website redesign company, we rebuild what&apos;s broken and keep what&apos;s already working. No need to throw out your existing SEO rankings in the process.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">E-commerce Web Development with Payment Gateway Integration</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">E-commerce Web Development with Payment Gateway Integration</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Checkout is where sales get won or lost. Our e-commerce web development with payment gateway integration covers Razorpay, Stripe, PayPal, and other gateways your customers already trust. Secure. Fast. Tested before launch, not after.
               </p>
             </div>
@@ -280,17 +280,17 @@ export default function WebDevelopmentServiceView() {
       </section>
 
       {/* FULL SERVICE DIGITAL MARKETING */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Full Service Digital Marketing and Website Design Agency
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <p>Some agencies build the site and stop there.</p>
             <p>
               We&apos;re a full service digital marketing and website design agency. Your site launches, and then we keep working - SEO, ads, content, the whole pipeline.
             </p>
-            <p className="font-semibold text-foreground">
+            <p className="font-semibold text-slate-900">
               One team. One point of contact. One dedicated account manager who already knows your business inside out.
             </p>
           </div>
@@ -298,10 +298,10 @@ export default function WebDevelopmentServiceView() {
       </section>
 
       {/* FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -320,20 +320,20 @@ export default function WebDevelopmentServiceView() {
         ]}
       />
       {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
             {/* Subtle accent corner */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/20 rounded-full blur-[40px] pointer-events-none" />
             <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
             
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Get Started With Our Web Development Team
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>You&apos;ve read this far. That tells us something.</p>
               <p>Tell us what you&apos;re building, and we&apos;ll walk you through pricing, timelines, and next steps - no pressure, no jargon.</p>
-              <p className="font-semibold text-foreground pt-2">Buzzspire. Delhi. Web development services that actually deliver.</p>
+              <p className="font-semibold text-slate-900 pt-2">Buzzspire. Delhi. Web development services that actually deliver.</p>
             </div>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">

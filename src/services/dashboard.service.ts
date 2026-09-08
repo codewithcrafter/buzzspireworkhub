@@ -88,4 +88,4 @@ export async function getDashboardStats() {
         activities: formattedActivities,
         tasks: formattedTasks
     };
-}
+}

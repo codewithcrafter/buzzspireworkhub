@@ -17,12 +17,12 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
   const IconComponent = getServiceIcon(service.iconName);
 
   return (
-    <section className={`relative pt-12 pb-20 px-6 max-w-7xl mx-auto overflow-hidden rounded-3xl bg-gradient-to-b ${service.gradient} border border-border/40 my-4`}>
+    <section className={`relative pt-12 pb-20 px-6 max-w-7xl mx-auto overflow-hidden rounded-3xl bg-gradient-to-b ${service.gradient} border border-slate-200/50 my-4`}>
       {/* Background glow orb */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none -z-10" />
 
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground mb-8">
+      <div className="flex items-center gap-2 text-xs md:text-sm text-slate-600 mb-8">
         <Link href="/" className="hover:text-primary transition-colors font-medium">
           Home
         </Link>
@@ -31,29 +31,29 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
           Services
         </Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-foreground font-semibold truncate">{service.navTitle}</span>
+        <span className="text-slate-900 font-semibold truncate">{service.navTitle}</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-8 space-y-6">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md border border-primary/20 rounded-full text-primary text-xs md:text-sm font-semibold shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md border border-primary/20 rounded-full text-primary text-xs md:text-sm font-semibold shadow-md shadow-indigo-900/5">
             <IconComponent className="w-4 h-4 text-secondary shrink-0" />
             <span>{service.heroBadge}</span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
             {service.title}
           </h1>
 
           {/* Short Description */}
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+          <p className="text-base md:text-lg text-slate-600 leading-relaxed max-w-2xl">
             {service.shortDesc}
           </p>
 
           {/* Delhi / NCR Relevance banner */}
-          <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-foreground bg-white/60 backdrop-blur-sm p-3.5 rounded-2xl border border-border/50 max-w-xl">
+          <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-slate-900 bg-white/60 backdrop-blur-sm p-3.5 rounded-2xl border border-slate-200/50 max-w-xl">
             <MapPin className="w-4 h-4 text-primary shrink-0" />
             <span>{service.delhiRelevance}</span>
           </div>
@@ -62,7 +62,7 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <Magnetic strength={0.2}>
               <Link href="/contact" className="w-full sm:w-auto">
-                <Button size="lg" className="rounded-full px-8 py-7 text-lg group bg-primary text-white hover:bg-primary/90 transition-all duration-300 w-full sm:w-auto shadow-md">
+                <Button size="lg" className="rounded-full px-8 py-7 text-lg group bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 transition-all duration-300 w-full sm:w-auto shadow-md">
                   Get Free Consultation
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -97,10 +97,10 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
                   {service.tag}
                 </span>
-                <h3 className="font-heading font-extrabold text-xl text-foreground">
+                <h3 className="font-heading font-extrabold text-xl text-slate-900">
                   Built For Delhi NCR Businesses
                 </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   No generic templates. Every strategy is tailored to your target customers and competition.
                 </p>
               </div>

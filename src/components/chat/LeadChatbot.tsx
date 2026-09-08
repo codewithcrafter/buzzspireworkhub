@@ -491,7 +491,7 @@ export default function LeadChatbot() {
                 )}
                 {chatSessionId && currentStep !== "SUCCESS" && (
                   <a
-                    href="tel:+919599249586"
+                    href="tel:+919205386625"
                     className="text-primary-foreground/80 hover:text-primary-foreground transition-colors p-1"
                     aria-label="Phone Call"
                   >

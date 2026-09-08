@@ -12,7 +12,8 @@ const prismaClientSingleton = () => {
     connectionTimeoutMillis: 15000,
     max: 10,
     allowExitOnIdle: true,
-  });
+    family: 4, // Force IPv4 to fix Node DNS resolution bug with Neon `.c-2` domains
+  } as any);
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 };
@@ -20,13 +21,13 @@ const prismaClientSingleton = () => {
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
 
 const globalForPrisma = globalThis as unknown as {
-  prismaFresh: PrismaClientSingleton | undefined;
+  prismaSuperFresh: PrismaClientSingleton | undefined;
 };
 
-export const prisma = globalForPrisma.prismaFresh ?? prismaClientSingleton();
+export const prisma = globalForPrisma.prismaSuperFresh ?? prismaClientSingleton();
 console.log("===== PRISMA DELEGATES =====");
 console.log(Object.keys(prisma).sort());
 console.log("blog delegate:", (prisma as any).blog);
 console.log("============================");
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prismaFresh = prisma;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prismaSuperFresh = prisma;

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getLeadById, updateLead, deleteLead } from "@/services/lead.service";
+import { getLeadById, updateLead, deleteLead, logLeadActivity } from "@/services/lead.service";
 import { authenticateRequest } from "@/lib/guard";
 import { ApiResponse } from "@/lib/api-response";
 import { PERMISSIONS } from "@/lib/permissions";
@@ -81,14 +81,62 @@ export async function PATCH(req: Request, { params }: RouteParams) {
       phone: body.phone,
       notes: body.notes,
       message: body.message,
+      priority: body.priority,
+      isArchived: body.isArchived,
       followUpAt: body.followUpAt ? new Date(body.followUpAt) : null,
     });
+
+    // Log activities for significant changes
+    if (body.status !== undefined && body.status !== lead.status) {
+      await logLeadActivity({
+        leadId: id,
+        action: "Status changed",
+        details: `${lead.status} -> ${body.status}`,
+        employeeId: auth.user.id,
+      });
+    }
+
+    if (body.priority !== undefined && body.priority !== lead.priority) {
+      await logLeadActivity({
+        leadId: id,
+        action: "Priority changed",
+        details: `${lead.priority} -> ${body.priority}`,
+        employeeId: auth.user.id,
+      });
+    }
+
+    if (body.message !== undefined && body.message !== lead.message) {
+      await logLeadActivity({
+        leadId: id,
+        action: "Customer Message updated",
+        employeeId: auth.user.id,
+      });
+    }
+
+    if (body.isArchived !== undefined && body.isArchived !== lead.isArchived) {
+      await logLeadActivity({
+        leadId: id,
+        action: body.isArchived ? "Lead archived" : "Lead unarchived",
+        employeeId: auth.user.id,
+      });
+    }
+
+    if (isAssigning && body.assignedEmployeeId !== lead.assignedEmployeeId) {
+      await logLeadActivity({
+        leadId: id,
+        action: body.assignedEmployeeId ? "Lead assigned" : "Lead unassigned",
+        employeeId: auth.user.id,
+      });
+    }
+
+    // Refetch to include updated relations (like the new activities)
+    const freshLead = await getLeadById(id);
 
     return NextResponse.json(
       {
         success: true,
         message: "Lead updated successfully",
-        lead: updated,
+        lead: freshLead,
       },
       { status: 200 }
     );

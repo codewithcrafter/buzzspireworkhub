@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUp, Mail, Send, Globe, CheckCircle2 } from "lucide-react";
+import { ArrowUp, Mail, Send, Globe, CheckCircle2, MapPin, Phone } from "lucide-react";
 import { Facebook, Linkedin, Instagram } from "@/components/ui/social-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,13 +64,13 @@ export default function Footer() {
   return (
     <footer className="relative bg-muted pt-24 pb-12 border-t border-border/50">
       {/* Outer wrapper */}
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="w-full max-w-[1600px] mx-auto px-6 md:px-10 lg:px-16 xl:px-24">
         
         {/* Top footer section: grid layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-12 gap-12 lg:gap-10 xl:gap-8 mb-16">
           
           {/* Logo and Pitch */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="md:col-span-2 lg:col-span-2 xl:col-span-3 space-y-7">
             <Link href="/" className="group flex items-center select-none">
               <Image
                 src="/logo-full.png"
@@ -105,7 +105,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-5">
+          <div className="lg:col-span-1 xl:col-span-2 space-y-6">
             <h4 className="font-heading font-bold text-base text-foreground tracking-wide uppercase">Agency</h4>
             <ul className="space-y-3">
               {[
@@ -129,7 +129,7 @@ export default function Footer() {
           </div>
 
           {/* Services Quick Links */}
-          <div className="space-y-5">
+          <div className="lg:col-span-1 xl:col-span-2 space-y-6">
             <h4 className="font-heading font-bold text-base text-foreground tracking-wide uppercase">Services</h4>
             <ul className="space-y-2.5">
               {[
@@ -156,8 +156,39 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Visit Us */}
+          <div className="lg:col-span-2 xl:col-span-3 space-y-6">
+            <h4 className="font-heading font-bold text-base text-foreground tracking-wide uppercase">Visit Us</h4>
+            <div className="space-y-5">
+              <div className="flex gap-3 items-start">
+                <MapPin className="w-5 h-5 text-primary shrink-0 mt-1" />
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Ground Floor, Ram Dutt Enclave, B-16, Block D, Ram Dutt Enclave, Uttam Nagar, New Delhi, Delhi, 110059
+                </p>
+              </div>
+              <div className="flex gap-3 items-center">
+                <Phone className="w-5 h-5 text-primary shrink-0" />
+                <a href="tel:+919205386625" className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors">
+                  +919205386625
+                </a>
+              </div>
+              <div className="w-full h-56 md:h-64 lg:h-52 xl:h-56 rounded-xl overflow-hidden border border-border shadow-sm mt-5">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.215673493137!2d77.0658602!3d28.623297500000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0558d309b3c1%3A0xb3da05723cb703fc!2sBuzzspire%20Media%20PVT.LTD!5e0!3m2!1sen!2sin!4v1787135089367!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  title="BuzzSpire Media Office Location"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Newsletter Box */}
-          <div className="space-y-5">
+          <div className="lg:col-span-2 xl:col-span-2 space-y-6">
             <h4 className="font-heading font-bold text-base text-foreground tracking-wide uppercase">Newsletter</h4>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Stay ahead of the curve. Get curated marketing insights and trends in your inbox weekly.

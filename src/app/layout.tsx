@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/animations/SmoothScroll";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-heading" });
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
     default: "BuzzSpire Media | Digital Marketing Agency in Delhi",
     template: "%s | BuzzSpire Media"
   },
-  description: "BuzzSpire Media is a digital marketing agency in Delhi NCR helping local businesses show up on Google, grow social presence, and win more customers with SEO, GMB management, Google Ads, web development, and ecommerce services.",
+  description: "BuzzSpire Media is a digital marketing agency in Delhi offering SEO, PPC, social media marketing, Google Business Profile management and web development services.",
   alternates: {
     canonical: "https://www.buzzspiremedia.com/",
   },
@@ -65,6 +64,8 @@ export const metadata: Metadata = {
   },
 };
 
+import GlobalContactButtons from "@/components/layout/GlobalContactButtons";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -78,7 +79,7 @@ export default function RootLayout({
         <SmoothScroll>
           {children}
         </SmoothScroll>
-        <WhatsAppButton />
+        <GlobalContactButtons />
       </body>
     </html>
   );

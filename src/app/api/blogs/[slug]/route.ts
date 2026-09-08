@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getBlog } from "@/services/blog.service";
 
+export const dynamic = "force-dynamic";
+
 // GET: Securely fetch a single published blog by slug
 export async function GET(
     req: Request,

@@ -22,7 +22,7 @@ export default function ServiceFAQ({ service }: ServiceFAQProps) {
           <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-1.5 rounded-full">
             Questions & Answers
           </span>
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-foreground">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight text-slate-900">
             Frequently Asked Questions
           </h2>
         </div>
@@ -33,13 +33,13 @@ export default function ServiceFAQ({ service }: ServiceFAQProps) {
           const isOpen = activeFaq === idx;
           return (
             <ScrollReveal key={idx} delay={idx * 0.05}>
-              <div className="rounded-2xl border border-border bg-white overflow-hidden transition-all duration-300 shadow-sm hover:border-primary/30">
+              <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden transition-all duration-300 shadow-md shadow-indigo-900/5 hover:border-primary/30">
                 <button
                   onClick={() => setActiveFaq(isOpen ? null : idx)}
-                  className="w-full p-6 text-left flex items-center justify-between font-heading font-bold text-base md:text-lg text-foreground hover:text-primary transition-colors focus:outline-none"
+                  className="w-full p-6 text-left flex items-center justify-between font-heading font-bold text-base md:text-lg text-slate-900 hover:text-primary transition-colors focus:outline-none"
                 >
                   <span className="pr-4">{faq.q}</span>
-                  <span className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary transition-colors shrink-0">
+                  <span className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-slate-600 hover:text-primary transition-colors shrink-0">
                     {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   </span>
                 </button>
@@ -52,7 +52,7 @@ export default function ServiceFAQ({ service }: ServiceFAQProps) {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 pt-0 border-t border-border/30 text-xs md:text-sm text-muted-foreground leading-relaxed">
+                      <div className="p-6 pt-0 border-t border-border/30 text-xs md:text-sm text-slate-600 leading-relaxed">
                         {faq.a}
                       </div>
                     </motion.div>

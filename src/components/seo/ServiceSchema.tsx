@@ -67,7 +67,7 @@ export default function ServiceSchema({
         "@id": `${baseUrl}/#localbusiness`,
         "name": "BuzzSpire Media",
         "url": baseUrl,
-        "telephone": "+919599249586",
+        "telephone": "+919205386625",
         "email": "sales@buzzspiremedia.com",
         "address": {
           "@type": "PostalAddress",

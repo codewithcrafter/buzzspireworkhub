@@ -1,0 +1,1 @@
+ALTER TABLE "LeadReminder" ADD COLUMN "isNotified" BOOLEAN NOT NULL DEFAULT false;

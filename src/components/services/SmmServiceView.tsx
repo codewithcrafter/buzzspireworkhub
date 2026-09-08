@@ -53,7 +53,7 @@ const smmFaqs = [
 
 export default function SmmServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -66,14 +66,14 @@ export default function SmmServiceView() {
                 <Target className="w-4 h-4" />
                 Social Media Marketing
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 Social Media Marketing Services in Delhi
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Running a business is hard enough. You don&apos;t need another agency throwing jargon at you.
                 </p>
-                <p className="font-semibold text-foreground">
+                <p className="font-semibold text-slate-900">
                   Buzzspire Media offers SMM services built around one thing. Results.
                 </p>
                 <p>
@@ -82,7 +82,7 @@ export default function SmmServiceView() {
                 <p>
                   If you&apos;re searching for a social media management services partner, here&apos;s the deal. We manage your pages. We run your ads. We report the numbers every single week. No hiding behind vague metrics.
                 </p>
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-slate-900">
                   Simple as that.
                 </p>
               </div>
@@ -90,7 +90,7 @@ export default function SmmServiceView() {
             <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Get a Free Strategy Call</span>
                   </Button>
@@ -104,41 +104,41 @@ export default function SmmServiceView() {
       </section>
 
       {/* WHAT BUZZSPIRE ACTUALLY RUNS */}
-      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
               What Buzzspire Actually Runs
             </h2>
-            <div className="space-y-2 text-lg text-muted-foreground max-w-3xl mx-auto">
+            <div className="space-y-2 text-lg text-slate-600 max-w-3xl mx-auto">
               <p>We&apos;re not a one-size-fits-all social media marketing company. Every brand gets a plan built around its own goals.</p>
               <p>Our social media advertising services cover everything from ad creative to targeting to daily budget checks. Nothing runs on autopilot without eyes on it.</p>
-              <p className="font-semibold text-foreground">Pick a plan. Or tell us your budget. We&apos;ll build around it.</p>
+              <p className="font-semibold text-slate-900">Pick a plan. Or tell us your budget. We&apos;ll build around it.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Facebook Ad Management</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Facebook Ad Management</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Facebook still converts. When it&apos;s done right. We handle audience research, ad copy, creative testing, and daily optimization. Cold traffic, warm retargeting, lookalikes. We test it all so your budget goes toward what&apos;s actually working.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Instagram Marketing Agency</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Instagram Marketing Agency</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Reels. Stories. Carousels. Instagram rewards brands that show up consistently. As an Instagram marketing agency, we plan content calendars around your audience&apos;s actual behavior, not just posting for the sake of posting.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">LinkedIn B2B Marketing Services</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">LinkedIn B2B Marketing Services</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 B2B is a different game. Longer sales cycles. Smarter buyers. Our LinkedIn B2B marketing services focus on thought-leadership content, decision-maker targeting, and lead forms that don&apos;t feel spammy.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">YouTube Promotion Agency</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">YouTube Promotion Agency</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Video builds trust faster than most formats - we use it accordingly. As a YouTube promotion agency, we handle everything from channel optimization to paid video campaigns that push watch time and subscribers.
               </p>
             </div>
@@ -147,33 +147,33 @@ export default function SmmServiceView() {
       </section>
 
       {/* CONTENT & ORGANIC GROWTH */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Content & Organic Growth
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Paid ads work best when your organic presence backs it up. That&apos;s where this piece fits in.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Content Creation</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Social Media Content Creation</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Our social media content creation team builds posts, reels, and graphics that match your brand voice. Not generic templates pulled off the internet.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Organic Social Media Growth</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Organic Social Media Growth</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Organic social media growth takes patience. We won&apos;t promise overnight virality. What we will do is build a consistent posting rhythm that compounds over months, not days.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Influencer Marketing Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Influencer Marketing Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Sometimes the fastest trust-builder is someone else&apos;s voice. Our influencer marketing services connect you with creators whose audience actually overlaps with yours. Not just big follower counts.
               </p>
             </div>
@@ -182,33 +182,33 @@ export default function SmmServiceView() {
       </section>
 
       {/* PAID ADVERTISING & LEAD GENERATION */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Paid Advertising & Lead Generation
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Here&apos;s where most agencies fall short. They run ads. They don&apos;t chase leads.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Paid Social Media Ads</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Paid Social Media Ads</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Our paid social media ads are built on constant testing. New creatives. New copy. New audiences. Every two weeks, minimum.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">ROI-Driven Social Media Campaigns</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">ROI-Driven Social Media Campaigns</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Every campaign we run is ROI-driven. Meaning we track cost per lead, not just reach. If a campaign isn&apos;t pulling numbers, we kill it. Fast.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Lead Generation</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Social Media Lead Generation</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Social media lead generation only works when your funnel is tight. We build the ad, the landing page, and the follow-up sequence together. Not in silos.
               </p>
             </div>
@@ -227,12 +227,12 @@ export default function SmmServiceView() {
       </section>
 
       {/* WHO WE WORK WITH */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Who We Work With
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <ul className="space-y-3 text-left pb-4">
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
@@ -247,7 +247,7 @@ export default function SmmServiceView() {
                 <span>And we&apos;ve delivered ROI-focused Instagram marketing agency campaigns for local businesses working with tight monthly budgets.</span>
               </li>
             </ul>
-            <p className="font-semibold text-foreground text-center text-xl">
+            <p className="font-semibold text-slate-900 text-center text-xl">
               Different industries. Same standard. Numbers that hold up.
             </p>
           </div>
@@ -255,12 +255,12 @@ export default function SmmServiceView() {
       </section>
 
       {/* WHY TEAMS PICK BUZZSPIRE */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Teams Pick Buzzspire Media
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <ul className="space-y-3 text-left">
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
@@ -284,10 +284,10 @@ export default function SmmServiceView() {
       </section>
 
       {/* FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -307,20 +307,20 @@ export default function SmmServiceView() {
       />
 
       {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
             {/* Subtle accent corner */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-[40px] pointer-events-none" />
             <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
             
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Work With a Delhi Team That Gets Results
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>If you&apos;re in Delhi, and looking for a team that treats your ad budget like it&apos;s their own, this is it.</p>
               <p>Buzzspire Media runs SMM services with weekly transparency and a dedicated account manager on every account.</p>
-              <p className="font-semibold text-foreground pt-2">Let&apos;s look at your current numbers first, no pressure.</p>
+              <p className="font-semibold text-slate-900 pt-2">Let&apos;s look at your current numbers first, no pressure.</p>
             </div>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">

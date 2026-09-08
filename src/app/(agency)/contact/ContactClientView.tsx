@@ -12,7 +12,7 @@ import {
   Plus,
   Minus
 } from "lucide-react";
-import { Twitter, Linkedin, Instagram } from "@/components/ui/social-icons";
+import { XIcon, Linkedin, Instagram } from "@/components/ui/social-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +21,7 @@ import ScrollReveal from "@/components/ui/scroll-reveal";
 
 // Office Locations
 const offices = [
-  { city: "New Delhi", address: "Ground Floor, Ram Dutt Enclave, B-16, Block D, Ram Dutt Enclave, Uttam Nagar, New Delhi, Delhi, 110059", phone: "+919599249586" }
+  { city: "New Delhi", address: "Ground Floor, Ram Dutt Enclave, B-16, Block D, Ram Dutt Enclave, Uttam Nagar, New Delhi, Delhi, 110059", phone: "+919205386625" }
 ];
 
 // Default Contact FAQs
@@ -135,7 +135,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
                   </div>
                   <div>
                     <p className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">Strategy Desk</p>
-                    <a href="tel:+919599249586" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">+919599249586</a>
+                    <a href="tel:+919205386625" className="text-sm font-semibold text-foreground hover:text-primary transition-colors">+919205386625</a>
                   </div>
                 </div>
 
@@ -155,7 +155,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
                 <p className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">Social Networks</p>
                 <div className="flex gap-3">
                   {[
-                    { icon: Twitter, href: "https://twitter.com" },
+                    { icon: XIcon, href: "https://twitter.com" },
                     { icon: Linkedin, href: "https://linkedin.com" },
                     { icon: Instagram, href: "https://instagram.com" }
                   ].map((soc, i) => (

@@ -34,25 +34,25 @@ const timeline = [
   { year: "2026", title: "What's Next", desc: "Continuing to innovate, adapt, and empower businesses with cutting-edge digital solutions and growth-focused strategies." }
 ];
 
-// Team Members
-const team = [
+// Directors of BuzzSpire Media Pvt. Ltd.
+const directors = [
   {
-    name: "Marcus Vane",
-    role: "Digital Marketing Strategist",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
-    bio: "SEO, performance marketing, and business growth specialist dedicated to creating data-driven strategies that generate qualified leads and measurable results."
+    name: "Ritwik Sachdeva",
+    role: "Director",
+    image: "/team/ritwik-sachdeva.jpg",
+    bio: "Visionary entrepreneur and digital marketing expert steering BuzzSpire Media's overall growth strategy, client partnerships, and business development initiatives."
   },
   {
-    name: "Elena Rostova",
-    role: "Creative Design Specialist",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-    bio: "Expert in branding, UI/UX design, and visual storytelling, creating impactful digital experiences that strengthen brand identity and engagement."
+    name: "Shipra Chauhan",
+    role: "Director",
+    image: "/team/shipra-chauhan.jpg",
+    bio: "Operations and strategy leader at BuzzSpire Media, driving excellence in campaign execution, team management, and delivering measurable client outcomes."
   },
   {
-    name: "Devon Carter",
-    role: "Web Development Expert",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
-    bio: "Skilled in website development, performance optimization, and user experience, building fast, responsive, and conversion-focused digital solutions."
+    name: "Sanjeev Kumar Malik",
+    role: "Director",
+    image: "/team/sanjeev-kumar-malik.jpg",
+    bio: "Digital growth architect and performance marketing specialist, building innovative SEO, PPC, and branding solutions that help businesses scale sustainably."
   }
 ];
 
@@ -175,77 +175,54 @@ export default function AboutClientView({ content = {} }: { content?: any }) {
           </div>
         </div>
       </section>
-
-      {/* 5. FOUNDER MESSAGE */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
-        <ScrollReveal>
-          <div className="rounded-[3rem] bg-white border border-border shadow-premium p-8 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="w-full max-w-[320px] aspect-[4/5] rounded-[2rem] overflow-hidden bg-muted border border-border shadow-xl relative">
-                <Image
-                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80"
-                  alt="Marcus Vane"
-                  width={320}
-                  height={400}
-                  sizes="(max-width: 768px) 100vw, 320px"
-                  className="object-cover w-full h-full"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 space-y-6">
-              <span className="text-xs font-bold text-primary uppercase tracking-widest">Message from our Founder</span>
-              <p className="font-heading font-extrabold text-2xl md:text-3xl text-foreground leading-snug">
-                "Every successful business deserves a digital strategy that inspires growth, builds trust, and delivers measurable results."
-              </p>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                BuzzSpire Media was founded with a clear vision—to help businesses grow through innovative digital marketing, creative branding, website development, and data-driven strategies. We believe in building long-term partnerships, delivering transparent solutions, and creating meaningful results that support sustainable business growth.
-              </p>
-              <div>
-                <h4 className="font-heading font-bold text-base text-foreground">Marcus Vane</h4>
-                <p className="text-xs text-muted-foreground">Founder & Managing Partner, BuzzSpire Media</p>
-              </div>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {/* 6. MEET THE TEAM */}
+      {/* 5. BOARD OF DIRECTORS */}
       <section className="py-24 bg-muted/40">
         <div className="max-w-7xl mx-auto px-6">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-20">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Expert Teams</h2>
-              <p className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
-                {h2s?.['team'] || "Meet the Experts Driving Your Digital Growth"}
+              <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full inline-block mb-6">
+                Leadership
+              </span>
+              <h2 className="text-4xl font-heading font-extrabold tracking-tight text-foreground">
+                {h2s?.['team'] || "Meet the Directors of BuzzSpire Media"}
+              </h2>
+              <p className="text-muted-foreground mt-4 leading-relaxed">
+                The visionaries behind BuzzSpire Media Pvt. Ltd. — driving strategy, growth, and excellence across every client engagement.
               </p>
             </div>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member: any, idx: number) => (
-              <ScrollReveal key={idx} delay={idx * 0.1}>
-                <div className="group rounded-3xl overflow-hidden bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-500 flex flex-col h-full">
-                  <div className="h-72 relative overflow-hidden bg-muted">
+            {directors.map((member, idx) => (
+              <ScrollReveal key={idx} delay={idx * 0.12}>
+                <div className="group relative rounded-[2rem] overflow-hidden bg-white border border-border shadow-premium hover:shadow-2xl transition-all duration-500 flex flex-col h-full">
+                  {/* Photo */}
+                  <div className="relative overflow-hidden bg-muted" style={{ height: '380px' }}>
                     <Image
                       src={member.image}
                       alt={member.name}
-                      width={400}
-                      height={288}
+                      fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-50" />
-                  </div>
-                  <div className="p-8 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="font-heading font-bold text-xl text-foreground mb-1">{member.name}</h3>
-                      <p className="text-xs font-bold text-primary uppercase tracking-wide mb-4">{member.role}</p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{member.bio}</p>
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/10 to-transparent" />
+                    {/* Name overlay on image */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <h3 className="font-heading font-extrabold text-xl text-white leading-tight">{member.name}</h3>
+                      <span className="inline-flex items-center gap-1.5 mt-2 text-[11px] font-bold uppercase tracking-widest text-white/90 bg-primary/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                        <Briefcase className="w-3 h-3" />
+                        {member.role} — BuzzSpire Media Pvt. Ltd.
+                      </span>
                     </div>
                   </div>
+                  {/* Bio */}
+                  <div className="p-6 flex-1">
+                    <p className="text-sm text-muted-foreground leading-relaxed">{member.bio}</p>
+                  </div>
+                  {/* Bottom accent line */}
+                  <div className="h-1 bg-gradient-to-r from-primary via-secondary to-accent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                 </div>
               </ScrollReveal>
             ))}

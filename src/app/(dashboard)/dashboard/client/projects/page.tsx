@@ -39,19 +39,19 @@ export default function ClientProjects() {
       />
 
       {loading ? (
-        <Card>
-          <CardContent className="py-10 text-center text-muted-foreground text-sm">
+        <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
+          <CardContent className="py-10 text-center text-muted-foreground text-sm font-medium">
             Loading projects...
           </CardContent>
         </Card>
       ) : error ? (
-        <Card className="border-destructive/50">
-          <CardContent className="py-10 text-center text-destructive text-sm font-semibold">
+        <Card className="border-red-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-red-50/20">
+          <CardContent className="py-10 text-center text-red-500 text-sm font-semibold">
             {error}
           </CardContent>
         </Card>
       ) : projects.length === 0 ? (
-        <Card>
+        <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
           <CardContent className="py-10 text-center text-muted-foreground text-sm font-semibold">
             No projects assigned yet.
           </CardContent>
@@ -59,7 +59,7 @@ export default function ClientProjects() {
       ) : (
         <div className="grid gap-6">
           {projects.map((proj) => (
-            <Card key={proj.id} className="overflow-hidden border border-primary/20">
+            <Card key={proj.id} className="overflow-hidden border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white hover:shadow-lg transition-shadow">
               <div className="p-5 bg-muted/20 border-b border-border/50 flex justify-between items-start md:items-center flex-col md:flex-row gap-4">
                 <div>
                   <h3 className="text-lg font-bold text-foreground">{proj.title}</h3>

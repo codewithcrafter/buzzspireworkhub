@@ -57,9 +57,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { name, email, company, budget, service, message, source, pageUrl, portfolio, phone, assignedEmployeeId } = body;
 
-    if (!name || !email || !message) {
-      return ApiResponse.badRequest("Name, email, and message are required");
-    }
+    // Fields are completely optional based on new requirements
+
 
     const finalAssignedEmployeeId = auth.user.role === "ADMIN" ? assignedEmployeeId : auth.user.id;
 

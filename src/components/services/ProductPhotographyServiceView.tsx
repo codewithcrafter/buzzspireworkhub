@@ -37,7 +37,7 @@ const photographyFaqs = [
 
 export default function ProductPhotographyServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -50,17 +50,17 @@ export default function ProductPhotographyServiceView() {
                 <Camera className="w-4 h-4" />
                 Product Photography Specialist
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 Product Photography Services in Delhi
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Looking for product photography services that actually sell your product? You&apos;re in the right place.
                 </p>
                 <p>
                   Buzzspire Media is a Delhi based product photoshoot agency. We shoot for D2C founders, Amazon sellers, Shopify stores, and small boutique labels.
                 </p>
-                <p className="font-semibold text-foreground">
+                <p className="font-semibold text-slate-900">
                   Got one product or a hundred? We shoot it all.
                 </p>
                 <p>
@@ -69,7 +69,7 @@ export default function ProductPhotographyServiceView() {
                 <p>
                   We do professional product photographer level work, every single time. Clean shots. Sharp focus. Colors that match what&apos;s in your hand.
                 </p>
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-slate-900">
                   If you sell online, your photos are your salesperson. They better look the part.
                 </p>
               </div>
@@ -77,7 +77,7 @@ export default function ProductPhotographyServiceView() {
             <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Book Your Studio Session</span>
                   </Button>
@@ -91,16 +91,16 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* WHAT BUZZSPIRE ACTUALLY SHOOTS */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               What Buzzspire Actually Shoots
             </h2>
-            <div className="space-y-2 text-lg text-muted-foreground max-w-3xl mx-auto">
+            <div className="space-y-2 text-lg text-slate-600 max-w-3xl mx-auto">
               <p>Buzzspire isn&apos;t just another studio with a camera and a white sheet. We&apos;re a full setup for online store photography, built around what actually gets clicks and conversions.</p>
               <p>Here&apos;s the deal. Our team has shot thousands of products. Jewelry, apparel, electronics, skincare, packaged food, furniture. You name it.</p>
-              <p className="font-semibold text-foreground">We know what Amazon wants. We know what Shopify stores need. We know what stops the scroll on Instagram.</p>
+              <p className="font-semibold text-slate-900">We know what Amazon wants. We know what Shopify stores need. We know what stops the scroll on Instagram.</p>
               <p>That&apos;s the whole point of a proper product photoshoot agency. One team. One studio. Every format you need.</p>
             </div>
           </div>
@@ -108,33 +108,33 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* E-COMMERCE & CATALOG PHOTOGRAPHY */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
               E-Commerce & Catalog Photography
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               This is where most of our clients start.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Catalog Shoots</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Catalog Shoots</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 We run full e-commerce catalog shoots for brands with big inventories. Fifty SKUs, five hundred SKUs, doesn&apos;t matter. We&apos;ve got a system for it. Need clean white background product photos for your listings? That&apos;s our bread and butter. Pure white, evenly lit, zero shadows where they shouldn&apos;t be.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Amazon Product Photography</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Amazon Product Photography</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Selling on Amazon? Our Amazon product photography follows their exact spec sheet. Main image, infographics, lifestyle shots, the works. No rejected listings because of a bad crop or wrong background.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Shopify Product Photographer</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Shopify Product Photographer</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Running a Shopify store? We work as your Shopify product photographer, shooting images sized and styled exactly for your theme and product pages.
               </p>
             </div>
@@ -143,33 +143,33 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* CREATIVE & LIFESTYLE PHOTOGRAPHY */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Creative & Lifestyle Photography
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Sometimes a plain white background isn&apos;t enough. You need mood. Context. A story.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Lifestyle Product Photography</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Lifestyle Product Photography</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Our lifestyle product photography puts your product in a real setting. Someone&apos;s hand holding it. A styled desk. A kitchen counter. Whatever fits your brand.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Creative Product Shoots</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Creative Product Shoots</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 We also do creative product shoots for brands that want something bolder. Colored backdrops, props, unusual angles. This is where we get to have fun.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Flat Lay Product Photography</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Flat Lay Product Photography</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 And for flat-focused catalogs, we shoot clean flat lay product photography. Great for skincare, food, accessories, anything that photographs well from directly above.
               </p>
             </div>
@@ -178,27 +178,27 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* SPECIALIZED PRODUCT SHOOTS */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Specialized Product Shoots
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Some products need a different approach entirely.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Ghost Mannequin Photography</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Ghost Mannequin Photography</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 For apparel brands, we offer ghost mannequin photography. Your clothing looks worn without an actual model in the shot. It&apos;s the industry standard for a reason, it just looks better.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Product Videography Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Product Videography Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 And if static images aren&apos;t cutting it anymore, we&apos;ve got you. Our product videography services cover 360 spins, unboxing clips, and short-form video built for ads and product pages.
               </p>
             </div>
@@ -207,13 +207,13 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* WHY BRANDS CHOOSE BUZZSPIRE */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Brands Choose Buzzspire
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground text-center pb-4">There are plenty of studios in Delhi. Here&apos;s what actually makes us different.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900 text-center pb-4">There are plenty of studios in Delhi. Here&apos;s what actually makes us different.</p>
             <ul className="space-y-3 text-left">
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
@@ -233,7 +233,7 @@ export default function ProductPhotographyServiceView() {
               </li>
             </ul>
             <div className="pt-6">
-              <p className="font-semibold text-foreground text-center pb-4">A few things that come standard with every project.</p>
+              <p className="font-semibold text-slate-900 text-center pb-4">A few things that come standard with every project.</p>
               <ul className="space-y-3 text-left">
                 <li className="flex gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-1" />
@@ -258,33 +258,33 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* NICHE SHOOTS & POST-PRODUCTION */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Niche Shoots & Post-Production
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Got a category that needs something specific? We&apos;ve built dedicated processes for a few of these.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">360-Degree Product Photography in Delhi</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">360-Degree Product Photography in Delhi</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 We shoot full 360 spins in-house - no outsourcing, no delays.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Jewelry and Apparel Product Photography</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Jewelry and Apparel Product Photography</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Studio setup with macro lenses and specialized lighting rigs. Small details like stone clarity or fabric texture actually show up.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Post-Production Retouching</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Post-Production Retouching</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 And once the shoot wraps, we don&apos;t just hand you raw files. Every image goes through e-commerce product photography with image retouching, color correction, blemish cleanup, background cleanup, all included.
               </p>
             </div>
@@ -293,13 +293,13 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* PRICING */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
             Product Photography Pricing
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            <p className="font-semibold text-foreground">Straight up, we don&apos;t believe in hidden costs.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="font-semibold text-slate-900">Straight up, we don&apos;t believe in hidden costs.</p>
             <p>
               Our product photography pricing is quoted per product, per package, upfront. You&apos;ll know the exact number before you commit to anything.
             </p>
@@ -324,13 +324,13 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             How Your Photoshoot Actually Works
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground text-center pb-4">Getting started is simple. Here&apos;s the process.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900 text-center pb-4">Getting started is simple. Here&apos;s the process.</p>
             <ul className="space-y-3 text-left">
               <li className="flex gap-2">
                 <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded text-sm mt-0.5 shrink-0 h-6">1</span>
@@ -349,7 +349,7 @@ export default function ProductPhotographyServiceView() {
                 <span>You get final files - sized and formatted for Amazon, Shopify, Instagram, wherever you sell.</span>
               </li>
             </ul>
-            <p className="font-semibold text-foreground text-center pt-4">
+            <p className="font-semibold text-slate-900 text-center pt-4">
               No long contracts. No confusing back and forth. Just clean images, delivered on time.
             </p>
           </div>
@@ -357,10 +357,10 @@ export default function ProductPhotographyServiceView() {
       </section>
 
       {/* FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -380,19 +380,19 @@ export default function ProductPhotographyServiceView() {
       />
 
       {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
             {/* Subtle accent corner */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/20 rounded-full blur-[40px] pointer-events-none" />
             <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
             
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Ready? Let&apos;s Shoot Your Catalog
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>Your product deserves better than a phone photo under bad lighting.</p>
-              <p className="font-semibold text-foreground">Buzzspire Media is ready when you are. Delhi studio, experienced team, fast delivery.</p>
+              <p className="font-semibold text-slate-900">Buzzspire Media is ready when you are. Delhi studio, experienced team, fast delivery.</p>
             </div>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">

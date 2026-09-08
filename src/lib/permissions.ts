@@ -25,6 +25,9 @@ export const PERMISSIONS = {
   PAGES_VIEW: "PAGES_VIEW",
   PAGES_EDIT: "PAGES_EDIT",
   PAGES_PUBLISH: "PAGES_PUBLISH",
+
+  // Blog / CMS module
+  BLOG_MANAGE: "BLOG_MANAGE",
 } as const;
 
 export type PermissionKey = keyof typeof PERMISSIONS;
@@ -33,7 +36,7 @@ export type PermissionValue = (typeof PERMISSIONS)[PermissionKey];
 export interface PermissionDefinition {
   key: PermissionValue;
   label: string;
-  category: "Leads" | "Clients" | "Projects" | "Reports" | "Employees" | "Pages";
+  category: "Leads" | "Clients" | "Projects" | "Reports" | "Employees" | "Pages" | "Blog";
   description: string;
 }
 
@@ -127,6 +130,12 @@ export const ALL_PERMISSIONS: PermissionDefinition[] = [
     label: "Publish Pages",
     category: "Pages",
     description: "Ability to publish pages to the live website",
+  },
+  {
+    key: PERMISSIONS.BLOG_MANAGE,
+    label: "Manage Blog CMS",
+    category: "Blog",
+    description: "Ability to view, create, edit, and publish blog posts",
   },
 ];
 

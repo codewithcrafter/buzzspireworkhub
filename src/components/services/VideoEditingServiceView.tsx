@@ -57,7 +57,7 @@ const videoFaqs = [
 
 export default function VideoEditingServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -70,11 +70,11 @@ export default function VideoEditingServiceView() {
                 <Video className="w-4 h-4" />
                 Video Editing Specialist
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 Video Editing Services in Delhi
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Your ads are only as good as the video behind them. That&apos;s it. That&apos;s the whole game.
                 </p>
                 <p>
@@ -83,7 +83,7 @@ export default function VideoEditingServiceView() {
                 <p>
                   We work as a B2B video editing service for agencies who need an extra pair of hands. And we work directly with brands who want a social media video editing agency they can call, not just email.
                 </p>
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-slate-900">
                   One team. Every format. Real deadlines.
                 </p>
               </div>
@@ -91,7 +91,7 @@ export default function VideoEditingServiceView() {
             <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Get a Free 60-Second Sample Edit</span>
                   </Button>
@@ -105,14 +105,14 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* DIGITAL MARKETING VIDEO EDITING */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Digital Marketing Video Editing That Drives Results
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground text-center">Here&apos;s the deal. Most video editors know how to trim a clip. Not many understand a marketing funnel.</p>
-            <p className="font-semibold text-foreground text-center pb-2">We do both.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900 text-center">Here&apos;s the deal. Most video editors know how to trim a clip. Not many understand a marketing funnel.</p>
+            <p className="font-semibold text-slate-900 text-center pb-2">We do both.</p>
             <p>
               Every edit we deliver is built around what happens after someone watches it. A click. A DM. A call. Our digital marketing agency video editing process starts with your campaign goal, not the raw footage.
             </p>
@@ -127,34 +127,34 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* SOCIAL MEDIA VIDEO EDITING */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
               Social Media Video Editing Services
             </h2>
-            <div className="space-y-2 text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div className="space-y-2 text-lg text-slate-600 max-w-2xl mx-auto">
               <p>Reels. Shorts. Stories. Feed posts. Each one needs a different pace, different pacing on text, different hook in the first two seconds.</p>
               <p>Our social media video editing service covers all of it under one roof.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Short-Form Video Editing for Reels & Shorts</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Short-Form Video Editing for Reels & Shorts</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Attention spans are brutal now. You&apos;ve got maybe 1.5 seconds before someone&apos;s thumb moves on. As a short form video editing agency, we build hooks first, then structure the rest of the video around holding attention till the end card.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">YouTube Shorts & Instagram Reels Editing</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">YouTube Shorts & Instagram Reels Editing</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Shorts and Reels aren&apos;t the same animal, even though they look similar. Aspect ratio matters. Caption timing matters. Even the export settings matter. Our team handles YouTube Shorts and Instagram Reels editing services for brands with platform-specific formatting baked into every delivery, not just a resized version of one master file.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Affordable Reels & Shorts Editing for Small Teams</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Affordable Reels & Shorts Editing for Small Teams</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Small teams don&apos;t always have big budgets. Fair enough. We built pricing tiers specifically so smaller brands get an affordable video editing agency for reels and shorts without cutting corners on quality.
               </p>
             </div>
@@ -163,33 +163,33 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* PERFORMANCE & E-COMMERCE */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Performance Marketing Video Ad Editing
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Ads live or die in the first three seconds. Our video ad editing for performance marketing work is built for one thing. Conversions. Not likes, not views for the sake of views.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Meta Ads Video Editing That Converts</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Meta Ads Video Editing That Converts</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 We&apos;ve edited hundreds of ad variations for testing. Different hooks, different CTAs, different pacing. Our high converting video ad editing for Meta ads process includes multiple hook variants per video, so your media buyer has real options to test instead of one single cut.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">E-Commerce Product Video Editing</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">E-Commerce Product Video Editing</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Product videos need to sell without saying &quot;buy now&quot; every five seconds. Our e-commerce video editing service focuses on showing the product doing its job. Texture. Use case. Before and after. That&apos;s what actually moves a cart to checkout. We edit for Amazon listings, Shopify product pages, and paid ad creatives alike.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">YouTube Video Editing for Brands & Creators</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">YouTube Video Editing for Brands & Creators</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Long-form content is a different beast entirely. Our YouTube video editing services for brands cover full editing, from raw footage assembly to pacing, B-roll insertion, sound design, and thumbnail-ready frame selection. We don&apos;t just cut out the silences. We shape the story so people actually stay till the end.
               </p>
             </div>
@@ -198,34 +198,34 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* PACKAGES */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Flexible Video Editing Packages
             </h2>
-            <div className="space-y-2 text-lg text-muted-foreground max-w-3xl mx-auto">
+            <div className="space-y-2 text-lg text-slate-600 max-w-3xl mx-auto">
               <p>No two brands need the same thing. So we don&apos;t force one package on everyone.</p>
               <p>Our custom video editing packages are built around your monthly output, not a rigid template.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Monthly Retainer for Agencies</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Monthly Retainer for Agencies</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 If you&apos;re an agency managing multiple client accounts, one-off projects don&apos;t scale. Our monthly retainer video editing services for agencies give you a fixed monthly capacity, weekly reporting, and one point of contact for every deliverable.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">White Label Video Editing for Agencies</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">White Label Video Editing for Agencies</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Your client never needs to know we exist. As a white label video editing service for marketing agencies, we work entirely under your brand name, on your timelines, with your client-facing formats.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Corporate & Training Video Editing</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Corporate & Training Video Editing</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Internal training videos. Investor decks. Company culture reels. Different tone entirely from social content. As a corporate video editing agency, we keep the pacing professional, the branding consistent, and the sound design clean, without the flashy cuts that work on Instagram but feel out of place in a boardroom.
               </p>
             </div>
@@ -234,29 +234,29 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Work With Buzzspire Media
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground text-center pb-4">Look, there&apos;s no shortage of freelance editors out there. So why work with us.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900 text-center pb-4">Look, there&apos;s no shortage of freelance editors out there. So why work with us.</p>
             <ul className="space-y-3 text-left">
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
-                <span><strong className="text-foreground">Professional video editing services for small businesses.</strong> You get agency-level output without hiring a full in-house team.</span>
+                <span><strong className="text-slate-900">Professional video editing services for small businesses.</strong> You get agency-level output without hiring a full in-house team.</span>
               </li>
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
-                <span><strong className="text-foreground">Video editing agency with quick turnaround time.</strong> Standard delivery windows, clearly communicated upfront. No chasing us for updates.</span>
+                <span><strong className="text-slate-900">Video editing agency with quick turnaround time.</strong> Standard delivery windows, clearly communicated upfront. No chasing us for updates.</span>
               </li>
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
-                <span><strong className="text-foreground">Transparent, upfront pricing.</strong> No hidden charges after the first draft.</span>
+                <span><strong className="text-slate-900">Transparent, upfront pricing.</strong> No hidden charges after the first draft.</span>
               </li>
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
-                <span><strong className="text-foreground">Weekly reporting</strong> so you always know what&apos;s in progress and what&apos;s shipped.</span>
+                <span><strong className="text-slate-900">Weekly reporting</strong> so you always know what&apos;s in progress and what&apos;s shipped.</span>
               </li>
             </ul>
           </div>
@@ -264,16 +264,16 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* PRICING */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
             Pricing
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             <p>
               Every plan starts with a call. We look at your monthly video volume, your platforms, and your turnaround needs before quoting anything.
             </p>
-            <p className="font-semibold text-foreground">
+            <p className="font-semibold text-slate-900">
               Upfront pricing. No surprise line items later.
             </p>
           </div>
@@ -291,10 +291,10 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -314,19 +314,19 @@ export default function VideoEditingServiceView() {
       />
 
       {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
             {/* Subtle accent corner */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-blue-500/20 rounded-full blur-[40px] pointer-events-none" />
             <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
             
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Ready to Get Videos That Actually Convert?
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>Stop sending footage to editors who don&apos;t understand marketing.</p>
-              <p className="font-semibold text-foreground">Talk to a team that does.</p>
+              <p className="font-semibold text-slate-900">Talk to a team that does.</p>
             </div>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">

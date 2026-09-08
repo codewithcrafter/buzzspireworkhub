@@ -442,7 +442,7 @@ function ClientDashboardContent() {
               <>
                 <SectionHeader title="Financial Overview" description="Your contract and billing status." />
                 <div className="grid gap-6 md:grid-cols-3">
-                  <Card>
+                  <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
@@ -456,7 +456,7 @@ function ClientDashboardContent() {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
@@ -470,7 +470,7 @@ function ClientDashboardContent() {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-start">
                         <div className="space-y-1">
@@ -491,7 +491,7 @@ function ClientDashboardContent() {
               {/* WHERE YOUR MONEY IS BEING USED */}
               <div className="space-y-4">
                 <SectionHeader title="Usage Breakdown" description="Where your money is being used." />
-                <Card className="max-h-80 overflow-y-auto">
+                <Card className="max-h-80 overflow-y-auto border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                   <CardContent className="p-0">
                     <Table>
                       <TableHeader>
@@ -528,7 +528,7 @@ function ClientDashboardContent() {
               {/* PAYMENT HISTORY */}
               <div className="space-y-4">
                 <SectionHeader title="Payment History" description="Your deposits and payments." />
-                <Card className="max-h-80 overflow-y-auto">
+                <Card className="max-h-80 overflow-y-auto border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                   <CardContent className="p-0">
                     <Table>
                       <TableHeader>
@@ -571,14 +571,14 @@ function ClientDashboardContent() {
                 <SectionHeader title="Admin Updates" description="Latest updates and news for you." />
                 <div className="space-y-3">
                   {!(dashboardData?.updates?.length > 0) ? (
-                    <Card>
+                    <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                       <CardContent className="py-10 text-center text-muted-foreground text-xs font-semibold">
                         No recent updates available.
                       </CardContent>
                     </Card>
                   ) : (
                     dashboardData.updates.map((update: any) => (
-                      <Card key={update.id}>
+                      <Card key={update.id} className="border-slate-100 shadow-sm hover:shadow-md transition-shadow bg-white">
                         <CardContent className="p-4 flex gap-3">
                           <div className="size-8 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
                             <Clock className="size-4 text-primary" />
@@ -603,7 +603,7 @@ function ClientDashboardContent() {
                 <SectionHeader title="Project Milestones" description="Current progress on your active projects." />
                 <div className="space-y-4">
                   {!(dashboardData?.projects?.length > 0) ? (
-                    <Card>
+                    <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
                       <CardContent className="py-10 text-center text-muted-foreground text-xs font-semibold">
                         No active projects to track.
                       </CardContent>
@@ -666,9 +666,11 @@ function ClientDashboardContent() {
         {activeTab === "projects" && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
             {projects.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground bg-card border border-border/60 rounded-2xl">
-                No active projects assigned to your account.
-              </div>
+              <Card className="border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white">
+                <CardContent className="text-center py-12 text-muted-foreground text-xs font-semibold">
+                  No active projects assigned to your account.
+                </CardContent>
+              </Card>
             ) : (
               <div className="grid gap-6 md:grid-cols-2">
                 {projects.map((proj) => {

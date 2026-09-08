@@ -31,6 +31,9 @@ model User {
   clientPayments    ClientPayment[]
   clientUsages      ClientUsage[]
   clientUpdates     ClientUpdate[]
+  leadReminders     LeadReminder[]
+  leadNotes         LeadNote[]
+  leadActivities    LeadActivity[]
 }
 
 model Project {
@@ -101,13 +104,13 @@ model ProjectMessage {
 }
 
 model Lead {
-  id                 String     @id @default(uuid())
-  name               String
-  email              String
+  id                 String         @id @default(uuid())
+  name               String?
+  email              String?
   company            String?
-  message            String
-  status             LeadStatus @default(NEW)
-  createdAt          DateTime   @default(now())
+  message            String?
+  status             LeadStatus     @default(NEW)
+  createdAt          DateTime       @default(now())
   budget             String?
   pageUrl            String?
   phone              String?
@@ -116,14 +119,47 @@ model Lead {
   source             String?
   assignedEmployeeId String?
   notes              String?
+  priority           LeadPriority   @default(MEDIUM)
+  isArchived         Boolean        @default(false)
   followUpAt         DateTime?
-  updatedAt          DateTime   @default(now()) @updatedAt
-  assignedEmployee   User?      @relation("AssignedLeads", fields: [assignedEmployeeId], references: [id])
+  updatedAt          DateTime       @default(now()) @updatedAt
+  assignedEmployee   User?          @relation("AssignedLeads", fields: [assignedEmployeeId], references: [id])
   chatSession        ChatSession?
+  reminders          LeadReminder[]
+  internalNotes      LeadNote[]
+  activities         LeadActivity[]
 
   @@index([assignedEmployeeId])
   @@index([status])
   @@index([createdAt])
+}
+
+model LeadNote {
+  id        String   @id @default(uuid())
+  leadId    String
+  employeeId String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  employee  User     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  
+  @@index([leadId])
+}
+
+model LeadActivity {
+  id         String   @id @default(uuid())
+  leadId     String
+  employeeId String? // the user who did the action, null if system
+  action     String   // e.g. "Status changed", "Customer Message updated"
+  details    String?  // e.g. "NEW -> CONTACTED"
+  createdAt  DateTime @default(now())
+  
+  lead       Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  employee   User?    @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  
+  @@index([leadId])
 }
 
 model Ticket {
@@ -435,6 +471,12 @@ enum Role {
   EMPLOYEE
 }
 
+enum LeadPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 enum UserStatus {
   ACTIVE
   INACTIVE
@@ -619,4 +661,25 @@ model ClientUpdate {
   client      User     @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
   @@index([clientId])
+}
+
+model LeadReminder {
+  id          String   @id @default(uuid())
+  title       String
+  note        String?
+  dueDate     DateTime
+  status      String   @default("PENDING") // PENDING, COMPLETED, CANCELLED
+  isNotified  Boolean  @default(false)
+  leadId      String
+  employeeId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  employee    User     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  
+  @@index([leadId])
+  @@index([employeeId])
+  @@index([dueDate])
+  @@index([status])
 }

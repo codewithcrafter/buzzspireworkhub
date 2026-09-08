@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getBlogs } from "@/services/blog.service";
 
+export const dynamic = "force-dynamic";
+
 // GET: Query published blogs for public view
 export async function GET(req: Request) {
     try {

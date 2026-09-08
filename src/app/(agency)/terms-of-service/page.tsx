@@ -276,7 +276,7 @@ export default function TermsOfServicePage() {
                   sales@buzzspiremedia.com
                 </a>
                 <a
-                  href="tel:+919599249586"
+                  href="tel:+919205386625"
                   className="flex items-center gap-2 text-foreground font-semibold hover:text-primary transition-colors"
                 >
                   <Phone className="w-3.5 h-3.5 text-primary" />

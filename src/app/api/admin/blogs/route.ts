@@ -1,31 +1,14 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJwt } from "@/lib/auth";
+import { authenticateRequest } from "@/lib/guard";
 import { getBlogs, createBlog } from "@/services/blog.service";
 import { BlogStatus } from "@prisma/client";
-
-// Helper to authenticate administrator requests
-async function authenticateAdmin() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value;
-
-    if (!token) {
-        throw new Error("Unauthorized");
-    }
-
-    const payload = await verifyJwt(token);
-
-    if (!payload || payload.role !== "ADMIN") {
-        throw new Error("Forbidden");
-    }
-
-    return payload;
-}
+import { revalidatePath } from "next/cache";
 
 // GET: List all blogs for administration (includes Drafts & Archives)
 export async function GET(req: Request) {
     try {
-        await authenticateAdmin();
+        const auth = await authenticateRequest(req, { requiredPermission: "BLOG_MANAGE" });
+        if (!auth.authenticated) return auth.response;
         
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get("page") || "1", 10);
@@ -72,7 +55,9 @@ export async function GET(req: Request) {
 // POST: Register a new blog post
 export async function POST(req: Request) {
     try {
-        const payload = await authenticateAdmin();
+        const auth = await authenticateRequest(req, { requiredPermission: "BLOG_MANAGE" });
+        if (!auth.authenticated) return auth.response;
+
         const body = await req.json();
 
         if (!body.title || !body.title.trim()) {
@@ -104,7 +89,7 @@ export async function POST(req: Request) {
             featuredImage: body.featuredImage,
             category: body.category,
             tags: body.tags || [],
-            author: body.author || payload.name || "Administrator",
+            author: body.author || auth.user.name || "Administrator",
             readTime: body.readTime ? parseInt(body.readTime, 10) : undefined,
             seoTitle: body.seoTitle,
             metaDescription: body.metaDescription,
@@ -112,6 +97,10 @@ export async function POST(req: Request) {
             isFeatured: body.isFeatured || false,
             faqs: Array.isArray(body.faqs) ? body.faqs : undefined,
         });
+
+        // Revalidate public blog pages
+        revalidatePath("/blog", "page");
+        revalidatePath("/blog/[slug]", "page");
 
         return NextResponse.json(
             { message: "Blog created successfully", blog },

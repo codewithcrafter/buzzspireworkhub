@@ -52,3 +52,7 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// Force Next.js server restart for Prisma schema reload
+
+// Force restart to clear Prisma cache for isNotified

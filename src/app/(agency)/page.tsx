@@ -209,7 +209,7 @@ const faqs = [
 export async function generateMetadata(): Promise<Metadata> {
   const defaultMetadata: Metadata = {
     title: "BuzzSpire Media | Digital Marketing Agency in Delhi",
-    description: "BuzzSpire Media is a digital marketing agency in Delhi NCR helping local businesses show up on Google.",
+    description: "BuzzSpire Media is a digital marketing agency in Delhi offering SEO, PPC, social media marketing, Google Business Profile management and web development services.",
   };
 
   let pageRecord = null;

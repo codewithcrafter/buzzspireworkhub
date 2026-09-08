@@ -22,6 +22,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ToastProvider } from "@/components/ui/toast";
+import { ReminderNotifications } from "@/components/dashboard/ReminderNotifications";
 
 interface EmployeeUser {
   id: string;
@@ -219,6 +220,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       });
     }
 
+    if (isUserAdmin || perms.includes("BLOG_MANAGE")) {
+      menuItems.push({
+        name: "Blog CMS",
+        icon: FileText,
+        path: "/employee/blog",
+      });
+    }
+
     if (isUserAdmin || perms.includes("REPORTS_VIEW")) {
       menuItems.push({
         name: "Reports",
@@ -251,16 +260,21 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-slate-50 flex font-sans">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-border bg-card flex flex-col fixed h-full z-10">
-        <div className="h-20 flex items-center justify-between px-6 border-b border-border">
-          <Link href="/" className="font-heading font-bold text-2xl tracking-tighter text-primary">
-            BuzzSpire<span className="text-muted-foreground">.</span>
+      <aside className="w-64 border-r border-slate-200 bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] flex flex-col fixed h-full z-20">
+        <div className="h-20 flex items-center justify-between px-6 border-b border-slate-100">
+          <Link href="/" className="font-heading font-extrabold text-2xl tracking-tight text-primary">
+            BuzzSpire<span className="text-indigo-300">.</span>
           </Link>
           {isEmployee && (
-            <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">
+            <span className="px-2 py-1 bg-indigo-50 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider border border-indigo-100">
               Staff
+            </span>
+          )}
+          {isClient && (
+            <span className="px-2 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded-full uppercase tracking-wider border border-emerald-100">
+              Client
             </span>
           )}
         </div>
@@ -284,27 +298,30 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
         )}
 
-        <nav className="flex-1 py-6 px-4 space-y-1.5 overflow-y-auto">
-          {menuItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                pathname === item.path || (item.path !== "/admin" && item.path !== "/employee/dashboard" && pathname.startsWith(item.path + "/"))
-                  ? "bg-primary/10 text-primary font-semibold"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
-            >
-              <item.icon className="w-5 h-5 shrink-0" />
-              <span className="truncate">{item.name}</span>
-            </Link>
-          ))}
+        <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+          {menuItems.map((item) => {
+            const isActive = pathname === item.path || (item.path !== "/admin" && item.path !== "/employee/dashboard" && item.path !== "/dashboard/client" && pathname.startsWith(item.path + "/"));
+            return (
+              <Link
+                key={item.name}
+                href={item.path}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                  isActive
+                    ? "bg-gradient-to-r from-primary to-indigo-700 text-white shadow-md shadow-indigo-200"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-primary"
+                }`}
+              >
+                <item.icon className="w-5 h-5 shrink-0" />
+                <span className="truncate">{item.name}</span>
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-slate-100">
           <Button
             variant="ghost"
-            className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 cursor-pointer"
+            className="w-full justify-start text-slate-500 hover:text-rose-600 hover:bg-rose-50 cursor-pointer rounded-xl font-medium"
             onClick={handleLogout}
           >
             <LogOut className="w-5 h-5 mr-3" />
@@ -314,8 +331,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 p-8 overflow-y-auto">
+      <main className="flex-1 ml-64 p-8 overflow-y-auto relative bg-slate-50/50">
         <ToastProvider>
+          <div className="absolute top-4 right-8 z-50">
+            <ReminderNotifications />
+          </div>
           <div className="max-w-6xl mx-auto">{children}</div>
         </ToastProvider>
       </main>

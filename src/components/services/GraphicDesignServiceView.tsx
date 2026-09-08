@@ -65,7 +65,7 @@ const graphicFaqs = [
 
 export default function GraphicDesignServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -78,14 +78,14 @@ export default function GraphicDesignServiceView() {
                 <Palette className="w-4 h-4" />
                 Graphic Design Specialist
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 Graphic Design Services in Delhi That Actually Get Your Brand Noticed
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Your brand&apos;s visuals talk before your sales team ever does.
                 </p>
-                <p className="font-semibold text-foreground">
+                <p className="font-semibold text-slate-900">
                   That&apos;s the whole point of good design.
                 </p>
                 <p>
@@ -94,7 +94,7 @@ export default function GraphicDesignServiceView() {
                 <p>
                   We&apos;re not another agency pushing templates. We&apos;re a Delhi-based creative team built around one thing - design that sells. Whether it&apos;s campaign creatives for your next launch or a full brand identity from scratch, our team handles it end to end.
                 </p>
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-slate-900">
                   Based out of Delhi, working with brands across Connaught Place, Karol Bagh, South Delhi, Dwarka, Rohini and Saket.
                 </p>
               </div>
@@ -102,7 +102,7 @@ export default function GraphicDesignServiceView() {
             <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Talk to our Design Team</span>
                   </Button>
@@ -116,69 +116,69 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* CORE SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
               Our Core Graphic Design Services
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Here&apos;s what we build for our clients, week after week.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Post Design</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Social Media Post Design</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Feeds move fast. Your posts need to stop the scroll in under two seconds. We design for that exact moment.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Brand Identity Design</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Brand Identity Design</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Colors, fonts, tone, the whole visual language of your brand. Built once, used everywhere.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Custom Logo Design</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Custom Logo Design</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 No stock icons. No templates. Your logo gets designed from a blank page, for your business only.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Marketing Collateral</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Marketing Collateral</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Brochures, one-pagers, sales decks. The stuff your team hands out and actually needs to look sharp.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Banner and Ad Creatives</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Banner and Ad Creatives</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Web banners, display ads, social ad creatives. Built to convert, not just to look pretty.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Brochure and Flyer</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Brochure and Flyer</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Print or digital, these still work. We design them to be read, not skimmed and binned.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Website Graphic Design</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-2 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Website Graphic Design</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Icons, banners, section graphics, hero images. The visual layer that makes your site feel alive.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-3 hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-heading font-bold text-foreground">Packaging and Label Design</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-3 hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Packaging and Label Design</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 For product brands, packaging is the first impression on a shelf. We design labels that get picked up.
               </p>
             </div>
           </div>
           <div className="text-center pt-2 max-w-3xl mx-auto">
-            <p className="text-base text-muted-foreground leading-relaxed">
+            <p className="text-base text-slate-600 leading-relaxed">
               Every single one of these is part of our core Graphic Design Services in Delhi. And we don&apos;t hand off your project to five different freelancers either. One team, one point of contact, start to finish.
             </p>
           </div>
@@ -186,28 +186,28 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* DIGITAL MARKETING ALIGNMENT */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Digital Marketing Graphic Design Solutions
             </h2>
-            <div className="space-y-2 text-lg text-muted-foreground max-w-3xl mx-auto">
+            <div className="space-y-2 text-lg text-slate-600 max-w-3xl mx-auto">
               <p>Design and marketing can&apos;t work in silos. Not anymore.</p>
               <p>Our Digital Marketing Graphic Design work plugs straight into your campaigns. Ad sets, landing pages, email banners, the visuals that carry your message from click to conversion.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Best Graphic Design Agency for Digital Marketing Campaigns</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Best Graphic Design Agency for Digital Marketing Campaigns</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 We build creatives around your campaign goals, not around what looks trendy on Behance. We optimize for CTR first, aesthetics second - the ones that pull real numbers are the ones we scale.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">High Converting Social Media Ad Design Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">High Converting Social Media Ad Design Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 We test formats. Carousel, static, story-first. Whatever pulls the numbers for your niche, that&apos;s what we scale.
               </p>
             </div>
@@ -216,33 +216,33 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* EVERY BUSINESS SIZE */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Graphic Design Services for Every Business Size
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
               You don&apos;t need to be a big brand to get design that works hard.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Professional Graphic Design Services for Small Businesses</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Professional Graphic Design Services for Small Businesses</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Small teams, tight budgets, big ambitions. We work with that reality every day.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Affordable Graphic Design Packages for Startups</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Affordable Graphic Design Packages for Startups</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Pick a package. Scale it up as you grow. No long contracts forced on you.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Custom Graphic Design Services for E-commerce Brands</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Custom Graphic Design Services for E-commerce Brands</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Product shots, catalog banners, seasonal creatives. Built to move inventory, not just fill space.
               </p>
             </div>
@@ -262,13 +262,13 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* GRAPHIC DESIGN COMPANY IN DELHI */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
             Graphic Design Company in Delhi, Serving All Localities
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            <p className="font-semibold text-foreground">We don&apos;t restrict work to one part of the city.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="font-semibold text-slate-900">We don&apos;t restrict work to one part of the city.</p>
             <p>
               Clients reach us from South Delhi, North Delhi, East Delhi, West Delhi, and everywhere in between. Connaught Place. Nehru Place. Lajpat Nagar. Rohini. Dwarka. Janakpuri. Doesn&apos;t matter where you&apos;re based.
             </p>
@@ -280,24 +280,24 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* RETAINER SOLUTIONS */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Brand Identity & Retainer Solutions
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Custom Brand Identity and Graphic Design Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Custom Brand Identity and Graphic Design Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 This isn&apos;t a one-off logo drop. It&apos;s the full system, applied consistently across everything you put out.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Graphic Design Retainer Services for Agencies</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Graphic Design Retainer Services for Agencies</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Running an agency and drowning in client design requests? We plug in as your back-end design bench. Fast turnarounds, consistent quality, your branding on top.
               </p>
             </div>
@@ -306,12 +306,12 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* WHY BUZZSPIRE */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Choose Buzzspire Media
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <ul className="space-y-3 text-left">
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
@@ -330,7 +330,7 @@ export default function GraphicDesignServiceView() {
                 <span>And we back campaign-linked design work with a 30-day results tracking window, so you can actually see what&apos;s working before committing further budget.</span>
               </li>
             </ul>
-            <p className="font-semibold text-foreground text-center pt-4">
+            <p className="font-semibold text-slate-900 text-center pt-4">
               That&apos;s how a real Graphic Design Agency should operate. Honestly, most don&apos;t.
             </p>
           </div>
@@ -338,12 +338,12 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* ABOUT */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
             About Our Graphic Design Company in Delhi
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             <p>
               Buzzspire Media runs out of Delhi, working with small businesses, startups, e-commerce brands and marketing agencies alike, right across the city.
             </p>
@@ -358,10 +358,10 @@ export default function GraphicDesignServiceView() {
       </section>
 
       {/* FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -381,19 +381,19 @@ export default function GraphicDesignServiceView() {
       />
 
       {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
             {/* Subtle accent corner */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-violet-500/20 rounded-full blur-[40px] pointer-events-none" />
             <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
             
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Let&apos;s Design Something That Works
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>You&apos;ve read enough.</p>
-              <p className="font-semibold text-foreground">Talk to our Creative Design Agency team directly.</p>
+              <p className="font-semibold text-slate-900">Talk to our Creative Design Agency team directly.</p>
             </div>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">

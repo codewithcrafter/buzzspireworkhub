@@ -58,7 +58,7 @@ const seoFaqs = [
 
 export default function SeoServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -71,11 +71,11 @@ export default function SeoServiceView() {
                 <Search className="w-4 h-4" />
                 SEO Specialist
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 Professional SEO Services in Delhi That Actually Move The Needle
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Looking for an SEO agency in Delhi that doesn&apos;t just sound good in a sales pitch? You&apos;re in the right place.
                 </p>
                 <p>
@@ -84,9 +84,16 @@ export default function SeoServiceView() {
                 <p>
                   Here&apos;s the thing about most SEO companies in Delhi. They talk a big game about algorithms and then hand you a PDF nobody reads. We&apos;re not that agency.
                 </p>
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-slate-900">
                   Our SEO services are built around one question. Is this actually growing your business? If the answer&apos;s no, we don&apos;t do it.
                 </p>
+              </div>
+              <div className="pt-4">
+                <Link href="/contact" className="inline-block w-full sm:w-auto">
+                  <Button size="lg" className="rounded-full h-14 px-8 text-base shadow-lg hover:shadow-xl transition-all w-full font-bold bg-primary hover:bg-indigo-700 text-white">
+                    Get a Free SEO Consultation
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -96,35 +103,35 @@ export default function SeoServiceView() {
       </section>
 
       {/* WHY PICK BUZZSPIRE */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="order-2 lg:order-1 relative h-full min-h-[400px] rounded-[2rem] bg-muted/30 border border-border/50 overflow-hidden flex items-center justify-center">
+            <div className="order-2 lg:order-1 relative h-full min-h-[400px] rounded-[2rem] bg-muted/30 border border-slate-200/50 overflow-hidden flex items-center justify-center">
                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
-               <div className="w-24 h-24 rounded-full bg-white dark:bg-zinc-900 shadow-xl flex items-center justify-center border border-border/50 relative z-10">
+               <div className="w-24 h-24 rounded-full bg-white dark:bg-zinc-900 shadow-xl flex items-center justify-center border border-slate-200/50 relative z-10">
                  <CheckCircle2 className="w-10 h-10 text-primary" />
                  <div className="absolute inset-0 rounded-full border border-primary/20 animate-ping" style={{ animationDuration: '3s' }} />
                </div>
             </div>
             
             <div className="order-1 lg:order-2 space-y-6">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900 leading-tight">
                 Why Pick Buzzspire Over Other Delhi SEO Agencies
               </h2>
-              <div className="space-y-5 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-xl">We&apos;re not the biggest SEO company in Delhi. We don&apos;t want to be.</p>
+              <div className="space-y-5 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-xl">We&apos;re not the biggest SEO company in Delhi. We don&apos;t want to be.</p>
                 <p>
                   What we want is a small, sharp team that actually picks up the phone. Every client gets a dedicated account manager who understands the Delhi market - not a rotating cast of junior execs who forget your business name.
                 </p>
                 <div className="pl-6 border-l-2 border-primary/30 py-2">
-                  <p className="text-foreground font-medium">
+                  <p className="text-slate-900 font-medium">
                     You&apos;ll get weekly reporting. Real numbers. Rankings, traffic, calls, leads. No fluff slides.
                   </p>
                 </div>
                 <p>
                   And here&apos;s our line in the sand. We track your results for the first 30 days and show you exactly what&apos;s moving and what isn&apos;t. No hiding behind jargon.
                 </p>
-                <p className="font-medium text-foreground bg-primary/5 inline-block px-4 py-2 rounded-lg">
+                <p className="font-medium text-slate-900 bg-primary/5 inline-block px-4 py-2 rounded-lg">
                   Pricing&apos;s upfront too. You&apos;ll know the plan and the expected return before you sign anything.
                 </p>
               </div>
@@ -134,51 +141,51 @@ export default function SeoServiceView() {
       </section>
 
       {/* CORE SEO SERVICES */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Our SEO Services in Delhi
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               We cover the full spread. Here&apos;s what&apos;s under the hood.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">On-Page SEO Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">On-Page SEO Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Titles, headers, internal links, content structure. The stuff Google actually reads on your pages. We fix what&apos;s broken and build what&apos;s missing.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">Off-Page SEO Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Off-Page SEO Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Your site&apos;s reputation off your own domain. Backlinks, brand mentions, digital PR relevant to Indian and Delhi-based audiences. This is where authority gets built.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">Technical SEO Audit Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Technical SEO Audit Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Site speed, crawl errors, broken redirects, mobile issues. We run a full technical SEO audit before touching anything else, because you can&apos;t fix what you can&apos;t see.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">Local SEO Services in Delhi</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Local SEO Services in Delhi</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Want to show up when someone nearby searches for what you sell - whether they&apos;re in Connaught Place, Dwarka, Rohini, Karol Bagh, or Gurgaon&apos;s Cyber Hub? Our local SEO services get your Google Business Profile, citations, and Maps presence in shape for hyperlocal search.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">E-commerce SEO Services</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">E-commerce SEO Services</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Product pages, category structure, site search, duplicate content headaches. Our e-commerce SEO services are built for stores that live and die by organic traffic.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">Enterprise SEO Management</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Enterprise SEO Management</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Big sites, big teams, big stakes. Our enterprise SEO management handles multi-location structure, content governance, and cross-team coordination without the chaos.
               </p>
             </div>
@@ -192,7 +199,7 @@ export default function SeoServiceView() {
                 </Button>
               </a>
             </Magnetic>
-            <p className="text-sm text-muted-foreground mt-4">
+            <p className="text-sm text-slate-600 mt-4">
               Not sure which one your business needs? Call +91-9205386625. We&apos;ll figure it out together, five minutes, no pressure.
             </p>
           </div>
@@ -200,13 +207,13 @@ export default function SeoServiceView() {
       </section>
 
       {/* WHAT YOU GET */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             What You Actually Get From Working With Us
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground text-center pb-2">This isn&apos;t about vanity rankings. It&apos;s about outcomes.</p>
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900 text-center pb-2">This isn&apos;t about vanity rankings. It&apos;s about outcomes.</p>
             <ul className="space-y-3 text-left">
               <li className="flex gap-2">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-1" />
@@ -229,7 +236,7 @@ export default function SeoServiceView() {
                 <span>Link building services that focus on quality over quantity</span>
               </li>
             </ul>
-            <p className="font-semibold text-foreground text-center pt-4">
+            <p className="font-semibold text-slate-900 text-center pt-4">
               We&apos;ve had clients ask us why we don&apos;t just chase every keyword. Simple. Rankings without buyers aren&apos;t worth much. We chase the searches that turn into customers.
             </p>
           </div>
@@ -237,51 +244,51 @@ export default function SeoServiceView() {
       </section>
 
       {/* INDUSTRIES WE RANK */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Industries We Rank
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Small business. Growing business. Local shop. National brand. Doesn&apos;t matter.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">SEO agency for small businesses in Delhi.</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">SEO agency for small businesses in Delhi.</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 If you&apos;re a small business, budget matters. We build plans that fit, not plans that break you.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">E-commerce SEO services for Shopify stores.</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">E-commerce SEO services for Shopify stores.</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Running a Shopify store based in Delhi or Noida? We&apos;ve handled product-page SEO, collection structure, and speed fixes for stores just like yours.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Local SEO services for Google Business Profile optimization.</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Local SEO services for Google Business Profile optimization.</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Walk-ins and calls matter to you. We get your Google Business Profile working like it should.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Affordable SEO packages for startups in Delhi and Gurgaon.</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Affordable SEO packages for startups in Delhi and Gurgaon.</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Early stage and tight on cash? We&apos;ve got startup-friendly plans that still deliver.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">B2B SEO agency for lead generation.</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">B2B SEO agency for lead generation.</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Selling to other businesses out of Gurgaon or Noida&apos;s corporate hubs? We build content and structure around the searches your buyers actually run.
               </p>
             </div>
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Real estate SEO & Healthcare SEO in Delhi.</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Real estate SEO & Healthcare SEO in Delhi.</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Real estate SEO services in Delhi and healthcare SEO services in Delhi are also part of what we do. Different industries, different search behavior. We adjust accordingly.
               </p>
             </div>
@@ -290,12 +297,12 @@ export default function SeoServiceView() {
       </section>
 
       {/* HIGHER RANKINGS */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
             SEO Services Agency in Delhi for Higher Google Rankings
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             <p>
               We&apos;re based in Delhi, and most of our clients are here too. That local experience matters. We understand the market, the competition, and what it takes to get found by customers across Delhi — from New Delhi and South Delhi to North Delhi, Dwarka, Rohini, and Karol Bagh.
             </p>
@@ -317,10 +324,10 @@ export default function SeoServiceView() {
       </section>
 
       {/* FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -340,15 +347,15 @@ export default function SeoServiceView() {
       />
 
       {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-primary/5 rounded-full blur-[60px] pointer-events-none" />
             
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Your Competitor&apos;s SEO Agency Is Probably Ignoring Them Right Now. Let&apos;s Fix Yours.
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>Get in touch today. No long forms, no pushy sales calls. Just a straight conversation about your SEO.</p>
             </div>
 

@@ -80,7 +80,7 @@ const gmbFaqs = [
 
 export default function GmbServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -93,11 +93,11 @@ export default function GmbServiceView() {
                 <MapPin className="w-4 h-4" />
                 Google Business Profile Management
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 Google Business Profile Management Service in Delhi
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Your Next Customer Just Searched For You On Google — Did They Find You? Thousands of Delhi searches happen every day. Right now, your listing is either showing up first, or it&apos;s invisible.Right here, in your own city.
                 </p>
                 <p>
@@ -109,7 +109,7 @@ export default function GmbServiceView() {
                 <p>
                   As a Local SEO Management Agency working specifically in the Delhi market, we know how different competition looks in South Delhi versus somewhere like Rohini or Noida border areas. Our Google My Business Optimization Service is built around that difference. Not a one-size template.
                 </p>
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-slate-900">
                   Whether you&apos;re a single clinic in Rajouri Garden or a chain with outlets across Delhi, our GMB Profile Optimization Services get your listing where Delhi customers can actually find it. Call now. Or drop a WhatsApp message. We&apos;ll check your listing for free.
                 </p>
               </div>
@@ -117,7 +117,7 @@ export default function GmbServiceView() {
             <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Audit My GMB Listing — 10 Minutes, No Cost</span>
                   </Button>
@@ -131,58 +131,58 @@ export default function GmbServiceView() {
       </section>
 
       {/* SECTION 1: WHY CHOOSE OUR LOCAL SEO MANAGEMENT AGENCY IN DELHI */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Why Choose Our Local SEO Management Agency in Delhi
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Certified GMB Management Services Experts
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Our team has handled listings across every major Delhi micro-market. East Delhi, West Delhi, South Delhi, belt. Each one behaves differently on Google Maps, and we&apos;ve seen it firsthand.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Proven Google My Business Optimization Service Results in Delhi
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 We don&apos;t copy generic playbooks. Every move is based on what&apos;s already working for ranking businesses in your specific Delhi neighborhood. That&apos;s the core of our Google My Business Optimization Service.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Trusted GMB Profile Optimization Services Provider
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Clients stick with us because we show real numbers. Weekly. No vague talk about &quot;growth&quot; with nothing behind it.
               </p>
             </div>
           </div>
 
-          <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium max-w-3xl mx-auto space-y-4">
+          <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 max-w-3xl mx-auto space-y-4">
             <ul className="space-y-3">
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
+              <li className="flex gap-3 text-sm md:text-base text-slate-900 items-start font-medium">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <span>A dedicated account manager who knows your Delhi listing inside out</span>
               </li>
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
+              <li className="flex gap-3 text-sm md:text-base text-slate-900 items-start font-medium">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <span>Transparent weekly reporting with actual local search data</span>
               </li>
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
+              <li className="flex gap-3 text-sm md:text-base text-slate-900 items-start font-medium">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <span>Clear upfront pricing, nothing added later</span>
               </li>
-              <li className="flex gap-3 text-sm md:text-base text-foreground items-start font-medium">
+              <li className="flex gap-3 text-sm md:text-base text-slate-900 items-start font-medium">
                 <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <span>A 30-day results tracking window so you see the movement yourself</span>
               </li>
@@ -203,92 +203,92 @@ export default function GmbServiceView() {
       </section>
 
       {/* SECTION 2: WHAT'S INCLUDED */}
-      <section className="py-20 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
               Our Google Business Profile Management Service in Delhi - What&apos;s Included
             </h2>
           </div>
 
           <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <MapPin className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">Google Maps Ranking Service for Delhi Businesses</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">Ranking on Google Maps in a city as dense as Delhi comes down to proximity, relevance, and prominence. Our Google Maps Ranking Service is built to strengthen all three for your exact location.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">Google Maps Ranking Service for Delhi Businesses</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">Ranking on Google Maps in a city as dense as Delhi comes down to proximity, relevance, and prominence. Our Google Maps Ranking Service is built to strengthen all three for your exact location.</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <ShieldCheck className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">GMB Listing Setup and Verification</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">New business or shifting locations within Delhi? We handle GMB Listing Setup and Verification properly the first time. Right category, right service area, no rejected applications.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">GMB Listing Setup and Verification</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">New business or shifting locations within Delhi? We handle GMB Listing Setup and Verification properly the first time. Right category, right service area, no rejected applications.</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <TrendingUp className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">Local Map Pack SEO for Delhi</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">Getting into the top three Delhi results takes structure and consistency, not luck. Our Local Map Pack SEO work targets exactly what pushes a listing into that spot.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">Local Map Pack SEO for Delhi</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">Getting into the top three Delhi results takes structure and consistency, not luck. Our Local Map Pack SEO work targets exactly what pushes a listing into that spot.</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <Star className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">Google Business Review Management</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">In Delhi, one bad review can sit at the top of your profile for months if it&apos;s not managed. Our Google Business Review Management service handles responses and pushes for more genuine reviews.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">Google Business Review Management</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">In Delhi, one bad review can sit at the top of your profile for months if it&apos;s not managed. Our Google Business Review Management service handles responses and pushes for more genuine reviews.</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <AlertTriangle className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">GMB Suspension Recovery Service</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">Delhi listings get flagged more than people realize, especially multi-location ones. Our GMB Suspension Recovery Service finds the actual cause and files a proper reinstatement request fast.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">GMB Suspension Recovery Service</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">Delhi listings get flagged more than people realize, especially multi-location ones. Our GMB Suspension Recovery Service finds the actual cause and files a proper reinstatement request fast.</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <FileCheck className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">Local Citation Building Services</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">Your business details need to match everywhere, Delhi directories included. Our Local Citation Building Services clean up mismatches that quietly drag your ranking down.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">Local Citation Building Services</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">Your business details need to match everywhere, Delhi directories included. Our Local Citation Building Services clean up mismatches that quietly drag your ranking down.</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <MessageSquare className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">Google Business Profile Post Management</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">An inactive profile reads as abandoned, both to Google and to Delhi customers scrolling fast. Google Business Profile Post Management keeps yours active and current.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">Google Business Profile Post Management</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">An inactive profile reads as abandoned, both to Google and to Delhi customers scrolling fast. Google Business Profile Post Management keeps yours active and current.</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-border/80 rounded-[2rem] p-6 sm:p-8 shadow-sm items-center sm:items-start group hover:shadow-md transition-shadow">
+            <div className="flex flex-col sm:flex-row gap-6 bg-white dark:bg-zinc-900 border border-slate-200/80 rounded-[2rem] p-6 sm:p-8 shadow-md shadow-indigo-900/5 items-center sm:items-start group hover:shadow-md transition-shadow">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                 <MapPin className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-heading font-bold text-foreground mb-2 text-center sm:text-left">Hyper-Local SEO Strategy for Delhi Neighborhoods</h3>
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-center sm:text-left">A shop in Saket faces different competition than one in Pitampura. Our Hyper-Local SEO Strategy is built block by block, not city-wide.</p>
+                <h3 className="text-xl font-heading font-bold text-slate-900 mb-2 text-center sm:text-left">Hyper-Local SEO Strategy for Delhi Neighborhoods</h3>
+                <p className="text-sm md:text-base text-slate-600 leading-relaxed text-center sm:text-left">A shop in Saket faces different competition than one in Pitampura. Our Hyper-Local SEO Strategy is built block by block, not city-wide.</p>
               </div>
             </div>
           </div>
@@ -296,51 +296,51 @@ export default function GmbServiceView() {
       </section>
 
       {/* SECTION 3: HOW YOUR LISTING GOES FROM INVISIBLE TO TOP 3 */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               How Your Listing Goes From Invisible To Top 3
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
               <span className="text-xs font-extrabold text-primary bg-primary/10 px-3 py-1 rounded-full">Step 01</span>
-              <h3 className="text-xl font-heading font-bold text-foreground">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Audit &amp; Analysis
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 We check your current Delhi listing against nearby competitors and flag exactly where you&apos;re losing ground.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
               <span className="text-xs font-extrabold text-primary bg-primary/10 px-3 py-1 rounded-full">Step 02</span>
-              <h3 className="text-xl font-heading font-bold text-foreground">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Strategy Setup
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 This is where the Hyper-Local SEO Strategy takes shape, based on your specific Delhi area and category.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
               <span className="text-xs font-extrabold text-primary bg-primary/10 px-3 py-1 rounded-full">Step 03</span>
-              <h3 className="text-xl font-heading font-bold text-foreground">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Optimization &amp; Post Management
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 We fix the profile itself, then keep it active with regular Delhi-relevant posts and updates.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
               <span className="text-xs font-extrabold text-primary bg-primary/10 px-3 py-1 rounded-full">Step 04</span>
-              <h3 className="text-xl font-heading font-bold text-foreground">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Reporting &amp; Growth Tracking
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Weekly numbers. Calls, direction requests, profile views. Straight data, no filler.
               </p>
             </div>
@@ -349,29 +349,29 @@ export default function GmbServiceView() {
       </section>
 
       {/* SECTION 4: ONE SHOP OR FIFTY */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               One Shop Or Fifty — We&apos;ve Ranked Both
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Small Businesses in Delhi
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Searching for the best Google Business Profile management agency for small business in Delhi? We keep pricing honest and results visible from the first month.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Multi-Location Brands Across Delhi
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Five outlets or fifty across Delhi? As a GMB management agency for multi-location businesses, we manage bulk listings while keeping each branch&apos;s local details accurate.
               </p>
             </div>
@@ -380,18 +380,18 @@ export default function GmbServiceView() {
       </section>
 
       {/* SECTION 5: WHAT THIS ACTUALLY COSTS */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               What This Actually Costs
             </h2>
           </div>
-          <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 max-w-3xl mx-auto">
-            <h3 className="text-xl font-heading font-bold text-foreground">
+          <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 max-w-3xl mx-auto">
+            <h3 className="text-xl font-heading font-bold text-slate-900">
               Affordable Google My Business Management Packages and Pricing
             </h3>
-            <p className="text-base text-muted-foreground leading-relaxed">
+            <p className="text-base text-slate-600 leading-relaxed">
               Our Google Business Profile Management Service in Delhi is priced by scope, not guesswork. Single-location plans start simple. Multi-location and suspension recovery work gets a custom quote after a quick audit call.
             </p>
           </div>
@@ -409,10 +409,10 @@ export default function GmbServiceView() {
       </section>
 
       {/* SECTION 6: FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -422,31 +422,31 @@ export default function GmbServiceView() {
       </section>
 
       {/* SECTION 7: TESTIMONIALS */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Client Testimonials
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 relative">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 relative">
               <Quote className="w-8 h-8 text-primary/20 absolute top-6 right-6" />
-              <p className="text-base text-foreground italic leading-relaxed">
+              <p className="text-base text-slate-900 italic leading-relaxed">
                 &quot;We&apos;re based in Rohini and our calls barely came from Google before. That changed within six weeks of working with Buzzspire.&quot;
               </p>
-              <div className="pt-2 border-t border-border/40">
+              <div className="pt-2 border-t border-slate-200/50">
                 <p className="text-sm font-bold text-primary">Local business owner, Delhi</p>
               </div>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 relative">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 relative">
               <Quote className="w-8 h-8 text-primary/20 absolute top-6 right-6" />
-              <p className="text-base text-foreground italic leading-relaxed">
+              <p className="text-base text-slate-900 italic leading-relaxed">
                 &quot;Our profile got suspended right before a big season. They got it reinstated in under two weeks.&quot;
               </p>
-              <div className="pt-2 border-t border-border/40">
+              <div className="pt-2 border-t border-slate-200/50">
                 <p className="text-sm font-bold text-primary">Multi-location client, Delhi</p>
               </div>
             </div>
@@ -465,21 +465,21 @@ export default function GmbServiceView() {
       />
 
       {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-border shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
+          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
             {/* Subtle accent corner */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/20 rounded-full blur-[40px] pointer-events-none" />
             <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
             
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Get Started - Free GMB Audit for Delhi Businesses
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>
                 Somewhere in Delhi right now, a customer is searching for exactly what you sell. The question is whether your listing shows up first, or not at all.
               </p>
-              <p className="font-semibold text-foreground">
+              <p className="font-semibold text-slate-900">
                 Buzzspire&apos;s Google Business Profile Management Service in Delhi starts with one free audit call. No commitment attached.
               </p>
             </div>

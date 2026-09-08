@@ -239,4 +239,4 @@ export async function acceptInvitation(token: string, password: string) {
     });
 
     return updatedUser;
-}
+}

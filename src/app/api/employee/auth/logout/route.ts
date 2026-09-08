@@ -7,5 +7,6 @@ export async function POST() {
   );
 
   response.cookies.delete("employee_token");
+  response.cookies.delete("token");
   return response;
 }

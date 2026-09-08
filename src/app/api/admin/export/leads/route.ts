@@ -172,15 +172,15 @@ export async function GET(req: Request) {
             title: "Lead Submissions",
             headers: ["Name", "Email", "Phone", "Company", "Service", "Source", "Message", "Status", "Date"],
             rows: leads.map(l => [
-              l.name,
-              l.email,
+              l.name || "-",
+              l.email || "-",
               l.phone || "-",
               l.company || "-",
               l.service || "-",
               l.source || "-",
-              l.message, // Will automatically wrap in pdfkit-table
+              (l.message || "").substring(0, 50) + ((l.message || "").length > 50 ? "..." : ""),
               l.status,
-              formatDate(l.createdAt)
+              l.createdAt.toLocaleDateString()
             ]),
           };
 

@@ -67,7 +67,7 @@ const smoFaqs = [
 
 export default function SmoServiceView() {
   return (
-    <div className="w-full bg-background select-none bg-grid-pattern relative overflow-hidden">
+    <div className="w-full bg-slate-50 font-sans select-none bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
@@ -80,11 +80,11 @@ export default function SmoServiceView() {
                 <Share2 className="w-4 h-4" />
                 Social Media Optimization
               </span>
-              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-foreground">
+              <h1 className="text-4xl md:text-5xl lg:text-[56px] font-heading font-extrabold tracking-tight leading-[1.1] text-slate-900">
                 SMO Services in Delhi That Actually Grow Your Brand
               </h1>
-              <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-                <p className="font-semibold text-foreground text-lg md:text-xl">
+              <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed">
+                <p className="font-semibold text-slate-900 text-lg md:text-xl">
                   Your Pages Get Likes. They Don&apos;t Get Leads. That&apos;s The Problem We Fix. That&apos;s where a real SMO (Social Media Optimization) service comes in.
                 </p>
                 <p>
@@ -98,7 +98,7 @@ export default function SmoServiceView() {
             <div className="pt-2 flex flex-col sm:flex-row items-start gap-4">
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-primary/90 font-bold shadow-lg flex items-center gap-2">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-primary text-white hover:bg-indigo-700 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 font-bold shadow-lg flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>Get My Free Page Audit — 10 Minutes, No Pitch</span>
                   </Button>
@@ -112,16 +112,16 @@ export default function SmoServiceView() {
       </section>
 
       {/* 2. WHAT IS SMO, REALLY? */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             What Is SMO, Really?
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <p>
               SMO stands for Social Media Optimization. It&apos;s the process of shaping your social profiles, content, and engagement so they attract the right audience organically.
             </p>
-            <p className="font-bold text-foreground text-lg">
+            <p className="font-bold text-slate-900 text-lg">
               Not paid ads. Organic pull.
             </p>
             <p>
@@ -135,33 +135,33 @@ export default function SmoServiceView() {
       </section>
 
       {/* 3. WHY BUSINESSES CHOOSE OUR SMO AGENCY */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-8">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Businesses Choose Our SMO Agency
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900">
               Here&apos;s the deal. Most agencies post and pray.
             </p>
             <p className="font-bold text-primary">
               We don&apos;t.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-              <div className="p-6 rounded-2xl bg-white border border-border/80 shadow-sm space-y-2">
-                <h3 className="font-bold text-foreground text-base">Dedicated Account Manager</h3>
+              <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-md shadow-indigo-900/5 space-y-2">
+                <h3 className="font-bold text-slate-900 text-base">Dedicated Account Manager</h3>
                 <p className="text-sm">Every client gets a dedicated account manager. Someone who actually knows your brand, not a rotating cast of strangers.</p>
               </div>
-              <div className="p-6 rounded-2xl bg-white border border-border/80 shadow-sm space-y-2">
-                <h3 className="font-bold text-foreground text-base">30-Day Tracking Window</h3>
+              <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-md shadow-indigo-900/5 space-y-2">
+                <h3 className="font-bold text-slate-900 text-base">30-Day Tracking Window</h3>
                 <p className="text-sm">You also get a 30-day results tracking window. We watch the numbers from day one and adjust course early, not three months in.</p>
               </div>
-              <div className="p-6 rounded-2xl bg-white border border-border/80 shadow-sm space-y-2">
-                <h3 className="font-bold text-foreground text-base">Upfront Clear Pricing</h3>
+              <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-md shadow-indigo-900/5 space-y-2">
+                <h3 className="font-bold text-slate-900 text-base">Upfront Clear Pricing</h3>
                 <p className="text-sm">And pricing? Upfront. Clear. No surprise line items buried in a PDF nobody reads.</p>
               </div>
             </div>
-            <p className="font-bold text-foreground text-center pt-4 text-xl">
+            <p className="font-bold text-slate-900 text-center pt-4 text-xl">
               That&apos;s why brands call us the Best SMO Services Agency in Delhi.
             </p>
           </div>
@@ -169,49 +169,49 @@ export default function SmoServiceView() {
       </section>
 
       {/* 4. OUR CORE SMO SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-border/40">
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
               Our Core SMO Services
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               We keep this simple. Here&apos;s exactly what falls under our SMO Marketing Services.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2">
-              <h3 className="text-xl font-heading font-bold text-foreground">Organic Social Media Optimization</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-2">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Organic Social Media Optimization</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 We build your organic reach the honest way. No bots. No fake followers. Just content that people actually want to engage with.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Profile Optimization</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Social Media Profile Optimization</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Your bio, your highlights, your pinned posts, your link-in-bio setup. Small details. Big impact on conversions.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4">
-              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Management</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Social Media Management</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Daily posting. Community replies. Content calendars that don&apos;t fall apart by week two. We handle the grind so you don&apos;t have to.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-2 lg:mt-8">
-              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Audit Services</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-2 lg:mt-8">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Social Media Audit Services</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Before we touch anything, we look at what&apos;s already there. What&apos;s working. What&apos;s dead weight. You get a clear picture, not guesswork.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-4 lg:col-span-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">Social Media Strategy Development</h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-3xl">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-4 lg:col-span-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">Social Media Strategy Development</h3>
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed max-w-3xl">
                 Every brand gets a plan built around its actual goals, not a copy-paste template we reuse for everyone.
               </p>
             </div>
@@ -230,50 +230,50 @@ export default function SmoServiceView() {
       </section>
 
       {/* 5. SMO SERVICES FOR EVERY KIND OF BUSINESS */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               SMO Services for Every Kind of Business
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Startups need something different than a ten-year-old retail brand. We get that.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 SMO Services for Business / Startups
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Fresh brand, tight budget, big ambitions. We build visibility from scratch, with content that earns trust fast.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Local SMO Services
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Running a shop, clinic, or restaurant in your city? Local SMO puts you in front of people nearby who are already searching for what you sell.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 E-commerce Social Media Optimization
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 Product tags, shoppable posts, reviews woven into your feed. Every scroll becomes a chance to sell.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 B2B Social Media Optimization Strategy
               </h3>
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 LinkedIn-first thinking. Thought leadership content. The kind of posts that get you into decision-makers&apos; feeds, not just likes from your own team.
               </p>
             </div>
@@ -282,50 +282,50 @@ export default function SmoServiceView() {
       </section>
 
       {/* 6. PLATFORM-SPECIFIC OPTIMIZATION */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Platform-Specific Optimization
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Every platform behaves differently. We treat them that way.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-600 flex items-center justify-center">
                 <Instagram className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-heading font-bold text-foreground">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Instagram Profile Optimization
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Reels strategy, story highlights, bio links that convert browsers into buyers.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center">
                 <Facebook className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-heading font-bold text-foreground">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 Facebook Page Optimization
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Business info, reviews, messaging setup, page categories. The stuff people check before they trust you.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center">
                 <Linkedin className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-heading font-bold text-foreground">
+              <h3 className="text-xl font-heading font-bold text-slate-900">
                 LinkedIn Business Page Optimization
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Agency page structure, employee advocacy, content that positions you as the go-to name in your industry.
               </p>
             </div>
@@ -334,75 +334,75 @@ export default function SmoServiceView() {
       </section>
 
       {/* 7. AREAS WE SERVE ACROSS DELHI */}
-      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-border/60">
+      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-5xl font-heading font-black text-foreground">
+            <h2 className="text-3xl md:text-5xl font-heading font-black text-slate-900">
               Areas We Serve Across Delhi
             </h2>
-            <div className="space-y-1 text-lg text-muted-foreground max-w-2xl mx-auto">
+            <div className="space-y-1 text-lg text-slate-600 max-w-2xl mx-auto">
               <p>We don&apos;t chase clients across five states.</p>
-              <p className="font-semibold text-foreground">Delhi&apos;s home turf. We know it street by street.</p>
+              <p className="font-semibold text-slate-900">Delhi&apos;s home turf. We know it street by street.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground flex items-center gap-2">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-primary" />
                 South Delhi
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Vasant Kunj. Saket. Lajpat Nagar. Greater Kailash. These areas have a different pulse. The audience here expects polished content, premium positioning, and brand storytelling that doesn&apos;t feel salesy. We&apos;ve run campaigns for clinics in GK, fashion brands in Saket, and real estate pages in Vasant Kunj. Each one needed a different voice. We built it.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground flex items-center gap-2">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-primary" />
                 West Delhi
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Dwarka. Rajouri Garden. Punjabi Bagh. The crowd here scrolls fast. You have 2 seconds to stop the thumb. We create hook-first content for West Delhi brands. Reels that open with a bang. Carousels that don&apos;t waste the first slide. That&apos;s how we get attention here.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground flex items-center gap-2">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-primary" />
                 East Delhi
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Preet Vihar. Laxmi Nagar. Mayur Vihar. This side of the city is hungry for value-driven content. How-to posts. Local offers. Community engagement that feels personal, not corporate. We&apos;ve helped local shops and coaching centers in East Delhi build followings that actually walk through their doors.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3">
-              <h3 className="text-xl font-heading font-bold text-foreground flex items-center gap-2">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
+              <h3 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-primary" />
                 North Delhi
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Rohini. Pitampura. Model Town. Karol Bagh. North Delhi has its own rhythm. Mix of old-school trust and new-age finding. We balance both. Traditional business language for the older crowd. Trending formats for the younger one. One page, two audiences, handled right.
               </p>
             </div>
 
-            <div className="p-8 rounded-3xl bg-white border border-border/80 shadow-premium space-y-3 lg:col-span-2">
-              <h3 className="text-xl font-heading font-bold text-foreground flex items-center gap-2">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3 lg:col-span-2">
+              <h3 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-primary" />
                 Central Delhi
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Connaught Place. Nehru Place. Karol Bagh. The business hub. B2B content works differently here. LinkedIn-first strategies. Thought leadership posts. Employee advocacy that makes your company look like the place smart people work at. We&apos;ve built business pages for CP-based agencies and Nehru Place tech firms.
               </p>
             </div>
           </div>
 
-          <div className="p-6 rounded-2xl bg-muted/60 border border-border text-center space-y-2 max-w-3xl mx-auto">
-            <p className="text-base text-muted-foreground">
+          <div className="p-6 rounded-2xl bg-muted/60 border border-slate-200 text-center space-y-2 max-w-3xl mx-auto">
+            <p className="text-base text-slate-600">
               Here&apos;s the thing. A Saket audience doesn&apos;t behave like a Rohini audience. Content that works in one falls flat in the other.
             </p>
-            <p className="font-bold text-foreground text-base">
+            <p className="font-bold text-slate-900 text-base">
               We factor that in. Every single time.
             </p>
           </div>
@@ -420,13 +420,13 @@ export default function SmoServiceView() {
       </section>
 
       {/* 8. WHY WE'RE THE BEST SMO SERVICES AGENCY IN DELHI */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why We&apos;re the Best SMO Services Agency in Delhi
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            <p className="font-semibold text-foreground">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
+            <p className="font-semibold text-slate-900">
               Real talk. Anyone can promise engagement. Few actually deliver it with proof.
             </p>
             <p>
@@ -443,16 +443,16 @@ export default function SmoServiceView() {
       </section>
 
       {/* 9. HOW TO INCREASE ORGANIC REACH ON SOCIAL MEDIA */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             How to Increase Organic Reach on Social Media
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <p>
               A few things actually move the needle here. Consistent posting windows. Native video over reposted content. Real replies instead of generic ones. And profile optimization that turns a visit into a follow, then a follow into a lead.
             </p>
-            <p className="font-semibold text-foreground">
+            <p className="font-semibold text-slate-900">
               We build all of that into every SMO Marketing Services package we run.
             </p>
           </div>
@@ -460,12 +460,12 @@ export default function SmoServiceView() {
       </section>
 
       {/* 10. WHAT THIS ACTUALLY COSTS YOU */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             What This Actually Costs You
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <p>
               We keep our Affordable Social Media Optimization Packages flexible. Small business, growing startup, or established e-commerce brand, there&apos;s a plan sized for where you are.
             </p>
@@ -490,12 +490,12 @@ export default function SmoServiceView() {
       </section>
 
       {/* 11. SMO VS SMM. WHAT'S THE DIFFERENCE? */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-border/60">
+      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
-          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             SMO vs SMM. What&apos;s the Difference?
           </h2>
-          <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+          <div className="space-y-4 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
             <p>
               People mix these up all the time. Fair enough, they sound alike.
             </p>
@@ -513,10 +513,10 @@ export default function SmoServiceView() {
       </section>
 
       {/* 12. FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -536,17 +536,17 @@ export default function SmoServiceView() {
       />
 
       {/* 14. FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-border/40">
+      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
         <ScrollReveal>
           <div className="rounded-[2.5rem] bg-white border-2 border-primary/20 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-foreground max-w-3xl mx-auto relative z-10">
+            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
               Let&apos;s Get Your Social Pages Working
             </h2>
-            <div className="space-y-4 text-base md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed relative z-10">
+            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
               <p>
                 You&apos;ve read this far. That means something isn&apos;t clicking with your current setup.
               </p>
-              <p className="font-semibold text-foreground">
+              <p className="font-semibold text-slate-900">
                 Let&apos;s fix that.
               </p>
               <p>
@@ -565,7 +565,7 @@ export default function SmoServiceView() {
               </Magnetic>
               <Magnetic>
                 <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-base border-border bg-white text-foreground hover:bg-muted font-bold flex items-center gap-2">
+                  <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-base border-border bg-white text-slate-900 hover:bg-muted font-bold flex items-center gap-2">
                     <MessageSquare className="w-5 h-5" />
                     <span>WhatsApp Strategy Chat</span>
                   </Button>

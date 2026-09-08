@@ -4,13 +4,8 @@ import CareerClientView from "./CareerClientView";
 import { prisma } from "@/lib/prisma";
 
 export async function generateMetadata(): Promise<Metadata> {
-  let pageRecord = null;
-  try {
-    pageRecord = await prisma.page.findUnique({ where: { slug: "career" } });
-  } catch (error) {
-    console.error("Failed to fetch CMS metadata for career page:", error);
-  }
-  
+  const pageRecord = await prisma.page.findUnique({ where: { slug: "career" } });
+
   if (!pageRecord) return {};
 
   const content = pageRecord.publishedContent as any || {};
@@ -27,14 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CareerPage() {
-  let pageRecord = null;
-  try {
-    pageRecord = await prisma.page.findUnique({
-      where: { slug: "career" },
-    });
-  } catch (error) {
-    console.error("Failed to fetch CMS data for career page:", error);
-  }
+  const pageRecord = await prisma.page.findUnique({
+    where: { slug: "career" },
+  });
 
   const content = pageRecord?.publishedContent as any || {};
 
