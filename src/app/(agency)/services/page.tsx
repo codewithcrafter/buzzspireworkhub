@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: pageRecord.metaDescription || "Explore all digital marketing services in Delhi under one roof — SEO, PPC, SMM, design, and more. One agency, every service you need. Call now!",
     keywords: keywords,
     alternates: {
-      canonical: "https://buzzspiremedia.com/services",
+      canonical: "https://www.buzzspiremedia.com/services",
     },
   };
 }

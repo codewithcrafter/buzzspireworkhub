@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: pageRecord.metaDescription || "Learn about BuzzSpire Media's story, vision, and core principles. Empowering businesses through SEO, performance marketing, website development, and branding.",
     keywords: keywords,
     alternates: {
-      canonical: "https://buzzspiremedia.com/about",
+      canonical: "https://www.buzzspiremedia.com/about",
     },
   };
 }

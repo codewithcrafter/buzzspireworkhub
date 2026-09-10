@@ -29,12 +29,12 @@ export async function generateMetadata(props: BlogPostPageProps) {
     title: `${seoTitle} | BuzzSpire Media`,
     description: seoDesc,
     alternates: {
-      canonical: `https://buzzspiremedia.com/blog/${blog.slug}`,
+      canonical: `https://www.buzzspiremedia.com/blog/${blog.slug}`,
     },
     openGraph: {
       title: seoTitle,
       description: seoDesc,
-      url: `https://buzzspiremedia.com/blog/${blog.slug}`,
+      url: `https://www.buzzspiremedia.com/blog/${blog.slug}`,
       siteName: "BuzzSpire Media Insights",
       images: blog.featuredImage ? [{ url: blog.featuredImage, width: 1200, height: 630 }] : [],
       type: "article",

@@ -51,13 +51,24 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return ApiResponse.badRequest("Page must have an H1 heading or a valid Title before publishing.");
     }
     
-    // Protection against overwriting hardcoded routes
-    const restrictedSlugs = ["about", "contact", "career", "services", "blog", "admin", "employee", "login", "try"];
-    if (restrictedSlugs.includes(page.slug.toLowerCase())) {
-      // System pages CAN be published. We just allow them.
-      // But we shouldn't block them entirely if they are system pages.
-      // Wait, system pages ALREADY exist in the DB (like 'about', 'contact').
-      // We shouldn't block publishing them.
+    // Protection against publishing CMS pages whose slugs collide with reserved application routes.
+    // These slugs are handled by dedicated Next.js route folders or private infrastructure and must
+    // never be overridden by a CMS-published page served via the [slug] catch-all.
+    const RESERVED_SLUGS = [
+      "try",       // legacy dev/test slug — no production purpose
+      "home",      // CMS DB key for the homepage; the actual homepage lives at /
+      "login",     // dedicated auth route at src/app/login/
+      "admin",     // private admin dashboard at src/app/(dashboard)/admin/
+      "employee",  // private employee portal at src/app/employee/ and src/app/(dashboard)/employee/
+      "invite",    // private invite route at src/app/invite/
+      "api",       // Next.js API route namespace
+      "mic-test",  // developer debug tool at src/app/mic-test/ — not for public indexing
+    ];
+    if (RESERVED_SLUGS.includes(page.slug.toLowerCase())) {
+      return ApiResponse.badRequest(
+        `Cannot publish: the slug "${page.slug}" is reserved by the application and cannot be used for a CMS page. ` +
+        `Please change the page slug to a unique, non-reserved value before publishing.`
+      );
     }
 
     // Use a transaction to update page status and create revision

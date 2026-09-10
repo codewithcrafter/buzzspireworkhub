@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: pageRecord.metaDescription || "Join BuzzSpire Media's team. Open positions for Senior Front-End Engineers, Performance Media Buyers, and B2B Copywriters with performance dividends.",
     keywords: keywords,
     alternates: {
-      canonical: "https://buzzspiremedia.com/career",
+      canonical: "https://www.buzzspiremedia.com/career",
     },
   };
 }

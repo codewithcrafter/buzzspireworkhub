@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     "Explore all digital marketing services in Delhi under one roof — SEO, PPC, SMM, design, and more. One agency, every service you need. Call now!",
   alternates: {
-    canonical: "https://buzzspiremedia.com/digital-marketing-agency-in-delhi",
+    canonical: "https://www.buzzspiremedia.com/digital-marketing-agency-in-delhi",
   },
 };
 
