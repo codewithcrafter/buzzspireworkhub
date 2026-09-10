@@ -48,7 +48,11 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Invalid email or password.");
+        if (response.status >= 500) {
+          setError("A server error occurred. Please try again or contact your administrator.");
+        } else {
+          setError(data.error?.message || data.message || "Invalid email or password.");
+        }
         return;
       }
 
