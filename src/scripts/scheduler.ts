@@ -3,7 +3,7 @@ async function runScheduler() {
   
   setInterval(async () => {
     try {
-      const PORT = process.env.PORT || "3000";
+      const PORT = process.env.PORT || "3001";
       const headers: Record<string, string> = {};
       if (process.env.CRON_SECRET) {
         headers["Authorization"] = `Bearer ${process.env.CRON_SECRET}`;
