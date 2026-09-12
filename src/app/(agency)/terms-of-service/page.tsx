@@ -198,7 +198,7 @@ export default function TermsOfServicePage() {
         {/* Subtle background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs md:text-sm text-muted-foreground mb-6">
             <Link href="/" className="hover:text-primary transition-colors font-medium">
@@ -234,7 +234,7 @@ export default function TermsOfServicePage() {
       </section>
 
       {/* 2. MAIN CONTENT WITH STICKY TABLE OF CONTENTS */}
-      <section className="py-16 md:py-20 px-6 max-w-7xl mx-auto">
+      <section className="py-16 md:py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* LEFT SIDEBAR: Table of Contents (Sticky on Desktop) */}

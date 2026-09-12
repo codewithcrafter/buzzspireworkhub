@@ -168,7 +168,7 @@ export default function ServicesClientView() {
   return (
     <main className="w-full bg-slate-50 font-sans select-none text-slate-900 font-sans">
       {/* 1. HERO SECTION (2-Column Balanced) */}
-      <section className="pt-24 pb-16 md:pt-32 md:pb-24 px-6 max-w-7xl mx-auto border-b border-slate-200/50 min-h-[650px] flex items-center overflow-x-clip">
+      <section className="pt-24 pb-16 md:pt-32 md:pb-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-b border-slate-200/50 min-h-[650px] flex items-center overflow-x-clip">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
           {/* Left Side: Content */}
           <div className="space-y-8">
@@ -281,7 +281,7 @@ export default function ServicesClientView() {
 
       {/* 2. SERVICES SECTION (Clean 3-Column Grid) */}
       <section className="py-20 md:py-24 bg-muted/20 relative">
-        <div className="max-w-7xl mx-auto px-6 space-y-12">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12 space-y-12">
           <ScrollReveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-200/50">
               <div className="space-y-4 max-w-2xl">
@@ -355,7 +355,7 @@ export default function ServicesClientView() {
       </section>
 
       {/* 3. WHAT SERVICES DOES A DIGITAL MARKETING AGENCY OFFER */}
-      <section className="py-20 md:py-24 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 md:py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             <div className="lg:col-span-5 space-y-6">
@@ -417,7 +417,7 @@ export default function ServicesClientView() {
       </section>
 
       {/* 4. DIGITAL MARKETING AGENCY WITH SEO, PPC, AND DESIGN */}
-      <section className="py-20 md:py-24 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 md:py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal>
           <div className="text-center space-y-4 max-w-3xl mx-auto mb-16">
             <span className="text-sm font-bold uppercase tracking-wider text-primary">The Advantage</span>
@@ -466,7 +466,7 @@ export default function ServicesClientView() {
 
       {/* 5. STILL DECIDING? HERE'S WHAT CLIENTS USUALLY ASK (FAQS) */}
       <section className="py-20 md:py-24 bg-muted/20 border-y border-slate-200/50">
-        <div className="max-w-3xl mx-auto px-6">
+        <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 lg:px-12">
           <ScrollReveal>
             <div className="space-y-10">
               <div className="text-center space-y-4">
@@ -516,7 +516,7 @@ export default function ServicesClientView() {
       </section>
 
       {/* 6. GET STARTED WITH BUZZSPIRE */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <ScrollReveal>
           <div className="bg-slate-50 font-sans border border-slate-200/80 rounded-[2rem] p-8 md:p-12 lg:p-16 shadow-md shadow-indigo-900/5 overflow-hidden relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">

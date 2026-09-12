@@ -50,7 +50,7 @@ interface BlogPost {
     name: string
     avatar: string
   }
-  status: "published" | "draft"
+  status: "published" | "draft" | "scheduled"
   coverImage: string // Featured image URL or gradient
   publishedDate: string
   readTime: string
@@ -59,6 +59,8 @@ interface BlogPost {
   metaDescription: string
   excerpt: string
   faqs?: { id: string; question: string; answer: string; order: number }[]
+  authorId?: string | null
+  scheduledDate?: string | null
 }
 
 function BlogDashboard() {
@@ -69,6 +71,7 @@ function BlogDashboard() {
 
   // Real Database state
   const [posts, setPosts] = React.useState<BlogPost[]>([])
+  const [dbAuthors, setDbAuthors] = React.useState<any[]>([])
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = React.useState("")
@@ -86,20 +89,25 @@ function BlogDashboard() {
   const [formTitle, setFormTitle] = React.useState("")
   const [formSlug, setFormSlug] = React.useState("")
   const [formCategory, setFormCategory] = React.useState("")
+  const [formCustomCategory, setFormCustomCategory] = React.useState("")
   const [formContent, setFormContent] = React.useState("")
   const [formTags, setFormTags] = React.useState("")
-  const [formStatus, setFormStatus] = React.useState<"published" | "draft">("draft")
+  const [formStatus, setFormStatus] = React.useState<"published" | "draft" | "scheduled">("draft")
+  const [formScheduledDate, setFormScheduledDate] = React.useState("")
+  const [formScheduledTime, setFormScheduledTime] = React.useState("")
   const [formFeaturedImage, setFormFeaturedImage] = React.useState("")
   const [formReadTime, setFormReadTime] = React.useState("5")
   const [formSeoTitle, setFormSeoTitle] = React.useState("")
   const [formMetaDescription, setFormMetaDescription] = React.useState("")
   const [formIsFeatured, setFormIsFeatured] = React.useState(false)
   const [formAuthor, setFormAuthor] = React.useState("")
+  const [formAuthorId, setFormAuthorId] = React.useState("")
   const [formExcerpt, setFormExcerpt] = React.useState("")
   const [formFaqs, setFormFaqs] = React.useState<{id?: string, question: string, answer: string, order?: number}[]>([])
 
   // Image Uploading States
   const [isUploading, setIsUploading] = React.useState(false)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
 
   const selectedPost = posts.find(p => p.id === selectedPostId) || null
 
@@ -120,7 +128,7 @@ function BlogDashboard() {
             category: b.category,
             tags: b.tags || [],
             author: { name: b.author, avatar: b.author ? b.author[0].toUpperCase() : "A" },
-            status: b.status.toLowerCase() as "published" | "draft",
+            status: b.status.toLowerCase() as "published" | "draft" | "scheduled",
             coverImage: b.featuredImage || "linear-gradient(to right, oklch(0.51 0.26 277), oklch(0.72 0.16 220))",
             publishedDate: b.publishedAt ? b.publishedAt.split("T")[0] : b.createdAt.split("T")[0],
             readTime: `${b.readTime} min read`,
@@ -129,6 +137,8 @@ function BlogDashboard() {
             metaDescription: b.metaDescription || "",
             excerpt: b.excerpt || "",
             faqs: b.faqs || [],
+            authorId: b.authorId || null,
+            scheduledDate: b.scheduledAt ? new Date(b.scheduledAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" }) : null,
           }))
         )
       }
@@ -141,6 +151,13 @@ function BlogDashboard() {
   React.useEffect(() => {
     loadPosts()
   }, [loadPosts])
+
+  React.useEffect(() => {
+    fetch("/api/admin/authors")
+      .then(r => r.json())
+      .then(d => { if (d.success) setDbAuthors(d.authors) })
+      .catch(console.error)
+  }, [])
 
   // Handles raw multipart upload submission
   const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,45 +204,65 @@ function BlogDashboard() {
   // Create Post Submit
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formTitle || !formCategory || !formContent) {
-      toast({
-        title: "Required fields missing",
-        description: "Please populate title, category, and body content.",
-        type: "error",
-      })
-      return
-    }
-
-    const hasEmptyFaqs = formFaqs.some(f => !f.question.trim() || !f.answer.trim())
-    if (hasEmptyFaqs) {
-      toast({
-        title: "FAQ Validation Failed",
-        description: "Please ensure all FAQs have both a question and an answer.",
-        type: "error",
-      })
-      return
-    }
-
-    const tagsArray = formTags ? formTags.split(",").map(t => t.trim()).filter(Boolean) : ["General"]
-
+    if (isSubmitting) return
+    setIsSubmitting(true)
     try {
+      const finalCategory = formCategory === "Other" ? formCustomCategory.trim() : formCategory.trim()
+      if (!formTitle.trim() || !finalCategory || !formContent.trim()) {
+        toast({
+          title: "Required fields missing",
+          description: "Please populate title, category, and body content.",
+          type: "error",
+        })
+        return
+      }
+
+      const hasEmptyFaqs = formFaqs.some(f => !f.question.trim() || !f.answer.trim())
+      if (hasEmptyFaqs) {
+        toast({
+          title: "FAQ Validation Failed",
+          description: "Please ensure all FAQs have both a question and an answer.",
+          type: "error",
+        })
+        return
+      }
+
+      const tagsArray = formTags ? formTags.split(",").map(t => t.trim()).filter(Boolean) : ["General"]
+
+      let scheduledAtIso: string | undefined = undefined;
+      if (formStatus === "scheduled") {
+        if (!formScheduledDate || !formScheduledTime) {
+          toast({ title: "Validation Error", description: "Please select a future date and time.", type: "error" });
+          return;
+        }
+        const dateTimeString = `${formScheduledDate}T${formScheduledTime}:00+05:30`;
+        const scheduledDateObj = new Date(dateTimeString);
+        if (scheduledDateObj.getTime() <= Date.now()) {
+          toast({ title: "Validation Error", description: "Please select a future date and time.", type: "error" });
+          return;
+        }
+        scheduledAtIso = scheduledDateObj.toISOString();
+      }
+
       const res = await fetch("/api/admin/blogs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: formTitle,
-          slug: formSlug || undefined,
-          excerpt: formExcerpt || formContent.slice(0, 150),
+          title: formTitle.trim(),
+          slug: formSlug.trim() || undefined,
+          excerpt: formExcerpt.trim() || formContent.slice(0, 150),
           content: formContent,
           featuredImage: formFeaturedImage || undefined,
-          category: formCategory,
+          category: finalCategory,
           tags: tagsArray,
-          author: formAuthor || undefined,
+          author: formAuthorId ? dbAuthors.find(a => a.id === formAuthorId)?.name : (formAuthor.trim() || undefined),
+          authorId: formAuthorId || undefined,
           readTime: formReadTime ? parseInt(formReadTime, 10) : undefined,
-          seoTitle: formSeoTitle || undefined,
-          metaDescription: formMetaDescription || undefined,
+          seoTitle: formSeoTitle.trim() || undefined,
+          metaDescription: formMetaDescription.trim() || undefined,
           status: formStatus.toUpperCase(),
           isFeatured: formIsFeatured,
+          scheduledAt: scheduledAtIso,
           faqs: formFaqs.map((f, i) => ({ ...f, order: i })),
         }),
       })
@@ -234,16 +271,22 @@ function BlogDashboard() {
         setIsAddOpen(false)
         resetForm()
         loadPosts()
+        let toastTitle = "Draft Saved"
+        if (formStatus === "published") toastTitle = "Article Published!"
+        if (formStatus === "scheduled") toastTitle = "Article Scheduled!"
         toast({
-          title: formStatus === "published" ? "Article Published!" : "Draft Saved",
+          title: toastTitle,
           description: "Blog has been added successfully.",
           type: "success",
         })
       } else {
         const errorData = await res.json()
+        const errMsg = typeof errorData.error === "string"
+          ? errorData.error
+          : (errorData.error?.message || errorData.message || "An error occurred.");
         toast({
           title: "Submission failed",
-          description: errorData.error || "An error occurred.",
+          description: errMsg,
           type: "error",
         })
       }
@@ -254,6 +297,8 @@ function BlogDashboard() {
         description: "Could not connect to CMS endpoint.",
         type: "error",
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -272,8 +317,24 @@ function BlogDashboard() {
     setFormMetaDescription(post.metaDescription)
     setFormIsFeatured(post.isFeatured)
     setFormAuthor(post.author.name)
+    setFormAuthorId(post.authorId || "")
     setFormExcerpt(post.excerpt)
     setFormFaqs(post.faqs || [])
+    
+    // Check if category is standard or Other
+    const standardCategories = ["Technology", "Marketing", "Design", "Business", "Development", "AI", "SEO"]
+    if (standardCategories.includes(post.category)) {
+      setFormCategory(post.category)
+      setFormCustomCategory("")
+    } else {
+      setFormCategory("Other")
+      setFormCustomCategory(post.category)
+    }
+
+    if (post.status === "scheduled" && post.scheduledDate) {
+      try {} catch (e) {}
+    }
+
     setIsEditOpen(true)
   }
 
@@ -281,6 +342,16 @@ function BlogDashboard() {
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!activePost) return
+
+    const finalCategory = formCategory === "Other" ? formCustomCategory.trim() : formCategory.trim()
+    if (!formTitle.trim() || !finalCategory || !formContent.trim()) {
+      toast({
+        title: "Required fields missing",
+        description: "Please populate title, category, and body content.",
+        type: "error",
+      })
+      return
+    }
 
     const tagsArray = formTags ? formTags.split(",").map(t => t.trim()).filter(Boolean) : ["General"]
 
@@ -294,24 +365,41 @@ function BlogDashboard() {
       return
     }
 
+    let scheduledAtIso: string | undefined = undefined;
+    if (formStatus === "scheduled") {
+      if (!formScheduledDate || !formScheduledTime) {
+        toast({ title: "Validation Error", description: "Please select a future date and time.", type: "error" });
+        return;
+      }
+      const dateTimeString = `${formScheduledDate}T${formScheduledTime}:00+05:30`;
+      const scheduledDateObj = new Date(dateTimeString);
+      if (scheduledDateObj.getTime() <= Date.now()) {
+        toast({ title: "Validation Error", description: "Please select a future date and time.", type: "error" });
+        return;
+      }
+      scheduledAtIso = scheduledDateObj.toISOString();
+    }
+
     try {
       const res = await fetch(`/api/admin/blogs/${activePost.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: formTitle,
-          slug: formSlug,
-          excerpt: formExcerpt || formContent.slice(0, 150),
+          title: formTitle.trim(),
+          slug: formSlug.trim() || undefined,
+          excerpt: formExcerpt.trim() || formContent.slice(0, 150),
           content: formContent,
           featuredImage: formFeaturedImage || null,
-          category: formCategory,
+          category: finalCategory,
           tags: tagsArray,
-          author: formAuthor || undefined,
+          author: formAuthorId ? dbAuthors.find(a => a.id === formAuthorId)?.name : (formAuthor.trim() || undefined),
+          authorId: formAuthorId || null,
           readTime: formReadTime ? parseInt(formReadTime, 10) : undefined,
-          seoTitle: formSeoTitle || null,
-          metaDescription: formMetaDescription || null,
+          seoTitle: formSeoTitle.trim() || null,
+          metaDescription: formMetaDescription.trim() || null,
           status: formStatus.toUpperCase(),
           isFeatured: formIsFeatured,
+          scheduledAt: scheduledAtIso,
           faqs: formFaqs.map((f, i) => ({ ...f, order: i })),
         }),
       })
@@ -327,9 +415,12 @@ function BlogDashboard() {
         })
       } else {
         const errorData = await res.json()
+        const errMsg = typeof errorData.error === "string"
+          ? errorData.error
+          : (errorData.error?.message || errorData.message || "An error occurred.");
         toast({
           title: "Update failed",
-          description: errorData.error || "An error occurred.",
+          description: errMsg,
           type: "error",
         })
       }
@@ -386,15 +477,19 @@ function BlogDashboard() {
     setFormTitle("")
     setFormSlug("")
     setFormCategory("")
+    setFormCustomCategory("")
     setFormContent("")
     setFormTags("")
     setFormStatus("draft")
+    setFormScheduledDate("")
+    setFormScheduledTime("")
     setFormFeaturedImage("")
     setFormReadTime("5")
     setFormSeoTitle("")
     setFormMetaDescription("")
     setFormIsFeatured(false)
     setFormAuthor("")
+    setFormAuthorId("")
     setFormExcerpt("")
     setFormFaqs([])
     setActivePost(null)
@@ -408,7 +503,7 @@ function BlogDashboard() {
     { value: "MarTech", label: "MarTech" },
   ]
 
-  const statusMapper = (status: "published" | "draft"): "active" | "inactive" => {
+  const statusMapper = (status: "published" | "draft" | "scheduled"): "active" | "inactive" => {
     return status === "published" ? "active" : "inactive"
   }
 
@@ -822,6 +917,7 @@ function BlogDashboard() {
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">Category *</label>
               <select
+                required
                 value={formCategory}
                 onChange={(e) => setFormCategory(e.target.value)}
                 className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground cursor-pointer"
@@ -832,7 +928,20 @@ function BlogDashboard() {
                 <option value="Strategy">Strategy</option>
                 <option value="Design">Design</option>
                 <option value="MarTech">MarTech</option>
+                <option value="Other">Other</option>
               </select>
+              {formCategory === "Other" && (
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    required
+                    value={formCustomCategory}
+                    onChange={(e) => setFormCustomCategory(e.target.value)}
+                    placeholder="Enter custom category"
+                    className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -872,7 +981,26 @@ function BlogDashboard() {
               >
                 <option value="draft">Draft (Private Preview)</option>
                 <option value="published">Published (Live Page)</option>
+                <option value="scheduled">Scheduled (Future Date)</option>
               </select>
+              {formStatus === "scheduled" && (
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    type="date"
+                    required
+                    value={formScheduledDate}
+                    onChange={(e) => setFormScheduledDate(e.target.value)}
+                    className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+                  />
+                  <input
+                    type="time"
+                    required
+                    value={formScheduledTime}
+                    onChange={(e) => setFormScheduledTime(e.target.value)}
+                    className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+                  />
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">Read Time (minutes)</label>
@@ -888,13 +1016,18 @@ function BlogDashboard() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">Author</label>
-              <input
-                type="text"
-                value={formAuthor}
-                onChange={(e) => setFormAuthor(e.target.value)}
-                placeholder="Aria Mercer"
-                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
-              />
+              <select
+                value={formAuthorId}
+                onChange={(e) => setFormAuthorId(e.target.value)}
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground cursor-pointer"
+              >
+                <option value="">Select Author...</option>
+                {dbAuthors.map(author => (
+                  <option key={author.id} value={author.id}>
+                    {author.name} {author.designation ? `— ${author.designation}` : ""}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">SEO Title</label>
@@ -998,7 +1131,20 @@ function BlogDashboard() {
                 <option value="Strategy">Strategy</option>
                 <option value="Design">Design</option>
                 <option value="MarTech">MarTech</option>
+                <option value="Other">Other</option>
               </select>
+              {formCategory === "Other" && (
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    required
+                    value={formCustomCategory}
+                    onChange={(e) => setFormCustomCategory(e.target.value)}
+                    placeholder="Enter custom category"
+                    className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -1036,7 +1182,26 @@ function BlogDashboard() {
               >
                 <option value="draft">Draft (Private Preview)</option>
                 <option value="published">Published (Live Page)</option>
+                <option value="scheduled">Scheduled (Future Date)</option>
               </select>
+              {formStatus === "scheduled" && (
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    type="date"
+                    required
+                    value={formScheduledDate}
+                    onChange={(e) => setFormScheduledDate(e.target.value)}
+                    className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+                  />
+                  <input
+                    type="time"
+                    required
+                    value={formScheduledTime}
+                    onChange={(e) => setFormScheduledTime(e.target.value)}
+                    className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
+                  />
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">Read Time (minutes)</label>
@@ -1052,12 +1217,18 @@ function BlogDashboard() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">Author</label>
-              <input
-                type="text"
-                value={formAuthor}
-                onChange={(e) => setFormAuthor(e.target.value)}
-                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground"
-              />
+              <select
+                value={formAuthorId}
+                onChange={(e) => setFormAuthorId(e.target.value)}
+                className="w-full text-xs bg-muted/40 border border-border rounded-lg p-2.5 outline-none focus:border-primary/50 text-foreground cursor-pointer"
+              >
+                <option value="">Select Author...</option>
+                {dbAuthors.map(author => (
+                  <option key={author.id} value={author.id}>
+                    {author.name} {author.designation ? `— ${author.designation}` : ""}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-muted-foreground">SEO Title</label>

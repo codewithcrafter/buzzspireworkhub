@@ -22,6 +22,7 @@ import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
 import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
 import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
+import LeadFormSection from "@/components/ui/LeadFormSection";
 
 const ecommerceFaqs = [
   {
@@ -53,7 +54,7 @@ export default function EcommerceServiceView() {
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* HERO SECTION */}
-      <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8">
             <div className="space-y-6">
@@ -99,7 +100,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 1: FULL-SERVICE ECOMMERCE AGENCY */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Full-Service Ecommerce Agency for Growing Brands
@@ -113,7 +114,7 @@ export default function EcommerceServiceView() {
         </ScrollReveal>
       </section>
       {/* SECTION 2: ECOMMERCE DIGITAL MARKETING AGENCY */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h3 className="text-2xl md:text-3xl font-heading font-bold text-slate-900 text-center">
             Ecommerce Digital Marketing Agency
@@ -130,7 +131,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 3: ECOMMERCE MANAGEMENT AGENCY YOU CAN TRUST */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Ecommerce Management Agency You Can Trust
@@ -148,7 +149,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 4: ECOMMERCE MANAGEMENT AGENCY IN DELHI */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Ecommerce Management Agency in Delhi
@@ -168,7 +169,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 5 & 6 & 7: END TO END STORE MANAGEMENT & MARKETING */}
-      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
@@ -212,7 +213,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 8: ECOMMERCE ACCOUNT MANAGEMENT SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
@@ -274,7 +275,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 9 & 10: MARKETPLACE MANAGEMENT & MULTI-CHANNEL INVENTORY */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -303,7 +304,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 11 & 12 & 13: LISTING, PPC & SEO SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3 hover:shadow-lg transition-shadow">
@@ -340,7 +341,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 14 & 15: BEST AGENCY & D2C GROWTH */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3">
@@ -389,7 +390,7 @@ export default function EcommerceServiceView() {
 
 
       {/* SECTION 8: ECOMMERCE ACCOUNT MANAGEMENT SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
@@ -451,7 +452,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 9 & 10: MARKETPLACE MANAGEMENT & MULTI-CHANNEL INVENTORY */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -480,7 +481,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 11 & 12 & 13: LISTING, PPC & SEO SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xl shadow-indigo-900/5 hover:shadow-2xl hover:shadow-indigo-900/10 transition-all duration-300 space-y-3 hover:shadow-lg transition-shadow">
@@ -519,7 +520,7 @@ export default function EcommerceServiceView() {
 
 
       {/* SECTION 16: WHY BUZZSPIRE MEDIA */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Buzzspire Media
@@ -540,7 +541,7 @@ export default function EcommerceServiceView() {
       </section>
 
       {/* SECTION 17: FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -561,42 +562,14 @@ export default function EcommerceServiceView() {
         ]}
       />
 
-      {/* SECTION 18: FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
-        <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
-            {/* Subtle accent corner */}
-            <div className="absolute -top-12 -right-12 w-32 h-32 bg-orange-500/20 rounded-full blur-[40px] pointer-events-none" />
-            <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
-            
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
-              Let&apos;s Fix Your Ecommerce Store, Starting Today
-            </h2>
-            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
-              <p>
-                Look, you&apos;ve read this far. That means something&apos;s not working with your store right now.
-              </p>
-              <p className="font-semibold text-slate-900">
-                Stop losing sales to bad listings, stockouts, or ad spend that&apos;s going nowhere.
-              </p>
-              <p>
-                Talk to our team today. No long pitch, just a straight look at where your store stands.
-              </p>
-            </div>
-
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-              <Magnetic>
-                <a href="tel:9205386625">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-foreground text-background hover:bg-foreground/90 font-bold shadow-lg flex items-center gap-2">
-                    <Phone className="w-5 h-5" />
-                    <span>Call +91-9205386625 or WhatsApp</span>
-                  </Button>
-                </a>
-              </Magnetic>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
+      {/* SECTION 18: FINAL LEAD FORM */}
+      <LeadFormSection
+        eyebrow="LET'S TALK"
+        heading="Ready to scale your ecommerce store revenue?"
+        description="Share your current sales channels and monthly order targets. Our ecommerce managers will audit your store and catalog setup."
+        defaultService="Ecommerce Operation"
+        source="Ecommerce Operation Page"
+      />
     </div>
   );
 }

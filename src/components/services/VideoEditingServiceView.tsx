@@ -11,6 +11,7 @@ import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
 import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
 import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
+import LeadFormSection from "@/components/ui/LeadFormSection";
 
 const videoFaqs = [
   {
@@ -62,7 +63,7 @@ export default function VideoEditingServiceView() {
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* HERO SECTION */}
-      <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8">
             <div className="space-y-6">
@@ -105,7 +106,7 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* DIGITAL MARKETING VIDEO EDITING */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Digital Marketing Video Editing That Drives Results
@@ -127,7 +128,7 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* SOCIAL MEDIA VIDEO EDITING */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
@@ -163,7 +164,7 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* PERFORMANCE & E-COMMERCE */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -198,7 +199,7 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* PACKAGES */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -234,7 +235,7 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Work With Buzzspire Media
@@ -264,7 +265,7 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* PRICING */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6 text-center">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
             Pricing
@@ -291,7 +292,7 @@ export default function VideoEditingServiceView() {
       </section>
 
       {/* FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -313,35 +314,14 @@ export default function VideoEditingServiceView() {
         ]}
       />
 
-      {/* FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
-        <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
-            {/* Subtle accent corner */}
-            <div className="absolute -top-12 -right-12 w-32 h-32 bg-blue-500/20 rounded-full blur-[40px] pointer-events-none" />
-            <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-primary/20 rounded-full blur-[40px] pointer-events-none" />
-            
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
-              Ready to Get Videos That Actually Convert?
-            </h2>
-            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
-              <p>Stop sending footage to editors who don&apos;t understand marketing.</p>
-              <p className="font-semibold text-slate-900">Talk to a team that does.</p>
-            </div>
-
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-              <Magnetic>
-                <a href="tel:9205386625">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-foreground text-background hover:bg-foreground/90 font-bold shadow-lg flex items-center gap-2">
-                    <Phone className="w-5 h-5" />
-                    <span>Call +91-9205386625 or WhatsApp</span>
-                  </Button>
-                </a>
-              </Magnetic>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
+      {/* FINAL LEAD FORM */}
+      <LeadFormSection
+        eyebrow="LET'S TALK"
+        heading="Ready to produce engaging video content?"
+        description="Tell us about your monthly video volume and target platforms (Reels, YouTube, Ad Creatives). Our post-production team will share package options."
+        defaultService="Video Editing"
+        source="Video Editing Page"
+      />
     </div>
   );
 }

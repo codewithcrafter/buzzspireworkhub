@@ -42,7 +42,7 @@ export default function EditorialHero() {
   return (
     <section
       onMouseMove={handleMouseMove}
-      className="relative min-h-[90vh] lg:min-h-[92vh] flex flex-col justify-center py-16 lg:py-20 px-6 max-w-7xl mx-auto overflow-visible select-none"
+      className="relative min-h-[90vh] lg:min-h-[92vh] flex flex-col justify-center py-16 lg:py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto overflow-visible select-none"
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center my-auto">
         

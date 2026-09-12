@@ -81,7 +81,7 @@ export default async function BlogPostPage(props: BlogPostPageProps) {
       <div className="absolute top-20 left-10 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
       <div className="absolute top-[40%] right-10 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[150px] pointer-events-none -z-10" />
 
-      <div className="max-w-4xl mx-auto px-6 pt-16 space-y-8 font-sans">
+      <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 lg:px-12 pt-16 space-y-8 font-sans">
         
         {/* Back navigation button */}
         <div>
@@ -114,24 +114,83 @@ export default async function BlogPostPage(props: BlogPostPageProps) {
             {blog.excerpt}
           </p>
 
-          <div className="flex flex-wrap items-center gap-6 pt-4 border-y border-border/40 py-4 text-xs font-semibold text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-xs text-primary">
-                {blog.author[0]}
+          {blog.authorProfile ? (
+            <div className="py-6 border-y border-border/40 my-6 bg-muted/10 rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
+              {blog.authorProfile.photoUrl ? (
+                <img src={blog.authorProfile.photoUrl} alt={blog.authorProfile.name} className="w-20 h-20 rounded-full object-cover shadow-sm border border-border shrink-0" />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center font-bold text-2xl text-primary shrink-0">
+                  {blog.authorProfile.name.charAt(0)}
+                </div>
+              )}
+              <div className="flex-1 space-y-2">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h3 className="font-heading font-bold text-xl text-foreground">{blog.authorProfile.name}</h3>
+                  {blog.authorProfile.designation && (
+                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
+                      {blog.authorProfile.designation}
+                    </span>
+                  )}
+                </div>
+                {blog.authorProfile.bio && (
+                  <p className="text-sm text-muted-foreground leading-relaxed font-semibold">
+                    {blog.authorProfile.bio}
+                  </p>
+                )}
+                <div className="flex items-center flex-wrap gap-4 pt-2">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                    <Calendar className="w-3.5 h-3.5" />
+                    <span>{publishDate}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{blog.readTime} min read</span>
+                  </div>
+                  {(blog.authorProfile.linkedinUrl || blog.authorProfile.facebookUrl || blog.authorProfile.instagramUrl) && (
+                    <>
+                      <div className="w-1 h-1 rounded-full bg-border" />
+                      <div className="flex items-center gap-3">
+                        {blog.authorProfile.linkedinUrl && (
+                          <Link href={blog.authorProfile.linkedinUrl} target="_blank" className="text-muted-foreground hover:text-primary transition-colors text-xs font-bold">
+                            LinkedIn
+                          </Link>
+                        )}
+                        {blog.authorProfile.facebookUrl && (
+                          <Link href={blog.authorProfile.facebookUrl} target="_blank" className="text-muted-foreground hover:text-primary transition-colors text-xs font-bold">
+                            Facebook
+                          </Link>
+                        )}
+                        {blog.authorProfile.instagramUrl && (
+                          <Link href={blog.authorProfile.instagramUrl} target="_blank" className="text-muted-foreground hover:text-primary transition-colors text-xs font-bold">
+                            Instagram
+                          </Link>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-              <span className="text-foreground font-bold">By {blog.author}</span>
             </div>
-            
-            <div className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-muted-foreground/80" />
-              <span>Published on {publishDate}</span>
-            </div>
+          ) : (
+            <div className="flex flex-wrap items-center gap-6 pt-4 border-y border-border/40 py-4 text-xs font-semibold text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-xs text-primary">
+                  {blog.author[0]}
+                </div>
+                <span className="text-foreground font-bold">By {blog.author}</span>
+              </div>
+              
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-muted-foreground/80" />
+                <span>Published on {publishDate}</span>
+              </div>
 
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-muted-foreground/80" />
-              <span>{blog.readTime} min read</span>
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-muted-foreground/80" />
+                <span>{blog.readTime} min read</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Featured Image spotlight banner */}

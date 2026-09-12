@@ -11,7 +11,7 @@ interface ServiceBenefitsProps {
 export default function ServiceBenefits({ service }: ServiceBenefitsProps) {
   return (
     <section className="py-20 bg-muted/40 relative">
-      <div className="max-w-7xl mx-auto px-6 space-y-12">
+      <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12 space-y-12">
         <ScrollReveal>
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">Business Outcomes</span>

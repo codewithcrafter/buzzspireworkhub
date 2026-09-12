@@ -10,7 +10,7 @@ interface ServiceOverviewProps {
 
 export default function ServiceOverview({ service }: ServiceOverviewProps) {
   return (
-    <section className="py-20 px-6 max-w-7xl mx-auto space-y-16">
+    <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto space-y-16">
       {/* Complete Source Content */}
       <ScrollReveal>
         <div className="max-w-4xl mx-auto space-y-6">

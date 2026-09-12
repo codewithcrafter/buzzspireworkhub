@@ -22,6 +22,7 @@ import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
 import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
 import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
+import LeadFormSection from "@/components/ui/LeadFormSection";
 
 const ppcFaqs = [
   {
@@ -77,7 +78,7 @@ export default function PpcServiceView() {
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* HERO SECTION */}
-      <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8">
             <div className="space-y-6">
@@ -120,7 +121,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 1: WHY DELHI BUSINESSES TRUST BUZZSPIRE */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             <div className="lg:col-span-5 space-y-6">
@@ -164,7 +165,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 2: BUILT FOR YOUR INDUSTRY */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-8">
           <div className="text-center space-y-3">
             <h3 className="text-2xl md:text-3xl font-heading font-bold text-slate-900">
@@ -206,7 +207,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 3: INDUSTRY-SPECIFIC PAID ADS */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -266,7 +267,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 4: WHO WE WORK WITH */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -297,7 +298,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 5: NUMBERS YOU CAN CHECK YOURSELF */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-8">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -331,7 +332,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 6: WHY NOT JUST ANY AGENCY IN DELHI */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Not Just Any Agency in Delhi
@@ -351,7 +352,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 7: LOCATION SERVING IN DELHI */}
-      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -405,7 +406,7 @@ export default function PpcServiceView() {
       </section>
 
       {/* SECTION 8: FAQS (EXACT MATCH INCLUDING REPEATED QUESTIONS) */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -427,37 +428,14 @@ export default function PpcServiceView() {
         ]}
       />
 
-      {/* SECTION 9: FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
-        <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border border-slate-200 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-blue-500/10 rounded-full blur-[60px] pointer-events-none" />
-            
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
-              Get Started with Buzzspire
-            </h2>
-            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
-              <p className="font-semibold text-slate-900">
-                You&apos;ve read enough. Numbers convince faster than words.
-              </p>
-              <p>
-                Call 9205386625 or WhatsApp us for a free account audit. We&apos;ll tell you honestly if paid ads make sense for your business right now-no forced sales pitch.
-              </p>
-            </div>
-
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-              <Magnetic>
-                <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-foreground text-background hover:bg-foreground/90 font-bold shadow-lg flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5" />
-                    <span>Talk To Buzzspire — No Pitch, Just Numbers</span>
-                  </Button>
-                </a>
-              </Magnetic>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
+      {/* SECTION 9: FINAL LEAD FORM */}
+      <LeadFormSection
+        eyebrow="LET'S TALK"
+        heading="Ready to make your ad spend work harder?"
+        description="Share your monthly ad budget and targets. Our certified PPC strategists will audit your account and structure a high-ROI campaign."
+        defaultService="PPC & Paid Ads"
+        source="PPC & Paid Ads Page"
+      />
     </div>
   );
 }

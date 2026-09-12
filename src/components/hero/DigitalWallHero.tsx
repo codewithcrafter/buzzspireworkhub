@@ -24,7 +24,7 @@ export default function DigitalWallHero({
   secondaryCtaUrl,
 }: DigitalWallHeroProps) {
   return (
-    <section className="relative min-h-[calc(100svh-120px)] lg:h-[100vh] lg:min-h-[100vh] w-full flex flex-col justify-start lg:justify-between pt-10 pb-5 md:pt-12 md:pb-7 lg:py-8 px-4 md:px-8 max-w-7xl mx-auto overflow-hidden select-none">
+    <section className="relative min-h-[calc(100svh-120px)] lg:h-[100vh] lg:min-h-[100vh] w-full flex flex-col justify-start lg:justify-between pt-10 pb-5 md:pt-12 md:pb-7 lg:py-8 px-6 md:px-10 lg:px-12 max-w-[1720px] mx-auto overflow-hidden select-none">
       {/* Top Bar Tag */}
       <div className="relative z-10 flex items-center justify-between pt-1">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-semibold shadow-xs backdrop-blur-md">

@@ -128,7 +128,7 @@ export default function HeroGrowthSlider() {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="relative h-[100svh] min-h-[100svh] lg:h-[100vh] lg:min-h-[100vh] w-full flex flex-col justify-between py-6 md:py-8 lg:py-10 px-4 md:px-8 max-w-7xl mx-auto overflow-hidden select-none"
+      className="relative h-[100svh] min-h-[100svh] lg:h-[100vh] lg:min-h-[100vh] w-full flex flex-col justify-between py-6 md:py-8 lg:py-10 px-4 md:px-8 lg:px-12 max-w-[1720px] mx-auto overflow-hidden select-none"
     >
       {/* Top Bar: Location Badge & Consistent Header Tag */}
       <div className="relative z-10 flex items-center justify-between pt-2">

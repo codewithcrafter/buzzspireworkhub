@@ -27,7 +27,7 @@ const processSteps = [
 
 export default function ServiceProcess() {
   return (
-    <section className="py-20 px-6 max-w-7xl mx-auto space-y-12">
+    <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto space-y-12">
       <ScrollReveal>
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-primary">How We Work</span>

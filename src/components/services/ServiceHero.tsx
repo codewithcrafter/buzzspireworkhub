@@ -17,7 +17,7 @@ export default function ServiceHero({ service }: ServiceHeroProps) {
   const IconComponent = getServiceIcon(service.iconName);
 
   return (
-    <section className={`relative pt-12 pb-20 px-6 max-w-7xl mx-auto overflow-hidden rounded-3xl bg-gradient-to-b ${service.gradient} border border-slate-200/50 my-4`}>
+    <section className={`relative pt-12 pb-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto overflow-hidden rounded-3xl bg-gradient-to-b ${service.gradient} border border-slate-200/50 my-4`}>
       {/* Background glow orb */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none -z-10" />
 

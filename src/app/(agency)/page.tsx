@@ -21,6 +21,7 @@ import { getServiceIcon } from "@/components/services/ServiceIcon";
 import DigitalWallHero from "@/components/hero/DigitalWallHero";
 import FaqSection from "@/components/faq/FaqSection";
 import ResultsPathway from "@/components/results/ResultsPathway";
+import LeadFormSection from "@/components/ui/LeadFormSection";
 import { prisma } from "@/lib/prisma";
 import { getCmsConfig } from "@/config/cmsConfig";
 // Configurable constants
@@ -290,7 +291,7 @@ export default async function HomePage() {
 
       {/* 2. TRUST SECTION */}
       <section className="py-16 bg-muted/30 border-y border-border/30 overflow-hidden relative">
-        <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12 mb-8 text-center">
           <p className="text-sm font-semibold text-foreground max-w-2xl mx-auto leading-relaxed">
             Trusted by retail, ecommerce, healthcare, education, and local service businesses across Delhi NCR.
           </p>
@@ -313,7 +314,7 @@ export default async function HomePage() {
       </section>
 
       {/* 3. REDESIGNED PREMIUM RESULTS SECTION */}
-      <section className="py-24 px-6 max-w-7xl mx-auto relative">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto relative">
         <ScrollReveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Content Column */}
@@ -347,7 +348,7 @@ export default async function HomePage() {
 
       {/* 4. WHY CHOOSE BUZZSPIRE (7 POINTS) */}
       <section className="py-24 bg-muted/40 relative">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">Why Choose Us</span>
@@ -389,7 +390,7 @@ export default async function HomePage() {
       </section>
 
       {/* 5. SERVICES SECTION (ALL 10 SERVICES LINKING TO DEDICATED PAGES) */}
-      <section className="py-24 px-6 max-w-7xl mx-auto relative">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto relative">
         <ScrollReveal>
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-1.5 rounded-full">
@@ -444,7 +445,7 @@ export default async function HomePage() {
 
       {/* 6. PROCESS SECTION (4 STEPS) */}
       <section className="py-24 bg-muted/40 relative">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">How We Work</span>
@@ -476,7 +477,7 @@ export default async function HomePage() {
       </section>
 
       {/* 7. CASE STUDIES */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
           <ScrollReveal direction="left">
             <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-1.5 rounded-full">
@@ -527,7 +528,7 @@ export default async function HomePage() {
 
       {/* 8. PERFORMANCE INSIGHTS (3 CARDS) */}
       <section className="py-24 bg-muted/40 relative">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">Performance Insights</span>
@@ -574,7 +575,7 @@ export default async function HomePage() {
 
       {/* 10. TESTIMONIALS */}
       <section className="py-24 bg-muted/40 relative">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-primary">Client Feedback</span>
@@ -622,7 +623,7 @@ export default async function HomePage() {
 
       {/* 12. READY TO GROW EDITORIAL CTA SECTION */}
       <section className="py-28 px-6 border-t border-border/40 bg-muted/20 relative">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           <ScrollReveal>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
               {/* Left Column: Heading with thin purple accent line */}
@@ -653,6 +654,14 @@ export default async function HomePage() {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* 13. HOME PAGE LEAD ENQUIRY FORM SECTION */}
+      <LeadFormSection 
+        eyebrow="LET'S TALK"
+        heading="Let's Grow Your Business"
+        description="Tell us about your business and what you're looking to achieve. We'll get back to you with the right next steps."
+        source="Home Page Form"
+      />
     </main>
   );
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp, Mail, Send, Globe, CheckCircle2, MapPin, Phone } from "lucide-react";
-import { Facebook, Linkedin, Instagram } from "@/components/ui/social-icons";
+import { Facebook, Linkedin, Instagram, Youtube } from "@/components/ui/social-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -64,7 +64,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-muted pt-24 pb-12 border-t border-border/50">
       {/* Outer wrapper */}
-      <div className="w-full max-w-[1600px] mx-auto px-6 md:px-10 lg:px-16 xl:px-24">
+      <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
         
         {/* Top footer section: grid layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-12 gap-12 lg:gap-10 xl:gap-8 mb-16">
@@ -81,7 +81,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-muted-foreground text-base max-w-sm leading-relaxed">
-              We are an award-winning digital growth agency crafting high-performance digital marketing, premium brand styling, and custom web experiences for global brands.
+              BuzzSpire Media is a Delhi-based digital marketing agency handling SEO, paid ads, branding, and web development for local and regional businesses.
             </p>
             {/* Social Icons */}
             <div className="flex gap-4">
@@ -89,6 +89,7 @@ export default function Footer() {
                 { icon: Facebook, href: "https://www.facebook.com/buzzspiremedia/", name: "Facebook" },
                 { icon: Instagram, href: "https://www.instagram.com/buzzspiremedia/", name: "Instagram" },
                 { icon: Linkedin, href: "https://www.linkedin.com/company/buzzspire-media-pvt-ltd", name: "LinkedIn" },
+                { icon: Youtube, href: "https://www.youtube.com/@BuzzspireMediaOfficial", name: "YouTube" },
               ].map((social, idx) => (
                 <a
                   key={idx}

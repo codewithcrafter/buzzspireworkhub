@@ -106,7 +106,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
       <div className="absolute top-12 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
 
       {/* 1. HERO HEADER */}
-      <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-6">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto text-center space-y-6">
         <ScrollReveal>
           <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full">
             Join the Spire
@@ -125,7 +125,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
 
       {/* 2. BENEFITS & PERKS */}
       <section className="py-32 bg-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
 
             {/* Left Column: Editorial Heading */}
@@ -170,7 +170,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
       </section>
 
       {/* 3. CURRENT OPENINGS */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <ScrollReveal>
           <div className="mb-12 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
@@ -239,7 +239,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
 
       {/* 4. HIRING PROCESS TIMELINE */}
       <section className="py-24 bg-slate-50/80 border-y border-slate-100 relative">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="w-full max-w-[1720px] mx-auto px-6 md:px-10 lg:px-12">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto mb-20">
               <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Our Framework</h2>
@@ -264,7 +264,7 @@ export default function CareerClientView({ content = {} }: { content?: any }) {
       </section>
 
       {/* 5. CAREER FAQ ACCORDION */}
-      <section className="py-24 px-6 max-w-4xl mx-auto relative">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto relative">
         <ScrollReveal>
           <div className="text-center mb-16">
             <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Hiring Queries</h2>

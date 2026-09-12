@@ -39,12 +39,14 @@ export async function createBlog(data: {
     category: string;
     tags: string[];
     author: string;
+    authorId?: string | null;
     readTime?: number;
     seoTitle?: string;
     metaDescription?: string;
     status?: BlogStatus;
     isFeatured?: boolean;
     publishedAt?: Date;
+    scheduledAt?: Date | null;
     faqs?: { question: string; answer: string; order?: number }[];
 }) {
     const finalSlug = data.slug 
@@ -52,34 +54,45 @@ export async function createBlog(data: {
         : await generateUniqueSlug(data.title);
 
     let publishedAtVal = data.publishedAt;
-    if (data.status === "PUBLISHED" && !publishedAtVal) {
+    if (data.status === BlogStatus.PUBLISHED && !publishedAtVal) {
         publishedAtVal = new Date();
     }
 
+    const createData: any = {
+        title: data.title,
+        slug: finalSlug,
+        excerpt: data.excerpt,
+        content: data.content,
+        category: data.category,
+        tags: data.tags,
+        author: data.author,
+        readTime: data.readTime ?? 5,
+        status: data.status || "DRAFT",
+        isFeatured: data.isFeatured ?? false,
+    };
+
+    if (data.featuredImage) createData.featuredImage = data.featuredImage;
+    if (data.seoTitle) createData.seoTitle = data.seoTitle;
+    if (data.metaDescription) createData.metaDescription = data.metaDescription;
+    if (publishedAtVal) createData.publishedAt = publishedAtVal;
+    if (data.scheduledAt) createData.scheduledAt = data.scheduledAt;
+
+    if (data.authorId && data.authorId.trim()) {
+        createData.authorProfile = { connect: { id: data.authorId.trim() } };
+    }
+
+    if (data.faqs && data.faqs.length > 0) {
+        createData.faqs = {
+            create: data.faqs.map((f, i) => ({
+                question: f.question,
+                answer: f.answer,
+                order: f.order ?? i,
+            })),
+        };
+    }
+
     return prisma.blog.create({
-        data: {
-            title: data.title,
-            slug: finalSlug,
-            excerpt: data.excerpt,
-            content: data.content,
-            featuredImage: data.featuredImage || null,
-            category: data.category,
-            tags: data.tags,
-            author: data.author,
-            readTime: data.readTime ?? 5,
-            seoTitle: data.seoTitle || null,
-            metaDescription: data.metaDescription || null,
-            status: data.status || "DRAFT",
-            isFeatured: data.isFeatured ?? false,
-            publishedAt: publishedAtVal,
-            faqs: data.faqs && data.faqs.length > 0 ? {
-                create: data.faqs.map((f, i) => ({
-                    question: f.question,
-                    answer: f.answer,
-                    order: f.order ?? i,
-                })),
-            } : undefined,
-        },
+        data: createData,
     });
 }
 
@@ -94,27 +107,50 @@ export async function updateBlog(
         category: string;
         tags: string[];
         author: string;
+        authorId: string | null;
         readTime: number;
         seoTitle: string | null;
         metaDescription: string | null;
         status: BlogStatus;
         isFeatured: boolean;
         publishedAt: Date | null;
+        scheduledAt: Date | null;
         faqs: { id?: string; question: string; answer: string; order?: number }[];
     }>
 ) {
-    const updateData: any = { ...data };
+    const updateData: any = {};
 
+    if (data.title !== undefined) updateData.title = data.title;
     if (data.slug) {
         updateData.slug = await generateUniqueSlug(data.slug, id);
-    } else if (data.title) {
-        // If title changed but slug was not explicitly modified, keep existing slug
     }
+    if (data.excerpt !== undefined) updateData.excerpt = data.excerpt;
+    if (data.content !== undefined) updateData.content = data.content;
+    if (data.featuredImage) updateData.featuredImage = data.featuredImage;
+    if (data.category !== undefined) updateData.category = data.category;
+    if (data.tags !== undefined) updateData.tags = data.tags;
+    if (data.author !== undefined) updateData.author = data.author;
+    if (data.authorId !== undefined) {
+        if (data.authorId && data.authorId.trim()) {
+            updateData.authorProfile = { connect: { id: data.authorId.trim() } };
+        } else {
+            updateData.authorProfile = { disconnect: true };
+        }
+    }
+    if (data.readTime !== undefined) updateData.readTime = data.readTime;
+    if (data.seoTitle) updateData.seoTitle = data.seoTitle;
+    if (data.metaDescription) updateData.metaDescription = data.metaDescription;
+    if (data.status !== undefined) updateData.status = data.status;
+    if (data.isFeatured !== undefined) updateData.isFeatured = data.isFeatured;
 
-    if (data.status === "PUBLISHED" && !data.publishedAt) {
-        updateData.publishedAt = new Date();
-    } else if (data.status === "DRAFT") {
-        updateData.publishedAt = null;
+    if (data.status === BlogStatus.PUBLISHED) {
+        if (data.publishedAt !== undefined) {
+            updateData.publishedAt = data.publishedAt;
+        } else {
+            updateData.publishedAt = new Date();
+        }
+    } else if (data.status === BlogStatus.SCHEDULED) {
+        if (data.scheduledAt) updateData.scheduledAt = data.scheduledAt;
     }
 
     if (data.faqs !== undefined) {
@@ -138,13 +174,51 @@ export async function getBlog(idOrSlug: string, isSlug: boolean = false) {
     if (isSlug) {
         return prisma.blog.findUnique({
             where: { slug: idOrSlug },
-            include: { faqs: { orderBy: { order: 'asc' } } },
+            include: { faqs: { orderBy: { order: 'asc' } }, authorProfile: true },
         });
     }
     return prisma.blog.findUnique({
         where: { id: idOrSlug },
-        include: { faqs: { orderBy: { order: 'asc' } } },
+        include: { faqs: { orderBy: { order: 'asc' } }, authorProfile: true },
     });
+}
+
+export async function publishDueScheduledBlogs(): Promise<number> {
+    const now = new Date();
+    const dueBlogs = await prisma.blog.findMany({
+        where: {
+            status: BlogStatus.SCHEDULED,
+            scheduledAt: { lte: now },
+        },
+    });
+
+    if (dueBlogs.length === 0) return 0;
+
+    let publishedCount = 0;
+    for (const blog of dueBlogs) {
+        const updated = await prisma.blog.updateMany({
+            where: { id: blog.id, status: BlogStatus.SCHEDULED },
+            data: {
+                status: BlogStatus.PUBLISHED,
+                publishedAt: now,
+                scheduledAt: null,
+            },
+        });
+
+        if (updated.count > 0) {
+            publishedCount++;
+            try {
+                const { revalidatePath } = await import("next/cache");
+                revalidatePath("/blog");
+                revalidatePath(`/blog/${blog.slug}`);
+                revalidatePath("/api/blogs");
+                revalidatePath(`/api/blogs/${blog.slug}`);
+            } catch (revalErr) {
+                // Ignore cache revalidation errors if invoked outside Next server request context
+            }
+        }
+    }
+    return publishedCount;
 }
 
 export async function getBlogs(options: {
@@ -155,6 +229,11 @@ export async function getBlogs(options: {
     status?: BlogStatus;
     isFeatured?: boolean;
 }) {
+    // If requesting published blogs, auto-publish any scheduled blogs that have reached their scheduledAt time
+    if (options.status === BlogStatus.PUBLISHED) {
+        await publishDueScheduledBlogs();
+    }
+
     const page = options.page ?? 1;
     const limit = options.limit ?? 10;
     const skip = (page - 1) * limit;
@@ -190,7 +269,7 @@ export async function getBlogs(options: {
             orderBy: { createdAt: "desc" },
             skip,
             take: limit,
-            include: { faqs: { orderBy: { order: 'asc' } } },
+            include: { faqs: { orderBy: { order: 'asc' } }, authorProfile: true },
         }),
         prisma.blog.count({ where }),
     ]);

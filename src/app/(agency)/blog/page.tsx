@@ -80,7 +80,7 @@ export default function BlogPage() {
       <div className="absolute top-12 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
 
       {/* 1. HERO HEADER */}
-      <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-6">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto text-center space-y-6">
         <ScrollReveal>
           <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full">
             Insights & Strategy
@@ -98,7 +98,7 @@ export default function BlogPage() {
       </section>
 
       {/* 2. SEARCH & FILTER CONTROLS */}
-      <section className="py-8 px-6 max-w-7xl mx-auto border-y border-border/50 bg-white/50 backdrop-blur-sm sticky top-[72px] lg:top-[88px] z-30">
+      <section className="py-8 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-y border-border/50 bg-white/50 backdrop-blur-sm sticky top-[72px] lg:top-[88px] z-30">
         <div className="flex flex-col md:flex-row gap-6 justify-between items-center">
           {/* Search Box */}
           <div className="relative w-full md:max-w-md">
@@ -136,7 +136,7 @@ export default function BlogPage() {
 
       {/* 3. FEATURED BLOG POST SPOTLIGHT (only shows when search/filter is neutral) */}
       {selectedCategory === "All" && !searchQuery && featuredBlog && (
-        <section className="py-16 px-6 max-w-7xl mx-auto">
+        <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
           <ScrollReveal>
             <div className="group rounded-[2.5rem] bg-white border border-border shadow-premium hover:shadow-xl transition-all duration-500 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-6 md:p-8 lg:p-12 items-center">
               
@@ -183,7 +183,7 @@ export default function BlogPage() {
       )}
 
       {/* 4. ARTICLES GRID */}
-      <section className="py-16 px-6 max-w-7xl mx-auto">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <ScrollReveal>
           <div className="mb-10 flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-primary" />
@@ -282,7 +282,7 @@ export default function BlogPage() {
       </section>
 
       {/* 5. NEWSLETTER SIGNUP */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <ScrollReveal>
           <div className="rounded-[3rem] bg-gradient-to-tr from-primary via-secondary to-accent p-12 lg:p-20 text-center text-white relative overflow-hidden shadow-2xl">
             <div className="relative z-10 max-w-2xl mx-auto space-y-6">

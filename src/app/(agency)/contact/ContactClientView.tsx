@@ -12,7 +12,7 @@ import {
   Plus,
   Minus
 } from "lucide-react";
-import { XIcon, Linkedin, Instagram } from "@/components/ui/social-icons";
+import { XIcon, Linkedin, Instagram, Youtube } from "@/components/ui/social-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -90,7 +90,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
       <div className="absolute top-12 left-10 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-slow" />
 
       {/* 1. HERO HEADER */}
-      <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-6">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto text-center space-y-6">
         <ScrollReveal>
           <span className="text-sm font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-full">
             Get In Touch
@@ -108,7 +108,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
       </section>
 
       {/* 2. CONTACT DETAILS & FORM */}
-      <section className="pb-24 px-6 max-w-7xl mx-auto">
+      <section className="pb-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
 
           {/* Left: Contact Info */}
@@ -155,9 +155,10 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
                 <p className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">Social Networks</p>
                 <div className="flex gap-3">
                   {[
-                    { icon: XIcon, href: "https://twitter.com" },
-                    { icon: Linkedin, href: "https://linkedin.com" },
-                    { icon: Instagram, href: "https://instagram.com" }
+                    { icon: XIcon, href: "https://twitter.com", name: "X" },
+                    { icon: Linkedin, href: "https://linkedin.com", name: "LinkedIn" },
+                    { icon: Instagram, href: "https://instagram.com", name: "Instagram" },
+                    { icon: Youtube, href: "https://www.youtube.com/@BuzzspireMediaOfficial", name: "YouTube" }
                   ].map((soc, i) => (
                     <a
                       key={i}
@@ -165,6 +166,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all"
+                      aria-label={soc.name}
                     >
                       <soc.icon className="w-4 h-4" />
                     </a>
@@ -295,7 +297,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
       </section>
 
       {/* 3. GOOGLE MAP */}
-      <section className="pb-24 px-6 max-w-7xl mx-auto">
+      <section className="pb-24 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="w-full h-[350px] md:h-[450px] rounded-3xl overflow-hidden border border-border shadow-premium">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.215673493137!2d77.0658602!3d28.623297500000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d0558d309b3c1%3A0xb3da05723cb703fc!2sBuzzspire%20Media%20PVT.LTD!5e0!3m2!1sen!2sin!4v1787135089367!5m2!1sen!2sin"
@@ -312,7 +314,7 @@ export default function ContactClientView({ content = {} }: { content?: any }) {
 
 
       {/* 4. CONTACT FAQ */}
-      <section className="py-24 px-6 max-w-4xl mx-auto relative">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto relative">
         <ScrollReveal>
           <div className="text-center mb-16">
             <h2 className="text-sm font-bold uppercase tracking-widest text-primary mb-3">Onboarding Info</h2>

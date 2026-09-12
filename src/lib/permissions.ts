@@ -28,6 +28,7 @@ export const PERMISSIONS = {
 
   // Blog / CMS module
   BLOG_MANAGE: "BLOG_MANAGE",
+  BLOG_CREATE: "BLOG_CREATE",
 } as const;
 
 export type PermissionKey = keyof typeof PERMISSIONS;
@@ -135,7 +136,13 @@ export const ALL_PERMISSIONS: PermissionDefinition[] = [
     key: PERMISSIONS.BLOG_MANAGE,
     label: "Manage Blog CMS",
     category: "Blog",
-    description: "Ability to view, create, edit, and publish blog posts",
+    description: "Ability to view, create, edit, publish and delete blog posts",
+  },
+  {
+    key: PERMISSIONS.BLOG_CREATE,
+    label: "Create Blog Posts",
+    category: "Blog",
+    description: "Ability to create and edit blog posts (no delete or publish access)",
   },
 ];
 

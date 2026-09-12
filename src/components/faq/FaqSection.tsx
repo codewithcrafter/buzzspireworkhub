@@ -21,7 +21,7 @@ export default function FaqSection({ faqs, sectionLabel, heading, description }:
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   return (
-    <section className="py-24 px-6 max-w-4xl mx-auto relative">
+    <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto relative">
       <ScrollReveal>
         <div className="text-center mb-16 space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-1.5 rounded-full">

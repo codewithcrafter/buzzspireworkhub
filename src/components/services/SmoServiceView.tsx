@@ -21,6 +21,7 @@ import Magnetic from "@/components/ui/magnetic";
 import RelatedServices from "@/components/services/RelatedServices";
 import ServiceHeroVideo from "@/components/services/ServiceHeroVideo";
 import ServiceFaqAccordion from "@/components/services/ServiceFaqAccordion";
+import LeadFormSection from "@/components/ui/LeadFormSection";
 
 const smoFaqs = [
   {
@@ -72,7 +73,7 @@ export default function SmoServiceView() {
       <div className="absolute bottom-20 right-10 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
       {/* 1. HERO SECTION */}
-      <section className="py-20 md:py-28 px-6 max-w-7xl mx-auto">
+      <section className="py-20 md:py-28 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8">
             <div className="space-y-6">
@@ -112,7 +113,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 2. WHAT IS SMO, REALLY? */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             What Is SMO, Really?
@@ -135,7 +136,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 3. WHY BUSINESSES CHOOSE OUR SMO AGENCY */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-8">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why Businesses Choose Our SMO Agency
@@ -169,7 +170,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 4. OUR CORE SMO SERVICES */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-200/50">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-slate-900">
@@ -230,7 +231,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 5. SMO SERVICES FOR EVERY KIND OF BUSINESS */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -282,7 +283,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 6. PLATFORM-SPECIFIC OPTIMIZATION */}
-      <section className="py-16 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -334,7 +335,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 7. AREAS WE SERVE ACROSS DELHI */}
-      <section className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-200/60">
+      <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-10">
           <div className="text-center space-y-3">
             <h2 className="text-3xl md:text-5xl font-heading font-black text-slate-900">
@@ -420,7 +421,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 8. WHY WE'RE THE BEST SMO SERVICES AGENCY IN DELHI */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             Why We&apos;re the Best SMO Services Agency in Delhi
@@ -443,7 +444,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 9. HOW TO INCREASE ORGANIC REACH ON SOCIAL MEDIA */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             How to Increase Organic Reach on Social Media
@@ -460,7 +461,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 10. WHAT THIS ACTUALLY COSTS YOU */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             What This Actually Costs You
@@ -490,7 +491,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 11. SMO VS SMM. WHAT'S THE DIFFERENCE? */}
-      <section className="py-16 px-6 max-w-5xl mx-auto border-t border-slate-200/60">
+      <section className="py-16 px-6 md:px-10 lg:px-12 w-full max-w-[1720px] mx-auto border-t border-slate-200/60">
         <ScrollReveal className="space-y-6">
           <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 text-center">
             SMO vs SMM. What&apos;s the Difference?
@@ -513,7 +514,7 @@ export default function SmoServiceView() {
       </section>
 
       {/* 12. FAQS */}
-      <section className="py-24 px-6 max-w-4xl mx-auto border-t border-slate-200/50">
+      <section className="py-24 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto border-t border-slate-200/50">
         <ScrollReveal className="space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold text-slate-900">
@@ -535,46 +536,14 @@ export default function SmoServiceView() {
         ]}
       />
 
-      {/* 14. FINAL CTA */}
-      <section className="py-24 px-6 max-w-5xl mx-auto border-t border-slate-200/50">
-        <ScrollReveal>
-          <div className="rounded-[2.5rem] bg-white border-2 border-primary/20 shadow-xl p-10 md:p-16 text-center relative overflow-hidden space-y-8">
-            <h2 className="text-3xl md:text-5xl font-heading font-extrabold tracking-tight leading-tight text-slate-900 max-w-3xl mx-auto relative z-10">
-              Let&apos;s Get Your Social Pages Working
-            </h2>
-            <div className="space-y-4 text-base md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed relative z-10">
-              <p>
-                You&apos;ve read this far. That means something isn&apos;t clicking with your current setup.
-              </p>
-              <p className="font-semibold text-slate-900">
-                Let&apos;s fix that.
-              </p>
-              <p>
-                Call 9205386625 or message us on WhatsApp. Buzzspire&apos;s SMO Agency in Delhi team will map out where your pages stand today, and what an honest Best SMO Services Agency in Delhi engagement looks like for your brand.
-              </p>
-            </div>
-
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-              <Magnetic>
-                <a href="tel:9205386625">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-base bg-foreground text-background hover:bg-foreground/90 font-bold shadow-lg flex items-center gap-2">
-                    <Phone className="w-5 h-5" />
-                    <span>Let&apos;s Fix Your Pages — Free Audit Call</span>
-                  </Button>
-                </a>
-              </Magnetic>
-              <Magnetic>
-                <a href="https://wa.me/919205386625" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-base border-border bg-white text-slate-900 hover:bg-muted font-bold flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5" />
-                    <span>WhatsApp Strategy Chat</span>
-                  </Button>
-                </a>
-              </Magnetic>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
+      {/* 14. FINAL LEAD FORM */}
+      <LeadFormSection
+        eyebrow="LET'S TALK"
+        heading="Ready to build a stronger social presence?"
+        description="Tell us about your brand handles and optimization targets. Our social media strategists will review your profiles and present a content roadmap."
+        defaultService="SMO / Social Media Optimization"
+        source="SMO Services Page"
+      />
     </div>
   );
 }

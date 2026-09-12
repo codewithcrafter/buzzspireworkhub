@@ -11,6 +11,7 @@ import {
   FileText,
   Sparkles,
   UserCheck,
+  UserPlus,
   GraduationCap,
   Mail,
   Bell,
@@ -171,6 +172,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       { name: "Projects", icon: Briefcase, path: "/admin/projects" },
       { name: "Pages", icon: FileText, path: "/admin/pages" },
       { name: "Blog CMS", icon: FileText, path: "/admin/blog" },
+      { name: "Add Author", icon: UserPlus, path: "/admin/authors/add" },
+      { name: "Authors", icon: Users, path: "/admin/authors" },
       { name: "Careers", icon: GraduationCap, path: "/admin/careers" },
       { name: "Inbox", icon: Mail, path: "/admin/inbox" },
       { name: "Notifications", icon: Bell, path: "/admin/notifications" },
@@ -221,11 +224,23 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     }
 
     if (isUserAdmin || perms.includes("BLOG_MANAGE")) {
-      menuItems.push({
-        name: "Blog CMS",
-        icon: FileText,
-        path: "/employee/blog",
-      });
+      menuItems.push(
+        {
+          name: "Blog CMS",
+          icon: FileText,
+          path: "/employee/blog",
+        },
+        {
+          name: "Add Author",
+          icon: UserPlus,
+          path: "/admin/authors/add",
+        },
+        {
+          name: "Authors",
+          icon: Users,
+          path: "/admin/authors",
+        }
+      );
     }
 
     if (isUserAdmin || perms.includes("REPORTS_VIEW")) {

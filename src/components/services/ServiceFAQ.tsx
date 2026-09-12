@@ -16,7 +16,7 @@ export default function ServiceFAQ({ service }: ServiceFAQProps) {
   if (!service.faqs || service.faqs.length === 0) return null;
 
   return (
-    <section className="py-20 px-6 max-w-4xl mx-auto space-y-12">
+    <section className="py-20 px-6 md:px-10 lg:px-12 w-full max-w-[1200px] mx-auto space-y-12">
       <ScrollReveal>
         <div className="text-center space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-4 py-1.5 rounded-full">

@@ -39,6 +39,8 @@ export async function authenticateRequest(
     let isEmployeeRoute = false;
     let isAdminOrClientRoute = false;
 
+    let isSharedAdminRoute = false;
+
     if (req && req.url) {
       // In next.js server components/route handlers, req.url may be a relative or absolute URL
       const urlString = req.url.startsWith('/') ? `http://localhost${req.url}` : req.url;
@@ -53,6 +55,14 @@ export async function authenticateRequest(
           url.pathname.startsWith('/api/client')
         ) {
           isAdminOrClientRoute = true;
+          // Employees need access to shared admin APIs for Blog/Author management
+          if (
+            url.pathname.startsWith('/api/admin/blogs') ||
+            url.pathname.startsWith('/api/admin/authors') ||
+            url.pathname.startsWith('/api/admin/upload')
+          ) {
+            isSharedAdminRoute = true;
+          }
         }
       } catch (e) {
         console.error("Error parsing URL in guard:", e);
@@ -79,6 +89,7 @@ export async function authenticateRequest(
           if (empToken) possibleTokens.push(empToken);
         } else if (isAdminOrClientRoute) {
           if (adminToken) possibleTokens.push(adminToken);
+          if (isSharedAdminRoute && empToken) possibleTokens.push(empToken);
         } else {
           if (adminToken) possibleTokens.push(adminToken);
           if (empToken) possibleTokens.push(empToken);
@@ -97,6 +108,7 @@ export async function authenticateRequest(
           if (empToken) possibleTokens.push(empToken);
         } else if (isAdminOrClientRoute) {
           if (adminToken) possibleTokens.push(adminToken);
+          if (isSharedAdminRoute && empToken) possibleTokens.push(empToken);
         } else {
           if (adminToken) possibleTokens.push(adminToken);
           if (empToken) possibleTokens.push(empToken);
