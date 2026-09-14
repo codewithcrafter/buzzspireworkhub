@@ -58,6 +58,31 @@ jobs:
           echo "Verifying derived public key fingerprint:"
           ssh-keygen -y -f "$RUNNER_TEMP/github_actions_buzzspire" | ssh-keygen -lf -
 
+      - name: Network & SSH Diagnostics
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          echo "=========================================="
+          echo "NETWORK & DNS DIAGNOSTICS"
+          echo "=========================================="
+          echo "VPS_HOST string length: ${#VPS_HOST}"
+          SAFE_HOST=$(echo "$VPS_HOST" | sed -E 's/^(.{3}).*(.{3})$/\1***\2/')
+          echo "VPS_HOST (redacted): $SAFE_HOST"
+          
+          echo "--- DNS Lookup (A & AAAA) ---"
+          getent ahosts "$VPS_HOST" || true
+          host -t A "$VPS_HOST" || true
+          host -t AAAA "$VPS_HOST" || true
+          
+          echo "--- TCP Port 22 Probe (Hostname/Configured VPS_HOST) ---"
+          nc -vz -w 10 "$VPS_HOST" 22 || true
+          
+          echo "--- TCP Port 22 Probe (Explicit IPv4 Hostname/Configured VPS_HOST) ---"
+          nc -4 -vz -w 10 "$VPS_HOST" 22 || true
+          
+          echo "--- TCP Port 22 Probe (Explicit Target IPv4 200.141.12.206) ---"
+          nc -vz -w 10 200.141.12.206 22 || true
+
       - name: SSH Deploy
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
@@ -65,13 +90,17 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
           echo "Running native SSH diagnostic..."
-          ssh -o IdentitiesOnly=yes \
+          ssh -4 \
+              -o ConnectTimeout=15 \
+              -o IdentitiesOnly=yes \
               -o StrictHostKeyChecking=no \
               -i "$RUNNER_TEMP/github_actions_buzzspire" \
               "${VPS_USER}@${VPS_HOST}" "echo SSH_AUTHENTICATION_SUCCESS"
               
           echo "Running deployment commands..."
-          ssh -o IdentitiesOnly=yes \
+          ssh -4 \
+              -o ConnectTimeout=15 \
+              -o IdentitiesOnly=yes \
               -o StrictHostKeyChecking=no \
               -i "$RUNNER_TEMP/github_actions_buzzspire" \
               "${VPS_USER}@${VPS_HOST}" << EOF
