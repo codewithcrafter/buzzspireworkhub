@@ -702,3 +702,41 @@ model Author {
   updatedAt    DateTime @updatedAt
   blogs        Blog[]
 }
+
+enum CaseStudyStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model CaseStudy {
+  id               String          @id @default(uuid())
+  title            String
+  slug             String          @unique
+  clientName       String
+  industry         String
+  shortDescription String
+  featuredImage    String?
+  services         String[]
+  projectOverview  String
+  challenge        String
+  objectives       String[]
+  strategy         String
+  execution        Json
+  results          Json
+  heroMetric       Json
+  conclusion       String
+  testimonial      Json?
+  seoTitle         String?
+  metaDescription  String?
+  canonicalUrl     String?
+  status           CaseStudyStatus @default(DRAFT)
+  isDemo           Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([industry])
+}
+

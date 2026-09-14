@@ -14,6 +14,7 @@ import { getServiceIcon } from "@/components/services/ServiceIcon";
 const standardNavLinks = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
+  { name: "Case Studies", href: "/case-studies" },
   { name: "Blog", href: "/blog" },
   { name: "Career", href: "/career" },
   { name: "Contact", href: "/contact" },
@@ -218,6 +219,15 @@ export default function Navbar() {
                 </div>
 
                 <Link
+                  href="/case-studies"
+                  className={`font-sans text-sm font-semibold tracking-wide hover-underline-animation py-2 transition-colors ${
+                    pathname.startsWith("/case-studies") ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Case Studies
+                </Link>
+
+                <Link
                   href="/blog"
                   className={`font-sans text-sm font-semibold tracking-wide hover-underline-animation py-2 transition-colors ${
                     pathname === "/blog" ? "text-primary" : "text-muted-foreground hover:text-foreground"
@@ -362,6 +372,16 @@ export default function Navbar() {
                     )}
                   </AnimatePresence>
                 </div>
+
+                <Link
+                  href="/case-studies"
+                  className={`font-heading text-2xl font-bold py-2 border-b border-border/40 ${
+                    pathname.startsWith("/case-studies") ? "text-primary" : "text-foreground"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Case Studies
+                </Link>
 
                 <Link
                   href="/blog"

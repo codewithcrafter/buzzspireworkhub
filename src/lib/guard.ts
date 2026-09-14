@@ -59,7 +59,8 @@ export async function authenticateRequest(
           if (
             url.pathname.startsWith('/api/admin/blogs') ||
             url.pathname.startsWith('/api/admin/authors') ||
-            url.pathname.startsWith('/api/admin/upload')
+            url.pathname.startsWith('/api/admin/upload') ||
+            url.pathname.startsWith('/api/admin/case-studies')
           ) {
             isSharedAdminRoute = true;
           }

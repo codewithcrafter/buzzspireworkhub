@@ -172,6 +172,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       { name: "Projects", icon: Briefcase, path: "/admin/projects" },
       { name: "Pages", icon: FileText, path: "/admin/pages" },
       { name: "Blog CMS", icon: FileText, path: "/admin/blog" },
+      { name: "Case Studies", icon: Briefcase, path: "/admin/case-studies" },
       { name: "Add Author", icon: UserPlus, path: "/admin/authors/add" },
       { name: "Authors", icon: Users, path: "/admin/authors" },
       { name: "Careers", icon: GraduationCap, path: "/admin/careers" },
@@ -241,6 +242,21 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           path: "/admin/authors",
         }
       );
+    }
+
+    if (
+      isUserAdmin ||
+      perms.includes("CASE_STUDY_CREATE") ||
+      perms.includes("CASE_STUDY_EDIT") ||
+      perms.includes("CASE_STUDY_DELETE") ||
+      perms.includes("CASE_STUDY_PUBLISH") ||
+      perms.includes("BLOG_MANAGE")
+    ) {
+      menuItems.push({
+        name: "Case Studies",
+        icon: Briefcase,
+        path: "/admin/case-studies",
+      });
     }
 
     if (isUserAdmin || perms.includes("REPORTS_VIEW")) {

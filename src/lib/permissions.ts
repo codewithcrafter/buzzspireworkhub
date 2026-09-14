@@ -29,6 +29,12 @@ export const PERMISSIONS = {
   // Blog / CMS module
   BLOG_MANAGE: "BLOG_MANAGE",
   BLOG_CREATE: "BLOG_CREATE",
+
+  // Case Studies CMS module
+  CASE_STUDY_CREATE: "CASE_STUDY_CREATE",
+  CASE_STUDY_EDIT: "CASE_STUDY_EDIT",
+  CASE_STUDY_DELETE: "CASE_STUDY_DELETE",
+  CASE_STUDY_PUBLISH: "CASE_STUDY_PUBLISH",
 } as const;
 
 export type PermissionKey = keyof typeof PERMISSIONS;
@@ -37,7 +43,7 @@ export type PermissionValue = (typeof PERMISSIONS)[PermissionKey];
 export interface PermissionDefinition {
   key: PermissionValue;
   label: string;
-  category: "Leads" | "Clients" | "Projects" | "Reports" | "Employees" | "Pages" | "Blog";
+  category: "Leads" | "Clients" | "Projects" | "Reports" | "Employees" | "Pages" | "Blog" | "Case Studies";
   description: string;
 }
 
@@ -143,6 +149,30 @@ export const ALL_PERMISSIONS: PermissionDefinition[] = [
     label: "Create Blog Posts",
     category: "Blog",
     description: "Ability to create and edit blog posts (no delete or publish access)",
+  },
+  {
+    key: PERMISSIONS.CASE_STUDY_CREATE,
+    label: "Create Case Studies",
+    category: "Case Studies",
+    description: "Ability to create new case study entries",
+  },
+  {
+    key: PERMISSIONS.CASE_STUDY_EDIT,
+    label: "Edit Case Studies",
+    category: "Case Studies",
+    description: "Ability to edit case study drafts and details",
+  },
+  {
+    key: PERMISSIONS.CASE_STUDY_DELETE,
+    label: "Delete Case Studies",
+    category: "Case Studies",
+    description: "Ability to delete case study entries",
+  },
+  {
+    key: PERMISSIONS.CASE_STUDY_PUBLISH,
+    label: "Publish Case Studies",
+    category: "Case Studies",
+    description: "Ability to publish or unpublish case studies",
   },
 ];
 

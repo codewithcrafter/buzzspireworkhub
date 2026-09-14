@@ -6,7 +6,9 @@ import { uploadImage } from "@/services/upload.service";
 export async function POST(req: Request) {
   try {
     // 1. Authenticate administrator or authorized employee session
-    const auth = await authenticateRequest(req, { requiredAnyPermission: ["PAGES_EDIT", "BLOG_MANAGE"] });
+    const auth = await authenticateRequest(req, {
+      requiredAnyPermission: ["PAGES_EDIT", "BLOG_MANAGE", "CASE_STUDY_CREATE", "CASE_STUDY_EDIT"],
+    });
     if (!auth.authenticated) return auth.response;
 
     // 2. Parse Multipart request body

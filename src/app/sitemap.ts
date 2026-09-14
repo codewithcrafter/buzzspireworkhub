@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { caseStudiesData } from "@/data/caseStudiesData";
 
 const BASE_URL = "https://www.buzzspiremedia.com";
 
@@ -33,6 +34,12 @@ const staticPages: MetadataRoute.Sitemap = [
     lastModified: new Date(),
     changeFrequency: "daily",
     priority: 0.8,
+  },
+  {
+    url: `${BASE_URL}/case-studies`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.85,
   },
   {
     url: `${BASE_URL}/digital-marketing-agency-in-delhi`,
@@ -120,6 +127,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamically fetch all currently PUBLISHED blog posts
   let blogEntries: MetadataRoute.Sitemap = [];
 
+  let caseStudyEntries: MetadataRoute.Sitemap = [];
+
   try {
     const { prisma } = await import("@/lib/prisma");
     const publishedBlogs = await prisma.blog.findMany({
@@ -134,11 +143,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.7,
     }));
+
+    const publishedCaseStudies = await prisma.caseStudy.findMany({
+      where: { status: "PUBLISHED" },
+      select: { slug: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    caseStudyEntries = publishedCaseStudies.map((cs) => ({
+      url: `${BASE_URL}/case-studies/${cs.slug}`,
+      lastModified: cs.updatedAt ?? new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
   } catch (error) {
-    // DB unavailable at build time — safely skip blog entries
-    // They will appear once the app is live and sitemap is requested dynamically
-    console.warn("[sitemap.ts] Could not fetch published blogs:", error);
+    console.warn("[sitemap.ts] Could not fetch published content from DB:", error);
+    caseStudyEntries = caseStudiesData.map((cs) => ({
+      url: `${BASE_URL}/case-studies/${cs.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
   }
 
-  return [...staticPages, ...blogEntries];
+  return [...staticPages, ...caseStudyEntries, ...blogEntries];
 }
