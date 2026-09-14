@@ -87,6 +87,8 @@ jobs:
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_USER: ${{ secrets.VPS_USER }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
           echo "Running native SSH diagnostic..."
@@ -109,9 +111,13 @@ jobs:
           npm ci
           npx prisma generate
           npx prisma db push
+          export DATABASE_URL="${DATABASE_URL}"
+          export JWT_SECRET="${JWT_SECRET}"
           export RESEND_API_KEY="${RESEND_API_KEY}"
           npm run build
-          pm2 reload ecosystem.config.js --update-env
+          pm2 restart buzzspire-app --update-env
+          pm2 restart buzzspire-scheduler --update-env || true
+          pm2 status
           EOF
 
       - name: Cleanup SSH Key
