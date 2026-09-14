@@ -107,13 +107,18 @@ jobs:
               -i "$RUNNER_TEMP/github_actions_buzzspire" \
               "${VPS_USER}@${VPS_HOST}" << EOF
           cd /var/www/buzzspire
-          GIT_SSH_COMMAND="ssh -i ~/.ssh/github_deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" git pull origin main
+          echo "Current VPS commit before pull:"
+          git rev-parse HEAD
+          git remote set-url origin git@github.com:codewithcrafter/digital-marketing-agency.git 2>/dev/null || true
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/github_deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" git pull --ff-only origin main || git pull --ff-only origin main || true
+          echo "VPS commit after pull:"
+          git rev-parse HEAD
           npm ci
-          npx prisma generate
-          npx prisma db push
           export DATABASE_URL="${DATABASE_URL}"
           export JWT_SECRET="${JWT_SECRET}"
           export RESEND_API_KEY="${RESEND_API_KEY}"
+          npx prisma generate
+          npx prisma db push
           npm run build
           pm2 restart buzzspire-app --update-env
           pm2 restart buzzspire-scheduler --update-env || true
