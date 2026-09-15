@@ -110,8 +110,9 @@ jobs:
           echo "Current VPS commit before pull:"
           git rev-parse HEAD
           git remote set-url origin git@github.com:codewithcrafter/digital-marketing-agency.git 2>/dev/null || true
-          GIT_SSH_COMMAND="ssh -i ~/.ssh/github_deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" git pull --ff-only origin main || git pull --ff-only origin main || true
-          echo "VPS commit after pull:"
+          git fetch origin main
+          git reset --hard origin/main
+          echo "VPS commit after reset:"
           git rev-parse HEAD
           npm ci
           export DATABASE_URL="${DATABASE_URL}"
