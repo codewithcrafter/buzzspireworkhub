@@ -38,6 +38,21 @@ function safeParseJson<T>(data: any, fallback: T): T {
   return data as T;
 }
 
+function renderSafeText(val: any): string {
+  if (val === null || val === undefined) return "";
+  if (typeof val === "string" || typeof val === "number" || typeof val === "boolean") {
+    return String(val);
+  }
+  if (typeof val === "object") {
+    if (val.value) return renderSafeText(val.value);
+    if (val.label) return renderSafeText(val.label);
+    if (val.text) return renderSafeText(val.text);
+    if (val.title) return renderSafeText(val.title);
+    return JSON.stringify(val);
+  }
+  return String(val);
+}
+
 // Generate Static Params for pre-rendering
 export async function generateStaticParams() {
   try {
@@ -51,9 +66,9 @@ export async function generateStaticParams() {
 }
 
 // Generate Dynamic SEO Metadata
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
   try {
+    const { slug } = await props.params;
     const cs = await getCaseStudyBySlug(slug);
 
     if (!cs || cs.status !== "PUBLISHED") {
@@ -62,8 +77,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       };
     }
 
-    const title = cs.seoTitle || `${cs.clientName} Case Study | BuzzSpire Media`;
-    const description = cs.metaDescription || cs.shortDescription;
+    const title = renderSafeText(cs.seoTitle) || `${renderSafeText(cs.clientName)} Case Study | BuzzSpire Media`;
+    const description = renderSafeText(cs.metaDescription) || renderSafeText(cs.shortDescription);
 
     return {
       title,
@@ -87,8 +102,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function CaseStudyDetailPage({ params }: PageProps) {
-  const { slug } = await params;
+export default async function CaseStudyDetailPage(props: PageProps) {
+  const { slug } = await props.params;
   let dbCs: any = null;
   try {
     dbCs = await getCaseStudyBySlug(slug);
@@ -102,31 +117,51 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
   // Map database fields safely
   const parsedHeroMetric = safeParseJson(dbCs.heroMetric, { label: "Impact", value: "High" });
-  const heroMetric =
-    typeof parsedHeroMetric === "object" && parsedHeroMetric !== null
-      ? {
-          label: parsedHeroMetric.label || "Impact",
-          value: parsedHeroMetric.value || String(parsedHeroMetric || "High"),
-        }
-      : { label: "Impact", value: String(parsedHeroMetric || "High") };
+  const heroMetric = {
+    label: renderSafeText(typeof parsedHeroMetric === "object" ? parsedHeroMetric?.label : "Impact") || "Impact",
+    value: renderSafeText(typeof parsedHeroMetric === "object" ? parsedHeroMetric?.value : parsedHeroMetric) || "High",
+  };
 
   const rawExecution = safeParseJson(dbCs.execution, []);
-  const execution = Array.isArray(rawExecution) ? rawExecution : [];
+  const execution = (Array.isArray(rawExecution) ? rawExecution : []).map((step: any) => ({
+    title: renderSafeText(step?.title || step?.name || "Tactical Approach"),
+    description: renderSafeText(step?.description || step?.desc || step?.details || ""),
+  }));
 
   const rawResults = safeParseJson(dbCs.results, []);
-  const results = Array.isArray(rawResults) ? rawResults : [];
+  const results = (Array.isArray(rawResults) ? rawResults : []).map((res: any) => ({
+    label: renderSafeText(res?.label || res?.name || "Metric"),
+    value: renderSafeText(res?.value || res?.score || "N/A"),
+    description: renderSafeText(res?.description || res?.desc || ""),
+    change: renderSafeText(res?.change || ""),
+  }));
 
-  const testimonial = safeParseJson<any>(dbCs.testimonial, null);
+  const rawTestimonial = safeParseJson<any>(dbCs.testimonial, null);
+  const testimonial =
+    rawTestimonial && typeof rawTestimonial === "object" && (rawTestimonial.quote || rawTestimonial.text)
+      ? {
+          quote: renderSafeText(rawTestimonial.quote || rawTestimonial.text || rawTestimonial.message),
+          author: renderSafeText(rawTestimonial.author || rawTestimonial.name || "Verified Client"),
+          role: renderSafeText(rawTestimonial.role || rawTestimonial.designation || "Executive"),
+          company: renderSafeText(rawTestimonial.company || dbCs.clientName),
+        }
+      : null;
 
   const rawServices = dbCs.services;
-  const services: string[] = Array.isArray(rawServices)
+  const services: string[] = (Array.isArray(rawServices)
     ? rawServices
-    : safeParseJson(rawServices, []);
+    : safeParseJson<any[]>(rawServices, [])
+  )
+    .map((s: any) => renderSafeText(s))
+    .filter(Boolean);
 
   const rawObjectives = dbCs.objectives;
-  const objectives: string[] = Array.isArray(rawObjectives)
+  const objectives: string[] = (Array.isArray(rawObjectives)
     ? rawObjectives
-    : safeParseJson(rawObjectives, []);
+    : safeParseJson<any[]>(rawObjectives, [])
+  )
+    .map((o: any) => renderSafeText(o))
+    .filter(Boolean);
 
   // Fetch adjacent case studies for bottom navigation safely
   let publishedList: any[] = [];
