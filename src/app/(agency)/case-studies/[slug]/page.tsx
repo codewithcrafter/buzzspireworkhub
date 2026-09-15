@@ -22,6 +22,7 @@ import { getCaseStudyBySlug, getCaseStudies } from "@/services/caseStudy.service
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+export const dynamicParams = true;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -54,17 +55,6 @@ function renderSafeText(val: any): string {
   return String(val);
 }
 
-// Generate Static Params for pre-rendering
-export async function generateStaticParams() {
-  try {
-    const data = await getCaseStudies({ status: "PUBLISHED", limit: 100 });
-    return (data.caseStudies || []).map((cs) => ({
-      slug: cs.slug,
-    }));
-  } catch (e) {
-    return [];
-  }
-}
 
 // Generate Dynamic SEO Metadata
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
