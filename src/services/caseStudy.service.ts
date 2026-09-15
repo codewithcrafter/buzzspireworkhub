@@ -149,22 +149,44 @@ export async function getCaseStudyById(id: string) {
   });
 }
 
+const DEMO_SLUGS = [
+  "novafit-wellness",
+  "urbannest-properties",
+  "luxe-aura",
+  "techcore-solutions",
+  "brew-and-bean",
+  "eduprime-academy",
+];
+
 /**
  * Fetch a single case study by slug
  */
 export async function getCaseStudyBySlug(slug: string) {
   await seedDemoCaseStudies();
-  const cs = await prisma.caseStudy.findUnique({
+  let cs = await prisma.caseStudy.findUnique({
     where: { slug },
   });
 
-  if (cs) return cs;
+  if (!cs) {
+    cs = await prisma.caseStudy.findFirst({
+      where: {
+        slug: { equals: slug, mode: "insensitive" },
+      },
+    });
+  }
 
-  return prisma.caseStudy.findFirst({
-    where: {
-      slug: { equals: slug, mode: "insensitive" },
-    },
-  });
+  if (cs && (cs.isDemo || DEMO_SLUGS.includes(cs.slug.toLowerCase())) && cs.status !== "PUBLISHED") {
+    try {
+      cs = await prisma.caseStudy.update({
+        where: { id: cs.id },
+        data: { status: "PUBLISHED", isDemo: true },
+      });
+    } catch (e) {
+      console.error("Failed to auto-publish demo case study:", e);
+    }
+  }
+
+  return cs;
 }
 
 /**

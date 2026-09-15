@@ -62,7 +62,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     const { slug } = await props.params;
     const cs = await getCaseStudyBySlug(slug);
 
-    if (!cs || cs.status !== "PUBLISHED") {
+    if (!cs || (cs.status !== "PUBLISHED" && !cs.isDemo)) {
       return {
         title: "Case Study Not Found | BuzzSpire Media",
       };
@@ -102,7 +102,7 @@ export default async function CaseStudyDetailPage(props: PageProps) {
     console.error("Error fetching case study by slug:", err);
   }
 
-  if (!dbCs || dbCs.status !== "PUBLISHED") {
+  if (!dbCs || (dbCs.status !== "PUBLISHED" && !dbCs.isDemo)) {
     notFound();
   }
 
