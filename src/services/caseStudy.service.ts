@@ -73,6 +73,11 @@ export async function seedDemoCaseStudies() {
             isDemo: true,
           },
         });
+      } else if (existing.isDemo && existing.status !== "PUBLISHED") {
+        await prisma.caseStudy.update({
+          where: { id: existing.id },
+          data: { status: "PUBLISHED" },
+        });
       }
     }
   } catch (err) {
@@ -149,8 +154,16 @@ export async function getCaseStudyById(id: string) {
  */
 export async function getCaseStudyBySlug(slug: string) {
   await seedDemoCaseStudies();
-  return prisma.caseStudy.findUnique({
+  const cs = await prisma.caseStudy.findUnique({
     where: { slug },
+  });
+
+  if (cs) return cs;
+
+  return prisma.caseStudy.findFirst({
+    where: {
+      slug: { equals: slug, mode: "insensitive" },
+    },
   });
 }
 
