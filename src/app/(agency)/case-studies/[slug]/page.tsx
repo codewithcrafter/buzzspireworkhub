@@ -20,7 +20,8 @@ import { Button } from "@/components/ui/button";
 import Magnetic from "@/components/ui/magnetic";
 import { getCaseStudyBySlug, getCaseStudies } from "@/services/caseStudy.service";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface PageProps {
   params: Promise<{ slug: string }>;

@@ -73,10 +73,10 @@ export async function seedDemoCaseStudies() {
             isDemo: true,
           },
         });
-      } else if (existing.isDemo && existing.status !== "PUBLISHED") {
+      } else {
         await prisma.caseStudy.update({
           where: { id: existing.id },
-          data: { status: "PUBLISHED" },
+          data: { status: "PUBLISHED", isDemo: true },
         });
       }
     }
