@@ -26,11 +26,23 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+function safeParseJson<T>(data: any, fallback: T): T {
+  if (data === null || data === undefined) return fallback;
+  if (typeof data === "string") {
+    try {
+      return JSON.parse(data) as T;
+    } catch {
+      return fallback;
+    }
+  }
+  return data as T;
+}
+
 // Generate Static Params for pre-rendering
 export async function generateStaticParams() {
   try {
     const data = await getCaseStudies({ status: "PUBLISHED", limit: 100 });
-    return data.caseStudies.map((cs) => ({
+    return (data.caseStudies || []).map((cs) => ({
       slug: cs.slug,
     }));
   } catch (e) {
@@ -41,55 +53,101 @@ export async function generateStaticParams() {
 // Generate Dynamic SEO Metadata
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const cs = await getCaseStudyBySlug(slug);
+  try {
+    const cs = await getCaseStudyBySlug(slug);
 
-  if (!cs || cs.status !== "PUBLISHED") {
+    if (!cs || cs.status !== "PUBLISHED") {
+      return {
+        title: "Case Study Not Found | BuzzSpire Media",
+      };
+    }
+
+    const title = cs.seoTitle || `${cs.clientName} Case Study | BuzzSpire Media`;
+    const description = cs.metaDescription || cs.shortDescription;
+
     return {
-      title: "Case Study Not Found | BuzzSpire Media",
-    };
-  }
-
-  const title = cs.seoTitle || `${cs.clientName} Case Study | BuzzSpire Media`;
-  const description = cs.metaDescription || cs.shortDescription;
-
-  return {
-    title,
-    description,
-    openGraph: {
       title,
       description,
-      url: cs.canonicalUrl || `https://www.buzzspiremedia.com/case-studies/${cs.slug}`,
-      siteName: "BuzzSpire Media",
-      images: cs.featuredImage ? [{ url: cs.featuredImage }] : [],
-      type: "article",
-    },
-    alternates: {
-      canonical: cs.canonicalUrl || `https://www.buzzspiremedia.com/case-studies/${cs.slug}`,
-    },
-  };
+      openGraph: {
+        title,
+        description,
+        url: cs.canonicalUrl || `https://www.buzzspiremedia.com/case-studies/${cs.slug}`,
+        siteName: "BuzzSpire Media",
+        images: cs.featuredImage ? [{ url: cs.featuredImage }] : [],
+        type: "article",
+      },
+      alternates: {
+        canonical: cs.canonicalUrl || `https://www.buzzspiremedia.com/case-studies/${cs.slug}`,
+      },
+    };
+  } catch (e) {
+    return {
+      title: "Case Study | BuzzSpire Media",
+    };
+  }
 }
 
 export default async function CaseStudyDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const dbCs = await getCaseStudyBySlug(slug);
+  let dbCs: any = null;
+  try {
+    dbCs = await getCaseStudyBySlug(slug);
+  } catch (err) {
+    console.error("Error fetching case study by slug:", err);
+  }
 
   if (!dbCs || dbCs.status !== "PUBLISHED") {
     notFound();
   }
 
   // Map database fields safely
-  const heroMetric = (dbCs.heroMetric as any) || { label: "Impact", value: "High" };
-  const execution = (dbCs.execution as any[]) || [];
-  const results = (dbCs.results as any[]) || [];
-  const testimonial = (dbCs.testimonial as any) || null;
+  const parsedHeroMetric = safeParseJson(dbCs.heroMetric, { label: "Impact", value: "High" });
+  const heroMetric =
+    typeof parsedHeroMetric === "object" && parsedHeroMetric !== null
+      ? {
+          label: parsedHeroMetric.label || "Impact",
+          value: parsedHeroMetric.value || String(parsedHeroMetric || "High"),
+        }
+      : { label: "Impact", value: String(parsedHeroMetric || "High") };
 
-  // Fetch adjacent case studies for bottom navigation
-  const allPublishedRes = await getCaseStudies({ status: "PUBLISHED", limit: 100 });
-  const publishedList = allPublishedRes.caseStudies;
+  const rawExecution = safeParseJson(dbCs.execution, []);
+  const execution = Array.isArray(rawExecution) ? rawExecution : [];
+
+  const rawResults = safeParseJson(dbCs.results, []);
+  const results = Array.isArray(rawResults) ? rawResults : [];
+
+  const testimonial = safeParseJson<any>(dbCs.testimonial, null);
+
+  const rawServices = dbCs.services;
+  const services: string[] = Array.isArray(rawServices)
+    ? rawServices
+    : safeParseJson(rawServices, []);
+
+  const rawObjectives = dbCs.objectives;
+  const objectives: string[] = Array.isArray(rawObjectives)
+    ? rawObjectives
+    : safeParseJson(rawObjectives, []);
+
+  // Fetch adjacent case studies for bottom navigation safely
+  let publishedList: any[] = [];
+  try {
+    const allPublishedRes = await getCaseStudies({ status: "PUBLISHED", limit: 100 });
+    publishedList = allPublishedRes.caseStudies || [];
+  } catch (e) {
+    publishedList = [];
+  }
+
   const currentIndex = publishedList.findIndex((item) => item.slug === dbCs.slug);
   
-  const prevStudy = publishedList[(currentIndex - 1 + publishedList.length) % publishedList.length];
-  const nextStudy = publishedList[(currentIndex + 1) % publishedList.length];
+  const prevStudy =
+    publishedList.length > 1 && currentIndex !== -1
+      ? publishedList[(currentIndex - 1 + publishedList.length) % publishedList.length]
+      : null;
+
+  const nextStudy =
+    publishedList.length > 1 && currentIndex !== -1
+      ? publishedList[(currentIndex + 1) % publishedList.length]
+      : null;
 
   return (
     <main className="w-full bg-background select-none bg-grid-pattern relative min-h-screen">
@@ -132,7 +190,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
         {/* Services Badges */}
         <div className="flex flex-wrap items-center gap-2 pt-2">
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mr-2">Services:</span>
-          {dbCs.services.map((svc, i) => (
+          {services.map((svc, i) => (
             <span key={i} className="px-3 py-1 rounded-lg bg-card border border-border text-xs font-semibold text-foreground shadow-sm">
               {svc}
             </span>
@@ -242,14 +300,14 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
           )}
 
           {/* Objectives */}
-          {dbCs.objectives && dbCs.objectives.length > 0 && (
+          {objectives && objectives.length > 0 && (
             <div className="space-y-4">
               <h2 className="text-2xl font-heading font-extrabold text-foreground flex items-center gap-3">
                 <CheckCircle2 className="w-6 h-6 text-primary shrink-0" />
                 Campaign Objectives
               </h2>
               <ul className="space-y-3">
-                {dbCs.objectives.map((obj, i) => (
+                {objectives.map((obj, i) => (
                   <li key={i} className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border/60">
                     <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
                       {i + 1}
@@ -361,7 +419,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
               <div>
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Services Implemented</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {dbCs.services.map((s, i) => (
+                  {services.map((s, i) => (
                     <span key={i} className="px-2.5 py-1 rounded-md bg-muted text-xs font-medium text-foreground">
                       {s}
                     </span>
@@ -386,7 +444,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
       </section>
 
       {/* 6. NEXT / PREVIOUS NAV */}
-      {publishedList.length > 1 && (
+      {publishedList.length > 1 && prevStudy && nextStudy && (
         <section className="py-12 px-6 md:px-10 lg:px-12 w-full max-w-[1400px] mx-auto border-t border-border/60">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <Link href={`/case-studies/${prevStudy.slug}`} className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all flex items-center gap-4">
