@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
 import { AuditService } from "./audit.service";
 import { ActivityService } from "./activity.service";
+import { EmployeeLifecycleService } from "./employee-lifecycle.service";
 
 export interface GetEmployeesOptions {
   search?: string;
@@ -310,7 +311,6 @@ export class EmployeeService {
         },
       });
 
-      const { EmployeeLifecycleService } = require("./employee-lifecycle.service");
       await EmployeeLifecycleService.recordAssignmentChange(tx, emp.id, new Date(), "Initial assignment");
 
       return emp;
@@ -400,7 +400,6 @@ export class EmployeeService {
       });
 
       if (hasAssignmentChanged) {
-        const { EmployeeLifecycleService } = require("./employee-lifecycle.service");
         await EmployeeLifecycleService.recordAssignmentChange(tx, id, new Date(), "Employee profile updated");
       }
       return emp;
