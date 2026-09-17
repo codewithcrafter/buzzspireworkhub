@@ -1,1 +1,0 @@
-const fs = require('fs'); const env = fs.readFileSync('.env', 'utf8'); const match = env.match(/DATABASE_URL=[\"']?(.*?)[\"']?(?:\r|\n|$)/); if (match) { const url = match[1]; console.log('Length:', url.length); for(let i=0; i<url.length; i++) console.log(url[i], url.charCodeAt(i)); }

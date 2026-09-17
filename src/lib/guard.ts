@@ -3,31 +3,46 @@ import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 import { verifyJwt } from "./auth";
 import { ApiResponse } from "./api-response";
-import { hasPermission, PermissionValue, PermissionKey } from "./permissions";
+import {
+  hasPermission,
+  Permission,
+  AllowedRole,
+} from "./auth/permissions";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface AuthenticatedUser {
   id: string;
   name: string;
   email: string;
-  role: string;
-  employeeId?: string | null;
+  role: AllowedRole;
+  employeeId: string;
+  employeeCode: string;
+  departmentId: string | null;
   status: string;
-  permissions: string[];
 }
 
 export interface AuthGuardOptions {
-  requiredRole?: string | string[];
-  requiredPermission?: PermissionValue | PermissionKey;
-  requiredAnyPermission?: (PermissionValue | PermissionKey)[];
+  /** Required role(s). ADMIN always bypasses. */
+  requiredRole?: AllowedRole | AllowedRole[];
+  /** Single WorkHub permission required. Accepts string for legacy compat. */
+  requiredPermission?: Permission | string;
+  /** At least one of these permissions required. Accepts strings for legacy compat. */
+  requiredAnyPermission?: (Permission | string)[];
 }
 
 export type AuthResult =
   | { authenticated: true; user: AuthenticatedUser }
   | { authenticated: false; response: NextResponse };
 
+// ─── Main Guard ───────────────────────────────────────────────────────────────
+
 /**
- * Extracts and verifies the user session, checks DB active status,
+ * Extracts and verifies the employee session JWT from cookies,
+ * verifies it against the live Employee row in the database,
  * and enforces server-side role and permission authorization.
+ *
+ * Uses `prisma.employee` — NOT the legacy `prisma.user`.
  */
 export async function authenticateRequest(
   req?: Request,
@@ -36,41 +51,7 @@ export async function authenticateRequest(
   try {
     const possibleTokens: string[] = [];
 
-    let isEmployeeRoute = false;
-    let isAdminOrClientRoute = false;
-
-    let isSharedAdminRoute = false;
-
-    if (req && req.url) {
-      // In next.js server components/route handlers, req.url may be a relative or absolute URL
-      const urlString = req.url.startsWith('/') ? `http://localhost${req.url}` : req.url;
-      try {
-        const url = new URL(urlString);
-        if (url.pathname.startsWith('/employee') || url.pathname.startsWith('/api/employee')) {
-          isEmployeeRoute = true;
-        } else if (
-          url.pathname.startsWith('/admin') || 
-          url.pathname.startsWith('/api/admin') || 
-          url.pathname.startsWith('/client') || 
-          url.pathname.startsWith('/api/client')
-        ) {
-          isAdminOrClientRoute = true;
-          // Employees need access to shared admin APIs for Blog/Author management
-          if (
-            url.pathname.startsWith('/api/admin/blogs') ||
-            url.pathname.startsWith('/api/admin/authors') ||
-            url.pathname.startsWith('/api/admin/upload') ||
-            url.pathname.startsWith('/api/admin/case-studies')
-          ) {
-            isSharedAdminRoute = true;
-          }
-        }
-      } catch (e) {
-        console.error("Error parsing URL in guard:", e);
-      }
-    }
-
-    // 1. Try Authorization header
+    // 1. Try Authorization header (Bearer token)
     if (req) {
       const authHeader = req.headers.get("authorization");
       if (authHeader && authHeader.startsWith("Bearer ")) {
@@ -81,41 +62,29 @@ export async function authenticateRequest(
       const cookieHeader = req.headers.get("cookie");
       if (cookieHeader) {
         const adminMatch = cookieHeader.match(/(?:^|;\s*)token=([^;]+)/);
-        const empMatch = cookieHeader.match(/(?:^|;\s*)employee_token=([^;]+)/);
-        
-        const adminToken = adminMatch ? decodeURIComponent(adminMatch[1]) : null;
+        const empMatch = cookieHeader.match(
+          /(?:^|;\s*)employee_token=([^;]+)/
+        );
+        const adminToken = adminMatch
+          ? decodeURIComponent(adminMatch[1])
+          : null;
         const empToken = empMatch ? decodeURIComponent(empMatch[1]) : null;
 
-        if (isEmployeeRoute) {
-          if (empToken) possibleTokens.push(empToken);
-        } else if (isAdminOrClientRoute) {
-          if (adminToken) possibleTokens.push(adminToken);
-          if (isSharedAdminRoute && empToken) possibleTokens.push(empToken);
-        } else {
-          if (adminToken) possibleTokens.push(adminToken);
-          if (empToken) possibleTokens.push(empToken);
-        }
+        if (adminToken) possibleTokens.push(adminToken);
+        if (empToken) possibleTokens.push(empToken);
       }
     }
 
-    // 3. Fallback to Next.js cookie store
+    // 3. Fallback — Next.js cookie store (Server Components context)
     if (possibleTokens.length === 0) {
       try {
         const cookieStore = await cookies();
         const adminToken = cookieStore.get("token")?.value;
         const empToken = cookieStore.get("employee_token")?.value;
-        
-        if (isEmployeeRoute) {
-          if (empToken) possibleTokens.push(empToken);
-        } else if (isAdminOrClientRoute) {
-          if (adminToken) possibleTokens.push(adminToken);
-          if (isSharedAdminRoute && empToken) possibleTokens.push(empToken);
-        } else {
-          if (adminToken) possibleTokens.push(adminToken);
-          if (empToken) possibleTokens.push(empToken);
-        }
+        if (adminToken) possibleTokens.push(adminToken);
+        if (empToken) possibleTokens.push(empToken);
       } catch {
-        // cookies() may throw in non-request contexts
+        // cookies() may throw outside request context
       }
     }
 
@@ -128,99 +97,117 @@ export async function authenticateRequest(
 
     let lastErrorResponse = ApiResponse.unauthorized("Authentication required");
 
-    // Loop through all provided tokens to see if one satisfies the requirements
     for (const token of possibleTokens) {
       const payload = await verifyJwt(token);
-      if (!payload || !payload.id) {
-        lastErrorResponse = ApiResponse.unauthorized("Invalid or expired session token");
+
+      // JWT payload sub = employee.id (set at login)
+      const employeeDbId =
+        (payload?.sub as string) || (payload?.id as string);
+
+      if (!payload || !employeeDbId) {
+        lastErrorResponse = ApiResponse.unauthorized(
+          "Invalid or expired session token"
+        );
         continue;
       }
 
-      // Fetch active user from database to ensure up-to-date role, permissions and status
-      const dbUser = await prisma.user.findUnique({
-        where: { id: payload.id as string },
+      // Fetch live Employee record — never trust stale JWT claims for role/status
+      const dbEmployee = await prisma.employee.findUnique({
+        where: { id: employeeDbId },
         select: {
           id: true,
-          name: true,
-          email: true,
-          role: true,
           employeeId: true,
+          employeeCode: true,
+          fullName: true,
+          email: true,
           status: true,
-          permissions: true,
+          departmentId: true,
+          role: { select: { name: true } },
         },
       });
 
-      if (!dbUser) {
-        lastErrorResponse = ApiResponse.unauthorized("User account no longer exists");
+      if (!dbEmployee) {
+        lastErrorResponse = ApiResponse.unauthorized(
+          "Employee account no longer exists"
+        );
         continue;
       }
 
-      if (dbUser.status === "INACTIVE" || dbUser.status === "SUSPENDED") {
-        lastErrorResponse = ApiResponse.forbidden("Account is inactive or suspended");
+      if (dbEmployee.status !== "ACTIVE") {
+        lastErrorResponse = ApiResponse.forbidden(
+          "Account is inactive or suspended"
+        );
         continue;
       }
 
       const user: AuthenticatedUser = {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        role: dbUser.role,
-        employeeId: dbUser.employeeId,
-        status: dbUser.status,
-        permissions: Array.isArray(dbUser.permissions) ? dbUser.permissions : [],
+        id: dbEmployee.id,
+        name: dbEmployee.fullName,
+        email: dbEmployee.email,
+        role: dbEmployee.role.name as AllowedRole,
+        employeeId: dbEmployee.employeeId,
+        employeeCode: dbEmployee.employeeCode,
+        departmentId: dbEmployee.departmentId,
+        status: dbEmployee.status,
       };
 
-      // Role check
-      let roleFailed = false;
+      // ── Role check ──────────────────────────────────────────────────────
       if (options.requiredRole) {
         const allowedRoles = Array.isArray(options.requiredRole)
           ? options.requiredRole
           : [options.requiredRole];
 
-        if (!allowedRoles.includes(user.role)) {
-          lastErrorResponse = ApiResponse.forbidden(`Access restricted to ${allowedRoles.join(" / ")}`);
-          roleFailed = true;
+        if (
+          user.role !== "ADMIN" &&
+          !allowedRoles.includes(user.role)
+        ) {
+          lastErrorResponse = ApiResponse.forbidden(
+            `Access restricted to: ${allowedRoles.join(" / ")}`
+          );
+          continue;
         }
       }
-      if (roleFailed) continue;
 
-      // Single permission check
-      let permFailed = false;
-      if (options.requiredPermission) {
-        if (!hasPermission(user, options.requiredPermission)) {
-          lastErrorResponse = ApiResponse.forbidden(`Permission denied: '${options.requiredPermission}' required`);
-          permFailed = true;
-        }
-      }
-      if (permFailed) continue;
-
-      // Any permission check
-      if (options.requiredAnyPermission && options.requiredAnyPermission.length > 0) {
-        const hasAny = options.requiredAnyPermission.some((perm) =>
-          hasPermission(user, perm)
+      // ── Single permission check ──────────────────────────────────────────
+      if (
+        options.requiredPermission &&
+        !hasPermission(user.role, options.requiredPermission as Permission)
+      ) {
+        lastErrorResponse = ApiResponse.forbidden(
+          `Permission denied: '${options.requiredPermission}' required`
         );
-        if (!hasAny && user.role !== "ADMIN") {
+        continue;
+      }
+
+      // ── Any-of permission check ──────────────────────────────────────────
+      if (
+        options.requiredAnyPermission &&
+        options.requiredAnyPermission.length > 0
+      ) {
+        const hasAny = options.requiredAnyPermission.some((p) =>
+          hasPermission(user.role, p as Permission)
+        );
+        if (!hasAny) {
           lastErrorResponse = ApiResponse.forbidden(
             `Permission denied: requires at least one of [${options.requiredAnyPermission.join(", ")}]`
           );
-          permFailed = true;
+          continue;
         }
       }
-      if (permFailed) continue;
 
-      // If we reach here, this user session meets all requirements!
+      // All checks passed
       return { authenticated: true, user };
     }
 
-    return {
-      authenticated: false,
-      response: lastErrorResponse,
-    };
+    return { authenticated: false, response: lastErrorResponse };
   } catch (error) {
     console.error("Auth guard error:", error);
     return {
       authenticated: false,
-      response: ApiResponse.serverError("Authentication verification error", error),
+      response: ApiResponse.serverError(
+        "Authentication verification error",
+        error
+      ),
     };
   }
 }

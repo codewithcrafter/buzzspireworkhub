@@ -1,0 +1,5086 @@
+{
+  "tables": {
+    "ActivityLog": [
+      {
+        "table_name": "ActivityLog",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "action",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "module",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "resource",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "resourceId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "metadata",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ActivityLog",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "AdminTask": [
+      {
+        "table_name": "AdminTask",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AdminTask",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AdminTask",
+        "column_name": "completed",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "AdminTask",
+        "column_name": "dueDate",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AdminTask",
+        "column_name": "priority",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'low'::text"
+      },
+      {
+        "table_name": "AdminTask",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "AdminTask",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "AgentDevice": [
+      {
+        "table_name": "AgentDevice",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "deviceId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "credential",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "agentVersion",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "deviceName",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'ACTIVE'::text"
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "lastSeenAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "enrolledAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "AgentDevice",
+        "column_name": "revokedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "AgentEnrollmentToken": [
+      {
+        "table_name": "AgentEnrollmentToken",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentEnrollmentToken",
+        "column_name": "token",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentEnrollmentToken",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentEnrollmentToken",
+        "column_name": "expiresAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AgentEnrollmentToken",
+        "column_name": "isUsed",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "AgentEnrollmentToken",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "AiPromptTemplate": [
+      {
+        "table_name": "AiPromptTemplate",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiPromptTemplate",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiPromptTemplate",
+        "column_name": "category",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiPromptTemplate",
+        "column_name": "prompt",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiPromptTemplate",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "AiUsageHistory": [
+      {
+        "table_name": "AiUsageHistory",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiUsageHistory",
+        "column_name": "userId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiUsageHistory",
+        "column_name": "action",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiUsageHistory",
+        "column_name": "tokens",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiUsageHistory",
+        "column_name": "prompt",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiUsageHistory",
+        "column_name": "response",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AiUsageHistory",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Attendance": [
+      {
+        "table_name": "Attendance",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "date",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "checkIn",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "checkOut",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'PRESENT'::\"AttendanceStatus\""
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "totalWorkingSeconds",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "totalBreakSeconds",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "netWorkingSeconds",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "isLate",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "lateMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "earlyLogoutMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "idleSeconds",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "overtimeMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Attendance",
+        "column_name": "shortfallMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      }
+    ],
+    "AttendanceSession": [
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "attendanceId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "punchIn",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "punchOut",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "workingSeconds",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "AttendanceSession",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "AuditLog": [
+      {
+        "table_name": "AuditLog",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "action",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "module",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "resource",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "resourceId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "ipAddress",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "userAgent",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "metadata",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "requestId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AuditLog",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Author": [
+      {
+        "table_name": "Author",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "photoUrl",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "designation",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "bio",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "facebookUrl",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "instagramUrl",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "linkedinUrl",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Author",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Author",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "AutomationWorkflow": [
+      {
+        "table_name": "AutomationWorkflow",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AutomationWorkflow",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AutomationWorkflow",
+        "column_name": "trigger",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "AutomationWorkflow",
+        "column_name": "conditions",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "AutomationWorkflow",
+        "column_name": "isActive",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "AutomationWorkflow",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Blog": [
+      {
+        "table_name": "Blog",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "slug",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "excerpt",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "content",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "featuredImage",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "category",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "tags",
+        "data_type": "ARRAY",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "author",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "authorId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "readTime",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "5"
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "seoTitle",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "metaDescription",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'DRAFT'::\"BlogStatus\""
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "isFeatured",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "publishedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "scheduledAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Blog",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "BlogFAQ": [
+      {
+        "table_name": "BlogFAQ",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "BlogFAQ",
+        "column_name": "blogId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "BlogFAQ",
+        "column_name": "question",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "BlogFAQ",
+        "column_name": "answer",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "BlogFAQ",
+        "column_name": "order",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "BlogFAQ",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "BlogFAQ",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "Break": [
+      {
+        "table_name": "Break",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Break",
+        "column_name": "attendanceSessionId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Break",
+        "column_name": "breakTypeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Break",
+        "column_name": "startTime",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Break",
+        "column_name": "endTime",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Break",
+        "column_name": "durationSeconds",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Break",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Break",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Break",
+        "column_name": "purpose",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "BreakType": [
+      {
+        "table_name": "BreakType",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "BreakType",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "BreakType",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "BreakType",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'ACTIVE'::text"
+      },
+      {
+        "table_name": "BreakType",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "BreakType",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "CallLog": [
+      {
+        "table_name": "CallLog",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallLog",
+        "column_name": "prospectId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallLog",
+        "column_name": "duration",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallLog",
+        "column_name": "outcome",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "CallSignal": [
+      {
+        "table_name": "CallSignal",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallSignal",
+        "column_name": "callId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallSignal",
+        "column_name": "senderType",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallSignal",
+        "column_name": "type",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallSignal",
+        "column_name": "payload",
+        "data_type": "jsonb",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CallSignal",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Campaign": [
+      {
+        "table_name": "Campaign",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Campaign",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Campaign",
+        "column_name": "budget",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Campaign",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'DRAFT'::text"
+      },
+      {
+        "table_name": "Campaign",
+        "column_name": "channels",
+        "data_type": "ARRAY",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Campaign",
+        "column_name": "roi",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Campaign",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "CaseStudy": [
+      {
+        "table_name": "CaseStudy",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "slug",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "clientName",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "industry",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "shortDescription",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "featuredImage",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "services",
+        "data_type": "ARRAY",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "projectOverview",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "challenge",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "objectives",
+        "data_type": "ARRAY",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "strategy",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "execution",
+        "data_type": "jsonb",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "results",
+        "data_type": "jsonb",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "heroMetric",
+        "data_type": "jsonb",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "conclusion",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "testimonial",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "seoTitle",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "metaDescription",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "canonicalUrl",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'DRAFT'::\"CaseStudyStatus\""
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "isDemo",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "CaseStudy",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "ChatMessage": [
+      {
+        "table_name": "ChatMessage",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatMessage",
+        "column_name": "sessionId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatMessage",
+        "column_name": "senderType",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatMessage",
+        "column_name": "message",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatMessage",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "ChatSession": [
+      {
+        "table_name": "ChatSession",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "leadId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'WAITING'::\"ChatStatus\""
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "visitorName",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "visitorEmail",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "visitorPhone",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "service",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "ChatSession",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "ClientPayment": [
+      {
+        "table_name": "ClientPayment",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientPayment",
+        "column_name": "clientId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientPayment",
+        "column_name": "amount",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientPayment",
+        "column_name": "date",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "ClientPayment",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientPayment",
+        "column_name": "method",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientPayment",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'PAID'::text"
+      },
+      {
+        "table_name": "ClientPayment",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "ClientUpdate": [
+      {
+        "table_name": "ClientUpdate",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUpdate",
+        "column_name": "clientId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUpdate",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUpdate",
+        "column_name": "message",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUpdate",
+        "column_name": "author",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUpdate",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "ClientUsage": [
+      {
+        "table_name": "ClientUsage",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "clientId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "category",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "amount",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "date",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "note",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "ClientUsage",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "CloudFile": [
+      {
+        "table_name": "CloudFile",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "folderId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "url",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "size",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "mimeType",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "altText",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "fileName",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "height",
+        "data_type": "integer",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFile",
+        "column_name": "width",
+        "data_type": "integer",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "CloudFolder": [
+      {
+        "table_name": "CloudFolder",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFolder",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "CloudFolder",
+        "column_name": "parentId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "Department": [
+      {
+        "table_name": "Department",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Department",
+        "column_name": "code",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Department",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Department",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Department",
+        "column_name": "manager",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Department",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'ACTIVE'::text"
+      },
+      {
+        "table_name": "Department",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Department",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "Employee": [
+      {
+        "table_name": "Employee",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "employeeCode",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "fullName",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "email",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "phone",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "passwordHash",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "roleId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "departmentId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "designation",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "joiningDate",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "shiftStart",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "shiftEnd",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "hourlyRate",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "monthlySalary",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "avatar",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'ACTIVE'::\"EmployeeStatus\""
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "failedLoginAttempts",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "lockedUntil",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "passwordResetToken",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "passwordResetExpiry",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "lastLoginAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Employee",
+        "column_name": "userId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "Holiday": [
+      {
+        "table_name": "Holiday",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Holiday",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Holiday",
+        "column_name": "date",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Holiday",
+        "column_name": "type",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Holiday",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Holiday",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'ACTIVE'::text"
+      },
+      {
+        "table_name": "Holiday",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Holiday",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "IntegrationConfig": [
+      {
+        "table_name": "IntegrationConfig",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "IntegrationConfig",
+        "column_name": "provider",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "IntegrationConfig",
+        "column_name": "apiKey",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "IntegrationConfig",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'DISCONNECTED'::text"
+      }
+    ],
+    "Invoice": [
+      {
+        "table_name": "Invoice",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "clientId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "projectId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "invoiceNumber",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "service",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "amount",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "subtotal",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "tax",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "discount",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "notes",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'DRAFT'::\"InvoiceStatus\""
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "dueDate",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Invoice",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "KbArticle": [
+      {
+        "table_name": "KbArticle",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "KbArticle",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "KbArticle",
+        "column_name": "content",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "KbArticle",
+        "column_name": "category",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "KbArticle",
+        "column_name": "isSop",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "KbArticle",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Lead": [
+      {
+        "table_name": "Lead",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "email",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "company",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "message",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'NEW'::\"LeadStatus\""
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "budget",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "pageUrl",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "phone",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "portfolio",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "service",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "source",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "assignedEmployeeId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "notes",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "priority",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'MEDIUM'::\"LeadPriority\""
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "isArchived",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "followUpAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Lead",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "LeadActivity": [
+      {
+        "table_name": "LeadActivity",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadActivity",
+        "column_name": "leadId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadActivity",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadActivity",
+        "column_name": "action",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadActivity",
+        "column_name": "details",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadActivity",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "LeadNote": [
+      {
+        "table_name": "LeadNote",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadNote",
+        "column_name": "leadId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadNote",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadNote",
+        "column_name": "content",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadNote",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "LeadNote",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "LeadReminder": [
+      {
+        "table_name": "LeadReminder",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "note",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "dueDate",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'PENDING'::text"
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "isNotified",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "false"
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "leadId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "LeadReminder",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "Leave": [
+      {
+        "table_name": "Leave",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "leaveType",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "startDate",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "endDate",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "totalDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "reason",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'PENDING'::\"LeaveStatus\""
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "rejectionReason",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "reviewedBy",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "reviewedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Leave",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "LoginSession": [
+      {
+        "table_name": "LoginSession",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "sessionToken",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "ipAddress",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "userAgent",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "expiresAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "lastActivity",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "revokedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "LoginSession",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Meeting": [
+      {
+        "table_name": "Meeting",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Meeting",
+        "column_name": "prospectId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Meeting",
+        "column_name": "date",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Meeting",
+        "column_name": "notes",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "Notification": [
+      {
+        "table_name": "Notification",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Notification",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Notification",
+        "column_name": "type",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Notification",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Notification",
+        "column_name": "message",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Notification",
+        "column_name": "readAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Notification",
+        "column_name": "metadata",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Notification",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Page": [
+      {
+        "table_name": "Page",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Page",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Page",
+        "column_name": "slug",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Page",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'DRAFT'::\"PageStatus\""
+      },
+      {
+        "table_name": "Page",
+        "column_name": "seoTitle",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Page",
+        "column_name": "metaDescription",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Page",
+        "column_name": "publishedContent",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Page",
+        "column_name": "publishedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Page",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Page",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "PageRevision": [
+      {
+        "table_name": "PageRevision",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageRevision",
+        "column_name": "pageId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageRevision",
+        "column_name": "version",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageRevision",
+        "column_name": "content",
+        "data_type": "jsonb",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageRevision",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "PageRevision",
+        "column_name": "createdBy",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "PageSection": [
+      {
+        "table_name": "PageSection",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageSection",
+        "column_name": "pageId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageSection",
+        "column_name": "sectionType",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageSection",
+        "column_name": "order",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageSection",
+        "column_name": "isEnabled",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "PageSection",
+        "column_name": "content",
+        "data_type": "jsonb",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PageSection",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "PageSection",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "Payment": [
+      {
+        "table_name": "Payment",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Payment",
+        "column_name": "invoiceId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Payment",
+        "column_name": "amount",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Payment",
+        "column_name": "method",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Payment",
+        "column_name": "transactionId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Payment",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'PENDING'::\"PaymentStatus\""
+      },
+      {
+        "table_name": "Payment",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "PayrollDeduction": [
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "payrollRecordId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "type",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "date",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "minutes",
+        "data_type": "integer",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "amount",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollDeduction",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "PayrollRecord": [
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "payrollRunId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "salaryType",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "baseMonthlySalary",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "baseHourlyRate",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "workingDaysMode",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "workingDaysDivisor",
+        "data_type": "double precision",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "expectedMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "workingMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "shortfallMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "overtimeMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "lateMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "earlyLogoutMinutes",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "workingDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "presentDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "absentDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "paidLeaveDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "unpaidLeaveDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "holidayDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "weekendDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "halfDays",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "basePay",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "overtimePay",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "grossPay",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "totalDeductions",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "netPay",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'DRAFT'::\"PayrollStatus\""
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "calculationPolicyVersion",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'PAYROLL_V1'::text"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRecord",
+        "column_name": "departmentSnapshot",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      }
+    ],
+    "PayrollRun": [
+      {
+        "table_name": "PayrollRun",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "month",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "year",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "periodStart",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "periodEnd",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'DRAFT'::\"PayrollStatus\""
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "totalEmployees",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "totalGrossPay",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "totalDeductions",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "totalNetPay",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "processedBy",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "PayrollRun",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "Project": [
+      {
+        "table_name": "Project",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Project",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Project",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Project",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'PLANNING'::\"ProjectStatus\""
+      },
+      {
+        "table_name": "Project",
+        "column_name": "clientId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Project",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Project",
+        "column_name": "progress",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "progressStages",
+        "data_type": "jsonb",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showDeliverables",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showDownloads",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showFiles",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showInvoices",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showMessages",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showPayments",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showProgress",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showTickets",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "Project",
+        "column_name": "showTimeline",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      }
+    ],
+    "ProjectFile": [
+      {
+        "table_name": "ProjectFile",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectFile",
+        "column_name": "projectId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectFile",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectFile",
+        "column_name": "url",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectFile",
+        "column_name": "size",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectFile",
+        "column_name": "category",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectFile",
+        "column_name": "clientVisible",
+        "data_type": "boolean",
+        "is_nullable": "NO",
+        "column_default": "true"
+      },
+      {
+        "table_name": "ProjectFile",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "ProjectMessage": [
+      {
+        "table_name": "ProjectMessage",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMessage",
+        "column_name": "projectId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMessage",
+        "column_name": "senderId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMessage",
+        "column_name": "recipientId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMessage",
+        "column_name": "text",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMessage",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "ProjectMilestone": [
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "projectId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'PENDING'::text"
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "progress",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "order",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "ProjectMilestone",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "ProjectUpdate": [
+      {
+        "table_name": "ProjectUpdate",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectUpdate",
+        "column_name": "projectId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectUpdate",
+        "column_name": "title",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectUpdate",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "ProjectUpdate",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Prospect": [
+      {
+        "table_name": "Prospect",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Prospect",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Prospect",
+        "column_name": "company",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Prospect",
+        "column_name": "email",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Prospect",
+        "column_name": "score",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      },
+      {
+        "table_name": "Prospect",
+        "column_name": "stage",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'LEAD'::text"
+      },
+      {
+        "table_name": "Prospect",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "Role": [
+      {
+        "table_name": "Role",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Role",
+        "column_name": "name",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Role",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "Role",
+        "column_name": "status",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": "'ACTIVE'::text"
+      },
+      {
+        "table_name": "Role",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Role",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "SystemSetting": [
+      {
+        "table_name": "SystemSetting",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "SystemSetting",
+        "column_name": "key",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "SystemSetting",
+        "column_name": "value",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "SystemSetting",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "SystemSetting",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "Ticket": [
+      {
+        "table_name": "Ticket",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Ticket",
+        "column_name": "subject",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Ticket",
+        "column_name": "description",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Ticket",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'OPEN'::\"TicketStatus\""
+      },
+      {
+        "table_name": "Ticket",
+        "column_name": "clientId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "Ticket",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "Ticket",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "TicketReply": [
+      {
+        "table_name": "TicketReply",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "TicketReply",
+        "column_name": "ticketId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "TicketReply",
+        "column_name": "senderId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "TicketReply",
+        "column_name": "text",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "TicketReply",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      }
+    ],
+    "User": [
+      {
+        "table_name": "User",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "email",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "password",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "name",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "role",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'CLIENT'::\"RoleType\""
+      },
+      {
+        "table_name": "User",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "User",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "company",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "invitationExpires",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "invitationToken",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "phone",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "employeeId",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "User",
+        "column_name": "permissions",
+        "data_type": "ARRAY",
+        "is_nullable": "YES",
+        "column_default": "ARRAY[]::text[]"
+      },
+      {
+        "table_name": "User",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'ACTIVE'::\"UserStatus\""
+      },
+      {
+        "table_name": "User",
+        "column_name": "contractAmount",
+        "data_type": "double precision",
+        "is_nullable": "NO",
+        "column_default": "0"
+      }
+    ],
+    "VoiceCall": [
+      {
+        "table_name": "VoiceCall",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "VoiceCall",
+        "column_name": "sessionId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "VoiceCall",
+        "column_name": "status",
+        "data_type": "USER-DEFINED",
+        "is_nullable": "NO",
+        "column_default": "'RINGING'::\"VoiceCallStatus\""
+      },
+      {
+        "table_name": "VoiceCall",
+        "column_name": "startedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "VoiceCall",
+        "column_name": "answeredAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "VoiceCall",
+        "column_name": "endedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "VoiceCall",
+        "column_name": "createdAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": "CURRENT_TIMESTAMP"
+      },
+      {
+        "table_name": "VoiceCall",
+        "column_name": "updatedAt",
+        "data_type": "timestamp without time zone",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "WorkflowAction": [
+      {
+        "table_name": "WorkflowAction",
+        "column_name": "id",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "WorkflowAction",
+        "column_name": "workflowId",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "WorkflowAction",
+        "column_name": "type",
+        "data_type": "text",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "WorkflowAction",
+        "column_name": "config",
+        "data_type": "jsonb",
+        "is_nullable": "NO",
+        "column_default": null
+      }
+    ],
+    "_prisma_migrations": [
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "id",
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "checksum",
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "finished_at",
+        "data_type": "timestamp with time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "migration_name",
+        "data_type": "character varying",
+        "is_nullable": "NO",
+        "column_default": null
+      },
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "logs",
+        "data_type": "text",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "rolled_back_at",
+        "data_type": "timestamp with time zone",
+        "is_nullable": "YES",
+        "column_default": null
+      },
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "started_at",
+        "data_type": "timestamp with time zone",
+        "is_nullable": "NO",
+        "column_default": "now()"
+      },
+      {
+        "table_name": "_prisma_migrations",
+        "column_name": "applied_steps_count",
+        "data_type": "integer",
+        "is_nullable": "NO",
+        "column_default": "0"
+      }
+    ]
+  },
+  "constraints": [
+    {
+      "table_name": "Role",
+      "constraint_name": "Role_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Role",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Department",
+      "constraint_name": "Department_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Department",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Employee",
+      "constraint_name": "Employee_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Attendance",
+      "constraint_name": "Attendance_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Attendance",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AttendanceSession",
+      "constraint_name": "AttendanceSession_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AttendanceSession",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "BreakType",
+      "constraint_name": "BreakType_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "BreakType",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Break",
+      "constraint_name": "Break_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Break",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LoginSession",
+      "constraint_name": "LoginSession_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "LoginSession",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ActivityLog",
+      "constraint_name": "ActivityLog_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ActivityLog",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Leave",
+      "constraint_name": "Leave_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Leave",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Holiday",
+      "constraint_name": "Holiday_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Holiday",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "SystemSetting",
+      "constraint_name": "SystemSetting_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "SystemSetting",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AuditLog",
+      "constraint_name": "AuditLog_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AuditLog",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Notification",
+      "constraint_name": "Notification_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Notification",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "User",
+      "constraint_name": "User_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Project",
+      "constraint_name": "Project_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Project",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectUpdate",
+      "constraint_name": "ProjectUpdate_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ProjectUpdate",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectFile",
+      "constraint_name": "ProjectFile_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ProjectFile",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectMessage",
+      "constraint_name": "ProjectMessage_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ProjectMessage",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Lead",
+      "constraint_name": "Lead_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Lead",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadNote",
+      "constraint_name": "LeadNote_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "LeadNote",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadActivity",
+      "constraint_name": "LeadActivity_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "LeadActivity",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Ticket",
+      "constraint_name": "Ticket_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Ticket",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "TicketReply",
+      "constraint_name": "TicketReply_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "TicketReply",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Blog",
+      "constraint_name": "Blog_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Blog",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "BlogFAQ",
+      "constraint_name": "BlogFAQ_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "BlogFAQ",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Invoice",
+      "constraint_name": "Invoice_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Invoice",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Payment",
+      "constraint_name": "Payment_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Payment",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AdminTask",
+      "constraint_name": "AdminTask_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AdminTask",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AiPromptTemplate",
+      "constraint_name": "AiPromptTemplate_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AiPromptTemplate",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AiUsageHistory",
+      "constraint_name": "AiUsageHistory_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AiUsageHistory",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AutomationWorkflow",
+      "constraint_name": "AutomationWorkflow_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AutomationWorkflow",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "WorkflowAction",
+      "constraint_name": "WorkflowAction_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "WorkflowAction",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Campaign",
+      "constraint_name": "Campaign_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Campaign",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Prospect",
+      "constraint_name": "Prospect_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Prospect",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Meeting",
+      "constraint_name": "Meeting_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Meeting",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CallLog",
+      "constraint_name": "CallLog_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "CallLog",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "KbArticle",
+      "constraint_name": "KbArticle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "KbArticle",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CloudFolder",
+      "constraint_name": "CloudFolder_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "CloudFolder",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CloudFile",
+      "constraint_name": "CloudFile_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "CloudFile",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "IntegrationConfig",
+      "constraint_name": "IntegrationConfig_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "IntegrationConfig",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Page",
+      "constraint_name": "Page_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Page",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PageSection",
+      "constraint_name": "PageSection_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "PageSection",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PageRevision",
+      "constraint_name": "PageRevision_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "PageRevision",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ChatSession",
+      "constraint_name": "ChatSession_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ChatSession",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ChatMessage",
+      "constraint_name": "ChatMessage_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ChatMessage",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "VoiceCall",
+      "constraint_name": "VoiceCall_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "VoiceCall",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CallSignal",
+      "constraint_name": "CallSignal_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "CallSignal",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ClientPayment",
+      "constraint_name": "ClientPayment_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ClientPayment",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ClientUsage",
+      "constraint_name": "ClientUsage_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ClientUsage",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectMilestone",
+      "constraint_name": "ProjectMilestone_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ProjectMilestone",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ClientUpdate",
+      "constraint_name": "ClientUpdate_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "ClientUpdate",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadReminder",
+      "constraint_name": "LeadReminder_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "LeadReminder",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Author",
+      "constraint_name": "Author_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "Author",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CaseStudy",
+      "constraint_name": "CaseStudy_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "CaseStudy",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Employee",
+      "constraint_name": "Employee_roleId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "roleId",
+      "foreign_table_name": "Role",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Employee",
+      "constraint_name": "Employee_departmentId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "departmentId",
+      "foreign_table_name": "Department",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Employee",
+      "constraint_name": "Employee_userId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "userId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Attendance",
+      "constraint_name": "Attendance_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AttendanceSession",
+      "constraint_name": "AttendanceSession_attendanceId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "attendanceId",
+      "foreign_table_name": "Attendance",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AttendanceSession",
+      "constraint_name": "AttendanceSession_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Break",
+      "constraint_name": "Break_attendanceSessionId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "attendanceSessionId",
+      "foreign_table_name": "AttendanceSession",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Break",
+      "constraint_name": "Break_breakTypeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "breakTypeId",
+      "foreign_table_name": "BreakType",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LoginSession",
+      "constraint_name": "LoginSession_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ActivityLog",
+      "constraint_name": "ActivityLog_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Leave",
+      "constraint_name": "Leave_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Leave",
+      "constraint_name": "Leave_reviewedBy_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "reviewedBy",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AuditLog",
+      "constraint_name": "AuditLog_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Notification",
+      "constraint_name": "Notification_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Project",
+      "constraint_name": "Project_clientId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "clientId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectUpdate",
+      "constraint_name": "ProjectUpdate_projectId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "projectId",
+      "foreign_table_name": "Project",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectFile",
+      "constraint_name": "ProjectFile_projectId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "projectId",
+      "foreign_table_name": "Project",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectMessage",
+      "constraint_name": "ProjectMessage_projectId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "projectId",
+      "foreign_table_name": "Project",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Lead",
+      "constraint_name": "Lead_assignedEmployeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "assignedEmployeeId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadNote",
+      "constraint_name": "LeadNote_leadId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "leadId",
+      "foreign_table_name": "Lead",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadNote",
+      "constraint_name": "LeadNote_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadActivity",
+      "constraint_name": "LeadActivity_leadId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "leadId",
+      "foreign_table_name": "Lead",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadActivity",
+      "constraint_name": "LeadActivity_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Ticket",
+      "constraint_name": "Ticket_clientId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "clientId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "TicketReply",
+      "constraint_name": "TicketReply_ticketId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "ticketId",
+      "foreign_table_name": "Ticket",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Blog",
+      "constraint_name": "Blog_authorId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "authorId",
+      "foreign_table_name": "Author",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "BlogFAQ",
+      "constraint_name": "BlogFAQ_blogId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "blogId",
+      "foreign_table_name": "Blog",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Invoice",
+      "constraint_name": "Invoice_clientId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "clientId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Invoice",
+      "constraint_name": "Invoice_projectId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "projectId",
+      "foreign_table_name": "Project",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Payment",
+      "constraint_name": "Payment_invoiceId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "invoiceId",
+      "foreign_table_name": "Invoice",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AiUsageHistory",
+      "constraint_name": "AiUsageHistory_userId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "userId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "WorkflowAction",
+      "constraint_name": "WorkflowAction_workflowId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "workflowId",
+      "foreign_table_name": "AutomationWorkflow",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "Meeting",
+      "constraint_name": "Meeting_prospectId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "prospectId",
+      "foreign_table_name": "Prospect",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CallLog",
+      "constraint_name": "CallLog_prospectId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "prospectId",
+      "foreign_table_name": "Prospect",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CloudFile",
+      "constraint_name": "CloudFile_folderId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "folderId",
+      "foreign_table_name": "CloudFolder",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PageSection",
+      "constraint_name": "PageSection_pageId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "pageId",
+      "foreign_table_name": "Page",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PageRevision",
+      "constraint_name": "PageRevision_pageId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "pageId",
+      "foreign_table_name": "Page",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ChatSession",
+      "constraint_name": "ChatSession_leadId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "leadId",
+      "foreign_table_name": "Lead",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ChatMessage",
+      "constraint_name": "ChatMessage_sessionId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "sessionId",
+      "foreign_table_name": "ChatSession",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "VoiceCall",
+      "constraint_name": "VoiceCall_sessionId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "sessionId",
+      "foreign_table_name": "ChatSession",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "CallSignal",
+      "constraint_name": "CallSignal_callId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "callId",
+      "foreign_table_name": "VoiceCall",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ClientPayment",
+      "constraint_name": "ClientPayment_clientId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "clientId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ClientUsage",
+      "constraint_name": "ClientUsage_clientId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "clientId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ProjectMilestone",
+      "constraint_name": "ProjectMilestone_projectId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "projectId",
+      "foreign_table_name": "Project",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "ClientUpdate",
+      "constraint_name": "ClientUpdate_clientId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "clientId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadReminder",
+      "constraint_name": "LeadReminder_leadId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "leadId",
+      "foreign_table_name": "Lead",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "LeadReminder",
+      "constraint_name": "LeadReminder_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "User",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AgentEnrollmentToken",
+      "constraint_name": "AgentEnrollmentToken_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AgentEnrollmentToken",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AgentDevice",
+      "constraint_name": "AgentDevice_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "AgentDevice",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AgentEnrollmentToken",
+      "constraint_name": "AgentEnrollmentToken_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "AgentDevice",
+      "constraint_name": "AgentDevice_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PayrollRun",
+      "constraint_name": "PayrollRun_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "PayrollRun",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PayrollRecord",
+      "constraint_name": "PayrollRecord_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "PayrollRecord",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PayrollDeduction",
+      "constraint_name": "PayrollDeduction_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "PayrollDeduction",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PayrollRecord",
+      "constraint_name": "PayrollRecord_payrollRunId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "payrollRunId",
+      "foreign_table_name": "PayrollRun",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PayrollRecord",
+      "constraint_name": "PayrollRecord_employeeId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "employeeId",
+      "foreign_table_name": "Employee",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "PayrollDeduction",
+      "constraint_name": "PayrollDeduction_payrollRecordId_fkey",
+      "constraint_type": "FOREIGN KEY",
+      "column_name": "payrollRecordId",
+      "foreign_table_name": "PayrollRecord",
+      "foreign_column_name": "id"
+    },
+    {
+      "table_name": "_prisma_migrations",
+      "constraint_name": "_prisma_migrations_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "column_name": "id",
+      "foreign_table_name": "_prisma_migrations",
+      "foreign_column_name": "id"
+    }
+  ],
+  "counts": {
+    "ActivityLog": 53,
+    "AdminTask": 0,
+    "AgentDevice": 1,
+    "AgentEnrollmentToken": 1,
+    "AiPromptTemplate": 0,
+    "AiUsageHistory": 0,
+    "Attendance": 3,
+    "AttendanceSession": 5,
+    "AuditLog": 109,
+    "Author": 0,
+    "AutomationWorkflow": 0,
+    "Blog": 0,
+    "BlogFAQ": 0,
+    "Break": 5,
+    "BreakType": 11,
+    "CallLog": 0,
+    "CallSignal": 0,
+    "Campaign": 0,
+    "CaseStudy": 0,
+    "ChatMessage": 0,
+    "ChatSession": 0,
+    "ClientPayment": 0,
+    "ClientUpdate": 0,
+    "ClientUsage": 0,
+    "CloudFile": 0,
+    "CloudFolder": 0,
+    "Department": 5,
+    "Employee": 3,
+    "Holiday": 0,
+    "IntegrationConfig": 0,
+    "Invoice": 0,
+    "KbArticle": 0,
+    "Lead": 0,
+    "LeadActivity": 0,
+    "LeadNote": 0,
+    "LeadReminder": 0,
+    "Leave": 0,
+    "LoginSession": 12,
+    "Meeting": 0,
+    "Notification": 0,
+    "Page": 0,
+    "PageRevision": 0,
+    "PageSection": 0,
+    "Payment": 0,
+    "PayrollDeduction": 0,
+    "PayrollRecord": 0,
+    "PayrollRun": 0,
+    "Project": 0,
+    "ProjectFile": 0,
+    "ProjectMessage": 0,
+    "ProjectMilestone": 0,
+    "ProjectUpdate": 0,
+    "Prospect": 0,
+    "Role": 4,
+    "SystemSetting": 11,
+    "Ticket": 0,
+    "TicketReply": 0,
+    "User": 0,
+    "VoiceCall": 0,
+    "WorkflowAction": 0,
+    "_prisma_migrations": 2
+  },
+  "migrations": [
+    {
+      "id": "cff96dc6-2d76-496e-9fe0-06a27830e91c",
+      "checksum": "37797dd051774d53c700192ebba8e01c7d3df67267a14b391b9aeaf5ddb797d6",
+      "finished_at": "2026-09-17T15:12:46.205Z",
+      "migration_name": "0_baseline",
+      "logs": "",
+      "rolled_back_at": null,
+      "started_at": "2026-09-17T15:12:46.205Z",
+      "applied_steps_count": 0
+    },
+    {
+      "id": "6d231058-3908-44b9-ba83-f985e90affde",
+      "checksum": "c63f6caf51986367ba1e79479ce9df1f6bba4c79606b1dd2f518ee4dbc974c41",
+      "finished_at": "2026-09-17T15:19:35.014Z",
+      "migration_name": "20260917_add_payroll_department_snapshot",
+      "logs": null,
+      "rolled_back_at": null,
+      "started_at": "2026-09-17T15:19:34.108Z",
+      "applied_steps_count": 1
+    }
+  ]
+}

@@ -86,7 +86,7 @@ export async function GET(req: Request) {
         employeeProfile: {
           select: {
             designation: true,
-            salary: true,
+            monthlySalary: true,
             department: {
               select: {
                 id: true,
@@ -116,7 +116,7 @@ export async function GET(req: Request) {
       updatedAt: emp.updatedAt,
       department: emp.employeeProfile?.department?.name || null,
       designation: emp.employeeProfile?.designation || null,
-      salary: auth.user.role === "ADMIN" ? emp.employeeProfile?.salary : null,
+      salary: auth.user.role === "ADMIN" ? emp.employeeProfile?.monthlySalary : null,
       assignedLeadsCount: emp._count.assignedLeads,
     }));
 
@@ -180,10 +180,11 @@ export async function POST(req: Request) {
     // Find or create department if requested
     let departmentId: string | null = null;
     if (departmentName) {
+      const code = departmentName.replaceAll(" ", "_").toUpperCase().slice(0, 10);
       const dept = await prisma.department.upsert({
         where: { name: departmentName },
         update: {},
-        create: { name: departmentName },
+        create: { name: departmentName, code },
       });
       departmentId = dept.id;
     }
@@ -214,6 +215,12 @@ export async function POST(req: Request) {
            }
         }
 
+        const targetRoleName = role === "ADMIN" ? "ADMIN" : "EMPLOYEE";
+        let defaultRole = await prisma.role.findFirst({ where: { name: targetRoleName as any } });
+        if (!defaultRole) {
+          defaultRole = await prisma.role.create({ data: { name: targetRoleName as any, description: `${targetRoleName} Role` } });
+        }
+
         // Create user and employee profile
         newEmployee = await prisma.user.create({
           data: {
@@ -227,9 +234,15 @@ export async function POST(req: Request) {
             permissions,
             employeeProfile: {
               create: {
+                employeeId: currentEmployeeId,
+                employeeCode: currentEmployeeId.replace("-", ""),
+                fullName: name,
+                email: email,
+                passwordHash: hashedPassword,
+                roleId: defaultRole.id,
                 designation,
                 departmentId,
-                salary: body.salary ? parseFloat(body.salary) : null,
+                monthlySalary: body.salary ? parseFloat(body.salary) : null,
               },
             },
           },

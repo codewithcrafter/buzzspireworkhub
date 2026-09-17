@@ -1,62 +1,40 @@
-import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/prisma";
-import { verifyJwt } from "@/lib/auth";
+import { verifyAuthToken } from "@/lib/auth/jwt";
+import { SessionService } from "@/services/session.service";
+import { EmployeeService } from "@/services/employee.service";
+import { ApiResponse } from "@/lib/api-response";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-    try {
-        const cookieStore = await cookies();
-        const token = cookieStore.get("token")?.value;
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value || cookieStore.get("employee_token")?.value;
 
-        if (!token) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        const payload = await verifyJwt(token);
-
-        if (!payload || !payload.id) {
-            return NextResponse.json(
-                { error: "Invalid or expired token" },
-                { status: 401 }
-            );
-        }
-
-        const user = await prisma.user.findUnique({
-            where: {
-                id: payload.id as string,
-            },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                role: true,
-                createdAt: true,
-                updatedAt: true,
-            },
-        });
-
-        if (!user) {
-            return NextResponse.json(
-                { error: "User not found" },
-                { status: 404 }
-            );
-        }
-
-        return NextResponse.json(
-            {
-                user,
-            },
-            { status: 200 }
-        );
-    } catch (error) {
-        console.error("Auth Me Error:", error);
-
-        return NextResponse.json(
-            { error: "Internal Server Error" },
-            { status: 500 }
-        );
+    if (!token) {
+      return ApiResponse.unauthorized("Authentication required");
     }
+
+    const payload = await verifyAuthToken(token);
+    if (!payload || !payload.sessionId) {
+      return ApiResponse.unauthorized("Invalid or expired session token");
+    }
+
+    const session = await SessionService.validate(payload.sessionId);
+    if (!session || !session.employee) {
+      return ApiResponse.unauthorized("Session revoked or expired");
+    }
+
+    const safeUser = EmployeeService.sanitizeEmployee(session.employee);
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        user: safeUser,
+      },
+      // Top-level fields for backwards compatibility with any existing components
+      user: safeUser,
+    });
+  } catch (error) {
+    return ApiResponse.serverError("Auth Me Error", error);
+  }
 }

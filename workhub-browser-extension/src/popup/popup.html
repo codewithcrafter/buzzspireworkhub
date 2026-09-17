@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WorkHub Extension</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h1>BuzzSpire WorkHub</h1>
+  </div>
+
+  <div id="unauth-view" class="view">
+    <p>Connect to WorkHub</p>
+    <div class="form-group">
+      <label for="server-url">WorkHub Server URL</label>
+      <input type="text" id="server-url" placeholder="http://localhost:3000">
+    </div>
+    <div class="form-group">
+      <label for="enroll-token">Pairing Token</label>
+      <input type="password" id="enroll-token" placeholder="Enter token from Admin">
+    </div>
+    <button id="btn-connect" class="primary-btn">Connect</button>
+    <div id="connect-error" class="error-msg" style="display: none;"></div>
+  </div>
+
+  <div id="auth-view" class="view" style="display: none;">
+    <div class="status-card">
+      <div class="status-row">
+        <span>Status:</span>
+        <span id="status-indicator" class="status-online">Connected</span>
+      </div>
+      <div class="status-row">
+        <span>Employee:</span>
+        <span id="employee-name">-</span>
+      </div>
+      <div class="status-row">
+        <span>Device:</span>
+        <span id="device-name">-</span>
+      </div>
+      <div class="status-row">
+        <span>Last Sync:</span>
+        <span id="last-sync">-</span>
+      </div>
+      <div class="status-row">
+        <span>Monitoring:</span>
+        <span>Website domain activity</span>
+      </div>
+    </div>
+    
+    <div class="privacy-notice">
+      <strong>Privacy:</strong> Only website domain and activity duration are collected.
+    </div>
+
+    <div class="actions">
+      <button id="btn-test" class="secondary-btn">Connection Test</button>
+      <button id="btn-sync" class="secondary-btn">Sync Status</button>
+      <button id="btn-privacy" class="secondary-btn">Privacy Info</button>
+      <button id="btn-disconnect" class="danger-btn">Disconnect / Revoke</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -6,12 +6,13 @@ const securityHeaders = [
   { key: 'X-XSS-Protection', value: '1; mode=block' },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
-  { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-src 'self' https://www.google.com https://maps.google.com" }
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
+  { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none';" }
 ];
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["192.168.1.128", "localhost"],
+  poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
@@ -30,29 +31,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async redirects() {
-    return [
-      {
-        source: '/services',
-        destination: '/digital-marketing-agency-in-delhi',
-        permanent: true,
-      },
-      {
-        source: '/digital-marketing-agency',
-        destination: '/digital-marketing-agency-in-delhi',
-        permanent: true,
-      },
-      {
-        source: '/digital-marketing',
-        destination: '/digital-marketing-agency-in-delhi',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default nextConfig;
-
-// Force Next.js server restart for Prisma schema reload
-
-// Force restart to clear Prisma cache for isNotified

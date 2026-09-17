@@ -152,7 +152,7 @@
   transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Custom shadow effects for luxury agency cards */
+/* Custom shadow effects for enterprise WorkHub cards */
 .shadow-premium {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
 }

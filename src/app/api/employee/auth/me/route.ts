@@ -29,8 +29,7 @@ export async function GET(req: Request) {
         employeeProfile: {
           select: {
             designation: true,
-            role: true,
-            salary: true,
+            monthlySalary: true,
             department: {
               select: {
                 id: true,

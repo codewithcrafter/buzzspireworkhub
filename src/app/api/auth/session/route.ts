@@ -11,9 +11,9 @@ export async function GET(req: Request) {
     const auth = await authenticateRequest(req);
     if (!auth.authenticated) return auth.response;
 
-    const { id, name, email, role, permissions } = auth.user;
+    const { id, name, email, role, employeeId, employeeCode } = auth.user;
 
-    return NextResponse.json({ user: { id, name, email, role, permissions } }, { status: 200 });
+    return NextResponse.json({ user: { id, name, email, role, employeeId, employeeCode } }, { status: 200 });
   } catch (error) {
     console.error("Session route error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

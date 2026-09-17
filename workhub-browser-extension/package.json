@@ -1,0 +1,15 @@
+{
+  "name": "workhub-browser-extension",
+  "version": "0.1.0",
+  "description": "BuzzSpire WorkHub Transparent Website Activity Monitor",
+  "scripts": {
+    "build": "esbuild src/background/worker.ts src/popup/popup.ts --bundle --outdir=dist --minify",
+    "dev": "esbuild src/background/worker.ts src/popup/popup.ts --bundle --outdir=dist --watch",
+    "copy-assets": "cp manifest.json dist/ && cp src/popup/popup.html dist/popup.html && cp src/popup/popup.css dist/popup.css"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.3.0",
+    "esbuild": "^0.20.1",
+    "typescript": "^5.4.2"
+  }
+}

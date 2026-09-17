@@ -1,114 +1,79 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
-import { signJwt } from "@/lib/auth";
+import { AuthService } from "@/services/auth.service";
 import { ApiResponse } from "@/lib/api-response";
-import { rateLimit } from "@/lib/rate-limit";
-
-const limiter = rateLimit({
-  uniqueTokenPerInterval: 500,
-  interval: 60000,
-});
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
-    await limiter.check(10, ip); // Max 10 attempts per min per IP
+    const ipAddress = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "127.0.0.1";
+    const userAgent = req.headers.get("user-agent") || undefined;
+
+    // Apply Rate Limiting (5 attempts per minute per IP)
+    const rateCheck = checkRateLimit(`login-${ipAddress}`, { limit: 5, windowMs: 60 * 1000 });
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck.reset);
+    }
 
     const body = await req.json();
-    const identifier = (body.employeeId || body.identifier || body.email || "").trim();
-    const password = body.password;
+    const identifier = (body.employeeId || body.identifier || body.email || "").toString().trim();
+    const password = (body.password || "").toString();
 
     if (!identifier || !password) {
-      return ApiResponse.badRequest("Employee ID and password are required");
+      return ApiResponse.badRequest("Employee ID and password are required.", req);
     }
 
-    // Lookup user by employeeId (case-insensitive) or email
-    const user = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { employeeId: { equals: identifier, mode: "insensitive" } },
-          { email: identifier.toLowerCase() },
-        ],
-      },
-      include: {
-        employeeProfile: {
-          include: {
-            department: true,
-          },
-        },
-      },
+    const result = await AuthService.login({
+      identifier,
+      password,
+      ipAddress,
+      userAgent,
+      portalType: "EMPLOYEE",
     });
 
-    if (!user || !user.password) {
-      return ApiResponse.unauthorized("Invalid Employee ID or password");
+    if (!result.success || !result.user) {
+      return ApiResponse.error(result.message || "Authentication failed", result.status || 401, result.code || "UNAUTHORIZED", req);
     }
-
-    // Role check: must be EMPLOYEE or ADMIN
-    if (user.role !== "EMPLOYEE" && user.role !== "ADMIN") {
-      return ApiResponse.forbidden("Access denied: Not an employee account");
-    }
-
-    // Status check
-    if (user.status !== "ACTIVE") {
-      return ApiResponse.forbidden(
-        `Account is ${user.status.toLowerCase()}. Please contact the administrator.`
-      );
-    }
-
-    // Verify bcrypt password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return ApiResponse.unauthorized("Invalid Employee ID or password");
-    }
-
-    // Create session JWT
-    const token = await signJwt({
-      id: user.id,
-      email: user.email,
-      employeeId: user.employeeId,
-      name: user.name,
-      role: user.role,
-      permissions: user.permissions,
-    });
-
-    // Sanitized user response
-    const sanitizedUser = {
-      id: user.id,
-      employeeId: user.employeeId,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      status: user.status,
-      permissions: user.permissions,
-      department: user.employeeProfile?.department?.name || null,
-      designation: user.employeeProfile?.designation || null,
-    };
 
     const response = NextResponse.json(
       {
         success: true,
         message: "Login successful",
-        user: sanitizedUser,
+        user: result.user,
+        data: {
+          user: result.user,
+          redirectUrl: "/dashboard",
+        },
       },
       { status: 200 }
     );
 
-    // Set secure HttpOnly cookie
-    response.cookies.set("employee_token", token, {
+    // Set secure HttpOnly cookies
+    response.cookies.set("employee_token", result.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24, // 24 hours
+      maxAge: 60 * 60 * 24,
       path: "/",
     });
-    
-    // Clear any stale admin session
-    response.cookies.delete("token");
+
+    response.cookies.set("token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
+
+    response.cookies.set("workhub_token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
 
     return response;
   } catch (error) {
-    console.error("Employee login error:", error);
-    return ApiResponse.serverError("Employee login error", error);
+    return ApiResponse.serverError("Employee Login Error", error, req);
   }
 }

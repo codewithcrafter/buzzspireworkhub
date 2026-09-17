@@ -37,7 +37,7 @@ export async function GET(req: Request, { params }: RouteParams) {
         employeeProfile: {
           select: {
             designation: true,
-            salary: true,
+            monthlySalary: true,
             department: {
               select: {
                 id: true,
@@ -86,7 +86,7 @@ export async function GET(req: Request, { params }: RouteParams) {
           updatedAt: employee.updatedAt,
           department: employee.employeeProfile?.department?.name || null,
           designation: employee.employeeProfile?.designation || null,
-          salary: auth.user.role === "ADMIN" ? employee.employeeProfile?.salary : null,
+          salary: auth.user.role === "ADMIN" ? employee.employeeProfile?.monthlySalary : null,
           assignedLeadsCount: employee._count.assignedLeads,
           recentLeads: employee.assignedLeads,
         },
@@ -172,16 +172,26 @@ export async function PATCH(req: Request, { params }: RouteParams) {
     if (body.department !== undefined) {
       const deptName = body.department ? String(body.department).trim() : "";
       if (deptName) {
+        const code = deptName.replaceAll(" ", "_").toUpperCase().slice(0, 10);
         const dept = await prisma.department.upsert({
           where: { name: deptName },
           update: {},
-          create: { name: deptName },
+          create: { name: deptName, code },
         });
         departmentId = dept.id;
       } else {
         departmentId = null;
       }
     }
+
+    const targetRoleName = (updateData.role || existingEmployee.role) === "ADMIN" ? "ADMIN" : "EMPLOYEE";
+    let defaultRole = await prisma.role.findFirst({ where: { name: targetRoleName as any } });
+    if (!defaultRole) {
+      defaultRole = await prisma.role.create({ data: { name: targetRoleName as any, description: `${targetRoleName} Role` } });
+    }
+
+    const empId = existingEmployee.employeeId || `EMP-${Date.now()}`;
+    const empCode = empId.replace("-", "");
 
     // Perform update
     const updated = await prisma.user.update({
@@ -191,13 +201,19 @@ export async function PATCH(req: Request, { params }: RouteParams) {
         employeeProfile: {
           upsert: {
             create: {
+              employeeId: empId,
+              employeeCode: empCode,
+              fullName: existingEmployee.name,
+              email: existingEmployee.email,
+              passwordHash: existingEmployee.password || "N/A",
+              roleId: defaultRole.id,
               designation: body.designation !== undefined ? body.designation : null,
-              salary: body.salary !== undefined ? parseFloat(body.salary) : null,
+              monthlySalary: body.salary !== undefined ? parseFloat(body.salary) : null,
               departmentId: departmentId,
             },
             update: {
               ...(body.designation !== undefined ? { designation: body.designation } : {}),
-              ...(body.salary !== undefined ? { salary: parseFloat(body.salary) } : {}),
+              ...(body.salary !== undefined ? { monthlySalary: parseFloat(body.salary) } : {}),
               ...(departmentId !== undefined ? { departmentId } : {}),
             },
           },

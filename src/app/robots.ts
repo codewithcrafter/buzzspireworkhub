@@ -1,16 +1,13 @@
 import { MetadataRoute } from "next";
 
-const BASE_URL = "https://www.buzzspiremedia.com";
-
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/admin/", "/dashboard/", "/api/", "/invite/"],
+        allow: ["/login"],
+        disallow: ["/api/", "/dashboard/", "/attendance/", "/employees/", "/departments/", "/leaves/", "/holidays/", "/reports/", "/audit/", "/settings/", "/profile/"],
       },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

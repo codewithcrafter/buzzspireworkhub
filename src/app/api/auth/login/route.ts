@@ -1,93 +1,82 @@
-import { ApiResponse } from "@/lib/api-response";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
-import { signJwt } from "@/lib/auth";
-import { rateLimit } from "@/lib/rate-limit";
-
-const limiter = rateLimit({
-  uniqueTokenPerInterval: 500,
-  interval: 60000,
-});
+import { AuthService } from "@/services/auth.service";
+import { ApiResponse } from "@/lib/api-response";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
-    await limiter.check(10, ip); // Max 10 logins per minute per IP
+    const ipAddress = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "127.0.0.1";
     
-    const { email, password } = await req.json();
-
-    const normalizedEmail = email.trim().toLowerCase();
-
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: "Email and password are required" },
-        { status: 400 }
-      );
+    // Apply Rate Limiting (5 attempts per minute per IP)
+    const rateCheck = checkRateLimit(`login-${ipAddress}`, { limit: 5, windowMs: 60 * 1000 });
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck.reset);
     }
 
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: {
-        email: normalizedEmail,
-      },
+    const body = await req.json();
+    const identifier = (body.identifier || body.email || body.employeeId || "").toString().trim();
+    const password = (body.password || "").toString();
+
+    const userAgent = req.headers.get("user-agent") || undefined;
+
+    if (!identifier || !password) {
+      return ApiResponse.badRequest("Email or Employee ID and password are required.");
+    }
+
+    const result = await AuthService.login({
+      identifier,
+      password,
+      ipAddress,
+      userAgent,
+      portalType: "MANAGEMENT",
     });
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: 401 }
-      );
+    if (!result.success || !result.user) {
+      return ApiResponse.error(result.message || "Authentication failed", result.status || 401, result.code || "UNAUTHORIZED");
     }
 
-    if (!user.password) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: 401 }
-      );
-    }
+    // Redirect routing based on role
+    const redirectUrl = result.user.role === "EMPLOYEE" ? "/staff-dashboard" : "/dashboard";
 
-    // Verify password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: 401 }
-      );
-    }
-
-    // Create JWT
-    const token = await signJwt({ id: user.id, email: user.email, role: user.role });
-
-    // Set cookie
     const response = NextResponse.json(
       {
+        success: true,
         message: "Login successful",
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
+        data: {
+          user: result.user,
+          redirectUrl,
         },
       },
       { status: 200 }
     );
 
-    response.cookies.set("token", token, {
+    // Set secure HTTP-only auth cookies
+    response.cookies.set("token", result.token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24, // 24 hours
+      path: "/",
+    });
+
+    response.cookies.set("workhub_token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 60 * 60 * 24,
       path: "/",
     });
-    
-    // Clear any stale employee session to avoid session collision
-    response.cookies.delete("employee_token");
+
+    response.cookies.set("employee_token", result.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
 
     return response;
   } catch (error) {
-    console.error("Login error:", error);
-    return ApiResponse.serverError("Login Error", error);
+    return ApiResponse.serverError("Auth Login Route Error", error);
   }
 }

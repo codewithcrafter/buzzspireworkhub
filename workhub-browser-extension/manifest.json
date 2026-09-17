@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "BuzzSpire WorkHub Extension",
+  "version": "0.1.0",
+  "description": "Transparent website domain activity monitor for WorkHub.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "idle"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "WorkHub Status"
+  }
+}

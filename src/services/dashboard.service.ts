@@ -1,94 +1,206 @@
 import { prisma } from "@/lib/prisma";
+import { getStartOfDay, getEndOfDay } from "@/lib/date";
 
-export async function getDashboardStats() {
-    const [
-        clientsCount,
-        leadsCount,
-        projectsCount,
-        successfulPayments,
-        recentLeads,
-        recentClientsRaw,
-        activities,
-        tasks
-    ] = await Promise.all([
-        prisma.user.count({ where: { role: "CLIENT" } }),
-        prisma.lead.count(),
-        prisma.project.count(),
-        prisma.payment.aggregate({
-            where: { status: "SUCCESS" },
-            _sum: { amount: true }
-        }),
-        prisma.lead.findMany({
-            take: 5,
-            orderBy: { createdAt: "desc" }
-        }),
-        prisma.user.findMany({
-            where: { role: "CLIENT" },
-            take: 5,
-            orderBy: { createdAt: "desc" },
-            include: { invoices: { include: { payments: { where: { status: "SUCCESS" } } } } }
-        }),
-        prisma.activityLog.findMany({
-            take: 10,
-            orderBy: { createdAt: "desc" }
-        }),
-        prisma.adminTask.findMany({
-            orderBy: { createdAt: "desc" }
-        })
-    ]);
+export interface WorkHubDashboardStats {
+  // Employee counts
+  totalEmployees: number;
+  activeEmployees: number;
+  newThisMonth: number;
 
-    const revenue = successfulPayments._sum.amount || 0;
+  // Today's attendance
+  presentToday: number;
+  absentToday: number;
+  lateToday: number;
+  onLeaveToday: number;
+  attendanceRate: number;
 
-    const recentClients = recentClientsRaw.map(client => {
-        const clientRevenue = client.invoices.reduce(
-            (sum, inv) => sum + inv.payments.reduce((pSum, p) => pSum + p.amount, 0), 
-            0
-        );
-        return {
-            id: client.id,
-            name: client.name,
-            company: client.company || "N/A",
-            status: "active", // can make dynamic later
-            revenue: `₹${clientRevenue.toLocaleString("en-IN")}`,
-            joined: new Date(client.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-        };
-    });
+  // Pending actions
+  pendingLeaves: number;
+  upcomingHolidays: UpcomingHoliday[];
 
-    const formattedLeads = recentLeads.map(lead => ({
-        id: lead.id,
-        name: lead.name,
-        company: lead.company || "N/A",
-        value: lead.budget || "₹0",
-        status: lead.status.toLowerCase(),
-        time: new Date(lead.createdAt).toLocaleDateString()
-    }));
+  // Recent activity
+  recentActivity: RecentActivity[];
+}
 
-    const formattedActivities = activities.map(act => ({
-        id: act.id,
-        user: act.user,
-        avatar: act.avatar,
-        action: act.action,
-        target: act.target,
-        time: new Date(act.createdAt).toLocaleDateString(),
-        type: act.type
-    }));
+export interface UpcomingHoliday {
+  id: string;
+  name: string;
+  date: Date;
+  type: string;
+  daysUntil: number;
+}
 
-    const formattedTasks = tasks.map(task => ({
-        id: task.id,
-        title: task.title,
-        completed: task.completed,
-        dueDate: task.dueDate || "No Date",
-        priority: task.priority as "high" | "medium" | "low"
-    }));
+export interface RecentActivity {
+  id: string;
+  actorName: string;
+  action: string;
+  module: string;
+  description: string;
+  createdAt: Date;
+}
 
+/**
+ * Aggregates real WorkHub KPIs for the dashboard overview.
+ *
+ * - totalEmployees / activeEmployees / newThisMonth: from Employee table
+ * - presentToday / absentToday / lateToday / onLeaveToday: from Attendance table
+ * - pendingLeaves: from Leave table (status=PENDING)
+ * - upcomingHolidays: next 30 days from Holiday table
+ * - recentActivity: last 10 ActivityLog entries
+ *
+ * @param scope  Optional department filter for Manager-scoped views.
+ */
+export async function getWorkHubDashboardStats(
+  scope?: { departmentId?: string | null }
+): Promise<WorkHubDashboardStats> {
+  const now = new Date();
+  const startOfToday = getStartOfDay(now);
+  const endOfToday = getEndOfDay(now);
+
+  // Month boundaries for "new this month"
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  // 30-day window for upcoming holidays
+  const in30Days = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+  // Optional department scope (for MANAGER role)
+  const deptFilter = scope?.departmentId
+    ? { departmentId: scope.departmentId }
+    : {};
+
+  const [
+    totalEmployees,
+    activeEmployees,
+    newThisMonth,
+    todayAttendances,
+    pendingLeaves,
+    upcomingHolidaysRaw,
+    recentActivityRaw,
+  ] = await Promise.all([
+    // 1. Total active employees (scoped)
+    prisma.employee.count({
+      where: { status: "ACTIVE", ...deptFilter },
+    }),
+
+    // 2. Active employees total
+    prisma.employee.count({
+      where: { status: "ACTIVE", ...deptFilter },
+    }),
+
+    // 3. New this month
+    prisma.employee.count({
+      where: {
+        status: "ACTIVE",
+        createdAt: { gte: startOfMonth },
+        ...deptFilter,
+      },
+    }),
+
+    // 4. Today's attendance records (with isLate flag)
+    prisma.attendance.findMany({
+      where: {
+        date: { gte: startOfToday, lte: endOfToday },
+        ...(scope?.departmentId
+          ? { employee: { departmentId: scope.departmentId } }
+          : {}),
+      },
+      select: {
+        status: true,
+        isLate: true,
+      },
+    }),
+
+    // 5. Pending leave requests (scoped)
+    prisma.leave.count({
+      where: {
+        status: "PENDING",
+        ...(scope?.departmentId
+          ? { employee: { departmentId: scope.departmentId } }
+          : {}),
+      },
+    }),
+
+    // 6. Upcoming holidays (next 30 days)
+    prisma.holiday.findMany({
+      where: {
+        status: "ACTIVE",
+        date: { gte: now, lte: in30Days },
+      },
+      orderBy: { date: "asc" },
+      take: 5,
+    }),
+
+    // 7. Recent activity logs (last 10)
+    prisma.activityLog.findMany({
+      take: 10,
+      orderBy: { createdAt: "desc" },
+      include: {
+        employee: {
+          select: { fullName: true },
+        },
+      },
+    }),
+  ]);
+
+  // Compute today attendance breakdown
+  const presentToday = todayAttendances.filter(
+    (a) => a.status === "PRESENT" || a.status === "LATE" || a.status === "HALF_DAY"
+  ).length;
+  const absentToday = todayAttendances.filter(
+    (a) => a.status === "ABSENT"
+  ).length;
+  const lateToday = todayAttendances.filter((a) => a.isLate).length;
+  const onLeaveToday = todayAttendances.filter(
+    (a) => a.status === "ON_LEAVE"
+  ).length;
+
+  const attendanceRate =
+    totalEmployees > 0
+      ? Math.round((presentToday / totalEmployees) * 1000) / 10
+      : 0;
+
+  // Map upcoming holidays
+  const upcomingHolidays: UpcomingHoliday[] = upcomingHolidaysRaw.map((h) => {
+    const msUntil = h.date.getTime() - now.getTime();
+    const daysUntil = Math.max(0, Math.ceil(msUntil / (1000 * 60 * 60 * 24)));
     return {
-        clients: clientsCount,
-        leads: leadsCount,
-        projects: projectsCount,
-        revenue,
-        recentLeads: formattedLeads,
-        recentClients,
-        activities: formattedActivities,
-        tasks: formattedTasks
+      id: h.id,
+      name: h.name,
+      date: h.date,
+      type: h.type,
+      daysUntil,
     };
+  });
+
+  // Map recent activity
+  const recentActivity: RecentActivity[] = recentActivityRaw.map((a) => ({
+    id: a.id,
+    actorName: a.employee?.fullName ?? "System",
+    action: a.action,
+    module: a.module,
+    description: a.description,
+    createdAt: a.createdAt,
+  }));
+
+  return {
+    totalEmployees,
+    activeEmployees,
+    newThisMonth,
+    presentToday,
+    absentToday,
+    lateToday,
+    onLeaveToday,
+    attendanceRate,
+    pendingLeaves,
+    upcomingHolidays,
+    recentActivity,
+  };
+}
+
+/**
+ * @deprecated Legacy agency function — kept for backward-compat.
+ * Use getWorkHubDashboardStats() for the WorkHub dashboard.
+ */
+export async function getDashboardStats() {
+  return getWorkHubDashboardStats();
 }
