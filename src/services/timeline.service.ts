@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getStartOfDay, getEndOfDay, getKolkataDateString } from "@/lib/date";
 
 export type TimelineEventType = 
   | 'ATTENDANCE_PUNCH_IN' 
@@ -33,10 +34,8 @@ export interface TimelineEvent {
 
 export class TimelineService {
   static async getEmployeeTimeline(employeeId: string, targetDate: Date): Promise<TimelineEvent[]> {
-    const startOfDay = new Date(targetDate);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(targetDate);
-    endOfDay.setHours(23, 59, 59, 999);
+    const startOfDay = getStartOfDay(targetDate);
+    const endOfDay = getEndOfDay(targetDate);
 
     const employee = await prisma.employee.findUnique({
       where: { id: employeeId },
@@ -53,7 +52,7 @@ export class TimelineService {
       employeeName: employee.fullName,
       employeeCode: employee.employeeCode,
       department: employee.department?.name || null,
-      date: startOfDay.toISOString().split("T")[0],
+      date: getKolkataDateString(targetDate),
     };
 
     // 1. Fetch Attendances & Sessions

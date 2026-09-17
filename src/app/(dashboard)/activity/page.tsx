@@ -14,12 +14,13 @@ export default function AdminActivityDashboard() {
   React.useEffect(() => {
     async function loadEmployees() {
       try {
-        const res = await fetch("/api/admin/employees");
+        const res = await fetch("/api/employees?limit=100");
         if (res.ok) {
           const d = await res.json();
-          setEmployees(d.data?.employees || []);
-          if (d.data?.employees?.length > 0) {
-            setSelectedEmployeeId(d.data.employees[0].id);
+          const emps = d.data?.employees || d.employees || [];
+          setEmployees(emps);
+          if (emps.length > 0) {
+            setSelectedEmployeeId(emps[0].id);
           }
         }
       } catch (e) {
