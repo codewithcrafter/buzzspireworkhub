@@ -36,7 +36,30 @@ def get_active_window_info():
     try:
         if pid > 0:
             process = psutil.Process(pid)
-            app_name = process.name().replace(".exe", "")
+            raw_name = process.name().replace(".exe", "").lower()
+            
+            # Map common names to human-readable forms
+            app_map = {
+                "chrome": "Google Chrome",
+                "msedge": "Microsoft Edge",
+                "firefox": "Mozilla Firefox",
+                "brave": "Brave Browser",
+                "code": "VS Code",
+                "devenv": "Visual Studio",
+                "excel": "Microsoft Excel",
+                "winword": "Microsoft Word",
+                "powerpnt": "Microsoft PowerPoint",
+                "explorer": "File Explorer",
+                "teams": "Microsoft Teams",
+                "zoom": "Zoom",
+                "notepad": "Notepad"
+            }
+            app_name = app_map.get(raw_name, process.name().replace(".exe", ""))
+            
+            # Privacy safe: drop window title for browsers since the extension tracks URLs safely
+            if raw_name in ["chrome", "msedge", "firefox", "brave"]:
+                title = None
+                
     except (psutil.NoSuchProcess, psutil.AccessDenied):
         pass
         

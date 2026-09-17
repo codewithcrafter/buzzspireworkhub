@@ -10,7 +10,8 @@ import {
   AppWindow, 
   Clock, 
   RotateCcw,
-  Activity
+  Activity,
+  Moon
 } from "lucide-react";
 import { TimelineEvent } from "@/services/timeline.service";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -134,6 +135,10 @@ export function UnifiedTimeline({ employeeId, date }: UnifiedTimelineProps) {
               Icon = MonitorOff;
               colorClass = "bg-amber-50 text-amber-400 ring-amber-50";
               break;
+            case 'IDLE_STATE':
+              Icon = Moon;
+              colorClass = "bg-zinc-100 text-zinc-500 ring-zinc-50";
+              break;
             case 'WEBSITE_ACTIVITY':
               Icon = Globe;
               colorClass = "bg-sky-100 text-sky-600 ring-sky-50";
@@ -193,12 +198,25 @@ export function UnifiedTimeline({ employeeId, date }: UnifiedTimelineProps) {
                     </p>
                   )}
                   
-                  {ev.source && (
-                    <div className="mt-3 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="size-1.5 rounded-full bg-slate-300" />
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                        {ev.source}
-                      </span>
+                  {(ev.source || ev.metadata?.deviceName) && (
+                    <div className="mt-3 flex items-center gap-2 flex-wrap opacity-0 group-hover:opacity-100 transition-opacity">
+                      {ev.source && (
+                        <div className="flex items-center gap-1.5">
+                          <div className="size-1.5 rounded-full bg-slate-300" />
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                            {ev.source}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {ev.metadata?.deviceName && (
+                        <div className="flex items-center gap-1.5">
+                          <div className="size-1.5 rounded-full bg-indigo-300" />
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-400">
+                            Device: {ev.metadata.deviceName}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

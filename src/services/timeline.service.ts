@@ -13,6 +13,7 @@ export type TimelineEventType =
   | 'SESSION_LOGIN' 
   | 'SESSION_LOGOUT' 
   | 'SESSION_RECOVERY'
+  | 'IDLE_STATE'
   | 'OTHER_ACTIVITY';
 
 export interface TimelineEvent {
@@ -157,6 +158,12 @@ export class TimelineService {
       }
     });
 
+    const agentDevices = await prisma.agentDevice.findMany({
+      where: { employeeId },
+      select: { deviceId: true, deviceName: true }
+    });
+    const deviceMap = new Map(agentDevices.map(d => [d.deviceId, d.deviceName]));
+
     for (const log of activityLogs) {
       // Map action strings to event types
       let mappedType: TimelineEventType = 'OTHER_ACTIVITY';
@@ -178,6 +185,9 @@ export class TimelineService {
       } else if (a.includes('RECOVERY')) {
         mappedType = 'SESSION_RECOVERY';
         title = 'Session Recovery';
+      } else if (a === 'IDLE_STATE') {
+        mappedType = 'IDLE_STATE';
+        title = 'Idle';
       }
 
       // Skip redundant BREAK or PUNCH activities if they are captured by the primary attendance loop
@@ -197,6 +207,10 @@ export class TimelineService {
         durationSeconds = Math.floor((endedAt.getTime() - log.createdAt.getTime()) / 1000);
       }
 
+      if (meta && meta.deviceId && !meta.deviceName) {
+        meta.deviceName = deviceMap.get(meta.deviceId);
+      }
+
       events.push({
         ...baseInfo,
         id: `activity-${log.id}`,
@@ -207,7 +221,7 @@ export class TimelineService {
         endedAt,
         durationSeconds,
         source: log.module,
-        metadata: log.metadata
+        metadata: meta
       });
     }
 
