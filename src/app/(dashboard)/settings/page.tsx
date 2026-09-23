@@ -87,6 +87,9 @@ export default function SettingsPage() {
   >("general");
 
   const [devices, setDevices] = React.useState<any[]>([]);
+  const [employees, setEmployees] = React.useState<any[]>([]);
+  const [pairingCodeOpen, setPairingCodeOpen] = React.useState(false);
+  const [pairingData, setPairingData] = React.useState<{code: string, expiresAt: string, employee: any} | null>(null);
   const [tokenLoading, setTokenLoading] = React.useState(false);
 
   const [saving, setSaving] = React.useState(false);
@@ -157,39 +160,47 @@ export default function SettingsPage() {
     }
     loadIdleSettings();
 
-    async function fetchDevices() {
+    async function fetchMonitoringData() {
       try {
-        const res = await fetch("/api/activity/agent/devices");
-        if (res.ok) {
-          const d = await res.json();
+        const [devicesRes, employeesRes] = await Promise.all([
+          fetch("/api/activity/agent/devices"),
+          fetch("/api/employees?limit=1000")
+        ]);
+        
+        if (devicesRes.ok) {
+          const d = await devicesRes.json();
           setDevices(d.data || []);
+        }
+        if (employeesRes.ok) {
+          const e = await employeesRes.json();
+          setEmployees(e.data?.employees || e.employees || []);
         }
       } catch (e) {}
     }
-    fetchDevices();
+    fetchMonitoringData();
   }, []);
 
-  const handleGenerateToken = async () => {
+  const handlePairDevice = async (employee: any) => {
     setTokenLoading(true);
-    const employeeId = prompt("Enter the Internal Employee UUID to generate token for:");
-    if (!employeeId) {
-      setTokenLoading(false);
-      return;
-    }
     try {
-      const res = await fetch("/api/activity/agent/enroll/token", {
+      const res = await fetch("/api/activity/agent/pair", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ employeeId })
+        body: JSON.stringify({ employeeId: employee.id })
       });
       const d = await res.json();
       if (d.success) {
-        alert("Enrollment Token Generated:\n\n" + d.data.token + "\n\nProvide this to the employee. It expires in 24 hours.");
+        setPairingData({
+          code: d.data.code,
+          expiresAt: d.data.expiresAt,
+          employee: d.data.employee
+        });
+        setPairingCodeOpen(true);
       } else {
         alert("Error: " + d.error);
       }
     } catch (e) {
-      alert("Failed to generate token");
+      alert("Failed to generate pairing code");
     } finally {
       setTokenLoading(false);
     }
@@ -876,6 +887,130 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* SECTION 6: ACTIVITY MONITORING */}
+      {activeSection === "monitoring" && (
+        <Card className="rounded-2xl border-slate-200/80 shadow-sm bg-white">
+          <CardHeader className="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Activity className="size-5 text-indigo-600" />
+                Employee Devices & Pairing
+              </CardTitle>
+              <CardDescription className="text-xs text-slate-500 mt-1">
+                Manage enrolled devices and generate pairing codes for employees
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200 text-xs text-slate-500 uppercase tracking-wider font-semibold">
+                    <th className="px-6 py-4">Employee</th>
+                    <th className="px-6 py-4">Department</th>
+                    <th className="px-6 py-4">Device</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {employees.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-8 text-center text-sm text-slate-500">
+                        No employees found.
+                      </td>
+                    </tr>
+                  ) : (
+                    employees.map(employee => {
+                      const device = devices.find(d => d.employeeId === employee.id && d.status === "ACTIVE");
+                      
+                      return (
+                        <tr key={employee.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-6 py-4">
+                            <p className="text-sm font-bold text-slate-900">{employee.fullName}</p>
+                            <p className="text-xs text-slate-500">{employee.role?.name}</p>
+                          </td>
+                          <td className="px-6 py-4">
+                            <p className="text-sm text-slate-700">{employee.department?.name || "—"}</p>
+                          </td>
+                          <td className="px-6 py-4">
+                            {device ? (
+                              <p className="text-sm font-semibold text-slate-800">{device.deviceName || "Active Device"}</p>
+                            ) : (
+                              <p className="text-sm text-slate-400 italic">Not Paired</p>
+                            )}
+                          </td>
+                          <td className="px-6 py-4">
+                            {device ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <span className="size-1.5 rounded-full bg-emerald-500"></span>
+                                ACTIVE
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                UNPAIRED
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            {device ? (
+                              <Button 
+                                variant="outline" 
+                                className="text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 rounded-xl text-xs h-8" 
+                                onClick={() => handleRevokeDevice(device.deviceId)}
+                              >
+                                Revoke
+                              </Button>
+                            ) : (
+                              <Button 
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs h-8 shadow-sm" 
+                                onClick={() => handlePairDevice(employee)}
+                                disabled={tokenLoading}
+                              >
+                                Pair Device
+                              </Button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Pairing Code Modal */}
+      <Dialog
+        isOpen={pairingCodeOpen}
+        onClose={() => setPairingCodeOpen(false)}
+        title="Pair Employee Device"
+        description={`Use this pairing code on the WorkHub Agent for ${pairingData?.employee?.fullName}.`}
+      >
+        <div className="flex flex-col items-center justify-center py-6 space-y-6">
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 w-full text-center shadow-inner">
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Pairing Code</p>
+            <div className="text-5xl font-black text-indigo-700 tracking-[0.2em] font-mono select-all">
+              {pairingData?.code}
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2 text-sm font-semibold text-amber-700 bg-amber-50 px-4 py-3 rounded-xl border border-amber-100 w-full justify-center">
+            <Clock className="size-4" />
+            <span>Expires in: 10 minutes</span>
+          </div>
+          
+          <Button 
+            className="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold"
+            onClick={() => setPairingCodeOpen(false)}
+          >
+            Close
+          </Button>
+        </div>
+      </Dialog>
 
       {/* Reset Confirmation Dialog */}
       <Dialog

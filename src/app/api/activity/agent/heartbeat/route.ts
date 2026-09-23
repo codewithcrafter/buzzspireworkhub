@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { AgentService } from "@/services/agent.service";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -14,9 +15,35 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { agentVersion } = body;
+    const { agentVersion, osIdleSeconds } = body;
 
     await AgentService.recordHeartbeat(device.deviceId, agentVersion || "unknown");
+
+    if (typeof osIdleSeconds === "number") {
+      const lastHeartbeat = await prisma.activityLog.findFirst({
+        where: { employeeId: device.employeeId, action: "LATEST_HEARTBEAT", module: "AGENT" },
+      });
+      
+      if (lastHeartbeat) {
+        await prisma.activityLog.update({
+          where: { id: lastHeartbeat.id },
+          data: {
+            metadata: { deviceId: device.deviceId, osIdleSeconds },
+            createdAt: new Date()
+          }
+        });
+      } else {
+        await prisma.activityLog.create({
+          data: {
+            employeeId: device.employeeId,
+            action: "LATEST_HEARTBEAT",
+            module: "AGENT",
+            description: "Latest Heartbeat State",
+            metadata: { deviceId: device.deviceId, osIdleSeconds }
+          }
+        });
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

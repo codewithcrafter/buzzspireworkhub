@@ -1,6 +1,6 @@
 {
   "server_url": "http://localhost:3000",
-  "device_id": "a22e774e-f691-4665-8aa4-aad6d998ac11",
-  "credential": "b57af79dcbec6e2d1113506b10776c85ea477945878d2c91a1fb94123f827fbd",
-  "employee_id": "f8a0e8b2-c09d-40df-a0af-179e19485fc5"
+  "device_id": "98786086-631c-4753-b960-ea331d45c924",
+  "credential": null,
+  "employee_id": null
 }

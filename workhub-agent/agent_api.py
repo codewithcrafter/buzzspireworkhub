@@ -24,28 +24,37 @@ class ApiClient:
                     config.credential = data["data"]["credential"]
                     config.employee_id = data["data"]["employeeId"]
                     config.save()
-                    return True, "Enrolled successfully"
+                    return True, data["data"]
             return False, res.json().get("error", "Unknown error")
         except Exception as e:
             return False, str(e)
 
-    def heartbeat(self):
+    def heartbeat(self, os_idle_seconds=0):
         if not config.credential:
-            return
+            return "unauthorized"
         try:
             url = f"{config.server_url}/api/activity/agent/heartbeat"
-            requests.post(url, headers=self.headers(), json={
-                "agentVersion": AGENT_VERSION
+            res = requests.post(url, headers=self.headers(), json={
+                "agentVersion": AGENT_VERSION,
+                "osIdleSeconds": os_idle_seconds
             }, timeout=60)
-        except:
-            pass
+            if res.status_code in [401, 403]:
+                return "revoked"
+            elif res.status_code == 200:
+                return "ok"
+            else:
+                return "unreachable"
+        except requests.exceptions.RequestException:
+            return "unreachable"
+        except Exception:
+            return "unreachable"
 
     def sync_events(self):
         if not config.credential:
-            return
+            return "unauthorized"
         batch = storage.get_batch(50)
         if not batch:
-            return
+            return "ok"
         
         try:
             url = f"{config.server_url}/api/activity/agent/events"
@@ -55,11 +64,13 @@ class ApiClient:
             
             if res.status_code == 200 and res.json().get("success"):
                 storage.remove_batch(len(batch))
+                return "ok"
             elif res.status_code in [401, 403]:
-                # Credential revoked or invalid. Stop syncing to prevent spam.
-                print("Credential invalid. Please re-enroll.")
-        except Exception as e:
+                # Credential revoked or invalid.
+                return "revoked"
+            return "unreachable"
+        except Exception:
             # Network issue, leave in queue
-            pass
+            return "unreachable"
 
 api = ApiClient()

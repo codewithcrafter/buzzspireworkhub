@@ -19,6 +19,34 @@ export class AgentService {
   }
 
   /**
+   * Generates a short-lived 6-digit numeric pairing code.
+   */
+  static async generatePairingCode(employeeId: string, expiresInMinutes: number = 10) {
+    // 1. Invalidate any existing unused tokens for this employee to prevent code hoarding
+    await prisma.agentEnrollmentToken.updateMany({
+      where: {
+        employeeId,
+        isUsed: false,
+      },
+      data: {
+        isUsed: true,
+      },
+    });
+
+    // 2. Generate secure 6-digit code
+    const code = crypto.randomInt(100000, 999999).toString();
+    const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000);
+
+    return await prisma.agentEnrollmentToken.create({
+      data: {
+        token: code,
+        employeeId,
+        expiresAt,
+      },
+    });
+  }
+
+  /**
    * Exchanges an enrollment token for a persistent device credential.
    */
   static async enrollDevice(tokenStr: string, deviceId: string, deviceName: string) {
@@ -26,44 +54,53 @@ export class AgentService {
       where: { token: tokenStr },
     });
 
-    if (!token || token.isUsed || token.expiresAt < new Date()) {
-      throw new Error("Invalid or expired enrollment token");
+    if (!token) {
+      throw new Error("Invalid pairing code.");
+    }
+    if (token.isUsed) {
+      throw new Error("This pairing code has already been used.");
+    }
+    if (token.expiresAt < new Date()) {
+      throw new Error("This pairing code has expired.");
     }
 
-    // Mark used
-    await prisma.agentEnrollmentToken.update({
-      where: { id: token.id },
-      data: { isUsed: true },
-    });
-
-    // Check if device already exists, or create new
     const credential = crypto.randomBytes(32).toString("hex");
 
     const existingDevice = await prisma.agentDevice.findUnique({
       where: { deviceId },
     });
 
-    if (existingDevice) {
-      return await prisma.agentDevice.update({
-        where: { deviceId },
+    return await prisma.$transaction(async (tx) => {
+      // Mark used atomically with device creation/update
+      await tx.agentEnrollmentToken.update({
+        where: { id: token.id },
+        data: { isUsed: true },
+      });
+
+      if (existingDevice) {
+        return await tx.agentDevice.update({
+          where: { deviceId },
+          data: {
+            employeeId: token.employeeId,
+            credential,
+            deviceName,
+            status: "ACTIVE",
+            enrolledAt: new Date(),
+            revokedAt: null,
+          },
+          include: { employee: true },
+        });
+      }
+
+      return await tx.agentDevice.create({
         data: {
+          deviceId,
           employeeId: token.employeeId,
           credential,
           deviceName,
-          status: "ACTIVE",
-          enrolledAt: new Date(),
-          revokedAt: null,
         },
+        include: { employee: true },
       });
-    }
-
-    return await prisma.agentDevice.create({
-      data: {
-        deviceId,
-        employeeId: token.employeeId,
-        credential,
-        deviceName,
-      },
     });
   }
 

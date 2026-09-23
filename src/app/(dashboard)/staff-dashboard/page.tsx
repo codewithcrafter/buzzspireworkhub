@@ -176,41 +176,60 @@ export default function StaffDashboardPage() {
 
   const state: AttendanceState = today?.currentState ?? "NOT_PUNCHED_IN";
 
-  // ── Idle Detection ──
+  // ── Idle Detection (Authoritative Polling) ──
   const [showIdleWarning, setShowIdleWarning] = React.useState(false);
   const [idleDetectedAt, setIdleDetectedAt] = React.useState<number | null>(null);
   const [idleStep, setIdleStep] = React.useState<"WARNING" | "PURPOSE">("WARNING");
-  const idleTimerRef = React.useRef<NodeJS.Timeout | null>(null);
   const fallbackTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  const triggerIdle = React.useCallback(() => {
-    if (showIdleWarning || !idleConfig.enabled) return;
-    setIdleDetectedAt(Date.now() - (idleConfig.thresholdMinutes * 60000));
-    setIdleStep("WARNING");
-    setShowIdleWarning(true);
-  }, [showIdleWarning, idleConfig]);
-
-  const resetIdleTimer = React.useCallback(() => {
-    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-    if (state === "WORKING" && !showIdleWarning && idleConfig.enabled) {
-      idleTimerRef.current = setTimeout(triggerIdle, idleConfig.thresholdMinutes * 60000);
+  const pollIdleStatus = React.useCallback(async () => {
+    if (state !== "WORKING" || showIdleWarning || !idleConfig.enabled) return;
+    try {
+      const res = await fetch("/api/attendance/idle/status", {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          if (data.data.thresholdMinutes !== undefined) {
+            setIdleConfig(prev => ({ 
+              ...prev, 
+              enabled: data.data.enabled !== false,
+              thresholdMinutes: data.data.thresholdMinutes 
+            }));
+          }
+          if (data.data.idle) {
+            setIdleDetectedAt(new Date(data.data.idleDetectedAt).getTime());
+            setIdleStep("WARNING");
+            setShowIdleWarning(true);
+          }
+        }
+      }
+    } catch (e) {
+      // Ignore network errors during polling
     }
-  }, [state, showIdleWarning, triggerIdle, idleConfig]);
+  }, [state, showIdleWarning, idleConfig]);
 
   React.useEffect(() => {
-    if (state !== "WORKING" || showIdleWarning || !idleConfig.enabled) {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      return;
-    }
-    resetIdleTimer();
-    const handleActivity = () => resetIdleTimer();
-    const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
-    events.forEach((e) => window.addEventListener(e, handleActivity));
-    return () => {
-      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      events.forEach((e) => window.removeEventListener(e, handleActivity));
+    if (state !== "WORKING" || showIdleWarning || !idleConfig.enabled) return;
+    
+    // Poll every 30 seconds
+    const interval = setInterval(pollIdleStatus, 30000);
+    
+    // Also check immediately when returning to the tab
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        pollIdleStatus();
+      }
     };
-  }, [state, showIdleWarning, resetIdleTimer, idleConfig]);
+    document.addEventListener("visibilitychange", handleVisibility);
+    
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [state, showIdleWarning, idleConfig, pollIdleStatus]);
 
   // ─── Fetch all data ─────────────────────────────────────────────────────────
 
@@ -445,7 +464,6 @@ export default function StaffDashboardPage() {
   const handleIdleYes = async () => {
     setShowIdleWarning(false);
     setIdleDetectedAt(null);
-    resetIdleTimer();
     toast({
       title: "✓ Working Confirmed",
       description: `Working status confirmed at ${fmtTimeFull(new Date().toISOString())}`,
@@ -864,7 +882,7 @@ export default function StaffDashboardPage() {
               {idleStep === "WARNING" ? (
                 <div className="space-y-8">
                   <p className="text-slate-600 text-center font-medium text-lg leading-relaxed">
-                    We haven&apos;t detected any activity for the last 2 minutes.
+                    We haven&apos;t detected any activity for the last {idleConfig.thresholdMinutes} minute{idleConfig.thresholdMinutes === 1 ? "" : "s"}.
                   </p>
                   
                   <div className="flex flex-col gap-3">

@@ -77,10 +77,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       
       if (res.ok && data.success) {
         await chrome.storage.local.set({
-          credential: data.credential,
+          credential: data.data.credential,
           deviceId: deviceId,
           serverUrl: serverUrl,
-          employeeName: data.employeeName,
+          employeeName: data.data.employeeName,
           deviceName: browserInfo,
           lastSync: Date.now()
         });
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         unauthView.style.display = 'none';
         authView.style.display = 'block';
         
-        employeeName.textContent = data.employeeName;
+        employeeName.textContent = data.data.employeeName;
         deviceName.textContent = browserInfo;
         lastSync.textContent = new Date().toLocaleTimeString();
       } else {

@@ -2,13 +2,18 @@ import os
 import json
 import uuid
 import socket
+import sys
 
 AGENT_VERSION = "0.1.0"
 CONFIG_FILE = "agent_config.json"
 
 class Config:
     def __init__(self):
-        self.server_url = "http://localhost:3000"
+        if getattr(sys, 'frozen', False):
+            self.server_url = "https://employee.buzzspiremedia.com"
+        else:
+            self.server_url = "http://localhost:3000"
+        
         self.device_id = str(uuid.uuid4())
         self.device_name = socket.gethostname()
         self.credential = None

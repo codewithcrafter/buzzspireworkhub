@@ -20,6 +20,8 @@ export async function POST(req: Request) {
       data: {
         credential: device.credential,
         employeeId: device.employeeId,
+        employeeName: (device as any).employee?.fullName || "Unknown",
+        deviceName: device.deviceName,
       },
     });
   } catch (error: any) {

@@ -3,6 +3,7 @@ import { getStartOfDay, getEndOfDay, calculateDurationSeconds, getKolkataDateStr
 import { AuditService } from "./audit.service";
 import { ActivityService } from "./activity.service";
 import { HREngineService } from "./hr-engine.service";
+import { SettingsService } from "./settings.service";
 
 export class AttendanceService {
   /**
@@ -161,7 +162,9 @@ export class AttendanceService {
         },
       });
 
-      const lateCalc = calculateLateStatus(now, employee.shiftStart || "09:00", 15);
+      const officeStart = (await SettingsService.get("office_start_time")) || employee.shiftStart || "10:00";
+      const lateGrace = parseInt((await SettingsService.get("late_grace_minutes")) || "15", 10);
+      const lateCalc = calculateLateStatus(now, officeStart, lateGrace);
 
       if (!attendance) {
         attendance = await tx.attendance.create({
