@@ -59,11 +59,6 @@ def run_watchdog():
     enable_startup()
     
     while True:
-        if not has_credential():
-            # If not paired, just sleep and wait. The agent GUI handles pairing.
-            time.sleep(5)
-            continue
-            
         pid = find_running_agent_pid()
         if pid:
             print(f"Agent is already running (PID: {pid}). Supervising...")
@@ -90,11 +85,21 @@ def run_watchdog():
         else:
             print("Agent not running. Starting it...")
             try:
-                subprocess.Popen([TARGET_EXE])
+                startupinfo = subprocess.STARTUPINFO()
+                startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+                startupinfo.wShowWindow = 1
+                subprocess.Popen([TARGET_EXE], startupinfo=startupinfo)
                 time.sleep(2)
             except Exception as e:
                 print(f"Failed to start agent: {e}")
                 time.sleep(5)
 
+import winerror
+
 if __name__ == "__main__":
+    mutex_name = "Global\\BuzzSpireWorkHubWatchdog_Mutex"
+    mutex = win32event.CreateMutex(None, False, mutex_name)
+    if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
+        sys.exit(0)
+        
     run_watchdog()

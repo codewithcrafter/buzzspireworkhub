@@ -46,6 +46,10 @@ export default function EmployeesPage() {
 
   // Employee state (initialized from centralized mock data)
   const [employees, setEmployees] = React.useState<MockEmployee[]>(MOCK_EMPLOYEES);
+
+  // Departments state
+  const [departments, setDepartments] = React.useState<any[]>([]);
+  const [departmentsLoading, setDepartmentsLoading] = React.useState(true);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [departmentFilter, setDepartmentFilter] = React.useState("ALL");
   const [statusFilter, setStatusFilter] = React.useState("ALL");
@@ -64,7 +68,7 @@ export default function EmployeesPage() {
   const [formName, setFormName] = React.useState("");
   const [formEmail, setFormEmail] = React.useState("");
   const [formPhone, setFormPhone] = React.useState("");
-  const [formDept, setFormDept] = React.useState("Engineering");
+  const [formDept, setFormDept] = React.useState("");
   const [formRole, setFormRole] = React.useState<MockEmployee["role"]>("EMPLOYEE");
   const [formDesignation, setFormDesignation] = React.useState("");
   const [formErrors, setFormErrors] = React.useState<Record<string, string>>({});
@@ -139,7 +143,8 @@ export default function EmployeesPage() {
     setFormName("");
     setFormEmail("");
     setFormPhone("");
-    setFormDept("Engineering");
+    const activeDepts = departments.filter((d) => d.status === "ACTIVE");
+    setFormDept(activeDepts.length > 0 ? activeDepts[0].id : "");
     setFormRole("EMPLOYEE");
     setFormDesignation("");
     setFormErrors({});
@@ -156,7 +161,7 @@ export default function EmployeesPage() {
     setFormName(emp.fullName);
     setFormEmail(emp.email);
     setFormPhone(emp.phone);
-    setFormDept(emp.departmentName);
+    setFormDept(emp.departmentId || "");
     setFormRole(emp.role);
     setFormDesignation(emp.designation);
     setFormErrors({});
@@ -295,9 +300,28 @@ export default function EmployeesPage() {
     }
   }, []);
 
+  // Load departments from real API
+  const loadDepartments = React.useCallback(async () => {
+    try {
+      setDepartmentsLoading(true);
+      const res = await fetch("/api/departments");
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.departments || json.data?.departments)) {
+          setDepartments(json.departments || json.data?.departments);
+        }
+      }
+    } catch {
+      // Graceful fallback
+    } finally {
+      setDepartmentsLoading(false);
+    }
+  }, []);
+
   React.useEffect(() => {
     loadEmployees();
-  }, [loadEmployees]);
+    loadDepartments();
+  }, [loadEmployees, loadDepartments]);
 
   // Add Employee Handler
   const handleAddSubmit = async (e: React.FormEvent) => {
@@ -313,7 +337,7 @@ export default function EmployeesPage() {
         phone: formPhone.trim() || undefined,
         designation: formDesignation.trim(),
         role: formRole,
-        departmentName: formDept,
+        departmentId: formDept,
         // Admin-set login credentials — employeeCode is the login ID
         employeeCode: formLoginId.trim().toUpperCase(),
         password: formPassword,
@@ -355,6 +379,7 @@ export default function EmployeesPage() {
         email: formEmail.trim(),
         phone: formPhone.trim() || null,
         designation: formDesignation.trim(),
+        departmentId: formDept,
       }),
     });
     const data = await res.json().catch(() => ({}));
@@ -444,7 +469,8 @@ export default function EmployeesPage() {
               className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
             >
               <option value="ALL">All Departments</option>
-              {MOCK_DEPARTMENTS.map((d) => (
+              {departmentsLoading ? <option value="ALL">Loading...</option> : null}
+              {departments.map((d) => (
                 <option key={d.id} value={d.name}>
                   {d.name}
                 </option>
@@ -708,11 +734,19 @@ export default function EmployeesPage() {
                 onChange={(e) => setFormDept(e.target.value)}
                 className="w-full h-9 text-xs px-3 rounded-lg border border-slate-200 bg-white text-slate-800 focus:ring-1 focus:ring-indigo-500"
               >
-                {MOCK_DEPARTMENTS.map((d) => (
-                  <option key={d.id} value={d.name}>
-                    {d.name}
-                  </option>
-                ))}
+                {departmentsLoading ? (
+                  <option value="">Loading departments...</option>
+                ) : departments.filter((d) => d.status === "ACTIVE").length === 0 ? (
+                  <option value="">No active departments available</option>
+                ) : (
+                  departments
+                    .filter((d) => d.status === "ACTIVE")
+                    .map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))
+                )}
               </select>
             </div>
 
@@ -915,11 +949,19 @@ export default function EmployeesPage() {
                 onChange={(e) => setFormDept(e.target.value)}
                 className="w-full h-9 text-xs px-3 rounded-lg border border-slate-200 bg-white text-slate-800"
               >
-                {MOCK_DEPARTMENTS.map((d) => (
-                  <option key={d.id} value={d.name}>
-                    {d.name}
-                  </option>
-                ))}
+                {departmentsLoading ? (
+                  <option value="">Loading departments...</option>
+                ) : departments.filter((d) => d.status === "ACTIVE").length === 0 ? (
+                  <option value="">No active departments available</option>
+                ) : (
+                  departments
+                    .filter((d) => d.status === "ACTIVE")
+                    .map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))
+                )}
               </select>
             </div>
 
