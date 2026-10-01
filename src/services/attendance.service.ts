@@ -558,6 +558,101 @@ export class AttendanceService {
   }
 
   /**
+   * Resumes an accidentally ended shift for an employee (Admin-only).
+   */
+  static async resumeShift(
+    attendanceId: string,
+    adminId: string,
+    reason: string,
+    ipAddress?: string,
+    userAgent?: string
+  ) {
+    return prisma.$transaction(async (tx) => {
+      // 1. Find the attendance record and its sessions
+      const attendance = await tx.attendance.findUnique({
+        where: { id: attendanceId },
+        include: { sessions: { orderBy: { createdAt: "asc" } } },
+      });
+
+      if (!attendance) {
+        throw new Error("ATTENDANCE_NOT_FOUND");
+      }
+
+      // 2. Prevent resuming if already active
+      const activeSession = attendance.sessions.find(s => !s.punchOut);
+      if (activeSession) {
+        throw new Error("SHIFT_ALREADY_ACTIVE");
+      }
+
+      // 3. Prevent resuming if there are no sessions
+      if (attendance.sessions.length === 0) {
+        throw new Error("NO_PUNCH_IN_FOUND");
+      }
+
+      // 4. Find the last session
+      const lastSession = attendance.sessions[attendance.sessions.length - 1];
+      const previousCheckOut = lastSession.punchOut;
+      const originalCheckIn = lastSession.punchIn;
+
+      // 5. Re-open the last session by nullifying punchOut
+      await tx.attendanceSession.update({
+        where: { id: lastSession.id },
+        data: {
+          punchOut: null,
+        },
+      });
+
+      // 6. Recalculate working and break seconds for the previously closed sessions
+      const allOtherSessions = attendance.sessions.filter(s => s.id !== lastSession.id);
+      const closedSessionsSum = allOtherSessions.reduce((sum, s) => sum + (s.workingSeconds || 0), 0);
+
+      const allSessionsWithBreaks = await tx.attendanceSession.findMany({
+        where: { attendanceId: attendance.id },
+        include: { breaks: true },
+      });
+
+      const totalBreaks = allSessionsWithBreaks
+        .flatMap((s) => s.breaks)
+        .reduce((sum, b) => sum + (b.durationSeconds || 0), 0);
+
+      const netWorking = Math.max(0, closedSessionsSum - totalBreaks);
+
+      // 7. Update the parent attendance container
+      await tx.attendance.update({
+        where: { id: attendance.id },
+        data: {
+          checkOut: null,
+          totalWorkingSeconds: closedSessionsSum,
+          totalBreakSeconds: totalBreaks,
+          netWorkingSeconds: netWorking,
+        },
+      });
+
+      // 8. Audit Log (Required)
+      await tx.auditLog.create({
+        data: {
+          employeeId: attendance.employeeId,
+          action: "ATTENDANCE_SHIFT_RESUMED",
+          module: "ATTENDANCE",
+          description: `Admin resumed shift. Reason: ${reason}`,
+          ipAddress: ipAddress || null,
+          userAgent: userAgent || null,
+          metadata: {
+            attendanceId,
+            sessionId: lastSession.id,
+            previousCheckOut,
+            originalCheckIn,
+            reason,
+            adminId,
+          },
+        },
+      });
+
+      return attendance;
+    });
+  }
+
+  /**
    * Retrieves paginated attendance history for an employee.
    */
   static async getEmployeeAttendanceHistory(

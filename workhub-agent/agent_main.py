@@ -261,12 +261,30 @@ class AgentGUI:
                     self.icon = None
                     self.root.deiconify()
                 self.build_ui()
-            elif self.daemon.status == "unreachable":
-                if hasattr(self, 'status_label'):
-                    self.status_label.config(text="WorkHub server unavailable", fg="red")
             elif self.daemon.status == "ok":
                 if hasattr(self, 'status_label'):
                     self.status_label.config(text="● Monitoring Active", fg="blue")
+            else:
+                if hasattr(self, 'status_label'):
+                    error_map = {
+                        "dns_error": "DNS Resolution Failed",
+                        "timeout": "Connection Timed Out",
+                        "conn_refused": "Connection Refused",
+                        "tls_error": "TLS/Certificate Error",
+                        "proxy_error": "Proxy Error",
+                        "conn_reset": "Connection Reset",
+                        "net_unreachable": "Network Unreachable",
+                        "conn_error": "Network Connection Error",
+                        "net_error": "Network Temporarily Unavailable",
+                        "http_404": "Server Endpoint Not Found (404)",
+                        "http_429": "Too Many Requests (429)",
+                    }
+                    if self.daemon.status.startswith("http_"):
+                        msg = f"Server Error ({self.daemon.status.split('_')[1]})"
+                    else:
+                        msg = error_map.get(self.daemon.status, "Network Temporarily Unavailable")
+                    
+                    self.status_label.config(text=f"Retrying: {msg}", fg="orange")
         
         self.root.after(1000, self.poll_daemon_status)
 

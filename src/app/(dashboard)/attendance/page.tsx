@@ -70,6 +70,10 @@ export default function AttendancePage() {
   const [detailModalOpen, setDetailModalOpen] = React.useState(false);
   const [selectedRecord, setSelectedRecord] = React.useState<ExtendedRecord | null>(null);
 
+  const [resumeModalOpen, setResumeModalOpen] = React.useState(false);
+  const [resumeReason, setResumeReason] = React.useState("");
+  const [isResuming, setIsResuming] = React.useState(false);
+
   React.useEffect(() => {
     async function loadLiveAttendance() {
       try {
@@ -113,6 +117,44 @@ export default function AttendancePage() {
     loadLiveAttendance();
   }, [selectedDate]);
 
+  const loadLiveAttendanceManual = async () => {
+    try {
+      const res = await fetch(`/api/admin/live-attendance?date=${selectedDate}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.success && Array.isArray(data.liveStates) && data.liveStates.length > 0) {
+        const mapped: ExtendedRecord[] = data.liveStates.map((s: any, idx: number) => {
+          const hrs = Math.floor((s.netWorkingSeconds || 0) / 3600);
+          const mins = Math.floor(((s.netWorkingSeconds || 0) % 3600) / 60);
+          return {
+            id: s.employeeId || `att-${idx}`,
+            employeeId: s.employeeId,
+            employeeName: s.fullName,
+            employeeCode: s.employeeCode,
+            department: s.department || "General",
+            designation: s.designation || "Staff",
+            checkIn: s.punchIn ? new Date(s.punchIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
+            checkOut: s.currentState === "COMPLETED" ? new Date(s.lastPunchOut || new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
+            workingHours: `${hrs}h ${mins}m`,
+            breakDuration: `${Math.floor((s.totalBreakSeconds || 0) / 60)}m`,
+            totalBreakCount: (s.breakHistory || []).length,
+            declaredBreakSeconds: s.declaredBreakSeconds || 0,
+            idleBreakSeconds: s.idleBreakSeconds || 0,
+            totalBreakSeconds: s.totalBreakSeconds || 0,
+            status: s.currentState === "ABSENT" ? "ABSENT" : "PRESENT",
+            liveState: s.currentState as any,
+            breakHistory: s.breakHistory || [],
+            shortfallMinutes: s.shortfallMinutes || 0,
+            overtimeMinutes: s.overtimeMinutes || 0,
+            earlyLogoutMinutes: s.earlyLogoutMinutes || 0,
+            lateMinutes: s.lateMinutes || 0,
+          };
+        });
+        setRecords(mapped);
+      }
+    } catch {}
+  };
+
   // Filters
   const filteredRecords = React.useMemo(() => {
     return records.filter((rec) => {
@@ -152,6 +194,36 @@ export default function AttendancePage() {
   const handleOpenDetail = (rec: ExtendedRecord) => {
     setSelectedRecord(rec);
     setDetailModalOpen(true);
+  };
+
+  const handleResumeShift = async () => {
+    if (!selectedRecord) return;
+    if (!resumeReason.trim()) {
+      toast({ title: "Reason Required", description: "Please provide a reason.", type: "error" });
+      return;
+    }
+    try {
+      setIsResuming(true);
+      const res = await fetch(`/api/admin/attendance/${selectedRecord.id}/resume`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: resumeReason }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast({ title: "Shift Resumed", description: "The employee's shift has been successfully resumed." });
+        setResumeModalOpen(false);
+        setDetailModalOpen(false);
+        setResumeReason("");
+        await loadLiveAttendanceManual();
+      } else {
+        toast({ title: "Failed to resume shift", description: data.message || "An error occurred.", type: "error" });
+      }
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, type: "error" });
+    } finally {
+      setIsResuming(false);
+    }
   };
 
   const getStatusBadge = (status: ExtendedRecord["status"]) => {
@@ -622,7 +694,19 @@ export default function AttendancePage() {
               <div>Shift logged in Asia/Kolkata timezone. IP verified from internal corporate subnet.</div>
             </div>
 
-            <div className="flex justify-end pt-3 border-t border-slate-100">
+            <div className="flex justify-between pt-3 border-t border-slate-100">
+              {selectedRecord.liveState === "COMPLETED" ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setResumeModalOpen(true)}
+                  className="text-xs rounded-xl bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
+                >
+                  Resume Shift
+                </Button>
+              ) : (
+                <div />
+              )}
               <Button
                 variant="outline"
                 size="sm"
@@ -634,6 +718,53 @@ export default function AttendancePage() {
             </div>
           </div>
         )}
+      </Dialog>
+
+      {/* ── MODAL: RESUME SHIFT ────────────────────────────────────────────── */}
+      <Dialog
+        isOpen={resumeModalOpen}
+        onClose={() => setResumeModalOpen(false)}
+        title="Resume Shift"
+        description="Are you sure you want to resume this employee's shift?"
+      >
+        <div className="space-y-4 py-2">
+          <p className="text-sm text-slate-600">
+            <strong>{selectedRecord?.employeeName}</strong> ({selectedRecord?.employeeCode})<br />
+            Date: {selectedDate}<br />
+            Original Check In: {selectedRecord?.checkIn}<br />
+            Current Check Out: {selectedRecord?.checkOut}
+          </p>
+          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-800 text-xs font-medium">
+            The Check Out will be removed and the employee will return to an active working state. The original Check In time will remain unchanged.
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-slate-700 mb-1 block">Reason for Correction <span className="text-rose-500">*</span></label>
+            <Input
+              value={resumeReason}
+              onChange={(e) => setResumeReason(e.target.value)}
+              placeholder="e.g. Employee accidentally punched out"
+              className="text-sm rounded-xl h-10 border-slate-200"
+            />
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setResumeModalOpen(false)}
+              className="text-xs rounded-xl"
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleResumeShift}
+              disabled={isResuming}
+              className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl"
+            >
+              {isResuming ? "Resuming..." : "Resume Shift"}
+            </Button>
+          </div>
+        </div>
       </Dialog>
     </div>
   );
