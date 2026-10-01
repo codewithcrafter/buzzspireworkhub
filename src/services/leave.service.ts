@@ -197,6 +197,30 @@ export class LeaveService {
 
     const totalDays = this.calculateLeaveDays(start, end);
 
+    if (params.leaveType.trim().toUpperCase() === "PAID") {
+      const targetMonth = start.getMonth();
+      const targetYear = start.getFullYear();
+
+      const existingPaidLeaves = await prisma.leave.findMany({
+        where: {
+          employeeId,
+          leaveType: "PAID",
+          status: { in: ["PENDING", "APPROVED"] },
+        },
+      });
+
+      let usedInMonth = 0;
+      for (const l of existingPaidLeaves) {
+        if (l.startDate.getMonth() === targetMonth && l.startDate.getFullYear() === targetYear) {
+          usedInMonth += l.totalDays;
+        }
+      }
+
+      if (usedInMonth + totalDays > 1) {
+        throw new Error("PAID_LEAVE_LIMIT_EXCEEDED");
+      }
+    }
+
     const leave = await prisma.$transaction(async (tx) => {
       const created = await tx.leave.create({
         data: {

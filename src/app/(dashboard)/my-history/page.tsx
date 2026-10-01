@@ -28,9 +28,36 @@ import { MOCK_PERSONAL_HISTORY } from "@/lib/mock-data";
 export default function MyHistoryPage() {
   const { toast } = useToast();
 
-  const [historyRecords, setHistoryRecords] = React.useState(MOCK_PERSONAL_HISTORY);
+  const [historyRecords, setHistoryRecords] = React.useState<any[]>([]);
   const [statusFilter, setStatusFilter] = React.useState("ALL");
-  const [selectedMonth, setSelectedMonth] = React.useState("2026-09");
+  const [selectedMonth, setSelectedMonth] = React.useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  });
+
+  const monthOptions = React.useMemo(() => {
+    const opts = [];
+    const d = new Date();
+    for (let i = 0; i < 12; i++) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const label = d.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+      opts.push({ value: `${y}-${m}`, label });
+      d.setMonth(d.getMonth() - 1);
+    }
+    return opts;
+  }, []);
+
+  const [stats, setStats] = React.useState({
+    totalDays: 0,
+    workingDays: 0,
+    present: 0,
+    late: 0,
+    leave: 0,
+    absent: 0,
+    holidays: 0,
+    averageHours: "0h 0m",
+  });
   
   // Interactive Punch State
   const [isClockedIn, setIsClockedIn] = React.useState(false);
@@ -67,37 +94,140 @@ export default function MyHistoryPage() {
     }
   }, []);
 
-  // Load Real Attendance History
+  // Load Real Attendance History & Stats
   const loadHistory = React.useCallback(async () => {
     try {
-      const res = await fetch("/api/attendance/history?limit=30");
-      if (!res.ok) return;
-      const data = await res.json();
-      if (data.success && Array.isArray(data.history) && data.history.length > 0) {
-        const mapped = data.history.map((h: any, idx: number) => {
-          const workHrs = Math.floor((h.netWorkingSeconds || 0) / 3600);
-          const workMins = Math.floor(((h.netWorkingSeconds || 0) % 3600) / 60);
-          const breakMins = Math.floor((h.totalBreakSeconds || 0) / 60);
-          return {
-            id: h.id || `hist-${idx}`,
-            date: h.dateString || new Date(h.date).toISOString().split("T")[0],
-            dayName: new Date(h.date).toLocaleDateString("en-US", { weekday: "short" }),
-            checkIn: h.firstPunchIn ? new Date(h.firstPunchIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—",
-            checkOut: h.lastPunchOut ? new Date(h.lastPunchOut).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—",
-            breakDuration: `${breakMins} mins`,
-            totalWorking: `${workHrs}h ${workMins}m`,
-            status: h.status || "PRESENT",
-            isLate: h.isLate || false,
-            lateMinutes: h.lateMinutes || 0,
-            intervals: h.sessions || [],
-          };
-        });
-        setHistoryRecords(mapped);
+      const [yearStr, monthStr] = selectedMonth.split("-");
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+      
+      const lastDay = new Date(year, month, 0).getDate();
+      const startDate = `${selectedMonth}-01`;
+      const endDate = `${selectedMonth}-${String(lastDay).padStart(2, '0')}`;
+
+      const [attRes, holRes, leaveRes] = await Promise.all([
+        fetch(`/api/attendance/history?limit=31&startDate=${startDate}&endDate=${endDate}`),
+        fetch(`/api/holidays?year=${year}&limit=100`),
+        fetch(`/api/leaves?limit=100`)
+      ]);
+
+      const attData = attRes.ok ? await attRes.json() : { history: [] };
+      const holData = holRes.ok ? await holRes.json() : { holidays: [] };
+      const leaveData = leaveRes.ok ? await leaveRes.json() : { leaves: [] };
+
+      const history = attData.history || [];
+      const holidays = holData.holidays || [];
+      const leaves = leaveData.leaves || [];
+
+      let presentCount = 0;
+      let lateCount = 0;
+      let totalSecs = 0;
+      const attSet = new Set<string>();
+
+      const mapped = history.map((h: any, idx: number) => {
+        const workHrs = Math.floor((h.netWorkingSeconds || 0) / 3600);
+        const workMins = Math.floor(((h.netWorkingSeconds || 0) % 3600) / 60);
+        const breakMins = Math.floor((h.totalBreakSeconds || 0) / 60);
+        
+        const dStr = h.dateString || new Date(h.date).toISOString().split("T")[0];
+        attSet.add(dStr);
+
+        if (h.status === "PRESENT" || h.status === "LATE") {
+           presentCount++;
+           if (h.isLate || h.status === "LATE") lateCount++;
+           totalSecs += (h.netWorkingSeconds || 0);
+        }
+
+        return {
+          id: h.id || `hist-${idx}`,
+          date: dStr,
+          day: new Date(h.date).toLocaleDateString("en-US", { weekday: "short" }),
+          checkIn: h.firstPunchIn ? new Date(h.firstPunchIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—",
+          checkOut: h.lastPunchOut ? new Date(h.lastPunchOut).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "—",
+          breakDuration: `${breakMins} mins`,
+          totalWorking: `${workHrs}h ${workMins}m`,
+          workingHours: `${workHrs}h ${workMins}m`,
+          status: h.status || "PRESENT",
+          isLate: h.isLate || false,
+          lateMinutes: h.lateMinutes || 0,
+          intervals: h.sessions || [],
+        };
+      });
+      setHistoryRecords(mapped);
+
+      // CALC STATS
+      const holidayDates = new Set<string>();
+      holidays.forEach((h:any) => {
+        if (h.status === "ACTIVE") {
+           const d = new Date(h.date);
+           if (d.getMonth() + 1 === month && d.getFullYear() === year) {
+             holidayDates.add(d.toISOString().split("T")[0]);
+           }
+        }
+      });
+
+      const approvedLeaveDates = new Set<string>();
+      let paidLeaveCount = 0;
+      leaves.forEach((l:any) => {
+         if (l.status === "APPROVED") {
+             const start = new Date(l.startDate);
+             const end = new Date(l.endDate);
+             // Ensure we count multi-day leaves correctly within this month
+             for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                 if (d.getMonth() + 1 === month && d.getFullYear() === year) {
+                     const dStr = d.toISOString().split("T")[0];
+                     approvedLeaveDates.add(dStr);
+                     
+                     if (l.leaveType === "PAID") {
+                         paidLeaveCount++;
+                     }
+                 }
+             }
+         }
+      });
+
+      let sundays = 0;
+      let weekdayHolidays = 0;
+      let absentCount = 0;
+      
+      const now = new Date();
+      const todayStr = now.toISOString().split("T")[0];
+
+      for (let i = 1; i <= lastDay; i++) {
+         const dStr = `${selectedMonth}-${String(i).padStart(2, '0')}`;
+         const d = new Date(year, month - 1, i);
+         
+         const isSunday = d.getDay() === 0;
+         if (isSunday) sundays++;
+         
+         const isHoliday = holidayDates.has(dStr);
+         if (isHoliday && !isSunday) weekdayHolidays++;
+
+         if (dStr <= todayStr && !isSunday && !isHoliday && !approvedLeaveDates.has(dStr) && !attSet.has(dStr)) {
+            absentCount++;
+         }
       }
-    } catch {
-      // Graceful fallback to mock records
+
+      const workingDays = lastDay - sundays - weekdayHolidays;
+      const avgSecs = presentCount > 0 ? Math.floor(totalSecs / presentCount) : 0;
+      const avgHrs = Math.floor(avgSecs / 3600);
+      const avgMins = Math.floor((avgSecs % 3600) / 60);
+
+      setStats({
+         totalDays: lastDay,
+         workingDays,
+         present: presentCount,
+         late: lateCount,
+         leave: paidLeaveCount,
+         absent: absentCount,
+         holidays: holidayDates.size,
+         averageHours: `${avgHrs}h ${avgMins}m`
+      });
+
+    } catch (err) {
+      console.error(err);
     }
-  }, []);
+  }, [selectedMonth]);
 
   React.useEffect(() => {
     loadTodayState();
@@ -309,9 +439,9 @@ export default function MyHistoryPage() {
             onChange={(e) => setSelectedMonth(e.target.value)}
             className="h-9 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:ring-1 focus:ring-indigo-500 cursor-pointer"
           >
-            <option value="2026-09">September 2026</option>
-            <option value="2026-08">August 2026</option>
-            <option value="2026-07">July 2026</option>
+            {monthOptions.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -360,36 +490,47 @@ export default function MyHistoryPage() {
         </div>
       </Card>
 
-      {/* ── 5 SUMMARY CARDS ─────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+      {/* ── 8 SUMMARY CARDS ─────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
-          <span className="text-xs font-semibold text-slate-500 block">Total Days</span>
-          <div className="font-heading text-2xl font-bold text-slate-900 mt-2">22</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Working days in Sep</p>
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Total Days</span>
+          <div className="font-heading text-xl font-bold text-slate-900 mt-1">{stats.totalDays}</div>
+          <p className="text-[10px] text-slate-400 mt-1">Calendar month</p>
         </Card>
-
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
-          <span className="text-xs font-semibold text-slate-500 block">Present</span>
-          <div className="font-heading text-2xl font-bold text-emerald-600 mt-2">18</div>
-          <p className="text-[11px] text-emerald-600 font-medium mt-0.5">Days on shift</p>
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Working Days</span>
+          <div className="font-heading text-xl font-bold text-blue-600 mt-1">{stats.workingDays}</div>
+          <p className="text-[10px] text-slate-400 mt-1">Excl. Sun & Hol.</p>
         </Card>
-
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
-          <span className="text-xs font-semibold text-slate-500 block">Late</span>
-          <div className="font-heading text-2xl font-bold text-orange-600 mt-2">2</div>
-          <p className="text-[11px] text-orange-600 font-medium mt-0.5">Within grace period</p>
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Present</span>
+          <div className="font-heading text-xl font-bold text-emerald-600 mt-1">{stats.present}</div>
+          <p className="text-[10px] text-emerald-600 mt-1">Days on shift</p>
         </Card>
-
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
-          <span className="text-xs font-semibold text-slate-500 block">Leave</span>
-          <div className="font-heading text-2xl font-bold text-amber-600 mt-2">1</div>
-          <p className="text-[11px] text-amber-600 font-medium mt-0.5">Approved leave</p>
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Late</span>
+          <div className="font-heading text-xl font-bold text-orange-600 mt-1">{stats.late}</div>
+          <p className="text-[10px] text-orange-600 mt-1">Check-ins late</p>
         </Card>
-
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
-          <span className="text-xs font-semibold text-slate-500 block">Average Hours</span>
-          <div className="font-heading text-2xl font-bold text-indigo-600 mt-2">8h 18m</div>
-          <p className="text-[11px] text-indigo-600 font-medium mt-0.5">Net working time</p>
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Paid Leave</span>
+          <div className="font-heading text-xl font-bold text-purple-600 mt-1">{stats.leave}</div>
+          <p className="text-[10px] text-purple-600 mt-1">Approved paid</p>
+        </Card>
+        <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Absent</span>
+          <div className="font-heading text-xl font-bold text-rose-600 mt-1">{stats.absent}</div>
+          <p className="text-[10px] text-rose-600 mt-1">No show</p>
+        </Card>
+        <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Holidays</span>
+          <div className="font-heading text-xl font-bold text-teal-600 mt-1">{stats.holidays}</div>
+          <p className="text-[10px] text-teal-600 mt-1">Co. holidays</p>
+        </Card>
+        <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
+          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">Avg Hours</span>
+          <div className="font-heading text-xl font-bold text-indigo-600 mt-1">{stats.averageHours}</div>
+          <p className="text-[10px] text-indigo-600 mt-1">Net work time</p>
         </Card>
       </div>
 

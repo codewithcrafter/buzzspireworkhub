@@ -82,7 +82,7 @@ export default function LeavesPage() {
   const [selectedLeave, setSelectedLeave] = React.useState<LeaveItem | null>(null);
 
   // Apply Form State
-  const [applyType, setApplyType] = React.useState("CASUAL");
+  const [applyType, setApplyType] = React.useState("PAID");
   const [applyStart, setApplyStart] = React.useState("");
   const [applyEnd, setApplyEnd] = React.useState("");
   const [applyReason, setApplyReason] = React.useState("");
@@ -139,6 +139,22 @@ export default function LeavesPage() {
     const diffTime = Math.abs(end.getTime() - start.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
   }, [applyStart, applyEnd]);
+
+  const usedPaidLeave = React.useMemo(() => {
+    if (userRole === "ADMIN") return 0;
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const paidLeavesThisMonth = leaves.filter(l => {
+      if (l.leaveType !== "PAID") return false;
+      if (l.status !== "APPROVED") return false;
+      const d = new Date(l.startDate);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    });
+    return paidLeavesThisMonth.reduce((acc, l) => acc + l.duration, 0);
+  }, [leaves, userRole]);
+
+  const remainingPaidLeave = Math.max(0, 1 - usedPaidLeave);
 
   // Filtering
   const filteredLeaves = React.useMemo(() => {
@@ -466,15 +482,15 @@ export default function LeavesPage() {
       {/* ── SUMMARY METRIC CARDS ────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
-          <span className="text-xs font-semibold text-slate-500 block">Available Balance</span>
-          <div className="font-heading text-2xl font-bold text-emerald-600 mt-2">18 Days</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Annual paid allowance</p>
+          <span className="text-xs font-semibold text-slate-500 block">Monthly Paid Leave</span>
+          <div className="font-heading text-2xl font-bold text-emerald-600 mt-2">1 Day</div>
+          <p className="text-[11px] text-slate-400 mt-0.5">Allowance for this month</p>
         </Card>
 
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
-          <span className="text-xs font-semibold text-slate-500 block">Leaves Used YTD</span>
-          <div className="font-heading text-2xl font-bold text-slate-800 mt-2">6 Days</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Casual & Sick balance</p>
+          <span className="text-xs font-semibold text-slate-500 block">Used Paid Leave</span>
+          <div className="font-heading text-2xl font-bold text-slate-800 mt-2">{usedPaidLeave} Day</div>
+          <p className="text-[11px] text-slate-400 mt-0.5">{remainingPaidLeave} Day Remaining</p>
         </Card>
 
         <Card className="rounded-2xl border-slate-200/80 bg-white p-4">
@@ -529,11 +545,12 @@ export default function LeavesPage() {
               className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:ring-1 focus:ring-indigo-500 cursor-pointer"
             >
               <option value="ALL">All Leave Types</option>
+              <option value="PAID">Paid Leave</option>
               <option value="CASUAL">Casual Leave</option>
               <option value="SICK">Sick Leave</option>
-              <option value="ANNUAL">Annual Leave</option>
-              <option value="MATERNITY">Maternity</option>
               <option value="UNPAID">Unpaid Leave</option>
+              <option value="MATERNITY">Maternity</option>
+              <option value="PATERNITY">Paternity</option>
             </select>
           </div>
         </CardContent>
@@ -673,9 +690,9 @@ export default function LeavesPage() {
               onChange={(e) => setApplyType(e.target.value)}
               className="w-full h-9 px-3 rounded-xl border border-slate-200 bg-white text-slate-800"
             >
-              <option value="CASUAL">Casual Leave (Balance: 6 Days)</option>
-              <option value="SICK">Sick Leave (Balance: 8 Days)</option>
-              <option value="ANNUAL">Annual Leave (Balance: 4 Days)</option>
+              <option value="PAID">Paid Leave (Balance: {remainingPaidLeave} Day)</option>
+              <option value="CASUAL">Casual Leave</option>
+              <option value="SICK">Sick Leave</option>
               <option value="MATERNITY">Maternity Leave</option>
               <option value="PATERNITY">Paternity Leave</option>
               <option value="UNPAID">Unpaid Sabbatical</option>

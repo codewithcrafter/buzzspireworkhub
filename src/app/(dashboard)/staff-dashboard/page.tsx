@@ -162,8 +162,7 @@ export default function StaffDashboardPage() {
   const [loading, setLoading] = React.useState(true);
   const [idleConfig, setIdleConfig] = React.useState({ enabled: true, thresholdMinutes: 2 });
 
-  // ── Break modal ──
-  const [modalOpen, setModalOpen] = React.useState(false);
+  // ── Break Selection ──
   const [breakTypes, setBreakTypes] = React.useState<any[]>([]);
   const [selectedType, setSelectedType] = React.useState("");
   const [otherDesc, setOtherDesc] = React.useState("");
@@ -217,17 +216,8 @@ export default function StaffDashboardPage() {
     // Poll every 30 seconds
     const interval = setInterval(pollIdleStatus, 30000);
     
-    // Also check immediately when returning to the tab
-    const handleVisibility = () => {
-      if (document.visibilityState === "visible") {
-        pollIdleStatus();
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-    
     return () => {
       clearInterval(interval);
-      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [state, showIdleWarning, idleConfig, pollIdleStatus]);
 
@@ -401,7 +391,6 @@ export default function StaffDashboardPage() {
           description: `${breakName} break started at ${fmtTimeFull(startTime)}.`,
           type: "success",
         });
-        setModalOpen(false);
         setShowIdleWarning(false);
         setIdleDetectedAt(null);
         if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
@@ -646,88 +635,7 @@ export default function StaffDashboardPage() {
             <CardTitle className="text-base font-bold text-slate-700 uppercase tracking-wider">
               Breaks
             </CardTitle>
-            {state === "WORKING" && !today?.activeBreak && (
-              <div className="relative">
-                <Button
-                  onClick={() => setModalOpen(!modalOpen)}
-                  variant="outline"
-                  size="sm"
-                  className="h-8 px-4 text-sm font-bold border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors"
-                >
-                  {modalOpen ? "Cancel Break" : "+ Start Break"}
-                </Button>
-
-                {/* ── INLINE BREAK OPTIONS DROPDOWN ── */}
-                {modalOpen && (
-                  <div className="absolute top-[calc(100%+8px)] right-0 w-[300px] sm:w-[380px] z-50 p-4 bg-white border border-slate-200 rounded-xl shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="space-y-4">
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Select break type</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {breakTypes.map((t) => {
-                          const selected = selectedType === t.id;
-                          return (
-                            <button
-                              key={t.id}
-                              onClick={() => setSelectedType(t.id)}
-                              className={`flex items-center gap-2 p-2.5 text-left border rounded-xl transition-all text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 ${
-                                selected
-                                  ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm font-bold"
-                                  : "border-slate-200 hover:border-slate-300 text-slate-700 bg-white hover:bg-slate-50"
-                              }`}
-                            >
-                              <span className="text-base">{BREAK_TYPE_ICONS[t.name] ?? "⏸"}</span>
-                              {t.name}
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {breakTypes.find((t) => t.id === selectedType)?.name?.toLowerCase().includes("other") && (
-                        <div className="space-y-2 pt-1">
-                          <label className="text-xs font-bold text-slate-700">
-                            Purpose / Description <span className="text-rose-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="E.g. Client discussion"
-                            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 bg-white"
-                            value={otherDesc}
-                            onChange={(e) => setOtherDesc(e.target.value)}
-                          />
-                        </div>
-                      )}
-
-                      <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setModalOpen(false);
-                            setSelectedType("");
-                            setOtherDesc("");
-                          }}
-                          className="rounded-lg border-slate-300 text-slate-600 hover:bg-slate-100 h-8 text-xs font-bold"
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            handleStartBreak().then(() => {
-                              setModalOpen(false);
-                            });
-                          }}
-                          disabled={startingBreak}
-                          className="rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-60 px-4 font-bold shadow-sm h-8 text-xs"
-                        >
-                          {startingBreak ? "Starting…" : "Start Break"}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Break actions moved to body */}
           </CardHeader>
           <CardContent className="p-0">
             {/* ── Break Summary Bar ── */}
@@ -738,6 +646,59 @@ export default function StaffDashboardPage() {
                 value={fmtHM(completedBreakSeconds)}
               />
             </div>
+
+            {/* ── BREAK SELECTION (if working and no active break) ── */}
+            {state === "WORKING" && !today?.activeBreak && (
+              <div className="bg-slate-50/50 border-b border-slate-100 p-6">
+                <div className="space-y-4">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Select break type</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {breakTypes.map((t) => {
+                      const selected = selectedType === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          onClick={() => setSelectedType(t.id)}
+                          className={`flex items-center gap-2 p-3 text-left border rounded-xl transition-all text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 ${
+                            selected
+                              ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm font-bold"
+                              : "border-slate-200 hover:border-slate-300 text-slate-700 bg-white hover:bg-slate-50"
+                          }`}
+                        >
+                          <span className="text-xl">{BREAK_TYPE_ICONS[t.name] ?? "⏸"}</span>
+                          {t.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {breakTypes.find((t) => t.id === selectedType)?.name?.toLowerCase().includes("other") && (
+                    <div className="space-y-2 pt-2 max-w-md">
+                      <label className="text-xs font-bold text-slate-700">
+                        Purpose / Description <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="E.g. Client discussion"
+                        className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 bg-white"
+                        value={otherDesc}
+                        onChange={(e) => setOtherDesc(e.target.value)}
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex justify-start pt-4 border-t border-slate-200/60 mt-4">
+                    <Button
+                      onClick={() => handleStartBreak()}
+                      disabled={startingBreak || !selectedType || (breakTypes.find((t) => t.id === selectedType)?.name?.toLowerCase().includes("other") && !otherDesc.trim())}
+                      className="rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 px-8 font-bold shadow-md h-12 text-sm"
+                    >
+                      ▶ {startingBreak ? "Starting…" : "Start Break"}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* ── BREAK IN PROGRESS ── */}
             {today?.activeBreak && (

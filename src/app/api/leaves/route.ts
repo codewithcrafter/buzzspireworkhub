@@ -74,6 +74,12 @@ export async function POST(req: Request) {
     if (error.message === "INVALID_DATE_RANGE") {
       return ApiResponse.badRequest("Invalid date range specified. End date must be on or after start date.");
     }
+    if (error.message === "PAID_LEAVE_LIMIT_EXCEEDED") {
+      return ApiResponse.badRequest("Monthly paid leave limit exceeded. You are allowed exactly 1 paid leave day per month.");
+    }
+    if (error.message === "OVERLAPPING_LEAVE_EXISTS") {
+      return ApiResponse.badRequest("You already have a pending or approved leave overlapping this date range.");
+    }
     return ApiResponse.serverError("Error submitting leave request", error);
   }
 }
