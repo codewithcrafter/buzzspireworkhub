@@ -1,11 +1,19 @@
 import json
 import os
+from agent_config import APP_DATA_DIR
 
-QUEUE_FILE = "agent_queue.jsonl"
+QUEUE_FILE = os.path.join(APP_DATA_DIR, "agent_queue.jsonl")
 MAX_QUEUE_SIZE = 5000
 
 class Storage:
+    def _ensure_dir(self):
+        try:
+            os.makedirs(APP_DATA_DIR, exist_ok=True)
+        except Exception:
+            pass
+
     def enqueue(self, event):
+        self._ensure_dir()
         # Prevent huge queue
         self._trim_queue()
         with open(QUEUE_FILE, "a") as f:

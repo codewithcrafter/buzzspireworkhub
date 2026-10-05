@@ -47,6 +47,9 @@ export async function GET(req: Request) {
         employeeId: auth.employee.id,
         action: "LATEST_HEARTBEAT",
         module: "AGENT"
+      },
+      orderBy: {
+        createdAt: "desc"
       }
     });
 

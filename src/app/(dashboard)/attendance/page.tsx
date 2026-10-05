@@ -27,7 +27,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast";
 interface ExtendedRecord {
-  id: string;
+  id: string; // React key, usually employeeId
+  attendanceId?: string; // The primary key of Attendance model
   employeeId: string;
   employeeName: string;
   employeeCode: string;
@@ -61,7 +62,27 @@ export default function AttendancePage() {
 
   const [records, setRecords] = React.useState<ExtendedRecord[]>([]);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [selectedDate, setSelectedDate] = React.useState("2026-09-16");
+  const [selectedDate, setSelectedDate] = React.useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const dateParam = params.get("date");
+      if (dateParam) return dateParam;
+    }
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
+  });
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("date", selectedDate);
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [selectedDate]);
   const [departmentFilter, setDepartmentFilter] = React.useState("ALL");
   const [statusFilter, setStatusFilter] = React.useState("ALL");
   const [employeeFilter, setEmployeeFilter] = React.useState("ALL");
@@ -73,6 +94,14 @@ export default function AttendancePage() {
   const [resumeModalOpen, setResumeModalOpen] = React.useState(false);
   const [resumeReason, setResumeReason] = React.useState("");
   const [isResuming, setIsResuming] = React.useState(false);
+
+  const [manualPunchInModalOpen, setManualPunchInModalOpen] = React.useState(false);
+  const [manualPunchOutModalOpen, setManualPunchOutModalOpen] = React.useState(false);
+  const [forcePunchOutModalOpen, setForcePunchOutModalOpen] = React.useState(false);
+  const [manualDate, setManualDate] = React.useState("");
+  const [manualTime, setManualTime] = React.useState("");
+  const [manualReason, setManualReason] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
     async function loadLiveAttendance() {
@@ -86,6 +115,7 @@ export default function AttendancePage() {
             const mins = Math.floor(((s.netWorkingSeconds || 0) % 3600) / 60);
             return {
               id: s.employeeId || `att-${idx}`,
+              attendanceId: s.attendanceId,
               employeeId: s.employeeId,
               employeeName: s.fullName,
               employeeCode: s.employeeCode,
@@ -99,7 +129,7 @@ export default function AttendancePage() {
               declaredBreakSeconds: s.declaredBreakSeconds || 0,
               idleBreakSeconds: s.idleBreakSeconds || 0,
               totalBreakSeconds: s.totalBreakSeconds || 0,
-              status: s.currentState === "ABSENT" ? "ABSENT" : "PRESENT",
+              status: s.status || (s.currentState === "ABSENT" ? "ABSENT" : "PRESENT"),
               liveState: s.currentState as any,
               breakHistory: s.breakHistory || [],
               shortfallMinutes: s.shortfallMinutes || 0,
@@ -128,6 +158,7 @@ export default function AttendancePage() {
           const mins = Math.floor(((s.netWorkingSeconds || 0) % 3600) / 60);
           return {
             id: s.employeeId || `att-${idx}`,
+            attendanceId: s.attendanceId,
             employeeId: s.employeeId,
             employeeName: s.fullName,
             employeeCode: s.employeeCode,
@@ -141,7 +172,7 @@ export default function AttendancePage() {
             declaredBreakSeconds: s.declaredBreakSeconds || 0,
             idleBreakSeconds: s.idleBreakSeconds || 0,
             totalBreakSeconds: s.totalBreakSeconds || 0,
-            status: s.currentState === "ABSENT" ? "ABSENT" : "PRESENT",
+            status: s.status || (s.currentState === "ABSENT" ? "ABSENT" : "PRESENT"),
             liveState: s.currentState as any,
             breakHistory: s.breakHistory || [],
             shortfallMinutes: s.shortfallMinutes || 0,
@@ -204,7 +235,11 @@ export default function AttendancePage() {
     }
     try {
       setIsResuming(true);
-      const res = await fetch(`/api/admin/attendance/${selectedRecord.id}/resume`, {
+      if (!selectedRecord.attendanceId) {
+        toast({ title: "Error", description: "Cannot resume a shift that has not started.", type: "error" });
+        return;
+      }
+      const res = await fetch(`/api/admin/attendance/${selectedRecord.attendanceId}/resume`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reason: resumeReason }),
@@ -223,6 +258,93 @@ export default function AttendancePage() {
       toast({ title: "Error", description: e.message, type: "error" });
     } finally {
       setIsResuming(false);
+    }
+  };
+
+  const handleManualPunchIn = async () => {
+    if (!selectedRecord) return;
+    if (!manualDate || !manualTime || !manualReason.trim()) {
+      toast({ title: "Validation Error", description: "Date, Time, and Reason are required.", type: "error" });
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const res = await fetch(`/api/admin/attendance/${selectedRecord.attendanceId || 'new'}/manual-punch-in`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ employeeId: selectedRecord.employeeId, date: manualDate, time: manualTime, reason: manualReason }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast({ title: "Success", description: "Manual Punch In successful." });
+        setManualPunchInModalOpen(false);
+        setDetailModalOpen(false);
+        await loadLiveAttendanceManual();
+      } else {
+        toast({ title: "Error", description: data.message || "An error occurred.", type: "error" });
+      }
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, type: "error" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleManualPunchOut = async () => {
+    if (!selectedRecord) return;
+    if (!manualDate || !manualTime || !manualReason.trim()) {
+      toast({ title: "Validation Error", description: "Date, Time, and Reason are required.", type: "error" });
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const res = await fetch(`/api/admin/attendance/${selectedRecord.attendanceId || 'new'}/manual-punch-out`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ employeeId: selectedRecord.employeeId, date: manualDate, time: manualTime, reason: manualReason }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast({ title: "Success", description: "Manual Punch Out successful." });
+        setManualPunchOutModalOpen(false);
+        setDetailModalOpen(false);
+        await loadLiveAttendanceManual();
+      } else {
+        toast({ title: "Error", description: data.message || "An error occurred.", type: "error" });
+      }
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, type: "error" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleForcePunchOut = async () => {
+    if (!selectedRecord) return;
+    if (!manualDate || !manualTime || !manualReason.trim()) {
+      toast({ title: "Validation Error", description: "Date, Time, and Reason are required.", type: "error" });
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const res = await fetch(`/api/admin/attendance/${selectedRecord.attendanceId || 'new'}/force-punch-out`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ employeeId: selectedRecord.employeeId, date: manualDate, time: manualTime, reason: manualReason }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast({ title: "Success", description: "Force Punch Out successful." });
+        setForcePunchOutModalOpen(false);
+        setDetailModalOpen(false);
+        await loadLiveAttendanceManual();
+      } else {
+        toast({ title: "Error", description: data.message || "An error occurred.", type: "error" });
+      }
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message, type: "error" });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -694,19 +816,68 @@ export default function AttendancePage() {
               <div>Shift logged in Asia/Kolkata timezone. IP verified from internal corporate subnet.</div>
             </div>
 
-            <div className="flex justify-between pt-3 border-t border-slate-100">
-              {selectedRecord.liveState === "COMPLETED" ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setResumeModalOpen(true)}
-                  className="text-xs rounded-xl bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
-                >
-                  Resume Shift
-                </Button>
-              ) : (
-                <div />
-              )}
+            <div className="flex justify-between pt-3 border-t border-slate-100 flex-wrap gap-2">
+              <div className="flex gap-2 flex-wrap">
+                {(!selectedRecord.checkIn || selectedRecord.liveState === "ABSENT") && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setManualDate(selectedDate);
+                      setManualTime("09:00");
+                      setManualReason("");
+                      setManualPunchInModalOpen(true);
+                    }}
+                    className="text-xs rounded-xl bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                  >
+                    Manual Punch In
+                  </Button>
+                )}
+
+                {(selectedRecord.liveState === "WORKING" || selectedRecord.liveState === "ON_BREAK" || selectedRecord.liveState === "COMPLETED") && selectedRecord.checkIn && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setManualDate(selectedDate);
+                      setManualTime("18:00");
+                      setManualReason("");
+                      setManualPunchOutModalOpen(true);
+                    }}
+                    className="text-xs rounded-xl bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100"
+                  >
+                    Manual Punch Out
+                  </Button>
+                )}
+
+                {(selectedRecord.liveState === "WORKING" || selectedRecord.liveState === "ON_BREAK") && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setManualDate(selectedDate);
+                      const now = new Date();
+                      setManualTime(`${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`);
+                      setManualReason("");
+                      setForcePunchOutModalOpen(true);
+                    }}
+                    className="text-xs rounded-xl bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100"
+                  >
+                    Force Punch Out
+                  </Button>
+                )}
+
+                {selectedRecord.liveState === "COMPLETED" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setResumeModalOpen(true)}
+                    className="text-xs rounded-xl bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100"
+                  >
+                    Resume Shift
+                  </Button>
+                )}
+              </div>
               <Button
                 variant="outline"
                 size="sm"
@@ -762,6 +933,147 @@ export default function AttendancePage() {
               className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl"
             >
               {isResuming ? "Resuming..." : "Resume Shift"}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* ── MODAL: MANUAL PUNCH IN ─────────────────────────────────────────── */}
+      <Dialog
+        isOpen={manualPunchInModalOpen}
+        onClose={() => setManualPunchInModalOpen(false)}
+        title="Manual Punch In"
+        description={`Record a manual punch in for ${selectedRecord?.employeeName}`}
+      >
+        <div className="space-y-4 py-2">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-slate-700 mb-1 block">Date</label>
+              <Input
+                type="date"
+                value={manualDate}
+                onChange={(e) => setManualDate(e.target.value)}
+                className="text-sm rounded-xl h-10 border-slate-200"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-700 mb-1 block">Time</label>
+              <Input
+                type="time"
+                value={manualTime}
+                onChange={(e) => setManualTime(e.target.value)}
+                className="text-sm rounded-xl h-10 border-slate-200"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-slate-700 mb-1 block">Reason <span className="text-rose-500">*</span></label>
+            <Input
+              value={manualReason}
+              onChange={(e) => setManualReason(e.target.value)}
+              placeholder="e.g. Employee forgot to punch in"
+              className="text-sm rounded-xl h-10 border-slate-200"
+            />
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" size="sm" onClick={() => setManualPunchInModalOpen(false)} className="text-xs rounded-xl">Cancel</Button>
+            <Button size="sm" onClick={handleManualPunchIn} disabled={isSubmitting} className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl">
+              {isSubmitting ? "Submitting..." : "Confirm Punch In"}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* ── MODAL: MANUAL PUNCH OUT ────────────────────────────────────────── */}
+      <Dialog
+        isOpen={manualPunchOutModalOpen}
+        onClose={() => setManualPunchOutModalOpen(false)}
+        title="Manual Punch Out"
+        description={`Record a manual punch out for ${selectedRecord?.employeeName}`}
+      >
+        <div className="space-y-4 py-2">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-slate-700 mb-1 block">Date</label>
+              <Input
+                type="date"
+                value={manualDate}
+                onChange={(e) => setManualDate(e.target.value)}
+                className="text-sm rounded-xl h-10 border-slate-200"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-700 mb-1 block">Time</label>
+              <Input
+                type="time"
+                value={manualTime}
+                onChange={(e) => setManualTime(e.target.value)}
+                className="text-sm rounded-xl h-10 border-slate-200"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-slate-700 mb-1 block">Reason <span className="text-rose-500">*</span></label>
+            <Input
+              value={manualReason}
+              onChange={(e) => setManualReason(e.target.value)}
+              placeholder="e.g. Employee forgot to punch out"
+              className="text-sm rounded-xl h-10 border-slate-200"
+            />
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" size="sm" onClick={() => setManualPunchOutModalOpen(false)} className="text-xs rounded-xl">Cancel</Button>
+            <Button size="sm" onClick={handleManualPunchOut} disabled={isSubmitting} className="text-xs bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl">
+              {isSubmitting ? "Submitting..." : "Confirm Punch Out"}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* ── MODAL: FORCE PUNCH OUT ─────────────────────────────────────────── */}
+      <Dialog
+        isOpen={forcePunchOutModalOpen}
+        onClose={() => setForcePunchOutModalOpen(false)}
+        title="Force Punch Out"
+        description={`Force close the currently open shift for ${selectedRecord?.employeeName}`}
+      >
+        <div className="space-y-4 py-2">
+          <div className="p-3 bg-rose-50 rounded-xl border border-rose-200 text-rose-800 text-xs font-medium">
+            This will close the employee's currently open shift. Please ensure the time is correct.
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-slate-700 mb-1 block">Date</label>
+              <Input
+                type="date"
+                value={manualDate}
+                onChange={(e) => setManualDate(e.target.value)}
+                className="text-sm rounded-xl h-10 border-slate-200"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-700 mb-1 block">Time</label>
+              <Input
+                type="time"
+                value={manualTime}
+                onChange={(e) => setManualTime(e.target.value)}
+                className="text-sm rounded-xl h-10 border-slate-200"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-semibold text-slate-700 mb-1 block">Reason <span className="text-rose-500">*</span></label>
+            <Input
+              value={manualReason}
+              onChange={(e) => setManualReason(e.target.value)}
+              placeholder="e.g. Shift was left open overnight"
+              className="text-sm rounded-xl h-10 border-slate-200"
+            />
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" size="sm" onClick={() => setForcePunchOutModalOpen(false)} className="text-xs rounded-xl">Cancel</Button>
+            <Button size="sm" onClick={handleForcePunchOut} disabled={isSubmitting} className="text-xs bg-rose-600 hover:bg-rose-700 text-white rounded-xl">
+              {isSubmitting ? "Submitting..." : "Force Punch Out"}
             </Button>
           </div>
         </div>

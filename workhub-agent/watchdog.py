@@ -15,7 +15,12 @@ if getattr(sys, 'frozen', False):
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-CONFIG_FILE = os.path.join(BASE_DIR, "agent_config.json")
+LOCAL_APP_DATA = os.environ.get("LOCALAPPDATA")
+if not LOCAL_APP_DATA:
+    LOCAL_APP_DATA = os.path.join(os.environ.get("USERPROFILE", os.path.expanduser("~")), "AppData", "Local")
+
+APP_DATA_DIR = os.path.join(LOCAL_APP_DATA, "BuzzSpireWorkHub")
+CONFIG_FILE = os.path.join(APP_DATA_DIR, "agent_config.json")
 # For testing locally without moving EXEs, if TARGET_EXE is in dist:
 if not getattr(sys, 'frozen', False) and os.path.exists(os.path.join(BASE_DIR, "dist", "BuzzSpireWorkHubAgent.exe")):
     TARGET_EXE = os.path.join(BASE_DIR, "dist", "BuzzSpireWorkHubAgent.exe")

@@ -51,12 +51,21 @@ export default function DashboardOverviewPage() {
     onBreak: number;
     completed: number;
     late: number;
+    onLeave: number;
   } | null>(null);
 
   // Real-time Clock State
   const [currentTime, setCurrentTime] = React.useState<string>("");
+  const [currentBusinessDateStr, setCurrentBusinessDateStr] = React.useState<string>("");
 
   React.useEffect(() => {
+    setCurrentBusinessDateStr(new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Asia/Kolkata",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }).format(new Date()));
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString(undefined, {
         hour: "2-digit",
@@ -93,6 +102,7 @@ export default function DashboardOverviewPage() {
               onBreak: s.onBreak || 0,
               completed: s.completed || 0,
               late: s.late || 0,
+              onLeave: s.onLeave || 0,
             };
             setLiveCounters(fetchedCounters);
           }
@@ -115,7 +125,7 @@ export default function DashboardOverviewPage() {
                 checkOut: s.currentState === "COMPLETED" ? new Date(s.punchOut).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
                 workingHours: `${hrs}h ${mins}m`,
                 breakTime: `${Math.floor((s.currentBreakDuration || 0) / 60)}m`,
-                status: s.currentState === "ABSENT" ? "ABSENT" : "PRESENT",
+                status: s.status || (s.currentState === "ABSENT" ? "ABSENT" : "PRESENT"),
                 liveState: s.currentState as any,
                 timeline: [],
               };
@@ -125,10 +135,10 @@ export default function DashboardOverviewPage() {
         }
         
         if (!fetchedCounters) {
-           setLiveCounters({ totalEmployees: 0, present: 0, absent: 0, working: 0, onBreak: 0, completed: 0, late: 0 });
+           setLiveCounters({ totalEmployees: 0, present: 0, absent: 0, working: 0, onBreak: 0, completed: 0, late: 0, onLeave: 0 });
         }
       } catch {
-        setLiveCounters({ totalEmployees: 0, present: 0, absent: 0, working: 0, onBreak: 0, completed: 0, late: 0 });
+        setLiveCounters({ totalEmployees: 0, present: 0, absent: 0, working: 0, onBreak: 0, completed: 0, late: 0, onLeave: 0 });
         setAttendanceData([]);
       }
     }
@@ -224,7 +234,7 @@ export default function DashboardOverviewPage() {
               Workforce Intelligence
             </span>
             <span className="text-xs text-slate-400">
-              Wednesday, 16 September 2026
+              {currentBusinessDateStr || "Loading..."}
             </span>
           </div>
           <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight">
@@ -318,7 +328,7 @@ export default function DashboardOverviewPage() {
             </div>
           </CardHeader>
           <CardContent className="p-4 pt-0">
-            <div className="font-heading text-2xl font-bold text-slate-900">{liveCounters?.onBreak ?? 0}</div>
+            <div className="font-heading text-2xl font-bold text-slate-900">{liveCounters?.onLeave ?? 0}</div>
             <p className="text-[11px] text-amber-600 font-medium mt-1">Approved requests</p>
           </CardContent>
         </Card>
@@ -411,7 +421,7 @@ export default function DashboardOverviewPage() {
                   Today's Attendance
                 </CardTitle>
                 <CardDescription className="text-xs text-slate-400">
-                  Live attendance logs for Wednesday, 16 September 2026
+                  Live attendance logs for {currentBusinessDateStr || "Today"}
                 </CardDescription>
               </div>
 

@@ -22,6 +22,7 @@ export async function POST(req: Request) {
     if (typeof osIdleSeconds === "number") {
       const lastHeartbeat = await prisma.activityLog.findFirst({
         where: { employeeId: device.employeeId, action: "LATEST_HEARTBEAT", module: "AGENT" },
+        orderBy: { createdAt: "desc" },
       });
       
       if (lastHeartbeat) {

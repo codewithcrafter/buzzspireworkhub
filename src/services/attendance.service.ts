@@ -734,6 +734,230 @@ export class AttendanceService {
   /**
    * Retrieves single attendance details by ID (with authorization check).
    */
+  static async adminManualPunchIn(
+    employeeId: string,
+    adminId: string,
+    dateString: string,
+    timeString: string,
+    reason: string,
+    ipAddress?: string,
+    userAgent?: string
+  ) {
+    const punchDate = new Date(`${dateString}T${timeString}:00+05:30`);
+    if (isNaN(punchDate.getTime())) throw new Error("INVALID_PUNCH_TIME");
+    
+    if (punchDate > new Date()) throw new Error("FUTURE_TIMESTAMP_NOT_ALLOWED");
+
+    const startOfDay = getStartOfDay(punchDate);
+    const endOfDay = getEndOfDay(punchDate);
+
+    return prisma.$transaction(async (tx) => {
+      // Check employee
+      const employee = await tx.employee.findUnique({ where: { id: employeeId }, include: { role: true } });
+      if (!employee) throw new Error("EMPLOYEE_NOT_FOUND");
+      if (employee.role.name === "ADMIN") throw new Error("ADMIN_ATTENDANCE_NOT_ALLOWED");
+
+      let attendance = await tx.attendance.findFirst({
+        where: { employeeId, date: { gte: startOfDay, lte: endOfDay } },
+        include: { sessions: true },
+      });
+
+      if (attendance) {
+        const activeSession = attendance.sessions.find(s => !s.punchOut);
+        if (activeSession) throw new Error("ATTENDANCE_ALREADY_ACTIVE");
+        if (attendance.sessions.length > 0) throw new Error("ATTENDANCE_ALREADY_COMPLETED");
+      }
+
+      const officeStart = (await SettingsService.get("office_start_time")) || employee.shiftStart || "10:00";
+      const lateGrace = parseInt((await SettingsService.get("late_grace_minutes")) || "15", 10);
+      const lateCalc = calculateLateStatus(punchDate, officeStart, lateGrace);
+
+      if (!attendance) {
+        attendance = await tx.attendance.create({
+          data: {
+            employeeId,
+            date: startOfDay,
+            checkIn: punchDate,
+            status: lateCalc.isLate ? "LATE" : "PRESENT",
+            isLate: lateCalc.isLate,
+            lateMinutes: lateCalc.lateMinutes,
+            totalWorkingSeconds: 0,
+            totalBreakSeconds: 0,
+            netWorkingSeconds: 0,
+          },
+          include: { sessions: true },
+        });
+      }
+
+      const session = await tx.attendanceSession.create({
+        data: {
+          attendanceId: attendance.id,
+          employeeId,
+          punchIn: punchDate,
+          workingSeconds: 0,
+        },
+      });
+
+      // Audit Log
+      await tx.auditLog.create({
+        data: {
+          employeeId,
+          action: "ADMIN_MANUAL_PUNCH_IN",
+          module: "ATTENDANCE",
+          description: `Admin manual punch in. Reason: ${reason}`,
+          ipAddress: ipAddress || null,
+          userAgent: userAgent || null,
+          metadata: {
+            adminId,
+            sessionId: session.id,
+            attendanceId: attendance.id,
+            reason,
+            previousCheckIn: attendance.checkIn || null,
+            previousCheckOut: attendance.checkOut || null,
+            newCheckIn: punchDate,
+            newCheckOut: attendance.checkOut || null,
+            selectedBusinessDate: dateString,
+          },
+        },
+      });
+
+      return session;
+    });
+  }
+
+  /**
+   * Admin Manual / Force Punch Out
+   */
+  static async adminManualPunchOut(
+    employeeId: string,
+    adminId: string,
+    dateString: string,
+    timeString: string,
+    reason: string,
+    isForce: boolean,
+    ipAddress?: string,
+    userAgent?: string
+  ) {
+    const punchDate = new Date(`${dateString}T${timeString}:00+05:30`);
+    if (isNaN(punchDate.getTime())) throw new Error("INVALID_PUNCH_TIME");
+    
+    if (punchDate > new Date()) throw new Error("FUTURE_TIMESTAMP_NOT_ALLOWED");
+
+    const startOfDay = getStartOfDay(punchDate);
+    const endOfDay = getEndOfDay(punchDate);
+
+    const result = await prisma.$transaction(async (tx) => {
+      const attendance = await tx.attendance.findFirst({
+        where: { employeeId, date: { gte: startOfDay, lte: endOfDay } },
+        include: { sessions: { include: { breaks: true } } },
+      });
+
+      if (!attendance) throw new Error("NO_PUNCH_IN_FOUND");
+
+      const activeSession = attendance.sessions.find(s => !s.punchOut);
+
+      let targetSession = activeSession;
+      if (!targetSession) {
+        throw new Error("ATTENDANCE_ALREADY_COMPLETED");
+      }
+
+      if (punchDate < targetSession.punchIn) {
+        throw new Error("PUNCH_OUT_BEFORE_PUNCH_IN");
+      }
+
+      // Handle breaks
+      const activeBreak = targetSession.breaks.find((b) => !b.endTime);
+      if (activeBreak) {
+        if (punchDate < activeBreak.startTime) {
+           throw new Error("PUNCH_OUT_BEFORE_BREAK_START");
+        }
+        await tx.break.update({
+          where: { id: activeBreak.id },
+          data: {
+            endTime: punchDate,
+            durationSeconds: calculateDurationSeconds(activeBreak.startTime, punchDate),
+          }
+        });
+      }
+
+      const sessionWorkingSeconds = calculateDurationSeconds(targetSession.punchIn, punchDate);
+
+      await tx.attendanceSession.update({
+        where: { id: targetSession.id },
+        data: {
+          punchOut: punchDate,
+          workingSeconds: sessionWorkingSeconds,
+        },
+      });
+
+      // Recalculate attendance
+      const allSessionsWithBreaks = await tx.attendanceSession.findMany({
+        where: { attendanceId: attendance.id },
+        include: { breaks: true },
+      });
+
+      const totalWorking = allSessionsWithBreaks.reduce(
+        (sum, s) => sum + (s.id === targetSession.id ? sessionWorkingSeconds : s.workingSeconds || 0),
+        0
+      );
+      const totalBreaks = allSessionsWithBreaks
+        .flatMap((s) => s.breaks)
+        .reduce((sum, b) => {
+           if (b.id === activeBreak?.id) {
+             return sum + calculateDurationSeconds(b.startTime, punchDate);
+           }
+           return sum + (b.durationSeconds || 0);
+        }, 0);
+
+      const netWorking = Math.max(0, totalWorking - totalBreaks);
+
+      await tx.attendance.update({
+        where: { id: attendance.id },
+        data: {
+          checkOut: punchDate,
+          totalWorkingSeconds: totalWorking,
+          totalBreakSeconds: totalBreaks,
+          netWorkingSeconds: netWorking,
+        },
+      });
+
+      const action = isForce ? "ADMIN_FORCE_PUNCH_OUT" : "ADMIN_MANUAL_PUNCH_OUT";
+
+      await tx.auditLog.create({
+        data: {
+          employeeId,
+          action,
+          module: "ATTENDANCE",
+          description: `Admin ${isForce ? "force" : "manual"} punch out. Reason: ${reason}`,
+          ipAddress: ipAddress || null,
+          userAgent: userAgent || null,
+          metadata: {
+            adminId,
+            sessionId: targetSession.id,
+            attendanceId: attendance.id,
+            reason,
+            previousCheckIn: attendance.checkIn || null,
+            previousCheckOut: attendance.checkOut || null,
+            newCheckIn: attendance.checkIn || null,
+            newCheckOut: punchDate,
+            selectedBusinessDate: dateString,
+          },
+        },
+      });
+
+      return attendance;
+    });
+
+    await HREngineService.recalculateAttendance(result.id).catch((e) => {
+      console.error("Failed to run HR Engine after admin punchOut", e);
+    });
+
+    return result;
+  }
+
+  /**
+   * Retrieves single attendance details by ID (with authorization check).
+   */
   static async getAttendanceById(id: string, requestingEmployeeId: string, requestingRole: string, requestingDepartmentId?: string | null) {
     const attendance = await prisma.attendance.findUnique({
       where: { id },
@@ -813,12 +1037,17 @@ export class AttendanceService {
     });
 
     let present = 0;
+    let late = 0;
+    let onLeave = 0;
     let working = 0;
     let onBreak = 0;
     let completed = 0;
 
     attendances.forEach((att) => {
-      present++;
+      if (att.status === "PRESENT") present++;
+      if (att.status === "LATE") late++;
+      if (att.status === "ON_LEAVE") onLeave++;
+
       const activeSession = att.sessions.find((s) => !s.punchOut);
       const activeBreak = activeSession?.breaks.find((b) => !b.endTime);
 
@@ -831,13 +1060,15 @@ export class AttendanceService {
       }
     });
 
-    const absent = Math.max(0, totalActiveEmployees - present);
+    const absent = Math.max(0, totalActiveEmployees - (present + late + onLeave));
 
     return {
       date: getKolkataDateString(dateInput),
       totalEmployees: totalActiveEmployees,
       present,
       absent,
+      late,
+      onLeave,
       working,
       onBreak,
       completed,
@@ -901,6 +1132,8 @@ export class AttendanceService {
         currentState = "COMPLETED";
       }
 
+      const status = todayAttendance?.status || "ABSENT";
+
       const firstPunchIn = sessions[0]?.punchIn || null;
       const currentSessionDuration = activeSession ? calculateDurationSeconds(activeSession.punchIn, now) : 0;
       const currentBreakDuration = activeBreak ? calculateDurationSeconds(activeBreak.startTime, now) : 0;
@@ -925,12 +1158,15 @@ export class AttendanceService {
       const totalBreakSeconds = declaredBreakSeconds + idleBreakSeconds;
 
       return {
+        id: todayAttendance?.id || undefined,
+        attendanceId: todayAttendance?.id || undefined,
         employeeId: emp.id,
         employeeCode: emp.employeeCode,
         fullName: emp.fullName,
         avatar: emp.avatar,
         designation: emp.designation,
         department: emp.department?.name || null,
+        status,
         currentState,
         punchIn: firstPunchIn,
         activeSessionStart: activeSession?.punchIn || null,
