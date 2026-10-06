@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAuthSession } from "@/lib/auth/permissions";
 import { AttendanceService } from "@/services/attendance.service";
 import { ApiResponse } from "@/lib/api-response";
+import { checkRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
@@ -15,6 +16,13 @@ export async function POST(req: Request) {
     }
 
     const ipAddress = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "127.0.0.1";
+    
+    // Apply Rate Limiting (10 requests per minute per IP to prevent duplicate clicks)
+    const rateCheck = checkRateLimit(`punch-out-${ipAddress}`, { limit: 10, windowMs: 60 * 1000 });
+    if (!rateCheck.success) {
+      return rateLimitResponse(rateCheck.reset);
+    }
+
     const userAgent = req.headers.get("user-agent") || undefined;
 
     const result = await AttendanceService.punchOut(auth.employee.id, ipAddress, userAgent);

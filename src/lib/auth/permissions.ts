@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { verifyAuthToken } from "./jwt";
 import { validateSession } from "./session";
 
-export type AllowedRole = "ADMIN" | "EMPLOYEE" | "MANAGER" | "HR_MANAGER";
+export type AllowedRole = "ADMIN" | "EMPLOYEE" | "MANAGER" | "HR_MANAGER" | "COMPLIANCE_AUDITOR";
 
 export type Permission =
   | "EMPLOYEE_READ"
@@ -34,7 +34,13 @@ export type Permission =
   | "EXPORT_LEAVE"
   | "EXPORT_EMPLOYEE"
   | "EXPORT_WORKING_HOURS"
-  | "EMPLOYEE_LIFECYCLE_MANAGE";
+  | "EMPLOYEE_LIFECYCLE_MANAGE"
+  | "OD_REQUEST"
+  | "OD_READ_SELF"
+  | "OD_READ_ALL"
+  | "OD_APPROVE"
+  | "OD_REJECT"
+  | "OD_CANCEL";
 
 export const ROLE_PERMISSIONS: Record<AllowedRole, Permission[]> = {
   ADMIN: [
@@ -68,6 +74,12 @@ export const ROLE_PERMISSIONS: Record<AllowedRole, Permission[]> = {
     "EXPORT_EMPLOYEE",
     "EXPORT_WORKING_HOURS",
     "EMPLOYEE_LIFECYCLE_MANAGE",
+    "OD_REQUEST",
+    "OD_READ_SELF",
+    "OD_READ_ALL",
+    "OD_APPROVE",
+    "OD_REJECT",
+    "OD_CANCEL",
   ],
   HR_MANAGER: [
     "EMPLOYEE_READ",
@@ -93,6 +105,12 @@ export const ROLE_PERMISSIONS: Record<AllowedRole, Permission[]> = {
     "EXPORT_EMPLOYEE",
     "EXPORT_WORKING_HOURS",
     "EMPLOYEE_LIFECYCLE_MANAGE",
+    "OD_REQUEST",
+    "OD_READ_SELF",
+    "OD_READ_ALL",
+    "OD_APPROVE",
+    "OD_REJECT",
+    "OD_CANCEL",
   ],
   MANAGER: [
     "EMPLOYEE_READ",
@@ -112,6 +130,9 @@ export const ROLE_PERMISSIONS: Record<AllowedRole, Permission[]> = {
     "EXPORT_ATTENDANCE",
     "EXPORT_LEAVE",
     "EXPORT_WORKING_HOURS",
+    "OD_REQUEST",
+    "OD_READ_SELF",
+    "OD_CANCEL",
   ],
   EMPLOYEE: [
     "EMPLOYEE_READ",
@@ -122,6 +143,16 @@ export const ROLE_PERMISSIONS: Record<AllowedRole, Permission[]> = {
     "HOLIDAY_READ",
     "REPORT_READ_SELF",
     "NOTIFICATION_READ_SELF",
+    "OD_REQUEST",
+    "OD_READ_SELF",
+    "OD_CANCEL",
+  ],
+  COMPLIANCE_AUDITOR: [
+    "AUDIT_READ",
+    "REPORT_READ_ALL",
+    "ATTENDANCE_READ_ALL",
+    "EMPLOYEE_READ",
+    "OD_READ_ALL",
   ],
 };
 
@@ -186,9 +217,18 @@ export function can(role: string, action: string, resource: string): boolean {
       return false;
 
     case "reports":
-    case "audit":
     case "settings":
       return role === "ADMIN" || role === "HR_MANAGER";
+
+    case "audit":
+      return role === "ADMIN" || role === "HR_MANAGER" || role === "COMPLIANCE_AUDITOR";
+
+    case "onduty":
+    case "od":
+      if (role === "ADMIN" || role === "HR_MANAGER") return true;
+      if (role === "MANAGER" && (action === "read" || action === "read_team")) return true;
+      if (role === "EMPLOYEE" && (action === "read_own" || action === "request" || action === "cancel")) return true;
+      return false;
 
     default:
       return false;
@@ -196,26 +236,74 @@ export function can(role: string, action: string, resource: string): boolean {
 }
 
 /**
- * Retrieves the currently authenticated employee session from HTTP cookies on server-side.
+ * Retrieves the currently authenticated employee session from HTTP cookies or Bearer Authorization header.
  */
-export async function getAuthSession() {
+export async function getAuthSession(req?: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token")?.value || cookieStore.get("employee_token")?.value;
+    let token: string | null = null;
+
+    // 1. Check Authorization Bearer header if Request is supplied
+    if (req) {
+      const authHeader = req.headers.get("authorization");
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        token = authHeader.substring(7).trim();
+      }
+      if (!token) {
+        const cookieHeader = req.headers.get("cookie");
+        if (cookieHeader) {
+          const match = cookieHeader.match(/(?:^|;\s*)(?:token|employee_token|workhub_token)=([^;]+)/);
+          if (match) token = decodeURIComponent(match[1]);
+        }
+      }
+    }
+
+    // 2. Next.js cookies() fallback
+    if (!token) {
+      const cookieStore = await cookies();
+      token =
+        cookieStore.get("token")?.value ||
+        cookieStore.get("employee_token")?.value ||
+        cookieStore.get("workhub_token")?.value ||
+        null;
+    }
 
     if (!token) return null;
 
     const payload = await verifyAuthToken(token);
-    if (!payload || !payload.sessionId) return null;
+    if (!payload) return null;
 
-    const session = await validateSession(payload.sessionId);
-    if (!session) return null;
+    // Session-based authentication
+    if (payload.sessionId) {
+      const session = await validateSession(payload.sessionId);
+      if (session) {
+        return {
+          session,
+          employee: session.employee,
+          role: session.employee.role.name as string,
+        };
+      }
+    }
 
-    return {
-      session,
-      employee: session.employee,
-      role: session.employee.role.name as string,
-    };
+    // Direct JWT subject fallback (for background agent / service tokens)
+    if (payload.sub) {
+      const { prisma } = await import("@/lib/prisma");
+      const employee = await prisma.employee.findUnique({
+        where: { id: payload.sub },
+        include: { role: true, department: true },
+      });
+      if (employee) {
+        const activeStatuses = ["ACTIVE", "PROBATION", "CONFIRMED", "NOTICE_PERIOD", "ONBOARDING"];
+        if (activeStatuses.includes(employee.status)) {
+          return {
+            session: null,
+            employee,
+            role: employee.role.name as string,
+          };
+        }
+      }
+    }
+
+    return null;
   } catch {
     return null;
   }

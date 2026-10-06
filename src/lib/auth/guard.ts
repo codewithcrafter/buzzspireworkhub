@@ -96,7 +96,8 @@ export async function requireAuth(req?: Request): Promise<RequireAuthResult> {
       };
     }
 
-    if (employee.status !== "ACTIVE") {
+    const activeStatuses = ["ACTIVE", "PROBATION", "CONFIRMED", "NOTICE_PERIOD", "ONBOARDING"];
+    if (!activeStatuses.includes(employee.status)) {
       return {
         success: false,
         response: ApiResponse.forbidden("Account is inactive or suspended. Please contact administrator."),

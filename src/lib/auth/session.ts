@@ -79,7 +79,8 @@ export async function validateSession(sessionId: string) {
   if (!session) return null;
   if (session.revokedAt) return null;
   if (session.expiresAt < new Date()) return null;
-  if (session.employee.status !== "ACTIVE") return null;
+  const activeStatuses = ["ACTIVE", "PROBATION", "CONFIRMED", "NOTICE_PERIOD", "ONBOARDING"];
+  if (!activeStatuses.includes(session.employee.status)) return null;
 
   return session;
 }

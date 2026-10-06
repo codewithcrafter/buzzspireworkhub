@@ -39,10 +39,19 @@ export async function POST(req: Request) {
     });
   } catch (error: any) {
     if (error.message === "ALREADY_PUNCHED_IN") {
-      return ApiResponse.badRequest("You already have an active work session. Please punch out before starting a new session.");
+      return ApiResponse.badRequest("You already have an active work session for today. Please punch out before starting a new session.");
     }
     if (error.message === "EMPLOYEE_NOT_ACTIVE") {
       return ApiResponse.forbidden("Inactive accounts are not allowed to record attendance.");
+    }
+    if (error.message === "EMPLOYMENT_ENDED") {
+      return ApiResponse.forbidden("Employment has ended for this account. Attendance recording is disabled.");
+    }
+    if (error.message === "BEYOND_LAST_WORKING_DATE") {
+      return ApiResponse.forbidden("Today's date is beyond your recorded last working date.");
+    }
+    if (error.message === "ADMIN_ATTENDANCE_NOT_ALLOWED") {
+      return ApiResponse.forbidden("Administrators do not participate in attendance tracking.");
     }
     return ApiResponse.serverError("Error processing punch in", error);
   }

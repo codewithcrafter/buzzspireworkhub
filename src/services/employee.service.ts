@@ -519,4 +519,52 @@ export class EmployeeService {
 
     return { attempts: newAttempts, isLocked: !!lockedUntil, lockedUntil };
   }
+
+  /**
+   * Checks if an employee's employment status qualifies for attendance recording.
+   * Allows active workforce statuses: ACTIVE, PROBATION, CONFIRMED, NOTICE_PERIOD, ONBOARDING.
+   */
+  static isEligibleForAttendance(status: string): boolean {
+    const activeWorkingStatuses = [
+      "ACTIVE",
+      "PROBATION",
+      "CONFIRMED",
+      "NOTICE_PERIOD",
+      "ONBOARDING",
+    ];
+    return activeWorkingStatuses.includes(status);
+  }
+
+  /**
+   * Asserts whether an employee is eligible to participate in attendance.
+   * Throws explicit domain errors if ineligible.
+   */
+  static verifyAttendanceEligibility(employee: {
+    status: string;
+    lastWorkingDate?: Date | null;
+    role?: { name: string } | null;
+  }) {
+    if (employee.role?.name === "ADMIN") {
+      throw new Error("ADMIN_ATTENDANCE_NOT_ALLOWED");
+    }
+
+    if (employee.status === "EXITED" || employee.status === "TERMINATED") {
+      throw new Error("EMPLOYMENT_ENDED");
+    }
+
+    if (employee.status === "SUSPENDED" || employee.status === "INACTIVE") {
+      throw new Error("EMPLOYEE_NOT_ACTIVE");
+    }
+
+    if (!EmployeeService.isEligibleForAttendance(employee.status)) {
+      throw new Error("EMPLOYEE_NOT_ACTIVE");
+    }
+
+    if (employee.lastWorkingDate) {
+      const now = new Date();
+      if (now > new Date(employee.lastWorkingDate.getTime() + 24 * 60 * 60 * 1000 - 1)) {
+        throw new Error("BEYOND_LAST_WORKING_DATE");
+      }
+    }
+  }
 }

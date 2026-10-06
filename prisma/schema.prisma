@@ -15,6 +15,7 @@ enum RoleName {
   EMPLOYEE
   MANAGER
   HR_MANAGER
+  COMPLIANCE_AUDITOR
 }
 
 enum EmployeeStatus {
@@ -44,6 +45,19 @@ enum LeaveStatus {
   APPROVED
   REJECTED
   CANCELLED
+}
+
+enum ODStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum ODSessionType {
+  FULL_DAY
+  FIRST_HALF
+  SECOND_HALF
 }
 
 // ==========================================
@@ -121,9 +135,12 @@ model Employee {
   attendanceSessions AttendanceSession[]
   loginSessions      LoginSession[]
   activityLogs       ActivityLog[]
-  auditLogs          AuditLog[]
+  auditLogs          AuditLog[]             @relation("AuditLogTargetEmployee")
+  performedAuditLogs AuditLog[]             @relation("AuditLogPerformedBy")
   leaves             Leave[]                @relation("EmployeeLeaves")
   reviewedLeaves     Leave[]                @relation("ReviewedLeaves")
+  onDutyRequests     OnDutyRequest[]        @relation("EmployeeODRequests")
+  reviewedODRequests OnDutyRequest[]        @relation("ReviewedODRequests")
   notifications      Notification[]
   agentDevices       AgentDevice[]
   agentEnrollments   AgentEnrollmentToken[]
@@ -305,6 +322,31 @@ model Leave {
   @@index([endDate])
 }
 
+// 10.5 On Duty (OD) Request Model
+model OnDutyRequest {
+  id              String        @id @default(cuid())
+  odId            String        @unique
+  employeeId      String
+  date            DateTime
+  sessionType     ODSessionType @default(FULL_DAY)
+  reason          String
+  location        String?
+  status          ODStatus      @default(PENDING)
+  approvedById    String?
+  approvedAt      DateTime?
+  rejectionReason String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  employee Employee  @relation("EmployeeODRequests", fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewer Employee? @relation("ReviewedODRequests", fields: [approvedById], references: [id], onDelete: SetNull)
+
+  @@index([employeeId])
+  @@index([status])
+  @@index([date])
+  @@index([approvedById])
+}
+
 // 11. Holiday Model
 model Holiday {
   id          String   @id @default(uuid())
@@ -331,22 +373,26 @@ model SystemSetting {
 
 // 13. Audit Log Model
 model AuditLog {
-  id          String   @id @default(uuid())
-  employeeId  String?
-  action      String
-  module      String
-  resource    String?
-  resourceId  String?
-  description String
-  ipAddress   String?
-  userAgent   String?
-  metadata    Json?
-  requestId   String?
-  createdAt   DateTime @default(now())
+  id            String    @id @default(cuid())
+  employeeId    String?
+  performedById String?
+  action        String
+  module        String
+  resource      String?
+  resourceId    String?
+  description   String
+  ipAddress     String?
+  userAgent     String?
+  metadata      Json?
+  requestId     String?
+  createdAt     DateTime  @default(now())
 
-  employee Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  employee    Employee? @relation("AuditLogTargetEmployee", fields: [employeeId], references: [id], onDelete: SetNull)
+  performedBy Employee? @relation("AuditLogPerformedBy", fields: [performedById], references: [id], onDelete: SetNull)
 
-  @@index([employeeId])
+  @@index([module, action, createdAt])
+  @@index([employeeId, createdAt])
+  @@index([performedById, createdAt])
   @@index([createdAt])
   @@index([action])
   @@index([module])

@@ -103,12 +103,44 @@ export class WorkingHoursService {
       }
     });
 
-    // 2. Fetch Idle Activity Logs matching this date
-    // (We use ActivityLog to find specific IDLE_STATEs telemetry that might not be formally closed as breaks)
-    // Actually, per Phase A, the Windows Agent auto-creates "Idle Break" Break records.
-    // So we can rely on the Break records of type "Idle Break" (or legacy "System Idle").
+    // 2. Check for approved On Duty (OD) request
+    const approvedOD = await prisma.onDutyRequest.findFirst({
+      where: {
+        employeeId,
+        date: { gte: startOfDay, lte: endOfDay },
+        status: "APPROVED",
+      },
+    });
 
     if (!attendance || attendance.sessions.length === 0) {
+      if (approvedOD) {
+        const isFullDay = approvedOD.sessionType === "FULL_DAY";
+        const expectedMinutes = dayType === "WORKING_DAY" ? settings.expectedWorkMinutes : 0;
+        const regularizedMinutes = isFullDay ? expectedMinutes : Math.floor(expectedMinutes / 2);
+
+        return {
+          employeeId,
+          date: dateString,
+          timezone: settings.timezone,
+          dayType,
+          attendanceOpen: false,
+          firstPunchIn: null,
+          lastPunchOut: null,
+          grossSpanMinutes: regularizedMinutes,
+          fixedLunchMinutes: 0,
+          declaredBreakMinutes: 0,
+          idleMinutes: 0,
+          workingMinutes: regularizedMinutes,
+          expectedWorkMinutes: expectedMinutes,
+          lateMinutes: 0,
+          earlyLogoutMinutes: 0,
+          shortfallMinutes: 0,
+          overtimeMinutes: 0,
+          halfDay: !isFullDay,
+          status: isFullDay ? "PRESENT" : "HALF_DAY",
+        };
+      }
+
       return {
         employeeId,
         date: dateString,
@@ -253,7 +285,17 @@ export class WorkingHoursService {
     const halfDay = workingMinutes > 0 && workingMinutes < settings.halfDayThreshold;
 
     let status = attendanceOpen ? "OPEN_SESSION" : "PRESENT";
-    if (dayType !== "WORKING_DAY" && workingMinutes === 0) {
+    if (approvedOD) {
+      if (approvedOD.sessionType === "FULL_DAY") {
+        status = "PRESENT";
+        lateMinutes = 0;
+        earlyLogoutMinutes = 0;
+        shortfallMinutes = 0;
+      } else {
+        if (approvedOD.sessionType === "FIRST_HALF") lateMinutes = 0;
+        if (approvedOD.sessionType === "SECOND_HALF") earlyLogoutMinutes = 0;
+      }
+    } else if (dayType !== "WORKING_DAY" && workingMinutes === 0) {
       status = dayType;
     } else if (halfDay && !attendanceOpen) {
       status = "HALF_DAY";

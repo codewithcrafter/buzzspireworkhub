@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { getStartOfDay, getEndOfDay, calculateDurationSeconds, getKolkataDateString, calculateLateStatus } from "@/lib/date";
 import { AuditService } from "./audit.service";
 import { ActivityService } from "./activity.service";
@@ -12,6 +13,13 @@ export class AttendanceService {
   static async getTodayAttendance(employeeId: string, dateInput?: Date | string) {
     const startOfDay = getStartOfDay(dateInput);
     const endOfDay = getEndOfDay(dateInput);
+
+    // Auto-close any orphaned sessions from previous days if checking today
+    if (!dateInput) {
+      await AttendanceService.autoCloseOrphanedSessions(prisma, employeeId, startOfDay).catch((err) => {
+        console.error("Auto-close orphaned sessions error in getTodayAttendance:", err);
+      });
+    }
 
     const attendance = await prisma.attendance.findFirst({
       where: {
@@ -114,6 +122,150 @@ export class AttendanceService {
   }
 
   /**
+   * Automatically closes unclosed / hanging sessions from previous calendar days.
+   * Prevents employees from being permanently locked out of punching in on subsequent days.
+   */
+  static async autoCloseOrphanedSessions(
+    tx: Prisma.TransactionClient | typeof prisma,
+    employeeId: string,
+    currentStartOfDay: Date,
+    shiftEndConfig?: string | null
+  ): Promise<number> {
+    const orphanedSessions = await tx.attendanceSession.findMany({
+      where: {
+        employeeId,
+        punchOut: null,
+        punchIn: { lt: currentStartOfDay },
+      },
+      include: {
+        attendance: true,
+        breaks: {
+          where: { endTime: null },
+        },
+      },
+      orderBy: { punchIn: "asc" },
+    });
+
+    for (const session of orphanedSessions) {
+      const sessionDayStart = getStartOfDay(session.punchIn);
+      const sessionDayEnd = getEndOfDay(session.punchIn);
+
+      // 1. Auto-close any hanging breaks on this orphaned session
+      for (const openBreak of session.breaks) {
+        const autoBreakEnd = new Date(
+          Math.min(
+            openBreak.startTime.getTime() + 60 * 60 * 1000,
+            sessionDayEnd.getTime()
+          )
+        );
+        const breakDuration = calculateDurationSeconds(openBreak.startTime, autoBreakEnd);
+        await tx.break.update({
+          where: { id: openBreak.id },
+          data: {
+            endTime: autoBreakEnd,
+            durationSeconds: breakDuration,
+          },
+        });
+      }
+
+      // 2. Determine an appropriate auto-close time for the session
+      let autoCheckoutTime: Date;
+      if (shiftEndConfig && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(shiftEndConfig)) {
+        const [endH, endM] = shiftEndConfig.split(":").map(Number);
+        const shiftEndDate = new Date(sessionDayStart.getTime() + (endH * 60 + endM) * 60 * 1000);
+        if (shiftEndDate > session.punchIn) {
+          autoCheckoutTime = shiftEndDate;
+        } else {
+          autoCheckoutTime = new Date(session.punchIn.getTime() + 8 * 3600 * 1000);
+        }
+      } else {
+        autoCheckoutTime = new Date(session.punchIn.getTime() + 8 * 3600 * 1000);
+      }
+
+      // Cap at end of that day (23:59:59 IST)
+      if (autoCheckoutTime > sessionDayEnd) {
+        autoCheckoutTime = sessionDayEnd;
+      }
+
+      const sessionWorkingSeconds = calculateDurationSeconds(session.punchIn, autoCheckoutTime);
+
+      await tx.attendanceSession.update({
+        where: { id: session.id },
+        data: {
+          punchOut: autoCheckoutTime,
+          workingSeconds: sessionWorkingSeconds,
+        },
+      });
+
+      // 3. Recalculate parent attendance container
+      const allSessions = await tx.attendanceSession.findMany({
+        where: { attendanceId: session.attendanceId },
+        include: { breaks: true },
+      });
+
+      const totalWorking = allSessions.reduce((sum: number, s) => sum + (s.workingSeconds || 0), 0);
+      const totalBreaks = allSessions
+        .flatMap((s) => s.breaks)
+        .reduce((sum: number, b) => sum + (b.durationSeconds || 0), 0);
+      const netWorking = Math.max(0, totalWorking - totalBreaks);
+
+      await tx.attendance.update({
+        where: { id: session.attendanceId },
+        data: {
+          checkOut: autoCheckoutTime,
+          totalWorkingSeconds: totalWorking,
+          totalBreakSeconds: totalBreaks,
+          netWorkingSeconds: netWorking,
+        },
+      });
+
+      // 4. Audit & Activity logging via Enterprise Audit Service
+      await tx.activityLog.create({
+        data: {
+          employeeId,
+          action: "ATTENDANCE_AUTO_CLOSED",
+          module: "ATTENDANCE",
+          description: `Overnight unclosed shift from ${sessionDayStart.toLocaleDateString("en-IN")} was auto-closed.`,
+          metadata: {
+            sessionId: session.id,
+            attendanceId: session.attendanceId,
+            autoCheckoutTime,
+            sessionWorkingSeconds,
+          },
+        },
+      });
+
+      await AuditService.logEvent(
+        {
+          employeeId,
+          performedById: null, // System automated agent
+          action: "ATTENDANCE_AUTO_CLOSED",
+          module: "ATTENDANCE",
+          description: `System auto-remediation: auto-closed orphaned shift from ${sessionDayStart.toLocaleDateString("en-IN")}`,
+          metadata: {
+            systemRemediation: true,
+            sessionId: session.id,
+            attendanceId: session.attendanceId,
+            before: {
+              punchOut: null,
+            },
+            after: {
+              punchOut: autoCheckoutTime,
+              workingSeconds: sessionWorkingSeconds,
+            },
+            autoCheckoutTime,
+            sessionWorkingSeconds,
+            reason: "Hanging overnight shift auto-closed by attendance engine",
+          },
+        },
+        tx
+      );
+    }
+
+    return orphanedSessions.length;
+  }
+
+  /**
    * Handles PUNCH IN for an employee (atomic transaction).
    */
   static async punchIn(employeeId: string, ipAddress?: string, userAgent?: string) {
@@ -125,11 +277,21 @@ export class AttendanceService {
       // 1. Verify employee exists and is active
       const employee = await tx.employee.findUnique({
         where: { id: employeeId },
-        select: { id: true, status: true, shiftStart: true, lastWorkingDate: true, role: { select: { name: true } } },
+        select: {
+          id: true,
+          status: true,
+          shiftStart: true,
+          shiftEnd: true,
+          lastWorkingDate: true,
+          role: { select: { name: true } },
+        },
       });
 
       if (!employee || employee.status === "EXITED" || employee.status === "TERMINATED") {
         throw new Error("EMPLOYMENT_ENDED");
+      }
+      if (employee.status === "INACTIVE" || employee.status === "SUSPENDED") {
+        throw new Error("EMPLOYEE_NOT_ACTIVE");
       }
       if (employee.lastWorkingDate && getStartOfDay(now) > getStartOfDay(employee.lastWorkingDate)) {
         throw new Error("BEYOND_LAST_WORKING_DATE");
@@ -139,19 +301,23 @@ export class AttendanceService {
         throw new Error("ADMIN_ATTENDANCE_NOT_ALLOWED");
       }
 
-      // 2. Check existing open session for employee
-      const existingOpenSession = await tx.attendanceSession.findFirst({
+      // 2. Clean up any hanging / orphaned sessions from PREVIOUS DAYS
+      await AttendanceService.autoCloseOrphanedSessions(tx, employeeId, startOfDay, employee.shiftEnd);
+
+      // 3. Check existing open session for employee TODAY
+      const existingTodayOpenSession = await tx.attendanceSession.findFirst({
         where: {
           employeeId,
           punchOut: null,
+          punchIn: { gte: startOfDay, lte: endOfDay },
         },
       });
 
-      if (existingOpenSession) {
+      if (existingTodayOpenSession) {
         throw new Error("ALREADY_PUNCHED_IN");
       }
 
-      // 3. Find or create today's Attendance container record
+      // 4. Find or create today's Attendance container record
       let attendance = await tx.attendance.findFirst({
         where: {
           employeeId,
@@ -192,7 +358,7 @@ export class AttendanceService {
         });
       }
 
-      // 4. Create new AttendanceSession
+      // 5. Create new AttendanceSession
       const session = await tx.attendanceSession.create({
         data: {
           attendanceId: attendance.id,
@@ -202,7 +368,7 @@ export class AttendanceService {
         },
       });
 
-      // 5. Create Activity & Audit records
+      // 6. Create Activity & Audit records
       await tx.activityLog.create({
         data: {
           employeeId,
@@ -246,16 +412,35 @@ export class AttendanceService {
           attendance: true,
           breaks: true,
         },
+        orderBy: { punchIn: "desc" },
       });
 
       if (!activeSession) {
         throw new Error("NO_ACTIVE_SESSION");
       }
 
-      // 2. Prevent punch out during an active break
+      // 2. Gracefully auto-close active break instead of throwing error!
       const activeBreak = activeSession.breaks.find((b) => !b.endTime);
+      let closedBreakDuration = 0;
       if (activeBreak) {
-        throw new Error("ACTIVE_BREAK_MUST_END_FIRST");
+        closedBreakDuration = calculateDurationSeconds(activeBreak.startTime, now);
+        await tx.break.update({
+          where: { id: activeBreak.id },
+          data: {
+            endTime: now,
+            durationSeconds: closedBreakDuration,
+          },
+        });
+
+        await tx.activityLog.create({
+          data: {
+            employeeId,
+            action: "BREAK_ENDED",
+            module: "ATTENDANCE",
+            description: `Active break automatically ended on shift punch out (${closedBreakDuration}s)`,
+            metadata: { breakId: activeBreak.id, autoClosedOnPunchOut: true },
+          },
+        });
       }
 
       // 3. Calculate session working seconds
@@ -283,7 +468,12 @@ export class AttendanceService {
 
       const totalBreaks = allAttendanceSessions
         .flatMap((s) => s.breaks)
-        .reduce((sum, b) => sum + (b.durationSeconds || 0), 0);
+        .reduce((sum, b) => {
+          if (b.id === activeBreak?.id) {
+            return sum + closedBreakDuration;
+          }
+          return sum + (b.durationSeconds || 0);
+        }, 0);
 
       const netWorking = Math.max(0, totalWorking - totalBreaks);
 
@@ -297,18 +487,14 @@ export class AttendanceService {
         },
       });
 
-      // Recalculate HR metrics using the Centralized Engine
-      // Note: We run it after the tx, or inside it. Since HREngine opens its own queries, we should run it after the transaction or pass the tx to it.
-      // To keep it clean, we'll run it after the transaction returns.
-
       // 6. Audit & Activity
       await tx.activityLog.create({
         data: {
           employeeId,
           action: "PUNCH_OUT",
           module: "ATTENDANCE",
-          description: `Punched out at ${now.toLocaleTimeString("en-IN")}`,
-          metadata: { sessionId: activeSession.id, sessionWorkingSeconds },
+          description: `Punched out at ${now.toLocaleTimeString("en-IN")}${activeBreak ? " (active break ended automatically)" : ""}`,
+          metadata: { sessionId: activeSession.id, sessionWorkingSeconds, autoClosedBreak: !!activeBreak },
         },
       });
 
@@ -317,10 +503,10 @@ export class AttendanceService {
           employeeId,
           action: "ATTENDANCE_PUNCH_OUT",
           module: "ATTENDANCE",
-          description: `Punch out recorded. Session duration: ${sessionWorkingSeconds}s`,
+          description: `Punch out recorded. Session duration: ${sessionWorkingSeconds}s${activeBreak ? " (auto-closed active break)" : ""}`,
           ipAddress: ipAddress || null,
           userAgent: userAgent || null,
-          metadata: { sessionId: activeSession.id, sessionWorkingSeconds },
+          metadata: { sessionId: activeSession.id, sessionWorkingSeconds, autoClosedBreak: !!activeBreak },
         },
       });
 
@@ -798,28 +984,35 @@ export class AttendanceService {
         },
       });
 
-      // Audit Log
-      await tx.auditLog.create({
-        data: {
+      // Audit Log via Enterprise Audit Service
+      await AuditService.logEvent(
+        {
           employeeId,
-          action: "ADMIN_MANUAL_PUNCH_IN",
+          performedById: adminId,
+          action: "ATTENDANCE_MANUAL_ADJUST",
           module: "ATTENDANCE",
           description: `Admin manual punch in. Reason: ${reason}`,
           ipAddress: ipAddress || null,
           userAgent: userAgent || null,
           metadata: {
+            operation: "MANUAL_PUNCH_IN",
             adminId,
             sessionId: session.id,
             attendanceId: attendance.id,
             reason,
-            previousCheckIn: attendance.checkIn || null,
-            previousCheckOut: attendance.checkOut || null,
-            newCheckIn: punchDate,
-            newCheckOut: attendance.checkOut || null,
+            before: {
+              checkIn: attendance.checkIn || null,
+              checkOut: attendance.checkOut || null,
+            },
+            after: {
+              checkIn: punchDate,
+              checkOut: attendance.checkOut || null,
+            },
             selectedBusinessDate: dateString,
           },
         },
-      });
+        tx
+      );
 
       return session;
     });
@@ -921,29 +1114,36 @@ export class AttendanceService {
         },
       });
 
-      const action = isForce ? "ADMIN_FORCE_PUNCH_OUT" : "ADMIN_MANUAL_PUNCH_OUT";
+      const action = isForce ? "ATTENDANCE_FORCE_ADJUST" : "ATTENDANCE_MANUAL_ADJUST";
 
-      await tx.auditLog.create({
-        data: {
+      await AuditService.logEvent(
+        {
           employeeId,
+          performedById: adminId,
           action,
           module: "ATTENDANCE",
           description: `Admin ${isForce ? "force" : "manual"} punch out. Reason: ${reason}`,
           ipAddress: ipAddress || null,
           userAgent: userAgent || null,
           metadata: {
+            operation: isForce ? "FORCE_PUNCH_OUT" : "MANUAL_PUNCH_OUT",
             adminId,
             sessionId: targetSession.id,
             attendanceId: attendance.id,
             reason,
-            previousCheckIn: attendance.checkIn || null,
-            previousCheckOut: attendance.checkOut || null,
-            newCheckIn: attendance.checkIn || null,
-            newCheckOut: punchDate,
+            before: {
+              checkIn: attendance.checkIn || null,
+              checkOut: attendance.checkOut || null,
+            },
+            after: {
+              checkIn: attendance.checkIn || null,
+              checkOut: punchDate,
+            },
             selectedBusinessDate: dateString,
           },
         },
-      });
+        tx
+      );
 
       return attendance;
     });
@@ -1039,6 +1239,7 @@ export class AttendanceService {
     let present = 0;
     let late = 0;
     let onLeave = 0;
+    let halfDay = 0;
     let working = 0;
     let onBreak = 0;
     let completed = 0;
@@ -1047,6 +1248,7 @@ export class AttendanceService {
       if (att.status === "PRESENT") present++;
       if (att.status === "LATE") late++;
       if (att.status === "ON_LEAVE") onLeave++;
+      if (att.status === "HALF_DAY") halfDay++;
 
       const activeSession = att.sessions.find((s) => !s.punchOut);
       const activeBreak = activeSession?.breaks.find((b) => !b.endTime);
@@ -1060,7 +1262,22 @@ export class AttendanceService {
       }
     });
 
-    const absent = Math.max(0, totalActiveEmployees - (present + late + onLeave));
+    // Check approved OD requests on this date
+    const approvedODs = await prisma.onDutyRequest.findMany({
+      where: {
+        status: "APPROVED",
+        date: { gte: startOfDay, lte: endOfDay },
+      },
+      select: { employeeId: true },
+    });
+    const odEmployeeIds = new Set(approvedODs.map((o) => o.employeeId));
+    const onDuty = odEmployeeIds.size;
+
+    const nonAbsentEmployees = new Set([
+      ...attendances.filter((a) => a.status !== "ABSENT").map((a) => a.employeeId),
+      ...approvedODs.map((o) => o.employeeId),
+    ]);
+    const absent = Math.max(0, totalActiveEmployees - nonAbsentEmployees.size);
 
     return {
       date: getKolkataDateString(dateInput),
@@ -1068,6 +1285,8 @@ export class AttendanceService {
       present,
       absent,
       late,
+      halfDay,
+      onDuty,
       onLeave,
       working,
       onBreak,
@@ -1094,6 +1313,15 @@ export class AttendanceService {
       include: {
         department: true,
         role: true,
+        onDutyRequests: {
+          where: {
+            status: "APPROVED",
+            date: {
+              gte: startOfDay,
+              lte: endOfDay,
+            },
+          },
+        },
         attendances: {
           where: {
             date: {
@@ -1122,17 +1350,22 @@ export class AttendanceService {
       const sessions = todayAttendance?.sessions || [];
       const activeSession = sessions.find((s) => !s.punchOut);
       const activeBreak = activeSession?.breaks.find((b) => !b.endTime);
+      const approvedOD = emp.onDutyRequests?.[0] || null;
 
-      let currentState: "ABSENT" | "WORKING" | "ON_BREAK" | "COMPLETED" = "ABSENT";
+      let currentState: "ABSENT" | "WORKING" | "ON_BREAK" | "COMPLETED" | "ON_DUTY" = "ABSENT";
       if (activeBreak) {
         currentState = "ON_BREAK";
       } else if (activeSession) {
         currentState = "WORKING";
       } else if (sessions.length > 0) {
         currentState = "COMPLETED";
+      } else if (approvedOD) {
+        currentState = "ON_DUTY";
       }
 
-      const status = todayAttendance?.status || "ABSENT";
+      const status =
+        todayAttendance?.status ||
+        (approvedOD ? (approvedOD.sessionType === "FULL_DAY" ? "PRESENT" : "HALF_DAY") : "ABSENT");
 
       const firstPunchIn = sessions[0]?.punchIn || null;
       const currentSessionDuration = activeSession ? calculateDurationSeconds(activeSession.punchIn, now) : 0;
