@@ -1202,12 +1202,21 @@ export class AttendanceService {
 
   /**
    * Retrieves admin aggregate attendance summary for a given date.
+  /**
+   * Retrieves admin aggregate attendance summary for a given date.
    */
   static async getAdminAttendanceSummary(dateInput?: Date | string, filters: { departmentId?: string } = {}) {
     const startOfDay = getStartOfDay(dateInput);
     const endOfDay = getEndOfDay(dateInput);
 
-    const empWhere: any = { status: "ACTIVE", role: { name: { not: "ADMIN" } } };
+    const activeStatuses: Prisma.EnumEmployeeStatusFilter = {
+      in: ["ACTIVE", "PROBATION", "CONFIRMED", "NOTICE_PERIOD", "ONBOARDING"] as any,
+    };
+
+    const empWhere: any = {
+      status: activeStatuses,
+      role: { name: { not: "ADMIN" } },
+    };
     if (filters.departmentId) {
       empWhere.departmentId = filters.departmentId;
     }
@@ -1219,7 +1228,10 @@ export class AttendanceService {
         gte: startOfDay,
         lte: endOfDay,
       },
-      employee: { role: { name: { not: "ADMIN" } } },
+      employee: {
+        status: activeStatuses,
+        role: { name: { not: "ADMIN" } },
+      },
     };
     if (filters.departmentId) {
       attWhere.employee.departmentId = filters.departmentId;
@@ -1262,22 +1274,84 @@ export class AttendanceService {
       }
     });
 
-    // Check approved OD requests on this date
-    const approvedODs = await prisma.onDutyRequest.findMany({
-      where: {
-        status: "APPROVED",
-        date: { gte: startOfDay, lte: endOfDay },
-      },
-      select: { employeeId: true },
-    });
+    // Check approved OD requests on this date (safely handled if table does not exist)
+    let approvedODs: Array<{ employeeId: string }> = [];
+    try {
+      approvedODs = await (prisma as any).onDutyRequest.findMany({
+        where: {
+          status: "APPROVED",
+          date: { gte: startOfDay, lte: endOfDay },
+        },
+        select: { employeeId: true },
+      });
+    } catch {
+      // Table may not exist in database
+    }
     const odEmployeeIds = new Set(approvedODs.map((o) => o.employeeId));
     const onDuty = odEmployeeIds.size;
+
+    // Check approved Leave requests on this date
+    let approvedLeaves: Array<{ employeeId: string }> = [];
+    try {
+      approvedLeaves = await prisma.leave.findMany({
+        where: {
+          status: "APPROVED",
+          startDate: { lte: endOfDay },
+          endDate: { gte: startOfDay },
+          employee: {
+            status: activeStatuses,
+            role: { name: { not: "ADMIN" } },
+            ...(filters.departmentId ? { departmentId: filters.departmentId } : {}),
+          },
+        },
+        select: { employeeId: true },
+      });
+    } catch {
+      // Leave table query safety
+    }
+
+    const leaveEmployeeIds = new Set([
+      ...attendances.filter((a) => a.status === "ON_LEAVE").map((a) => a.employeeId),
+      ...approvedLeaves.map((l) => l.employeeId),
+    ]);
+    onLeave = leaveEmployeeIds.size;
 
     const nonAbsentEmployees = new Set([
       ...attendances.filter((a) => a.status !== "ABSENT").map((a) => a.employeeId),
       ...approvedODs.map((o) => o.employeeId),
+      ...approvedLeaves.map((l) => l.employeeId),
     ]);
-    const absent = Math.max(0, totalActiveEmployees - nonAbsentEmployees.size);
+
+    // Check if date is a weekend (Sunday) or holiday
+    const targetDateObj = dateInput ? new Date(dateInput) : new Date();
+    const dayOfWeek = targetDateObj.getDay();
+    let isHolidayOrWeekend = dayOfWeek === 0;
+
+    if (!isHolidayOrWeekend) {
+      try {
+        const holidayCount = await prisma.holiday.count({
+          where: {
+            status: "ACTIVE",
+            date: { gte: startOfDay, lte: endOfDay },
+          },
+        });
+        if (holidayCount > 0) {
+          isHolidayOrWeekend = true;
+        }
+      } catch {
+        // Holiday table check
+      }
+    }
+
+    let absent = 0;
+    if (!isHolidayOrWeekend) {
+      absent = Math.max(0, totalActiveEmployees - nonAbsentEmployees.size);
+    }
+
+    const presentCount = present + late + halfDay + onDuty;
+    const attendanceRate = totalActiveEmployees > 0
+      ? Math.round((presentCount / totalActiveEmployees) * 100)
+      : 0;
 
     return {
       date: getKolkataDateString(dateInput),
@@ -1291,6 +1365,7 @@ export class AttendanceService {
       working,
       onBreak,
       completed,
+      attendanceRate,
     };
   }
 
@@ -1303,9 +1378,29 @@ export class AttendanceService {
     const startOfDay = getStartOfDay(targetDate);
     const endOfDay = getEndOfDay(targetDate);
 
-    const empWhere: any = { status: "ACTIVE", role: { name: { not: "ADMIN" } } };
+    const activeStatuses: Prisma.EnumEmployeeStatusFilter = {
+      in: ["ACTIVE", "PROBATION", "CONFIRMED", "NOTICE_PERIOD", "ONBOARDING"] as any,
+    };
+    const empWhere: any = {
+      status: activeStatuses,
+      role: { name: { not: "ADMIN" } },
+    };
     if (filters.departmentId) {
       empWhere.departmentId = filters.departmentId;
+    }
+
+    // Safely query OD requests separately to avoid query failure if table missing
+    const approvedODMap = new Map<string, any>();
+    try {
+      const approvedODs = await (prisma as any).onDutyRequest.findMany({
+        where: {
+          status: "APPROVED",
+          date: { gte: startOfDay, lte: endOfDay },
+        },
+      });
+      approvedODs.forEach((od: any) => approvedODMap.set(od.employeeId, od));
+    } catch {
+      // Table may not exist
     }
 
     const employees = await prisma.employee.findMany({
@@ -1313,15 +1408,6 @@ export class AttendanceService {
       include: {
         department: true,
         role: true,
-        onDutyRequests: {
-          where: {
-            status: "APPROVED",
-            date: {
-              gte: startOfDay,
-              lte: endOfDay,
-            },
-          },
-        },
         attendances: {
           where: {
             date: {
@@ -1350,7 +1436,7 @@ export class AttendanceService {
       const sessions = todayAttendance?.sessions || [];
       const activeSession = sessions.find((s) => !s.punchOut);
       const activeBreak = activeSession?.breaks.find((b) => !b.endTime);
-      const approvedOD = emp.onDutyRequests?.[0] || null;
+      const approvedOD = approvedODMap.get(emp.id) || null;
 
       let currentState: "ABSENT" | "WORKING" | "ON_BREAK" | "COMPLETED" | "ON_DUTY" = "ABSENT";
       if (activeBreak) {
@@ -1368,20 +1454,23 @@ export class AttendanceService {
         (approvedOD ? (approvedOD.sessionType === "FULL_DAY" ? "PRESENT" : "HALF_DAY") : "ABSENT");
 
       const firstPunchIn = sessions[0]?.punchIn || null;
+      const lastSession = sessions.length > 0 ? sessions[sessions.length - 1] : null;
+      const lastPunchOut = lastSession?.punchOut || null;
+
       const currentSessionDuration = activeSession ? calculateDurationSeconds(activeSession.punchIn, now) : 0;
       const currentBreakDuration = activeBreak ? calculateDurationSeconds(activeBreak.startTime, now) : 0;
 
-      const breakHistory = sessions.flatMap(s => s.breaks).map(b => ({
+      const breakHistory = sessions.flatMap((s) => s.breaks).map((b) => ({
         breakTypeName: b.breakType?.name || "Break",
         purpose: b.purpose || null,
         startTime: b.startTime,
         endTime: b.endTime,
-        durationSeconds: b.endTime ? b.durationSeconds : calculateDurationSeconds(b.startTime, now)
+        durationSeconds: b.endTime ? b.durationSeconds : calculateDurationSeconds(b.startTime, now),
       }));
 
       let declaredBreakSeconds = 0;
       let idleBreakSeconds = 0;
-      breakHistory.forEach(b => {
+      breakHistory.forEach((b) => {
         if (b.breakTypeName === "System Idle" || b.breakTypeName === "Idle Break") {
           idleBreakSeconds += b.durationSeconds;
         } else {
@@ -1402,6 +1491,7 @@ export class AttendanceService {
         status,
         currentState,
         punchIn: firstPunchIn,
+        lastPunchOut,
         activeSessionStart: activeSession?.punchIn || null,
         currentSessionDuration,
         activeBreakStart: activeBreak?.startTime || null,
@@ -1415,6 +1505,7 @@ export class AttendanceService {
         shortfallMinutes: todayAttendance?.shortfallMinutes || 0,
         overtimeMinutes: todayAttendance?.overtimeMinutes || 0,
         earlyLogoutMinutes: todayAttendance?.earlyLogoutMinutes || 0,
+        lateMinutes: todayAttendance?.lateMinutes || 0,
         breakHistory,
       };
     });

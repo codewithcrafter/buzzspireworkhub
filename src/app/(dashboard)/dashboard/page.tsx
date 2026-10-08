@@ -52,7 +52,11 @@ export default function DashboardOverviewPage() {
     completed: number;
     late: number;
     onLeave: number;
+    attendanceRate: number;
   } | null>(null);
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   // Real-time Clock State
   const [currentTime, setCurrentTime] = React.useState<string>("");
@@ -81,69 +85,72 @@ export default function DashboardOverviewPage() {
     return () => clearInterval(timer);
   }, []);
 
-  React.useEffect(() => {
-    async function fetchDashboardData() {
-      try {
-        const [sumRes, liveRes] = await Promise.all([
-          fetch("/api/admin/attendance"),
-          fetch("/api/admin/live-attendance"),
-        ]);
-        
-        let fetchedCounters = null;
-        if (sumRes.ok) {
-          const sumData = await sumRes.json();
-          if (sumData.success && sumData.data?.summary) {
-            const s = sumData.data.summary;
-            fetchedCounters = {
-              totalEmployees: s.totalEmployees || 0,
-              present: s.present || 0,
-              absent: s.absent || 0,
-              working: s.working || 0,
-              onBreak: s.onBreak || 0,
-              completed: s.completed || 0,
-              late: s.late || 0,
-              onLeave: s.onLeave || 0,
-            };
-            setLiveCounters(fetchedCounters);
-          }
-        }
-        
-        if (liveRes.ok) {
-          const liveData = await liveRes.json();
-          if (liveData.success && Array.isArray(liveData.liveStates)) {
-            const mapped: MockAttendanceRecord[] = liveData.liveStates.map((s: any, idx: number) => {
-              const hrs = Math.floor((s.netWorkingSeconds || 0) / 3600);
-              const mins = Math.floor(((s.netWorkingSeconds || 0) % 3600) / 60);
-              return {
-                id: s.employeeId || `att-${idx}`,
-                employeeId: s.employeeId,
-                employeeName: s.fullName,
-                employeeCode: s.employeeCode,
-                department: s.department || "General",
-                designation: s.designation || "Staff",
-                checkIn: s.punchIn ? new Date(s.punchIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
-                checkOut: s.currentState === "COMPLETED" ? new Date(s.punchOut).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
-                workingHours: `${hrs}h ${mins}m`,
-                breakTime: `${Math.floor((s.currentBreakDuration || 0) / 60)}m`,
-                status: s.status || (s.currentState === "ABSENT" ? "ABSENT" : "PRESENT"),
-                liveState: s.currentState as any,
-                timeline: [],
-              };
-            });
-            setAttendanceData(mapped);
-          }
-        }
-        
-        if (!fetchedCounters) {
-           setLiveCounters({ totalEmployees: 0, present: 0, absent: 0, working: 0, onBreak: 0, completed: 0, late: 0, onLeave: 0 });
-        }
-      } catch {
-        setLiveCounters({ totalEmployees: 0, present: 0, absent: 0, working: 0, onBreak: 0, completed: 0, late: 0, onLeave: 0 });
-        setAttendanceData([]);
+  const fetchDashboardData = React.useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const [sumRes, liveRes] = await Promise.all([
+        fetch("/api/admin/attendance"),
+        fetch("/api/admin/live-attendance"),
+      ]);
+      
+      if (!sumRes.ok) {
+        const errJson = await sumRes.json().catch(() => ({}));
+        throw new Error(errJson.message || `Failed to fetch summary data (${sumRes.status})`);
       }
+
+      const sumData = await sumRes.json();
+      const s = sumData.data?.summary || sumData.summary;
+
+      if (s) {
+        setLiveCounters({
+          totalEmployees: typeof s.totalEmployees === "number" ? s.totalEmployees : 0,
+          present: typeof s.present === "number" ? s.present : 0,
+          absent: typeof s.absent === "number" ? s.absent : 0,
+          working: typeof s.working === "number" ? s.working : 0,
+          onBreak: typeof s.onBreak === "number" ? s.onBreak : 0,
+          completed: typeof s.completed === "number" ? s.completed : 0,
+          late: typeof s.late === "number" ? s.late : 0,
+          onLeave: typeof s.onLeave === "number" ? s.onLeave : 0,
+          attendanceRate: typeof s.attendanceRate === "number" ? s.attendanceRate : 0,
+        });
+      }
+      
+      if (liveRes.ok) {
+        const liveData = await liveRes.json();
+        if (liveData.success && Array.isArray(liveData.liveStates)) {
+          const mapped: MockAttendanceRecord[] = liveData.liveStates.map((st: any, idx: number) => {
+            const hrs = Math.floor((st.netWorkingSeconds || 0) / 3600);
+            const mins = Math.floor(((st.netWorkingSeconds || 0) % 3600) / 60);
+            return {
+              id: st.employeeId || `att-${idx}`,
+              employeeId: st.employeeId,
+              employeeName: st.fullName,
+              employeeCode: st.employeeCode,
+              department: st.department || "General",
+              designation: st.designation || "Staff",
+              checkIn: st.punchIn ? new Date(st.punchIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
+              checkOut: (st.currentState === "COMPLETED" && (st.lastPunchOut || st.punchOut)) ? new Date(st.lastPunchOut || st.punchOut).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
+              workingHours: `${hrs}h ${mins}m`,
+              breakTime: `${Math.floor((st.currentBreakDuration || 0) / 60)}m`,
+              status: st.status || (st.currentState === "ABSENT" ? "ABSENT" : "PRESENT"),
+              liveState: st.currentState as any,
+              timeline: [],
+            };
+          });
+          setAttendanceData(mapped);
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || "Error loading dashboard attendance stats.");
+    } finally {
+      setIsLoading(false);
     }
-    fetchDashboardData();
   }, []);
+
+  React.useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   // Filtered Today's Attendance
   const filteredAttendance = React.useMemo(() => {
@@ -258,6 +265,23 @@ export default function DashboardOverviewPage() {
 
       </div>
 
+      {error && (
+        <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between gap-4 text-xs font-semibold shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="size-4 shrink-0 text-rose-600" />
+            <span>{error}</span>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fetchDashboardData()}
+            className="text-xs bg-white text-rose-700 border-rose-200 hover:bg-rose-100/50 rounded-xl shrink-0"
+          >
+            Retry
+          </Button>
+        </div>
+      )}
+
       {/* ── 1. 6 KPI CARDS ─────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {/* Total Employees */}
@@ -286,7 +310,7 @@ export default function DashboardOverviewPage() {
             <div className="font-heading text-2xl font-bold text-slate-900">{liveCounters?.present ?? 0}</div>
             <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-semibold mt-1">
               <TrendingUp className="size-3" />
-              <span>{Math.round(((liveCounters?.present ?? 0) / (liveCounters?.totalEmployees || 1)) * 100)}% present</span>
+              <span>{Math.round(((liveCounters?.present ?? 0) / (liveCounters?.totalEmployees || 1)) * 100)}% on-time</span>
             </div>
           </CardContent>
         </Card>
@@ -343,7 +367,7 @@ export default function DashboardOverviewPage() {
           </CardHeader>
           <CardContent className="p-4 pt-0">
             <div className="font-heading text-2xl font-bold text-slate-900">
-              {Math.round(((liveCounters?.present ?? 0) / (liveCounters?.totalEmployees || 1)) * 100)}%
+              {liveCounters?.attendanceRate ?? 0}%
             </div>
             <p className="text-[11px] text-slate-400 mt-1">Target: &gt;90.0%</p>
           </CardContent>
