@@ -76,7 +76,46 @@ export async function POST(req: Request) {
     });
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
+    const isConnRefused =
+      error?.code === "ECONNREFUSED" ||
+      error?.message?.includes("ECONNREFUSED") ||
+      error?.cause?.code === "ECONNREFUSED";
+
+    const isSchemaError =
+      error?.code === "P2021" ||
+      error?.code === "P2022" ||
+      error?.cause?.kind === "ColumnNotFound" ||
+      error?.cause?.kind === "TableNotFound" ||
+      error?.message?.includes("does not exist in the current database");
+
+    if (isConnRefused) {
+      console.error("🚨 [POST /api/auth/login - Database Connection Refused]:", {
+        message: error.message,
+        code: error.code,
+        meta: error.meta,
+      });
+      return ApiResponse.error(
+        "Database connection refused. Verify that the PostgreSQL database is reachable and DATABASE_URL in .env is correct.",
+        503,
+        "DATABASE_CONNECTION_REFUSED"
+      );
+    }
+
+    if (isSchemaError) {
+      console.error("🚨 [POST /api/auth/login - Database Schema Out of Sync]:", {
+        message: error.message,
+        code: error.code,
+        meta: error.meta,
+      });
+      return ApiResponse.error(
+        "Database schema is not synchronized (missing table or column). Run prisma db push or migrations.",
+        500,
+        "DATABASE_SCHEMA_ERROR"
+      );
+    }
+
+    console.error("🚨 [POST /api/auth/login - Internal Error]:", error);
     return ApiResponse.serverError("Auth Login Route Error", error);
   }
 }

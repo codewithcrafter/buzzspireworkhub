@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  serverExternalPackages: ['pdfkit', 'pdfkit-table'],
+  serverExternalPackages: ['@prisma/client', '.prisma/client', 'pdfkit', 'pdfkit-table'],
   async headers() {
     return [
       {

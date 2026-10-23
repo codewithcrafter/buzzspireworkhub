@@ -95,6 +95,7 @@ async function main() {
     { key: "FIXED_LUNCH_END", value: "14:30", description: "Fixed lunch end time" },
     { key: "HALF_DAY_THRESHOLD_MINUTES", value: "255", description: "Minimum minutes for half day (4h 15m)" },
     { key: "GRACE_MINUTES", value: "15", description: "Grace period for late login" },
+    { key: "MAX_BREAK_DURATION_MINUTES", value: "180", description: "Maximum allowable duration for a single break before auto-closing (3 hours)" },
   ];
 
   for (const s of hrSettings) {
@@ -164,7 +165,21 @@ async function main() {
   }
   console.log("✓ System settings seeded.");
 
-  console.log("🎉 Seed finished successfully!");
+  // 6. Optionally Seed Test Staff & Historical Attendance Data
+  const shouldSeedMockData =
+    process.env.SEED_MOCK_DATA === "true" || process.argv.includes("--with-mock-data");
+
+  if (shouldSeedMockData) {
+    console.log("\n6. Seeding test staff employees, historical attendance, and break activities...");
+    const { syncAttendanceData } = await import("../scripts/sync-attendance-data");
+    await syncAttendanceData();
+  } else {
+    console.log("\n6. Skipping mock staff and attendance data (SEED_MOCK_DATA not set).");
+    console.log("   Only base configuration and System Administrator (ADM001) seeded.");
+    console.log("   (Run with SEED_MOCK_DATA=true or 'npm run db:seed:mock' to populate test data).");
+  }
+
+  console.log("🎉 Complete database seed finished successfully!");
 }
 
 main()

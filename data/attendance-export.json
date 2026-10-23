@@ -1,0 +1,758 @@
+{
+  "exportedAt": "2026-10-21T06:22:50.415Z",
+  "source": "ep-square-moon-ao36wwjz-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require",
+  "filterDate": "2026-10-17",
+  "departments": [
+    {
+      "id": "ff236695-95ed-47db-87c3-9e683a1e1383",
+      "code": "ENG",
+      "name": "Engineering",
+      "description": "Software engineering and infrastructure",
+      "manager": "Vikram Malhotra",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:46:28.224Z",
+      "updatedAt": "2026-10-21T06:20:44.201Z"
+    },
+    {
+      "id": "cc1cf2b0-28e5-48ad-aee8-0a39b6b1d49a",
+      "code": "DES",
+      "name": "Product & Design",
+      "description": "User experience, prototyping, and UI design",
+      "manager": "Ananya Iyer",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:46:28.449Z",
+      "updatedAt": "2026-10-21T06:20:44.277Z"
+    },
+    {
+      "id": "e4179aac-9d87-48fa-88b9-66ce42872f5a",
+      "code": "MKT",
+      "name": "Marketing & Growth",
+      "description": "Brand awareness, growth, and communications",
+      "manager": "Rohan Kapoor",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:46:28.300Z",
+      "updatedAt": "2026-10-21T06:20:44.353Z"
+    },
+    {
+      "id": "326eb696-c7b1-4da6-805e-153ebbba4242",
+      "code": "HR",
+      "name": "Human Resources",
+      "description": "People operations, talent, and workplace culture",
+      "manager": "Sunita Rao",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:46:28.374Z",
+      "updatedAt": "2026-10-21T06:20:44.429Z"
+    },
+    {
+      "id": "e1ca0bb8-df8b-4855-9bce-583142444d7d",
+      "code": "OPS",
+      "name": "Operations & Facilities",
+      "description": "Workplace administration and facilities",
+      "manager": "Sunita Rao",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:46:28.147Z",
+      "updatedAt": "2026-10-21T06:20:44.506Z"
+    }
+  ],
+  "breakTypes": [
+    {
+      "id": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+      "name": "Lunch",
+      "description": "Standard lunch break",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:47:58.896Z",
+      "updatedAt": "2026-10-21T06:20:44.588Z"
+    },
+    {
+      "id": "f62ab932-cf49-46b9-a71c-330fc5757123",
+      "name": "Tea / Coffee",
+      "description": "Short tea or coffee break",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:47:58.973Z",
+      "updatedAt": "2026-10-21T06:20:44.665Z"
+    },
+    {
+      "id": "7720a6f0-042d-4d2d-965c-61620799350c",
+      "name": "Washroom",
+      "description": "Washroom break",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:47:59.047Z",
+      "updatedAt": "2026-10-21T06:20:44.744Z"
+    },
+    {
+      "id": "8f5b4879-8b40-4248-a6ae-ec13e93a54c4",
+      "name": "Calls",
+      "description": "Phone calls",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:47:59.120Z",
+      "updatedAt": "2026-10-21T06:20:44.820Z"
+    },
+    {
+      "id": "fea2a0fc-9cc9-4e15-b2e1-b23d6fb29009",
+      "name": "Meeting",
+      "description": "Internal or external meetings",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:47:59.194Z",
+      "updatedAt": "2026-10-21T06:20:44.896Z"
+    },
+    {
+      "id": "b7569e7f-4964-4660-a7ff-f124582f33f2",
+      "name": "Shoot",
+      "description": "Production shoot",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:47:59.268Z",
+      "updatedAt": "2026-10-21T06:20:44.972Z"
+    },
+    {
+      "id": "cdb762b8-792c-492b-89f9-17c8fd7e0d2e",
+      "name": "Other",
+      "description": "Other breaks (requires purpose)",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T05:47:59.341Z",
+      "updatedAt": "2026-10-21T06:20:45.048Z"
+    },
+    {
+      "id": "ea2192e2-5d20-467d-a9ae-a4f6e6eda08b",
+      "name": "Idle Break",
+      "description": "System idle detected break",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T06:20:45.125Z",
+      "updatedAt": "2026-10-21T06:20:45.125Z"
+    },
+    {
+      "id": "9659b6ed-e60a-47f5-aac8-80246cd724e3",
+      "name": "System Idle",
+      "description": "System idle detected break",
+      "status": "ACTIVE",
+      "createdAt": "2026-10-21T06:20:45.202Z",
+      "updatedAt": "2026-10-21T06:20:45.202Z"
+    }
+  ],
+  "employees": [
+    {
+      "id": "fef84b0b-4cb4-45f5-9fae-cd8a83ff90a3",
+      "employeeId": "EMP-102",
+      "employeeCode": "EMP-102",
+      "fullName": "Priya Patel",
+      "email": "priya.patel@buzzspire.com",
+      "phone": "+91 98765 43211",
+      "departmentId": "cc1cf2b0-28e5-48ad-aee8-0a39b6b1d49a",
+      "designation": "Lead Product Designer",
+      "status": "ACTIVE",
+      "roleId": "b9670425-d967-4526-8661-22eeb1a75519"
+    },
+    {
+      "id": "37ac286b-a95f-45a5-acf5-671203df0be5",
+      "employeeId": "EMP-103",
+      "employeeCode": "EMP-103",
+      "fullName": "Vikram Malhotra",
+      "email": "vikram.m@buzzspire.com",
+      "phone": "+91 98765 43212",
+      "departmentId": "ff236695-95ed-47db-87c3-9e683a1e1383",
+      "designation": "VP of Engineering",
+      "status": "ACTIVE",
+      "roleId": "584edc1b-abd1-46ba-8422-fe413bcca9e3"
+    },
+    {
+      "id": "ece2f87d-e62c-4001-8933-943fe9201e15",
+      "employeeId": "EMP-104",
+      "employeeCode": "EMP-104",
+      "fullName": "Sunita Rao",
+      "email": "sunita.r@buzzspire.com",
+      "phone": "+91 98765 43213",
+      "departmentId": "326eb696-c7b1-4da6-805e-153ebbba4242",
+      "designation": "Head of People & Operations",
+      "status": "ACTIVE",
+      "roleId": "8b8d5963-3f2b-4bfa-a0d1-8b46a7ef0bae"
+    },
+    {
+      "id": "d658131b-1998-44d2-a168-16da1512e925",
+      "employeeId": "EMP-105",
+      "employeeCode": "EMP-105",
+      "fullName": "Aman Gupta",
+      "email": "aman.gupta@buzzspire.com",
+      "phone": "+91 98765 43214",
+      "departmentId": "ff236695-95ed-47db-87c3-9e683a1e1383",
+      "designation": "Senior Frontend Engineer",
+      "status": "ACTIVE",
+      "roleId": "b9670425-d967-4526-8661-22eeb1a75519"
+    },
+    {
+      "id": "eac45143-369f-4867-9400-8b7993ede804",
+      "employeeId": "EMP-106",
+      "employeeCode": "EMP-106",
+      "fullName": "Neha Verma",
+      "email": "neha.verma@buzzspire.com",
+      "phone": "+91 98765 43215",
+      "departmentId": "326eb696-c7b1-4da6-805e-153ebbba4242",
+      "designation": "HR Generalist",
+      "status": "ACTIVE",
+      "roleId": "b9670425-d967-4526-8661-22eeb1a75519"
+    },
+    {
+      "id": "215500d3-a95b-4404-ac32-bf649c03f4ba",
+      "employeeId": "EMP-107",
+      "employeeCode": "EMP-107",
+      "fullName": "Karan Singh",
+      "email": "karan.singh@buzzspire.com",
+      "phone": "+91 98765 43216",
+      "departmentId": "ff236695-95ed-47db-87c3-9e683a1e1383",
+      "designation": "Full Stack Engineer",
+      "status": "ACTIVE",
+      "roleId": "b9670425-d967-4526-8661-22eeb1a75519"
+    },
+    {
+      "id": "4fd47025-1993-4833-8244-13413759da2f",
+      "employeeId": "EMP-108",
+      "employeeCode": "EMP-108",
+      "fullName": "Ananya Iyer",
+      "email": "ananya.i@buzzspire.com",
+      "phone": "+91 98765 43217",
+      "departmentId": "cc1cf2b0-28e5-48ad-aee8-0a39b6b1d49a",
+      "designation": "Design Director",
+      "status": "ACTIVE",
+      "roleId": "584edc1b-abd1-46ba-8422-fe413bcca9e3"
+    },
+    {
+      "id": "b1396e31-527c-4b8a-a679-211454c96a0d",
+      "employeeId": "EMP-109",
+      "employeeCode": "EMP-109",
+      "fullName": "Rohan Kapoor",
+      "email": "rohan.k@buzzspire.com",
+      "phone": "+91 98765 43218",
+      "departmentId": "e4179aac-9d87-48fa-88b9-66ce42872f5a",
+      "designation": "Head of Marketing",
+      "status": "ACTIVE",
+      "roleId": "584edc1b-abd1-46ba-8422-fe413bcca9e3"
+    },
+    {
+      "id": "5201e586-9390-4e6c-b682-71e53d06b67c",
+      "employeeId": "EMP-110",
+      "employeeCode": "EMP-110",
+      "fullName": "Meera Nair",
+      "email": "meera.nair@buzzspire.com",
+      "phone": "+91 98765 43219",
+      "departmentId": "e4179aac-9d87-48fa-88b9-66ce42872f5a",
+      "designation": "Growth Marketing Specialist",
+      "status": "ACTIVE",
+      "roleId": "b9670425-d967-4526-8661-22eeb1a75519"
+    }
+  ],
+  "attendances": [
+    {
+      "id": "699cc989-dd3c-4880-b386-cbdec03f8a7e",
+      "employeeId": "fef84b0b-4cb4-45f5-9fae-cd8a83ff90a3",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:32:00.000Z",
+      "checkOut": "2026-10-17T12:48:00.000Z",
+      "status": "PRESENT",
+      "totalWorkingSeconds": 33360,
+      "totalBreakSeconds": 3720,
+      "netWorkingSeconds": 29640,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 720,
+      "createdAt": "2026-10-21T06:20:46.403Z",
+      "updatedAt": "2026-10-21T06:20:46.403Z",
+      "sessions": [
+        {
+          "id": "69e2f794-42be-40d1-800f-adf82499b51a",
+          "attendanceId": "699cc989-dd3c-4880-b386-cbdec03f8a7e",
+          "employeeId": "fef84b0b-4cb4-45f5-9fae-cd8a83ff90a3",
+          "punchIn": "2026-10-17T03:32:00.000Z",
+          "punchOut": "2026-10-17T12:48:00.000Z",
+          "workingSeconds": 33360,
+          "createdAt": "2026-10-21T06:20:46.493Z",
+          "updatedAt": "2026-10-21T06:20:46.493Z",
+          "breaks": [
+            {
+              "id": "1a671456-4052-4737-9c1f-8a69df34a42f",
+              "attendanceSessionId": "69e2f794-42be-40d1-800f-adf82499b51a",
+              "breakTypeId": "f62ab932-cf49-46b9-a71c-330fc5757123",
+              "purpose": "Morning Tea Break",
+              "startTime": "2026-10-17T05:45:00.000Z",
+              "endTime": "2026-10-17T06:00:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:46.576Z",
+              "updatedAt": "2026-10-21T06:20:46.576Z"
+            },
+            {
+              "id": "36dc020c-d735-43d2-9f8f-d37d39af6636",
+              "attendanceSessionId": "69e2f794-42be-40d1-800f-adf82499b51a",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Cafeteria Lunch",
+              "startTime": "2026-10-17T07:45:00.000Z",
+              "endTime": "2026-10-17T08:20:00.000Z",
+              "durationSeconds": 2100,
+              "createdAt": "2026-10-21T06:20:46.654Z",
+              "updatedAt": "2026-10-21T06:20:46.654Z"
+            },
+            {
+              "id": "19564c9d-63c8-443c-bb71-41e4987a6d9c",
+              "attendanceSessionId": "69e2f794-42be-40d1-800f-adf82499b51a",
+              "breakTypeId": "9659b6ed-e60a-47f5-aac8-80246cd724e3",
+              "purpose": "Idle Break",
+              "startTime": "2026-10-17T10:40:00.000Z",
+              "endTime": "2026-10-17T10:52:00.000Z",
+              "durationSeconds": 720,
+              "createdAt": "2026-10-21T06:20:46.731Z",
+              "updatedAt": "2026-10-21T06:20:46.731Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7b41e73a-056c-4b63-aa1e-454ce6548bfb",
+      "employeeId": "37ac286b-a95f-45a5-acf5-671203df0be5",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:15:00.000Z",
+      "checkOut": "2026-10-17T12:35:00.000Z",
+      "status": "PRESENT",
+      "totalWorkingSeconds": 33600,
+      "totalBreakSeconds": 5400,
+      "netWorkingSeconds": 28200,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 0,
+      "createdAt": "2026-10-21T06:20:46.886Z",
+      "updatedAt": "2026-10-21T06:20:46.886Z",
+      "sessions": [
+        {
+          "id": "0d24cd7b-b5b8-4a54-bdbe-4315c726570a",
+          "attendanceId": "7b41e73a-056c-4b63-aa1e-454ce6548bfb",
+          "employeeId": "37ac286b-a95f-45a5-acf5-671203df0be5",
+          "punchIn": "2026-10-17T03:15:00.000Z",
+          "punchOut": "2026-10-17T12:35:00.000Z",
+          "workingSeconds": 33600,
+          "createdAt": "2026-10-21T06:20:46.964Z",
+          "updatedAt": "2026-10-21T06:20:46.964Z",
+          "breaks": [
+            {
+              "id": "b522d001-adf0-4bfe-b5bc-48d85231e667",
+              "attendanceSessionId": "0d24cd7b-b5b8-4a54-bdbe-4315c726570a",
+              "breakTypeId": "f62ab932-cf49-46b9-a71c-330fc5757123",
+              "purpose": "Coffee with Client",
+              "startTime": "2026-10-17T05:00:00.000Z",
+              "endTime": "2026-10-17T05:15:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:47.042Z",
+              "updatedAt": "2026-10-21T06:20:47.042Z"
+            },
+            {
+              "id": "4b1fa6c4-202c-485a-af82-7ff4fec52526",
+              "attendanceSessionId": "0d24cd7b-b5b8-4a54-bdbe-4315c726570a",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Team Lunch",
+              "startTime": "2026-10-17T07:30:00.000Z",
+              "endTime": "2026-10-17T08:15:00.000Z",
+              "durationSeconds": 2700,
+              "createdAt": "2026-10-21T06:20:47.119Z",
+              "updatedAt": "2026-10-21T06:20:47.119Z"
+            },
+            {
+              "id": "0bd225a0-33f3-41ea-846c-58daa2cf59cf",
+              "attendanceSessionId": "0d24cd7b-b5b8-4a54-bdbe-4315c726570a",
+              "breakTypeId": "fea2a0fc-9cc9-4e15-b2e1-b23d6fb29009",
+              "purpose": "Cross-functional Strategy Meeting",
+              "startTime": "2026-10-17T10:00:00.000Z",
+              "endTime": "2026-10-17T10:30:00.000Z",
+              "durationSeconds": 1800,
+              "createdAt": "2026-10-21T06:20:47.194Z",
+              "updatedAt": "2026-10-21T06:20:47.194Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "950a06bf-146a-49d3-8b3b-94a05102bdc6",
+      "employeeId": "ece2f87d-e62c-4001-8933-943fe9201e15",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:30:00.000Z",
+      "checkOut": "2026-10-17T12:30:00.000Z",
+      "status": "PRESENT",
+      "totalWorkingSeconds": 32400,
+      "totalBreakSeconds": 3300,
+      "netWorkingSeconds": 29100,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 0,
+      "createdAt": "2026-10-21T06:20:47.346Z",
+      "updatedAt": "2026-10-21T06:20:47.346Z",
+      "sessions": [
+        {
+          "id": "dfa6f6a0-183a-4987-9759-bce3209c2a21",
+          "attendanceId": "950a06bf-146a-49d3-8b3b-94a05102bdc6",
+          "employeeId": "ece2f87d-e62c-4001-8933-943fe9201e15",
+          "punchIn": "2026-10-17T03:30:00.000Z",
+          "punchOut": "2026-10-17T12:30:00.000Z",
+          "workingSeconds": 32400,
+          "createdAt": "2026-10-21T06:20:47.423Z",
+          "updatedAt": "2026-10-21T06:20:47.423Z",
+          "breaks": [
+            {
+              "id": "973ff9fc-aed3-4206-97a4-9fc300a95740",
+              "attendanceSessionId": "dfa6f6a0-183a-4987-9759-bce3209c2a21",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Executive Dining",
+              "startTime": "2026-10-17T07:40:00.000Z",
+              "endTime": "2026-10-17T08:20:00.000Z",
+              "durationSeconds": 2400,
+              "createdAt": "2026-10-21T06:20:47.500Z",
+              "updatedAt": "2026-10-21T06:20:47.500Z"
+            },
+            {
+              "id": "935eb98b-41de-4d44-88f7-e359d8376b67",
+              "attendanceSessionId": "dfa6f6a0-183a-4987-9759-bce3209c2a21",
+              "breakTypeId": "8f5b4879-8b40-4248-a6ae-ec13e93a54c4",
+              "purpose": "Vendor Negotiation Call",
+              "startTime": "2026-10-17T10:15:00.000Z",
+              "endTime": "2026-10-17T10:30:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:47.575Z",
+              "updatedAt": "2026-10-21T06:20:47.575Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3bdda1ed-5d44-49e8-a331-7c2fdeff806c",
+      "employeeId": "d658131b-1998-44d2-a168-16da1512e925",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:55:00.000Z",
+      "checkOut": "2026-10-17T13:15:00.000Z",
+      "status": "LATE",
+      "totalWorkingSeconds": 33600,
+      "totalBreakSeconds": 3900,
+      "netWorkingSeconds": 29700,
+      "isLate": true,
+      "lateMinutes": 25,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 900,
+      "createdAt": "2026-10-21T06:20:47.729Z",
+      "updatedAt": "2026-10-21T06:20:47.729Z",
+      "sessions": [
+        {
+          "id": "5feed237-5b73-4f80-8a99-ad2439fc000b",
+          "attendanceId": "3bdda1ed-5d44-49e8-a331-7c2fdeff806c",
+          "employeeId": "d658131b-1998-44d2-a168-16da1512e925",
+          "punchIn": "2026-10-17T03:55:00.000Z",
+          "punchOut": "2026-10-17T13:15:00.000Z",
+          "workingSeconds": 33600,
+          "createdAt": "2026-10-21T06:20:47.805Z",
+          "updatedAt": "2026-10-21T06:20:47.805Z",
+          "breaks": [
+            {
+              "id": "146fa169-28c7-44b4-ae71-29d65a177e74",
+              "attendanceSessionId": "5feed237-5b73-4f80-8a99-ad2439fc000b",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Lunch & Walk",
+              "startTime": "2026-10-17T08:00:00.000Z",
+              "endTime": "2026-10-17T08:40:00.000Z",
+              "durationSeconds": 2400,
+              "createdAt": "2026-10-21T06:20:47.881Z",
+              "updatedAt": "2026-10-21T06:20:47.881Z"
+            },
+            {
+              "id": "86b0b4bf-43ff-448c-972d-cd6d6df6bca7",
+              "attendanceSessionId": "5feed237-5b73-4f80-8a99-ad2439fc000b",
+              "breakTypeId": "7720a6f0-042d-4d2d-965c-61620799350c",
+              "purpose": "Personal",
+              "startTime": "2026-10-17T10:30:00.000Z",
+              "endTime": "2026-10-17T10:40:00.000Z",
+              "durationSeconds": 600,
+              "createdAt": "2026-10-21T06:20:47.957Z",
+              "updatedAt": "2026-10-21T06:20:47.957Z"
+            },
+            {
+              "id": "05188cea-390a-4085-840c-33f65a8c0d90",
+              "attendanceSessionId": "5feed237-5b73-4f80-8a99-ad2439fc000b",
+              "breakTypeId": "ea2192e2-5d20-467d-a9ae-a4f6e6eda08b",
+              "purpose": "Away from desk",
+              "startTime": "2026-10-17T11:45:00.000Z",
+              "endTime": "2026-10-17T12:00:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:48.033Z",
+              "updatedAt": "2026-10-21T06:20:48.033Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "da13a8c8-5bc8-432d-8907-dc261b259b7b",
+      "employeeId": "eac45143-369f-4867-9400-8b7993ede804",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:42:00.000Z",
+      "checkOut": "2026-10-17T12:40:00.000Z",
+      "status": "PRESENT",
+      "totalWorkingSeconds": 32280,
+      "totalBreakSeconds": 3000,
+      "netWorkingSeconds": 29280,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 0,
+      "createdAt": "2026-10-21T06:20:48.184Z",
+      "updatedAt": "2026-10-21T06:20:48.184Z",
+      "sessions": [
+        {
+          "id": "3abeb2bb-c7c6-4831-9f5f-6e01a4f12d16",
+          "attendanceId": "da13a8c8-5bc8-432d-8907-dc261b259b7b",
+          "employeeId": "eac45143-369f-4867-9400-8b7993ede804",
+          "punchIn": "2026-10-17T03:42:00.000Z",
+          "punchOut": "2026-10-17T12:40:00.000Z",
+          "workingSeconds": 32280,
+          "createdAt": "2026-10-21T06:20:48.260Z",
+          "updatedAt": "2026-10-21T06:20:48.260Z",
+          "breaks": [
+            {
+              "id": "48933ced-33fc-46fa-8087-73c3bdc74961",
+              "attendanceSessionId": "3abeb2bb-c7c6-4831-9f5f-6e01a4f12d16",
+              "breakTypeId": "f62ab932-cf49-46b9-a71c-330fc5757123",
+              "purpose": "Tea Break",
+              "startTime": "2026-10-17T05:30:00.000Z",
+              "endTime": "2026-10-17T05:45:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:48.336Z",
+              "updatedAt": "2026-10-21T06:20:48.336Z"
+            },
+            {
+              "id": "029ac276-152f-4859-9482-7770d214610a",
+              "attendanceSessionId": "3abeb2bb-c7c6-4831-9f5f-6e01a4f12d16",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Lunch Break",
+              "startTime": "2026-10-17T07:30:00.000Z",
+              "endTime": "2026-10-17T08:05:00.000Z",
+              "durationSeconds": 2100,
+              "createdAt": "2026-10-21T06:20:48.412Z",
+              "updatedAt": "2026-10-21T06:20:48.412Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f642a2b9-09cb-44a6-a00d-4bbfdd2811fb",
+      "employeeId": "215500d3-a95b-4404-ac32-bf649c03f4ba",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:28:00.000Z",
+      "checkOut": "2026-10-17T12:42:00.000Z",
+      "status": "PRESENT",
+      "totalWorkingSeconds": 33240,
+      "totalBreakSeconds": 7200,
+      "netWorkingSeconds": 26040,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 900,
+      "createdAt": "2026-10-21T06:20:48.566Z",
+      "updatedAt": "2026-10-21T06:20:48.566Z",
+      "sessions": [
+        {
+          "id": "ce3f7dce-edfa-4a83-b9ac-7f2120c50d63",
+          "attendanceId": "f642a2b9-09cb-44a6-a00d-4bbfdd2811fb",
+          "employeeId": "215500d3-a95b-4404-ac32-bf649c03f4ba",
+          "punchIn": "2026-10-17T03:28:00.000Z",
+          "punchOut": "2026-10-17T12:42:00.000Z",
+          "workingSeconds": 33240,
+          "createdAt": "2026-10-21T06:20:48.642Z",
+          "updatedAt": "2026-10-21T06:20:48.642Z",
+          "breaks": [
+            {
+              "id": "a1eb8900-f031-4394-95a8-5804f621a3b4",
+              "attendanceSessionId": "ce3f7dce-edfa-4a83-b9ac-7f2120c50d63",
+              "breakTypeId": "f62ab932-cf49-46b9-a71c-330fc5757123",
+              "purpose": "Morning Espresso",
+              "startTime": "2026-10-17T06:00:00.000Z",
+              "endTime": "2026-10-17T06:15:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:48.718Z",
+              "updatedAt": "2026-10-21T06:20:48.718Z"
+            },
+            {
+              "id": "e173312c-996f-4334-9213-d8ee201e1644",
+              "attendanceSessionId": "ce3f7dce-edfa-4a83-b9ac-7f2120c50d63",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Healthy Bowl Lunch",
+              "startTime": "2026-10-17T07:45:00.000Z",
+              "endTime": "2026-10-17T08:30:00.000Z",
+              "durationSeconds": 2700,
+              "createdAt": "2026-10-21T06:20:48.793Z",
+              "updatedAt": "2026-10-21T06:20:48.793Z"
+            },
+            {
+              "id": "f30aba19-4c78-4935-a1d4-6fce0c93c978",
+              "attendanceSessionId": "ce3f7dce-edfa-4a83-b9ac-7f2120c50d63",
+              "breakTypeId": "b7569e7f-4964-4660-a7ff-f124582f33f2",
+              "purpose": "Product Demo Video Recording",
+              "startTime": "2026-10-17T09:30:00.000Z",
+              "endTime": "2026-10-17T10:15:00.000Z",
+              "durationSeconds": 2700,
+              "createdAt": "2026-10-21T06:20:48.868Z",
+              "updatedAt": "2026-10-21T06:20:48.868Z"
+            },
+            {
+              "id": "408b2677-c2b8-472f-9c0c-02139f7f896e",
+              "attendanceSessionId": "ce3f7dce-edfa-4a83-b9ac-7f2120c50d63",
+              "breakTypeId": "ea2192e2-5d20-467d-a9ae-a4f6e6eda08b",
+              "purpose": "System Inactivity",
+              "startTime": "2026-10-17T11:30:00.000Z",
+              "endTime": "2026-10-17T11:45:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:48.951Z",
+              "updatedAt": "2026-10-21T06:20:48.951Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1d393e32-a72b-41fc-96d3-fa7f9ed1a902",
+      "employeeId": "4fd47025-1993-4833-8244-13413759da2f",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:35:00.000Z",
+      "checkOut": "2026-10-17T12:50:00.000Z",
+      "status": "PRESENT",
+      "totalWorkingSeconds": 33300,
+      "totalBreakSeconds": 3300,
+      "netWorkingSeconds": 30000,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 0,
+      "createdAt": "2026-10-21T06:20:49.099Z",
+      "updatedAt": "2026-10-21T06:20:49.099Z",
+      "sessions": [
+        {
+          "id": "449b6e50-5581-404b-bf57-5d60da6c9d2c",
+          "attendanceId": "1d393e32-a72b-41fc-96d3-fa7f9ed1a902",
+          "employeeId": "4fd47025-1993-4833-8244-13413759da2f",
+          "punchIn": "2026-10-17T03:35:00.000Z",
+          "punchOut": "2026-10-17T12:50:00.000Z",
+          "workingSeconds": 33300,
+          "createdAt": "2026-10-21T06:20:49.173Z",
+          "updatedAt": "2026-10-21T06:20:49.173Z",
+          "breaks": [
+            {
+              "id": "56e8c2bf-c43d-4125-a895-c9b10a345d74",
+              "attendanceSessionId": "449b6e50-5581-404b-bf57-5d60da6c9d2c",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Design Team Lunch",
+              "startTime": "2026-10-17T07:30:00.000Z",
+              "endTime": "2026-10-17T08:10:00.000Z",
+              "durationSeconds": 2400,
+              "createdAt": "2026-10-21T06:20:49.247Z",
+              "updatedAt": "2026-10-21T06:20:49.247Z"
+            },
+            {
+              "id": "bbf6c8b5-0ba7-4dd7-b403-1e6f06b6718d",
+              "attendanceSessionId": "449b6e50-5581-404b-bf57-5d60da6c9d2c",
+              "breakTypeId": "f62ab932-cf49-46b9-a71c-330fc5757123",
+              "purpose": "Evening Refreshment",
+              "startTime": "2026-10-17T11:00:00.000Z",
+              "endTime": "2026-10-17T11:15:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:49.322Z",
+              "updatedAt": "2026-10-21T06:20:49.322Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bf6b1c5e-c882-440b-85aa-40c6b491e72e",
+      "employeeId": "b1396e31-527c-4b8a-a679-211454c96a0d",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": "2026-10-17T03:20:00.000Z",
+      "checkOut": "2026-10-17T12:25:00.000Z",
+      "status": "PRESENT",
+      "totalWorkingSeconds": 32700,
+      "totalBreakSeconds": 3300,
+      "netWorkingSeconds": 29400,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 0,
+      "createdAt": "2026-10-21T06:20:49.473Z",
+      "updatedAt": "2026-10-21T06:20:49.473Z",
+      "sessions": [
+        {
+          "id": "0336b321-8cd1-4978-b4a6-fbb1ebc01c15",
+          "attendanceId": "bf6b1c5e-c882-440b-85aa-40c6b491e72e",
+          "employeeId": "b1396e31-527c-4b8a-a679-211454c96a0d",
+          "punchIn": "2026-10-17T03:20:00.000Z",
+          "punchOut": "2026-10-17T12:25:00.000Z",
+          "workingSeconds": 32700,
+          "createdAt": "2026-10-21T06:20:49.555Z",
+          "updatedAt": "2026-10-21T06:20:49.555Z",
+          "breaks": [
+            {
+              "id": "b1d7bd01-b778-4e87-8add-316920788e4b",
+              "attendanceSessionId": "0336b321-8cd1-4978-b4a6-fbb1ebc01c15",
+              "breakTypeId": "f62ab932-cf49-46b9-a71c-330fc5757123",
+              "purpose": "Coffee Catchup",
+              "startTime": "2026-10-17T05:15:00.000Z",
+              "endTime": "2026-10-17T05:30:00.000Z",
+              "durationSeconds": 900,
+              "createdAt": "2026-10-21T06:20:49.630Z",
+              "updatedAt": "2026-10-21T06:20:49.630Z"
+            },
+            {
+              "id": "b6b30ee6-bdf1-4eda-98e9-a0f7dfe3ffae",
+              "attendanceSessionId": "0336b321-8cd1-4978-b4a6-fbb1ebc01c15",
+              "breakTypeId": "4d079a31-11b4-4b70-a0f3-145432bd173c",
+              "purpose": "Lunch Break",
+              "startTime": "2026-10-17T07:45:00.000Z",
+              "endTime": "2026-10-17T08:25:00.000Z",
+              "durationSeconds": 2400,
+              "createdAt": "2026-10-21T06:20:49.711Z",
+              "updatedAt": "2026-10-21T06:20:49.711Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f6d0eb33-4a25-41d9-a712-3be86596fe9d",
+      "employeeId": "5201e586-9390-4e6c-b682-71e53d06b67c",
+      "date": "2026-10-16T18:30:00.000Z",
+      "checkIn": null,
+      "checkOut": null,
+      "status": "ON_LEAVE",
+      "totalWorkingSeconds": 0,
+      "totalBreakSeconds": 0,
+      "netWorkingSeconds": 0,
+      "isLate": false,
+      "lateMinutes": 0,
+      "earlyLogoutMinutes": 0,
+      "overtimeMinutes": 0,
+      "shortfallMinutes": 0,
+      "idleSeconds": 0,
+      "createdAt": "2026-10-21T06:20:49.909Z",
+      "updatedAt": "2026-10-21T06:20:49.909Z",
+      "sessions": []
+    }
+  ]
+}

@@ -42,7 +42,10 @@ export async function GET(req: Request) {
     const endOfDay = getEndOfDay(now);
 
     // Build employee filter based on scope
-    const employeeWhere: Record<string, unknown> = { status: "ACTIVE" };
+    const employeeWhere: Record<string, unknown> = {
+      status: { in: ["ACTIVE", "PROBATION", "CONFIRMED", "NOTICE_PERIOD", "ONBOARDING"] },
+      role: { name: { not: "ADMIN" } },
+    };
     if (!canSeeAll && canSeeTeam && employee.departmentId) {
       // MANAGER: restrict to own department
       employeeWhere.departmentId = employee.departmentId;
@@ -121,13 +124,13 @@ export async function GET(req: Request) {
       let liveBreakSeconds = attendance.totalBreakSeconds;
       let currentBreakDuration = 0;
       if (activeBreak) {
-        currentBreakDuration = calculateDurationSeconds(
-          activeBreak.startTime,
-          now
+        currentBreakDuration = Math.min(
+          180 * 60,
+          calculateDurationSeconds(activeBreak.startTime, now)
         );
         const closedBreaks = attendance.sessions
           .flatMap((s) => s.breaks)
-          .filter((b) => b.endTime)
+          .filter((b) => b.endTime && b.id !== activeBreak.id)
           .reduce((sum, b) => sum + (b.durationSeconds ?? 0), 0);
         liveBreakSeconds = closedBreaks + currentBreakDuration;
       }

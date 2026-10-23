@@ -49,6 +49,7 @@ interface ExtendedRecord {
   earlyLogoutMinutes: number;
   lateMinutes: number;
   breakHistory: {
+    id?: string;
     breakTypeName: string;
     purpose?: string | null;
     startTime: string;
@@ -103,13 +104,21 @@ export default function AttendancePage() {
   const [manualReason, setManualReason] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+  // Admin Break Control & Export States
+  const [forceEndBreakModalOpen, setForceEndBreakModalOpen] = React.useState(false);
+  const [targetBreakRecord, setTargetBreakRecord] = React.useState<ExtendedRecord | null>(null);
+  const [targetBreakId, setTargetBreakId] = React.useState<string | undefined>(undefined);
+  const [forceEndReason, setForceEndReason] = React.useState("");
+  const [isForceEndingBreak, setIsForceEndingBreak] = React.useState(false);
+  const [isExporting, setIsExporting] = React.useState(false);
+
   React.useEffect(() => {
     async function loadLiveAttendance() {
       try {
         const res = await fetch(`/api/admin/live-attendance?date=${selectedDate}`);
         if (!res.ok) return;
         const data = await res.json();
-        if (data.success && Array.isArray(data.liveStates) && data.liveStates.length > 0) {
+        if (data.success && Array.isArray(data.liveStates)) {
           const mapped: ExtendedRecord[] = data.liveStates.map((s: any, idx: number) => {
             const hrs = Math.floor((s.netWorkingSeconds || 0) / 3600);
             const mins = Math.floor(((s.netWorkingSeconds || 0) % 3600) / 60);
@@ -152,7 +161,7 @@ export default function AttendancePage() {
       const res = await fetch(`/api/admin/live-attendance?date=${selectedDate}`);
       if (!res.ok) return;
       const data = await res.json();
-      if (data.success && Array.isArray(data.liveStates) && data.liveStates.length > 0) {
+      if (data.success && Array.isArray(data.liveStates)) {
         const mapped: ExtendedRecord[] = data.liveStates.map((s: any, idx: number) => {
           const hrs = Math.floor((s.netWorkingSeconds || 0) / 3600);
           const mins = Math.floor(((s.netWorkingSeconds || 0) % 3600) / 60);
@@ -348,6 +357,92 @@ export default function AttendancePage() {
     }
   };
 
+  const handleOpenForceEndBreak = (record: ExtendedRecord, breakId?: string) => {
+    setTargetBreakRecord(record);
+    setTargetBreakId(breakId);
+    setForceEndReason("Stuck break ended by Administrator");
+    setForceEndBreakModalOpen(true);
+  };
+
+  const handleForceEndBreak = async () => {
+    if (!targetBreakRecord) return;
+    try {
+      setIsForceEndingBreak(true);
+      const res = await fetch("/api/admin/attendance/break", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          employeeId: targetBreakRecord.employeeId,
+          breakId: targetBreakId,
+          reason: forceEndReason.trim() || "Force-ended by Administrator",
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast({
+          title: "Break Terminated",
+          description: data.message || `Active break ended for ${targetBreakRecord.employeeName}.`,
+          type: "success",
+        });
+        setForceEndBreakModalOpen(false);
+        setTargetBreakRecord(null);
+        setDetailModalOpen(false);
+        await loadLiveAttendanceManual();
+      } else {
+        toast({
+          title: "Action Failed",
+          description: data.message || "Could not force end break.",
+          type: "error",
+        });
+      }
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err.message || "Failed to communicate with server.",
+        type: "error",
+      });
+    } finally {
+      setIsForceEndingBreak(false);
+    }
+  };
+
+  const handleExportCsv = async () => {
+    try {
+      setIsExporting(true);
+      const url = `/api/admin/attendance/export?date=${selectedDate}&department=${departmentFilter}&status=${statusFilter}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to export attendance CSV");
+      }
+
+      const blob = await res.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = `attendance-report-${selectedDate}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      toast({
+        title: "Report Downloaded",
+        description: `Successfully exported daily attendance records for ${selectedDate}.`,
+        type: "success",
+      });
+    } catch (err: any) {
+      toast({
+        title: "Export Error",
+        description: err.message || "Failed to download attendance CSV.",
+        type: "error",
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const getStatusBadge = (status: ExtendedRecord["status"]) => {
     switch (status) {
       case "PRESENT":
@@ -409,44 +504,12 @@ export default function AttendancePage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => {
-              const headers = [
-                "Employee", "Employee ID", "Department", "Date", "Punch In", "Punch Out",
-                "Working Hours", "Total Breaks", "Total Break Time", "Declared Break Time", "Idle Break Time", "Status"
-              ];
-              const rows = filteredRecords.map(r => [
-                r.employeeName,
-                r.employeeCode,
-                r.department,
-                selectedDate,
-                r.checkIn || "-",
-                r.checkOut || "-",
-                r.workingHours,
-                r.totalBreakCount,
-                r.breakDuration,
-                fmtHm(r.declaredBreakSeconds),
-                fmtHm(r.idleBreakSeconds),
-                r.status
-              ]);
-              const csvContent = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(",")).join("\\n");
-              const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", `Attendance_Break_Report_${selectedDate}.csv`);
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-
-              toast({
-                title: "Report Generated",
-                description: "Exported daily attendance records as CSV format.",
-              });
-            }}
-            className="text-xs font-semibold text-slate-700 border-slate-200 rounded-xl"
+            onClick={handleExportCsv}
+            disabled={isExporting}
+            className="text-xs font-semibold text-slate-700 border-slate-200 hover:bg-slate-50 hover:text-indigo-600 rounded-xl inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
           >
-            <Download className="size-3.5 mr-1.5 text-slate-400" />
-            Export CSV
+            <Download className={`size-3.5 text-slate-400 ${isExporting ? "animate-bounce" : ""}`} />
+            {isExporting ? "Exporting..." : "Download CSV"}
           </Button>
         </div>
       </div>
@@ -677,13 +740,25 @@ export default function AttendancePage() {
 
                     {/* Actions */}
                     <td className="py-3.5 px-4 text-right">
-                      <button
-                        onClick={() => handleOpenDetail(row)}
-                        title="View Attendance Details"
-                        className="size-8 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 inline-flex items-center justify-center transition-colors cursor-pointer"
-                      >
-                        <Eye className="size-4" />
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        {row.liveState === "ON_BREAK" && (
+                          <button
+                            onClick={() => handleOpenForceEndBreak(row)}
+                            title="Force End Active Break"
+                            className="h-7 px-2.5 rounded-lg text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100 inline-flex items-center gap-1 text-[11px] font-semibold transition-colors cursor-pointer shadow-xs"
+                          >
+                            <Coffee className="size-3.5 text-amber-600" />
+                            <span>Stop Break</span>
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleOpenDetail(row)}
+                          title="View Attendance Details"
+                          className="size-8 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 inline-flex items-center justify-center transition-colors cursor-pointer"
+                        >
+                          <Eye className="size-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -778,6 +853,7 @@ export default function AttendancePage() {
                         <th className="px-3 py-2">End</th>
                         <th className="px-3 py-2">Duration</th>
                         <th className="px-3 py-2">Type</th>
+                        <th className="px-3 py-2 text-right">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -786,6 +862,7 @@ export default function AttendancePage() {
                         const s = b.durationSeconds % 60;
                         const isIdle = b.breakTypeName === "System Idle" || b.breakTypeName === "Idle Break";
                         const displayPurpose = isIdle ? "Idle Break" : (b.purpose || b.breakTypeName);
+                        const isRunning = !b.endTime;
                         
                         return (
                           <tr key={i}>
@@ -793,13 +870,34 @@ export default function AttendancePage() {
                               {displayPurpose}
                             </td>
                             <td className="px-3 py-2 font-mono text-slate-500">{new Date(b.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                            <td className="px-3 py-2 font-mono text-slate-500">{b.endTime ? new Date(b.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'In Progress'}</td>
+                            <td className="px-3 py-2 font-mono text-slate-500">
+                              {b.endTime ? (
+                                new Date(b.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-amber-600 font-semibold animate-pulse">
+                                  <span className="size-1.5 rounded-full bg-amber-500" />
+                                  Running
+                                </span>
+                              )}
+                            </td>
                             <td className="px-3 py-2 font-mono font-semibold text-amber-600">{m}m {s}s</td>
                             <td className="px-3 py-2">
                               {isIdle ? (
                                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700">IDLE</span>
                               ) : (
                                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700">DECLARED</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 text-right">
+                              {isRunning && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenForceEndBreak(selectedRecord, b.id)}
+                                  className="h-6 px-2 text-[10px] font-semibold rounded-md bg-amber-100 text-amber-800 hover:bg-amber-200 border border-amber-300 transition-colors cursor-pointer"
+                                  title="Force End This Active Break"
+                                >
+                                  End Break
+                                </button>
                               )}
                             </td>
                           </tr>
@@ -864,6 +962,18 @@ export default function AttendancePage() {
                     className="text-xs rounded-xl bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100"
                   >
                     Force Punch Out
+                  </Button>
+                )}
+
+                {selectedRecord.liveState === "ON_BREAK" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleOpenForceEndBreak(selectedRecord)}
+                    className="text-xs rounded-xl bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 font-semibold"
+                  >
+                    <Coffee className="size-3.5 mr-1" />
+                    Force End Break
                   </Button>
                 )}
 
@@ -1074,6 +1184,85 @@ export default function AttendancePage() {
             <Button variant="outline" size="sm" onClick={() => setForcePunchOutModalOpen(false)} className="text-xs rounded-xl">Cancel</Button>
             <Button size="sm" onClick={handleForcePunchOut} disabled={isSubmitting} className="text-xs bg-rose-600 hover:bg-rose-700 text-white rounded-xl">
               {isSubmitting ? "Submitting..." : "Force Punch Out"}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
+
+      {/* ── MODAL: FORCE END BREAK ────────────────────────────────────────── */}
+      <Dialog
+        isOpen={forceEndBreakModalOpen}
+        onClose={() => setForceEndBreakModalOpen(false)}
+        title="Force End Employee Break"
+        description={`Terminate active break session for ${targetBreakRecord?.employeeName} (${targetBreakRecord?.employeeCode})`}
+      >
+        <div className="space-y-4 py-2">
+          <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs font-medium space-y-1">
+            <div className="font-semibold text-amber-950 flex items-center gap-1.5">
+              <Coffee className="size-3.5 text-amber-700" />
+              Active Break Termination
+            </div>
+            <div>
+              This will immediately clock out the employee's active break timer in the system and return their attendance state to <strong>WORKING</strong>.
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs space-y-1.5">
+            <div className="flex justify-between">
+              <span className="text-slate-500">Employee:</span>
+              <span className="font-semibold text-slate-800">{targetBreakRecord?.employeeName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Department:</span>
+              <span className="text-slate-700">{targetBreakRecord?.department}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Total Breaks Logged:</span>
+              <span className="font-mono text-slate-800">{targetBreakRecord?.totalBreakCount}</span>
+            </div>
+            {targetBreakId && (
+              <div className="flex justify-between">
+                <span className="text-slate-500">Target Break Session:</span>
+                <span className="font-mono text-[11px] text-slate-600 truncate max-w-[200px]">{targetBreakId}</span>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <label className="text-xs font-semibold text-slate-700 mb-1 block">
+              Reason / Admin Note <span className="text-slate-400 font-normal">(optional)</span>
+            </label>
+            <Input
+              value={forceEndReason}
+              onChange={(e) => setForceEndReason(e.target.value)}
+              placeholder="e.g. Employee returned to desk; break timer was left running"
+              className="text-sm rounded-xl h-10 border-slate-200"
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setForceEndBreakModalOpen(false)}
+              className="text-xs rounded-xl"
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleForceEndBreak}
+              disabled={isForceEndingBreak}
+              className="text-xs bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-medium"
+            >
+              {isForceEndingBreak ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="size-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>Stopping Break...</span>
+                </div>
+              ) : (
+                "Confirm & End Break"
+              )}
             </Button>
           </div>
         </div>

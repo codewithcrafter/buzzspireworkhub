@@ -173,6 +173,13 @@ export async function POST(req: Request) {
       }
 
       case "PUNCH_OUT": {
+        // Business Rule: Administrators cannot participate directly as attendance participants
+        if (auth.role === "ADMIN" && (!body.employeeId || body.employeeId === auth.employee.id)) {
+          return ApiResponse.forbidden(
+            "Administrators are not attendance participants. Use manual adjustments to record staff attendance."
+          );
+        }
+
         // If privileged user punches out on behalf of an employee
         if (hasRole(auth.role, ["ADMIN", "HR_MANAGER"]) && body.employeeId && body.employeeId !== auth.employee.id) {
           if (body.date && body.time) {

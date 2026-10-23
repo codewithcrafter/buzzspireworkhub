@@ -95,6 +95,10 @@ export default function DashboardOverviewPage() {
       ]);
       
       if (!sumRes.ok) {
+        if (sumRes.status === 403) {
+          router.push("/staff-dashboard");
+          return;
+        }
         const errJson = await sumRes.json().catch(() => ({}));
         throw new Error(errJson.message || `Failed to fetch summary data (${sumRes.status})`);
       }

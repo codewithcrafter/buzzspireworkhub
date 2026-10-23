@@ -4,15 +4,16 @@ import { AttendanceService } from "@/services/attendance.service";
 import { ApiResponse } from "@/lib/api-response";
 
 export async function POST(req: Request) {
-  try {
-    const auth = await getAuthSession();
-    if (!auth) {
-      return ApiResponse.unauthorized("Authentication required to end a break");
-    }
+  const auth = await getAuthSession();
+  if (!auth) {
+    return ApiResponse.unauthorized("Authentication required to end a break");
+  }
 
-    if (auth.role === "ADMIN") {
-      return ApiResponse.forbidden("Administrators cannot take attendance breaks.");
-    }
+  if (auth.role === "ADMIN") {
+    return ApiResponse.forbidden("Administrators cannot take attendance breaks.");
+  }
+
+  try {
 
     const ipAddress = req.headers.get("x-forwarded-for")?.split(",")[0] || req.headers.get("x-real-ip") || "127.0.0.1";
     const userAgent = req.headers.get("user-agent") || undefined;
@@ -38,7 +39,16 @@ export async function POST(req: Request) {
       return ApiResponse.badRequest("No active work session found.");
     }
     if (error.message === "NO_ACTIVE_BREAK") {
-      return ApiResponse.badRequest("No active break found to end.");
+      const todayState = await AttendanceService.getTodayAttendance(auth.employee.id);
+      return NextResponse.json({
+        success: true,
+        message: "No active break was found or break was already completed.",
+        data: {
+          break: null,
+          attendance: todayState,
+          alreadyEnded: true,
+        },
+      });
     }
     return ApiResponse.serverError("Error ending break", error);
   }

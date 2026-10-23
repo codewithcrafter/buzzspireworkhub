@@ -3,14 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
     "admin": "tsx src/scripts/create-admin.ts",
+    "admin:reset-password": "tsx scripts/reset-admin-password.ts",
     "scheduler": "tsx src/scripts/scheduler.ts",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:seed:mock": "tsx scripts/sync-attendance-data.ts",
+    "db:clean": "tsx scripts/cleanup-test-data.ts",
+    "db:clean:attendance": "tsx scripts/cleanup-test-data.ts --attendance-only"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

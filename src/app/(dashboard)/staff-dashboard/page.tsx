@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import {
   LogIn,
   LogOut,
@@ -122,18 +123,42 @@ function WorkingTimer({
 
 function BreakTimer({ startTime }: { startTime: string }) {
   const [disp, setDisp] = React.useState("00:00");
+  const [isCapped, setIsCapped] = React.useState(false);
 
   React.useEffect(() => {
+    if (!startTime) return;
+    const startMs = new Date(startTime).getTime();
+    if (isNaN(startMs)) return;
+
+    const maxSeconds = 180 * 60; // 3 hours safety ceiling
+
     const tick = () => {
-      const elapsed = Math.floor((Date.now() - new Date(startTime).getTime()) / 1000);
-      setDisp(fmtHMS(elapsed));
+      const rawElapsed = Math.floor((Date.now() - startMs) / 1000);
+      const elapsed = Math.max(0, rawElapsed);
+      if (elapsed >= maxSeconds) {
+        setDisp(fmtHMS(maxSeconds));
+        setIsCapped(true);
+      } else {
+        setDisp(fmtHMS(elapsed));
+        setIsCapped(false);
+      }
     };
+
     tick();
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
   }, [startTime]);
 
-  return <>{disp}</>;
+  return (
+    <>
+      {disp}
+      {isCapped && (
+        <span className="text-[10px] block text-amber-600 font-sans tracking-normal font-normal mt-0.5">
+          Auto-cap reached
+        </span>
+      )}
+    </>
+  );
 }
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
@@ -152,6 +177,7 @@ const BREAK_TYPE_ICONS: Record<string, string> = {
 const formatBreakName = (name?: string) => name === "System Idle" || name === "Idle Break" ? "Idle Break" : (name || "Break");
 
 export default function StaffDashboardPage() {
+  const router = useRouter();
   const { toast } = useToast();
 
   // ── Profile ──
@@ -221,6 +247,29 @@ export default function StaffDashboardPage() {
     };
   }, [state, showIdleWarning, idleConfig, pollIdleStatus]);
 
+  // Sync break status periodically while on break (handles other tabs, auto-timeout, etc.)
+  React.useEffect(() => {
+    if (state !== "ON_BREAK") return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch("/api/attendance/today");
+        if (res.ok) {
+          const d = await res.json();
+          if (d.data?.attendance) {
+            setToday(d.data.attendance);
+          }
+        }
+      } catch {
+        // Silently ignore background polling errors
+      }
+    }, 15000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [state]);
+
   // ─── Fetch all data ─────────────────────────────────────────────────────────
 
   const loadAll = React.useCallback(async () => {
@@ -235,7 +284,13 @@ export default function StaffDashboardPage() {
         const d = await meRes.json();
         // sanitizeEmployee returns department as a plain string
         const u = d.data?.user || d.user;
-        if (u) setProfile(u);
+        if (u) {
+          setProfile(u);
+          if (u.role === "ADMIN") {
+            router.push("/dashboard");
+            return;
+          }
+        }
       }
 
       if (todayRes.ok) {
@@ -412,31 +467,57 @@ export default function StaffDashboardPage() {
   };
 
   const handleEndBreak = async () => {
+    const prevToday = today;
+    const activeBreakInfo = today?.activeBreak;
+
     setEndingBreak(true);
+
+    // Optimistic UI update: immediately transition out of break state so timer stops instantly
+    if (today && activeBreakInfo) {
+      setToday({
+        ...today,
+        currentState: "WORKING",
+        activeBreak: null,
+      });
+    }
+
     try {
       const res = await fetch("/api/breaks/end", { method: "POST" });
-      const d = await res.json();
-      if (res.ok) {
-        // break/end returns { data: { break: { durationSeconds, ... }, attendance } }
+      const d = await res.json().catch(() => ({}));
+
+      if (res.ok && d.success) {
         const dur = d.data?.break?.durationSeconds ?? 0;
-        const name = formatBreakName(today?.activeBreak?.breakTypeName);
+        const name = formatBreakName(activeBreakInfo?.breakTypeName);
+
         toast({
           title: "✓ Break Completed",
-          description: `${name} completed. Duration: ${fmtHuman(dur)}.`,
+          description: d.data?.alreadyEnded
+            ? "Work session resumed."
+            : `${name} completed. Duration: ${fmtHuman(dur)}.`,
           type: "success",
         });
-        await loadAll();
+
+        // Use returned attendance state directly for immediate sync
+        if (d.data?.attendance) {
+          setToday(d.data.attendance);
+        } else {
+          await loadAll();
+        }
       } else {
+        // Revert optimistic state if request actually failed
+        if (prevToday) setToday(prevToday);
         toast({
           title: "✕ End Break Failed",
           description: d.error || d.message || "Unable to end break. Please try again.",
           type: "error",
         });
+        await loadAll();
       }
     } catch {
-      toast({ title: "Network Error", description: "Could not reach the server.", type: "error" });
+      if (prevToday) setToday(prevToday);
+      toast({ title: "Network Error", description: "Could not reach the server. Please check your connection.", type: "error" });
+      await loadAll();
     } finally {
-      setEndingBreak(false);
       setEndingBreak(false);
     }
   };

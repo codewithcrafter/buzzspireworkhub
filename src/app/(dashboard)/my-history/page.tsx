@@ -357,25 +357,25 @@ export default function MyHistoryPage() {
           await loadTodayState();
           toast({
             title: "Break Concluded",
-            description: "Work session resumed.",
+            description: data.data?.alreadyEnded ? "Work session resumed." : "Work session resumed.",
             type: "success",
           });
         } else {
-          setIsOnBreak(false);
           toast({
-            title: "Break Concluded",
-            description: data.message || "Work session resumed.",
-            type: "success",
+            title: "End Break Failed",
+            description: data.error || data.message || "Unable to end break. Please try again.",
+            type: "error",
           });
+          await loadTodayState();
         }
       }
     } catch {
-      setIsOnBreak(!isOnBreak);
       toast({
-        title: !isOnBreak ? "Break Started" : "Break Concluded",
-        description: !isOnBreak ? "Break timer active." : "Work session resumed.",
-        type: !isOnBreak ? "warning" : "success",
+        title: "Network Error",
+        description: "Could not reach the server.",
+        type: "error",
       });
+      await loadTodayState();
     } finally {
       setIsProcessing(false);
     }

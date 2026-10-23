@@ -30,16 +30,31 @@ export class AuthService {
     }
 
     // 1. Find employee
-    const employee = await EmployeeService.findByIdentifier(identifier);
+    let employee;
+    try {
+      employee = await EmployeeService.findByIdentifier(identifier);
+    } catch (dbError: any) {
+      console.error(`🚨 [AuthService.login] Database error during EmployeeService.findByIdentifier("${identifier}"):`, {
+        code: dbError?.code,
+        message: dbError?.message,
+        meta: dbError?.meta,
+      });
+      throw dbError;
+    }
 
     if (!employee) {
-      await AuditService.log({
-        action: "LOGIN_FAILED",
-        module: "AUTHENTICATION",
-        description: `Failed login attempt for nonexistent identifier: ${identifier}`,
-        ipAddress,
-        userAgent,
-      });
+      console.warn(`⚠️ [AuthService.login] No employee found matching identifier: "${identifier}"`);
+      try {
+        await AuditService.log({
+          action: "LOGIN_FAILED",
+          module: "AUTHENTICATION",
+          description: `Failed login attempt for nonexistent identifier: ${identifier}`,
+          ipAddress,
+          userAgent,
+        });
+      } catch (auditErr) {
+        console.error("Failed to log audit entry for nonexistent user:", auditErr);
+      }
 
       return {
         success: false as const,

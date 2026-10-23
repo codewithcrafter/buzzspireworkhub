@@ -9,6 +9,7 @@ import {
   Clock,
   Activity,
   User,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast";
 
 interface BreakRecord {
+  breakId?: string;
   employeeId: string;
   employeeName: string;
   employeeCode: string;
@@ -51,7 +53,27 @@ export default function BreakActivityPage() {
   const [employees, setEmployees] = React.useState<EmployeeSummary[]>([]);
   const [flatBreaks, setFlatBreaks] = React.useState<BreakRecord[]>([]);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [selectedDate, setSelectedDate] = React.useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = React.useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const dateParam = params.get("date");
+      if (dateParam) return dateParam;
+    }
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
+  });
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("date", selectedDate);
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [selectedDate]);
   const [departmentFilter, setDepartmentFilter] = React.useState("ALL");
   const [typeFilter, setTypeFilter] = React.useState("ALL");
   const [statusFilter, setStatusFilter] = React.useState("ALL");
@@ -60,68 +82,107 @@ export default function BreakActivityPage() {
   const [detailModalOpen, setDetailModalOpen] = React.useState(false);
   const [selectedEmployee, setSelectedEmployee] = React.useState<EmployeeSummary | null>(null);
 
-  React.useEffect(() => {
-    async function loadBreakActivity() {
-      try {
-        const res = await fetch(`/api/admin/live-attendance?date=${selectedDate}`);
-        if (!res.ok) return;
-        const data = await res.json();
+  const [forceEndingId, setForceEndingId] = React.useState<string | null>(null);
+
+  const loadBreakActivity = React.useCallback(async () => {
+    try {
+      const res = await fetch(`/api/admin/live-attendance?date=${selectedDate}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      
+      if (data.success && Array.isArray(data.liveStates)) {
+        const empSummaries: EmployeeSummary[] = [];
+        const allBreaks: BreakRecord[] = [];
         
-        if (data.success && Array.isArray(data.liveStates)) {
-          const empSummaries: EmployeeSummary[] = [];
-          const allBreaks: BreakRecord[] = [];
+        data.liveStates.forEach((s: any) => {
+          const bh = s.breakHistory || [];
           
-          data.liveStates.forEach((s: any) => {
-            const bh = s.breakHistory || [];
-            
-            const summary: EmployeeSummary = {
+          const summary: EmployeeSummary = {
+            employeeId: s.employeeId,
+            employeeName: s.fullName,
+            employeeCode: s.employeeCode,
+            department: s.department || "General",
+            checkIn: s.punchIn ? new Date(s.punchIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
+            checkOut: s.currentState === "COMPLETED" ? new Date(s.lastPunchOut || new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
+            netWorkingSeconds: s.netWorkingSeconds || 0,
+            totalBreakCount: bh.length,
+            totalBreakSeconds: s.totalBreakSeconds || 0,
+            declaredBreakSeconds: s.declaredBreakSeconds || 0,
+            idleBreakSeconds: s.idleBreakSeconds || 0,
+            breakHistory: [],
+          };
+
+          bh.forEach((b: any) => {
+            const record: BreakRecord = {
+              breakId: b.id,
               employeeId: s.employeeId,
               employeeName: s.fullName,
               employeeCode: s.employeeCode,
               department: s.department || "General",
-              checkIn: s.punchIn ? new Date(s.punchIn).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
-              checkOut: s.currentState === "COMPLETED" ? new Date(s.lastPunchOut || new Date()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : null,
-              netWorkingSeconds: s.netWorkingSeconds || 0,
-              totalBreakCount: bh.length,
-              totalBreakSeconds: s.totalBreakSeconds || 0,
-              declaredBreakSeconds: s.declaredBreakSeconds || 0,
-              idleBreakSeconds: s.idleBreakSeconds || 0,
-              breakHistory: [],
+              breakTypeName: b.breakTypeName,
+              purpose: b.purpose,
+              startTime: b.startTime,
+              endTime: b.endTime,
+              durationSeconds: b.durationSeconds,
             };
-
-            bh.forEach((b: any) => {
-              const record: BreakRecord = {
-                employeeId: s.employeeId,
-                employeeName: s.fullName,
-                employeeCode: s.employeeCode,
-                department: s.department || "General",
-                breakTypeName: b.breakTypeName,
-                purpose: b.purpose,
-                startTime: b.startTime,
-                endTime: b.endTime,
-                durationSeconds: b.durationSeconds,
-              };
-              allBreaks.push(record);
-              summary.breakHistory.push(record);
-            });
-            
-            empSummaries.push(summary);
+            allBreaks.push(record);
+            summary.breakHistory.push(record);
           });
           
-          setEmployees(empSummaries);
-          setFlatBreaks(allBreaks.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()));
-        }
-      } catch (e) {
-        console.error(e);
+          empSummaries.push(summary);
+        });
+        
+        setEmployees(empSummaries);
+        setFlatBreaks(allBreaks.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()));
       }
+    } catch (e) {
+      console.error(e);
     }
-    
+  }, [selectedDate]);
+
+  React.useEffect(() => {
     loadBreakActivity();
-    
-    // Polling every 30 seconds for live updates
     const interval = setInterval(loadBreakActivity, 30000);
     return () => clearInterval(interval);
-  }, [selectedDate]);
+  }, [loadBreakActivity]);
+
+  const handleForceEndBreak = async (employeeId: string, breakId?: string, employeeName?: string) => {
+    if (!window.confirm(`Are you sure you want to force-end the active break for ${employeeName || "this employee"}?`)) {
+      return;
+    }
+    const targetKey = breakId || employeeId;
+    setForceEndingId(targetKey);
+    try {
+      const res = await fetch("/api/admin/attendance/break", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          employeeId,
+          breakId,
+          reason: "Force-ended by administrator from Break Activity panel",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error?.message || data.message || "Failed to force end break");
+      }
+      toast({
+        title: "Break Terminated",
+        description: `Successfully ended break for ${employeeName || "employee"}.`,
+        type: "success",
+      });
+      await loadBreakActivity();
+      setDetailModalOpen(false);
+    } catch (err: any) {
+      toast({
+        title: "Action Failed",
+        description: err.message || "Could not end break.",
+        type: "error",
+      });
+    } finally {
+      setForceEndingId(null);
+    }
+  };
 
   // Filters for flat breaks
   const filteredBreaks = React.useMemo(() => {
@@ -233,7 +294,18 @@ export default function BreakActivityPage() {
             className="text-xs font-semibold text-slate-700 border-slate-200 rounded-xl"
           >
             <Download className="size-3.5 mr-1.5 text-slate-400" />
-            Export CSV
+            Export Breaks CSV
+          </Button>
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => {
+              window.open(`/api/admin/attendance/export?date=${selectedDate}`, "_blank");
+            }}
+            className="text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-xs"
+          >
+            <FileSpreadsheet className="size-3.5 mr-1.5" />
+            Export Full Attendance
           </Button>
         </div>
       </div>
@@ -454,13 +526,26 @@ export default function BreakActivityPage() {
                           )}
                         </td>
                         <td className="py-3.5 px-4 text-right">
-                          <button
-                            onClick={() => handleOpenDetail(row.employeeId)}
-                            title="View Employee Summary"
-                            className="size-8 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 inline-flex items-center justify-center transition-colors cursor-pointer"
-                          >
-                            <Eye className="size-4" />
-                          </button>
+                          <div className="flex items-center justify-end gap-1.5">
+                            {isActive && (
+                              <button
+                                onClick={() => handleForceEndBreak(row.employeeId, row.breakId, row.employeeName)}
+                                disabled={forceEndingId === (row.breakId || row.employeeId)}
+                                title="Force End Active Break"
+                                className="h-7 px-2.5 rounded-lg text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100 inline-flex items-center gap-1 text-[11px] font-semibold transition-colors cursor-pointer shadow-xs disabled:opacity-50"
+                              >
+                                <Coffee className="size-3.5 text-amber-600" />
+                                <span>{forceEndingId === (row.breakId || row.employeeId) ? "Ending..." : "Stop Break"}</span>
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleOpenDetail(row.employeeId)}
+                              title="View Employee Summary"
+                              className="size-8 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 inline-flex items-center justify-center transition-colors cursor-pointer"
+                            >
+                              <Eye className="size-4" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -553,6 +638,7 @@ export default function BreakActivityPage() {
                         <th className="px-3 py-2">End</th>
                         <th className="px-3 py-2">Duration</th>
                         <th className="px-3 py-2">Type</th>
+                        <th className="px-3 py-2 text-right">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -561,6 +647,7 @@ export default function BreakActivityPage() {
                         const s = b.durationSeconds % 60;
                         const isIdle = b.breakTypeName === "System Idle" || b.breakTypeName === "Idle Break";
                         const displayPurpose = isIdle ? "Idle Break" : (b.purpose || b.breakTypeName);
+                        const isRunning = !b.endTime;
                         
                         return (
                           <tr key={i}>
@@ -568,13 +655,35 @@ export default function BreakActivityPage() {
                               {displayPurpose}
                             </td>
                             <td className="px-3 py-2 font-mono text-slate-500">{new Date(b.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                            <td className="px-3 py-2 font-mono text-slate-500">{b.endTime ? new Date(b.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'In Progress'}</td>
+                            <td className="px-3 py-2 font-mono text-slate-500">
+                              {b.endTime ? (
+                                new Date(b.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-amber-600 font-semibold animate-pulse">
+                                  <span className="size-1.5 rounded-full bg-amber-500" />
+                                  Running
+                                </span>
+                              )}
+                            </td>
                             <td className="px-3 py-2 font-mono font-semibold text-amber-600">{m}m {s}s</td>
                             <td className="px-3 py-2">
                               {isIdle ? (
                                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700">IDLE</span>
                               ) : (
                                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700">DECLARED</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 text-right">
+                              {isRunning && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleForceEndBreak(selectedEmployee.employeeId, b.breakId, selectedEmployee.employeeName)}
+                                  disabled={forceEndingId === (b.breakId || selectedEmployee.employeeId)}
+                                  className="h-6 px-2 text-[10px] font-semibold rounded-md bg-amber-100 text-amber-800 hover:bg-amber-200 border border-amber-300 transition-colors cursor-pointer disabled:opacity-50"
+                                  title="Force End This Active Break"
+                                >
+                                  {forceEndingId === (b.breakId || selectedEmployee.employeeId) ? "Ending..." : "End Break"}
+                                </button>
                               )}
                             </td>
                           </tr>

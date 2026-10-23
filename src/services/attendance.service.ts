@@ -14,10 +14,13 @@ export class AttendanceService {
     const startOfDay = getStartOfDay(dateInput);
     const endOfDay = getEndOfDay(dateInput);
 
-    // Auto-close any orphaned sessions from previous days if checking today
+    // Auto-close any orphaned sessions from previous days and stale active breaks if checking today
     if (!dateInput) {
       await AttendanceService.autoCloseOrphanedSessions(prisma, employeeId, startOfDay).catch((err) => {
         console.error("Auto-close orphaned sessions error in getTodayAttendance:", err);
+      });
+      await AttendanceService.autoCloseStaleBreaks(prisma, employeeId).catch((err) => {
+        console.error("Auto-close stale breaks error in getTodayAttendance:", err);
       });
     }
 
@@ -69,9 +72,13 @@ export class AttendanceService {
     }
 
     if (activeBreak) {
-      const currentBreakElapsed = calculateDurationSeconds(activeBreak.startTime, now);
+      const maxBreakCapSeconds = 180 * 60; // 3 hours cap
+      const currentBreakElapsed = Math.min(
+        maxBreakCapSeconds,
+        calculateDurationSeconds(activeBreak.startTime, now)
+      );
       const closedBreaksSum = attendance.sessions.flatMap((s) => s.breaks)
-        .filter((b) => b.endTime)
+        .filter((b) => b.endTime && b.id !== activeBreak.id)
         .reduce((sum, b) => sum + (b.durationSeconds || 0), 0);
 
       liveBreakSeconds = closedBreaksSum + currentBreakElapsed;
@@ -114,7 +121,10 @@ export class AttendanceService {
             breakTypeId: activeBreak.breakTypeId,
             breakTypeName: activeBreak.breakType?.name || "Break",
             startTime: activeBreak.startTime,
-            durationSeconds: calculateDurationSeconds(activeBreak.startTime, now),
+            durationSeconds: Math.min(
+              180 * 60,
+              calculateDurationSeconds(activeBreak.startTime, now)
+            ),
           }
         : null,
       sessions: attendance.sessions,
@@ -262,7 +272,104 @@ export class AttendanceService {
       );
     }
 
+    // Also auto-close any hanging breaks from previous days that were orphaned across any session
+    const orphanedPastBreaks = await tx.break.findMany({
+      where: {
+        endTime: null,
+        startTime: { lt: currentStartOfDay },
+        attendanceSession: { employeeId },
+      },
+    });
+
+    for (const ob of orphanedPastBreaks) {
+      const bDayEnd = getEndOfDay(ob.startTime);
+      const autoEnd = new Date(Math.min(ob.startTime.getTime() + 60 * 60 * 1000, bDayEnd.getTime()));
+      const dur = calculateDurationSeconds(ob.startTime, autoEnd);
+      await tx.break.update({
+        where: { id: ob.id },
+        data: {
+          endTime: autoEnd,
+          durationSeconds: dur,
+        },
+      });
+    }
+
     return orphanedSessions.length;
+  }
+
+  /**
+   * Automatically closes active breaks exceeding safety duration limit (default 180 min / 3 hours).
+   * Prevents break timers from running indefinitely if forgotten or abandoned.
+   */
+  static async autoCloseStaleBreaks(
+    tx: Prisma.TransactionClient | typeof prisma,
+    employeeId: string,
+    maxDurationMinutes: number = 180
+  ): Promise<number> {
+    const now = new Date();
+    const maxDurationSeconds = maxDurationMinutes * 60;
+
+    const staleBreaks = await tx.break.findMany({
+      where: {
+        endTime: null,
+        attendanceSession: { employeeId },
+      },
+      include: {
+        attendanceSession: true,
+        breakType: true,
+      },
+    });
+
+    let closedCount = 0;
+    for (const brk of staleBreaks) {
+      const elapsed = calculateDurationSeconds(brk.startTime, now);
+      if (elapsed >= maxDurationSeconds) {
+        const cappedEnd = new Date(brk.startTime.getTime() + maxDurationSeconds * 1000);
+        await tx.break.update({
+          where: { id: brk.id },
+          data: {
+            endTime: cappedEnd,
+            durationSeconds: maxDurationSeconds,
+          },
+        });
+        closedCount++;
+
+        // Update attendance container
+        const allSessions = await tx.attendanceSession.findMany({
+          where: { attendanceId: brk.attendanceSession.attendanceId },
+          include: { breaks: true },
+        });
+
+        const totalBreaks = allSessions
+          .flatMap((s) => s.breaks)
+          .reduce((sum, b) => sum + (b.id === brk.id ? maxDurationSeconds : b.durationSeconds || 0), 0);
+
+        const att = await tx.attendance.findUnique({
+          where: { id: brk.attendanceSession.attendanceId },
+          select: { totalWorkingSeconds: true },
+        });
+
+        await tx.attendance.update({
+          where: { id: brk.attendanceSession.attendanceId },
+          data: {
+            totalBreakSeconds: totalBreaks,
+            netWorkingSeconds: Math.max(0, (att?.totalWorkingSeconds || 0) - totalBreaks),
+          },
+        });
+
+        await tx.activityLog.create({
+          data: {
+            employeeId,
+            action: "BREAK_AUTO_CLOSED",
+            module: "ATTENDANCE",
+            description: `Active break (${brk.breakType?.name || "Break"}) automatically closed after exceeding maximum duration cap (${maxDurationMinutes}m)`,
+            metadata: { breakId: brk.id, maxDurationSeconds },
+          },
+        });
+      }
+    }
+
+    return closedCount;
   }
 
   /**
@@ -419,26 +526,33 @@ export class AttendanceService {
         throw new Error("NO_ACTIVE_SESSION");
       }
 
-      // 2. Gracefully auto-close active break instead of throwing error!
-      const activeBreak = activeSession.breaks.find((b) => !b.endTime);
+      // 2. Gracefully auto-close any active breaks instead of throwing error!
+      const activeBreaks = await tx.break.findMany({
+        where: {
+          endTime: null,
+          attendanceSession: { employeeId },
+        },
+      });
+
       let closedBreakDuration = 0;
-      if (activeBreak) {
-        closedBreakDuration = calculateDurationSeconds(activeBreak.startTime, now);
+      for (const ab of activeBreaks) {
+        const dur = calculateDurationSeconds(ab.startTime, now);
         await tx.break.update({
-          where: { id: activeBreak.id },
+          where: { id: ab.id },
           data: {
             endTime: now,
-            durationSeconds: closedBreakDuration,
+            durationSeconds: dur,
           },
         });
+        closedBreakDuration += dur;
 
         await tx.activityLog.create({
           data: {
             employeeId,
             action: "BREAK_ENDED",
             module: "ATTENDANCE",
-            description: `Active break automatically ended on shift punch out (${closedBreakDuration}s)`,
-            metadata: { breakId: activeBreak.id, autoClosedOnPunchOut: true },
+            description: `Active break automatically ended on shift punch out (${dur}s)`,
+            metadata: { breakId: ab.id, autoClosedOnPunchOut: true },
           },
         });
       }
@@ -468,12 +582,7 @@ export class AttendanceService {
 
       const totalBreaks = allAttendanceSessions
         .flatMap((s) => s.breaks)
-        .reduce((sum, b) => {
-          if (b.id === activeBreak?.id) {
-            return sum + closedBreakDuration;
-          }
-          return sum + (b.durationSeconds || 0);
-        }, 0);
+        .reduce((sum, b) => sum + (b.durationSeconds || 0), 0);
 
       const netWorking = Math.max(0, totalWorking - totalBreaks);
 
@@ -488,13 +597,14 @@ export class AttendanceService {
       });
 
       // 6. Audit & Activity
+      const hadAutoClosedBreaks = activeBreaks.length > 0;
       await tx.activityLog.create({
         data: {
           employeeId,
           action: "PUNCH_OUT",
           module: "ATTENDANCE",
-          description: `Punched out at ${now.toLocaleTimeString("en-IN")}${activeBreak ? " (active break ended automatically)" : ""}`,
-          metadata: { sessionId: activeSession.id, sessionWorkingSeconds, autoClosedBreak: !!activeBreak },
+          description: `Punched out at ${now.toLocaleTimeString("en-IN")}${hadAutoClosedBreaks ? ` (${activeBreaks.length} active break(s) ended automatically)` : ""}`,
+          metadata: { sessionId: activeSession.id, sessionWorkingSeconds, autoClosedBreak: hadAutoClosedBreaks },
         },
       });
 
@@ -503,10 +613,10 @@ export class AttendanceService {
           employeeId,
           action: "ATTENDANCE_PUNCH_OUT",
           module: "ATTENDANCE",
-          description: `Punch out recorded. Session duration: ${sessionWorkingSeconds}s${activeBreak ? " (auto-closed active break)" : ""}`,
+          description: `Punch out recorded. Session duration: ${sessionWorkingSeconds}s${hadAutoClosedBreaks ? ` (${activeBreaks.length} auto-closed active break(s))` : ""}`,
           ipAddress: ipAddress || null,
           userAgent: userAgent || null,
-          metadata: { sessionId: activeSession.id, sessionWorkingSeconds, autoClosedBreak: !!activeBreak },
+          metadata: { sessionId: activeSession.id, sessionWorkingSeconds, autoClosedBreak: hadAutoClosedBreaks },
         },
       });
 
@@ -550,6 +660,7 @@ export class AttendanceService {
           employeeId,
           punchOut: null,
         },
+        orderBy: { punchIn: "desc" },
         include: {
           breaks: true,
         },
@@ -559,9 +670,33 @@ export class AttendanceService {
         throw new Error("NO_ACTIVE_SESSION");
       }
 
-      // 2. Check no break is currently active
-      const activeBreak = activeSession.breaks.find((b) => !b.endTime);
-      if (activeBreak) {
+      // 2. Check for active breaks and auto-close any stale breaks exceeding max threshold
+      const existingActiveBreaks = await tx.break.findMany({
+        where: {
+          endTime: null,
+          attendanceSession: { employeeId },
+        },
+      });
+
+      const maxBreakSeconds = 180 * 60;
+      let unclosedCount = 0;
+      for (const eb of existingActiveBreaks) {
+        const elapsed = calculateDurationSeconds(eb.startTime, now);
+        if (elapsed >= maxBreakSeconds) {
+          // Stale break -> auto-close so employee is not locked out
+          await tx.break.update({
+            where: { id: eb.id },
+            data: {
+              endTime: new Date(eb.startTime.getTime() + maxBreakSeconds * 1000),
+              durationSeconds: maxBreakSeconds,
+            },
+          });
+        } else {
+          unclosedCount++;
+        }
+      }
+
+      if (unclosedCount > 0) {
         throw new Error("BREAK_ALREADY_ACTIVE");
       }
 
@@ -643,82 +778,131 @@ export class AttendanceService {
   }
 
   /**
-   * Ends an active break for an employee (atomic transaction).
+   * Ends active break(s) for an employee (atomic transaction).
+   * Robust against session ordering issues, multiple open breaks, and stale timers.
    */
   static async endBreak(employeeId: string, ipAddress?: string, userAgent?: string) {
     const now = new Date();
 
-    const result = await prisma.$transaction(async (tx) => {
-      // 1. Find active open session
-      const activeSession = await tx.attendanceSession.findFirst({
+    return prisma.$transaction(async (tx) => {
+      // 1. Authoritative lookup: Find ALL active breaks for this employee directly
+      const activeBreaks = await tx.break.findMany({
         where: {
-          employeeId,
-          punchOut: null,
-        },
-        include: {
-          breaks: {
-            include: { breakType: true },
+          endTime: null,
+          attendanceSession: {
+            employeeId,
           },
         },
+        include: {
+          breakType: true,
+          attendanceSession: {
+            include: { attendance: true },
+          },
+        },
+        orderBy: { startTime: "desc" },
       });
 
-      if (!activeSession) {
-        throw new Error("NO_ACTIVE_SESSION");
-      }
-
-      // 2. Find active break
-      const activeBreak = activeSession.breaks.find((b) => !b.endTime);
-      if (!activeBreak) {
+      if (activeBreaks.length === 0) {
         throw new Error("NO_ACTIVE_BREAK");
       }
 
-      // 3. Calculate break duration
-      const breakDurationSeconds = calculateDurationSeconds(activeBreak.startTime, now);
+      // 2. Fetch maximum allowable break duration (default: 180 mins / 3 hours)
+      let maxBreakMinutes = 180;
+      try {
+        const maxSetting = await tx.systemSetting.findUnique({
+          where: { key: "MAX_BREAK_DURATION_MINUTES" },
+        });
+        if (maxSetting?.value && !isNaN(parseInt(maxSetting.value, 10))) {
+          maxBreakMinutes = parseInt(maxSetting.value, 10);
+        }
+      } catch {
+        // Fallback default 180
+      }
+      const maxBreakSeconds = maxBreakMinutes * 60;
 
-      // 4. Close break
-      const closedBreak = await tx.break.update({
-        where: { id: activeBreak.id },
-        data: {
-          endTime: now,
-          durationSeconds: breakDurationSeconds,
-        },
-      });
+      // 3. Close all active breaks for this employee to prevent stuck/hanging timers
+      const primaryBreak = activeBreaks[0];
+      const affectedAttendanceIds = new Set<string>();
+      let primaryDurationSeconds = 0;
+      let primaryEndTime = now;
 
-      // 5. Update attendance total break seconds
-      const allAttendanceSessions = await tx.attendanceSession.findMany({
-        where: { attendanceId: activeSession.attendanceId },
-        include: { breaks: true },
-      });
+      for (let i = 0; i < activeBreaks.length; i++) {
+        const brk = activeBreaks[i];
+        affectedAttendanceIds.add(brk.attendanceSession.attendanceId);
 
-      const totalBreaks = allAttendanceSessions
-        .flatMap((s) => s.breaks)
-        .reduce(
-          (sum, b) => sum + (b.id === activeBreak.id ? breakDurationSeconds : b.durationSeconds || 0),
-          0
-        );
+        let durationSeconds = calculateDurationSeconds(brk.startTime, now);
+        let effectiveEndTime = now;
 
-      const attRecord = await tx.attendance.findUnique({
-        where: { id: activeSession.attendanceId },
-        select: { totalWorkingSeconds: true },
-      });
-      const netWorking = Math.max(0, (attRecord?.totalWorkingSeconds || 0) - totalBreaks);
+        // Auto-cap safety fallback: If break ran longer than max allowed duration
+        if (durationSeconds > maxBreakSeconds) {
+          durationSeconds = maxBreakSeconds;
+          effectiveEndTime = new Date(brk.startTime.getTime() + maxBreakSeconds * 1000);
+        }
 
-      await tx.attendance.update({
-        where: { id: activeSession.attendanceId },
-        data: {
-          totalBreakSeconds: totalBreaks,
-          netWorkingSeconds: netWorking,
-        },
-      });
+        await tx.break.update({
+          where: { id: brk.id },
+          data: {
+            endTime: effectiveEndTime,
+            durationSeconds,
+          },
+        });
 
-      // 6. Audit & Activity
+        if (i === 0) {
+          primaryDurationSeconds = durationSeconds;
+          primaryEndTime = effectiveEndTime;
+        }
+      }
+
+      // 4. Update parent attendance container totals (totalBreakSeconds & netWorkingSeconds)
+      let primaryTotalBreaks = 0;
+      for (const attId of affectedAttendanceIds) {
+        const allAttendanceSessions = await tx.attendanceSession.findMany({
+          where: { attendanceId: attId },
+          include: { breaks: true },
+        });
+
+        const totalBreaks = allAttendanceSessions
+          .flatMap((s) => s.breaks)
+          .reduce((sum, b) => sum + (b.durationSeconds || 0), 0);
+
+        const idleBreaks = allAttendanceSessions
+          .flatMap((s) => s.breaks)
+          .filter((b) => b.purpose?.toLowerCase().includes("idle"))
+          .reduce((sum, b) => sum + (b.durationSeconds || 0), 0);
+
+        const attRecord = await tx.attendance.findUnique({
+          where: { id: attId },
+          select: { totalWorkingSeconds: true },
+        });
+
+        const netWorking = Math.max(0, (attRecord?.totalWorkingSeconds || 0) - totalBreaks);
+
+        await tx.attendance.update({
+          where: { id: attId },
+          data: {
+            totalBreakSeconds: totalBreaks,
+            netWorkingSeconds: netWorking,
+            idleSeconds: idleBreaks,
+          },
+        });
+
+        if (attId === primaryBreak.attendanceSession.attendanceId) {
+          primaryTotalBreaks = totalBreaks;
+        }
+      }
+
+      // 5. Activity & Audit Logs
       await tx.activityLog.create({
         data: {
           employeeId,
           action: "BREAK_ENDED",
           module: "ATTENDANCE",
-          description: `Ended break: ${activeBreak.breakType?.name || "Break"} (${breakDurationSeconds}s)`,
-          metadata: { breakId: activeBreak.id, breakDurationSeconds },
+          description: `Ended break: ${primaryBreak.breakType?.name || "Break"} (${primaryDurationSeconds}s)`,
+          metadata: {
+            breakId: primaryBreak.id,
+            breakDurationSeconds: primaryDurationSeconds,
+            closedBreaksCount: activeBreaks.length,
+          },
         },
       });
 
@@ -727,18 +911,177 @@ export class AttendanceService {
           employeeId,
           action: "BREAK_ENDED",
           module: "ATTENDANCE",
-          description: `Break ended (${breakDurationSeconds}s duration)`,
+          description: `Break ended (${primaryDurationSeconds}s duration)${activeBreaks.length > 1 ? ` [${activeBreaks.length} breaks closed]` : ""}`,
           ipAddress: ipAddress || null,
           userAgent: userAgent || null,
-          metadata: { breakId: activeBreak.id, breakDurationSeconds },
+          metadata: {
+            breakId: primaryBreak.id,
+            breakDurationSeconds: primaryDurationSeconds,
+            closedBreaksCount: activeBreaks.length,
+          },
         },
       });
 
       return {
-        id: closedBreak.id,
-        endTime: now,
-        durationSeconds: breakDurationSeconds,
-        totalBreakSeconds: totalBreaks,
+        id: primaryBreak.id,
+        endTime: primaryEndTime,
+        durationSeconds: primaryDurationSeconds,
+        totalBreakSeconds: primaryTotalBreaks,
+      };
+    });
+  }
+
+  /**
+   * Forcefully ends active break session(s) for an employee (Admin / HR action).
+   * Automatically enforces safety duration cap, updates parent attendance totals, and logs audit trail.
+   */
+  static async adminForceEndBreak(options: {
+    employeeId: string;
+    adminId: string;
+    breakId?: string;
+    endTime?: Date;
+    reason?: string;
+    ipAddress?: string;
+    userAgent?: string;
+  }) {
+    const { employeeId, adminId, breakId, reason = "Force-ended by Administrator", ipAddress, userAgent } = options;
+    const now = options.endTime || new Date();
+
+    return prisma.$transaction(async (tx) => {
+      // 1. Authoritative lookup: Find active break(s) matching criteria
+      const whereClause: any = {
+        endTime: null,
+        attendanceSession: { employeeId },
+      };
+      if (breakId) {
+        whereClause.id = breakId;
+      }
+
+      const activeBreaks = await tx.break.findMany({
+        where: whereClause,
+        include: {
+          breakType: true,
+          attendanceSession: {
+            include: { attendance: true },
+          },
+        },
+        orderBy: { startTime: "desc" },
+      });
+
+      if (activeBreaks.length === 0) {
+        throw new Error("NO_ACTIVE_BREAK");
+      }
+
+      // 2. Fetch maximum allowable duration (default: 180 min)
+      let maxBreakMinutes = 180;
+      try {
+        const maxSetting = await tx.systemSetting.findUnique({
+          where: { key: "MAX_BREAK_DURATION_MINUTES" },
+        });
+        if (maxSetting?.value && !isNaN(parseInt(maxSetting.value, 10))) {
+          maxBreakMinutes = parseInt(maxSetting.value, 10);
+        }
+      } catch {
+        // Fallback default 180
+      }
+      const maxBreakSeconds = maxBreakMinutes * 60;
+
+      const closedBreaks = [];
+      const affectedAttendanceIds = new Set<string>();
+
+      for (const ab of activeBreaks) {
+        let calculatedDuration = calculateDurationSeconds(ab.startTime, now);
+        let actualEndTime = now;
+
+        if (calculatedDuration > maxBreakSeconds) {
+          calculatedDuration = maxBreakSeconds;
+          actualEndTime = new Date(ab.startTime.getTime() + maxBreakSeconds * 1000);
+        }
+
+        const updatedBreak = await tx.break.update({
+          where: { id: ab.id },
+          data: {
+            endTime: actualEndTime,
+            durationSeconds: calculatedDuration,
+          },
+          include: { breakType: true },
+        });
+
+        closedBreaks.push(updatedBreak);
+        if (ab.attendanceSession?.attendanceId) {
+          affectedAttendanceIds.add(ab.attendanceSession.attendanceId);
+        }
+      }
+
+      // 3. Recalculate parent attendance containers
+      for (const attId of affectedAttendanceIds) {
+        const allSessionsWithBreaks = await tx.attendanceSession.findMany({
+          where: { attendanceId: attId },
+          include: { breaks: true },
+        });
+
+        const totalWorking = allSessionsWithBreaks.reduce(
+          (sum, s) => sum + (s.workingSeconds || 0),
+          0
+        );
+
+        const totalBreaks = allSessionsWithBreaks
+          .flatMap((s) => s.breaks)
+          .reduce((sum, b) => sum + (b.durationSeconds || 0), 0);
+
+        const netWorking = Math.max(0, totalWorking - totalBreaks);
+
+        await tx.attendance.update({
+          where: { id: attId },
+          data: {
+            totalBreakSeconds: totalBreaks,
+            netWorkingSeconds: netWorking,
+          },
+        });
+      }
+
+      // 4. Audit & Activity Logging
+      const primaryBreak = closedBreaks[0];
+      await AuditService.logEvent(
+        {
+          employeeId,
+          performedById: adminId,
+          action: "ATTENDANCE_BREAK_FORCE_ENDED",
+          module: "ATTENDANCE",
+          description: `Admin forcefully ended break (${primaryBreak.breakType?.name || "Break"}) [${primaryBreak.durationSeconds}s]. Reason: ${reason}`,
+          ipAddress: ipAddress || null,
+          userAgent: userAgent || null,
+          metadata: {
+            adminId,
+            breakId: primaryBreak.id,
+            breakTypeName: primaryBreak.breakType?.name,
+            durationSeconds: primaryBreak.durationSeconds,
+            closedBreaksCount: closedBreaks.length,
+            reason,
+          },
+        },
+        tx
+      );
+
+      await tx.activityLog.create({
+        data: {
+          employeeId,
+          action: "BREAK_FORCE_ENDED",
+          module: "ATTENDANCE",
+          description: `Break (${primaryBreak.breakType?.name || "Break"}) forcefully ended by administrator. Reason: ${reason}`,
+          metadata: {
+            adminId,
+            breakId: primaryBreak.id,
+            durationSeconds: primaryBreak.durationSeconds,
+            reason,
+          },
+        },
+      });
+
+      return {
+        closedBreaks,
+        primaryBreak,
+        closedCount: closedBreaks.length,
       };
     });
   }
@@ -1458,14 +1801,19 @@ export class AttendanceService {
       const lastPunchOut = lastSession?.punchOut || null;
 
       const currentSessionDuration = activeSession ? calculateDurationSeconds(activeSession.punchIn, now) : 0;
-      const currentBreakDuration = activeBreak ? calculateDurationSeconds(activeBreak.startTime, now) : 0;
+      const currentBreakDuration = activeBreak
+        ? Math.min(180 * 60, calculateDurationSeconds(activeBreak.startTime, now))
+        : 0;
 
       const breakHistory = sessions.flatMap((s) => s.breaks).map((b) => ({
+        id: b.id,
         breakTypeName: b.breakType?.name || "Break",
         purpose: b.purpose || null,
         startTime: b.startTime,
         endTime: b.endTime,
-        durationSeconds: b.endTime ? b.durationSeconds : calculateDurationSeconds(b.startTime, now),
+        durationSeconds: b.endTime
+          ? b.durationSeconds
+          : Math.min(180 * 60, calculateDurationSeconds(b.startTime, now)),
       }));
 
       let declaredBreakSeconds = 0;

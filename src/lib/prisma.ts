@@ -4,6 +4,9 @@ import { Pool } from "pg";
 
 const prismaClientSingleton = () => {
   const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    console.error("❌ [Prisma Client Error]: DATABASE_URL is not defined in environment variables. Check your .env file!");
+  }
   const isNeon = connectionString?.includes("neon.tech");
   const pool = new Pool({
     connectionString,
