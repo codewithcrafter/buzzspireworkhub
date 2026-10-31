@@ -111,6 +111,31 @@ export default function AttendancePage() {
   const [forceEndReason, setForceEndReason] = React.useState("");
   const [isForceEndingBreak, setIsForceEndingBreak] = React.useState(false);
   const [isExporting, setIsExporting] = React.useState(false);
+  const [isExportingExcel, setIsExportingExcel] = React.useState(false);
+  const [exportFromDate, setExportFromDate] = React.useState(() => {
+    if (typeof window !== "undefined") {
+      const today = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date());
+      const [year, month] = today.split("-");
+      return `${year}-${month}-01`;
+    }
+    return "2026-10-01";
+  });
+  const [exportToDate, setExportToDate] = React.useState(() => {
+    if (typeof window !== "undefined") {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date());
+    }
+    return "2026-10-31";
+  });
 
   React.useEffect(() => {
     async function loadLiveAttendance() {
@@ -443,6 +468,62 @@ export default function AttendancePage() {
     }
   };
 
+  const handleExportExcel = async () => {
+    if (!exportFromDate || !exportToDate) {
+      toast({
+        title: "Date Range Required",
+        description: "Please specify both From Date and To Date.",
+        type: "error",
+      });
+      return;
+    }
+
+    if (exportFromDate > exportToDate) {
+      toast({
+        title: "Invalid Date Range",
+        description: "From Date cannot be later than To Date.",
+        type: "error",
+      });
+      return;
+    }
+
+    try {
+      setIsExportingExcel(true);
+      const url = `/api/admin/attendance/export/excel?from=${exportFromDate}&to=${exportToDate}${
+        departmentFilter !== "ALL" ? `&department=${departmentFilter}` : ""
+      }`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `Failed to export attendance Excel (${res.status})`);
+      }
+
+      const blob = await res.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = `Buzzspire_Attendance_${exportFromDate}_to_${exportToDate}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+
+      toast({
+        title: "Excel Report Ready",
+        description: `Successfully exported attendance records from ${exportFromDate} to ${exportToDate}.`,
+        type: "success",
+      });
+    } catch (err: any) {
+      toast({
+        title: "Excel Export Failed",
+        description: err.message || "Failed to download attendance Excel report.",
+        type: "error",
+      });
+    } finally {
+      setIsExportingExcel(false);
+    }
+  };
+
   const getStatusBadge = (status: ExtendedRecord["status"]) => {
     switch (status) {
       case "PRESENT":
@@ -605,60 +686,118 @@ export default function AttendancePage() {
       </div>
 
       {/* ── FILTER TOOLBAR ─────────────────────────────────────────────────── */}
-      <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
-        <CardContent className="p-4 flex flex-col md:flex-row items-center gap-3">
-          {/* Date Selector */}
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <Input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="h-10 text-xs px-3 rounded-xl border-slate-200 bg-white text-slate-700 font-medium w-full sm:w-44"
-            />
+      <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm overflow-hidden">
+        <CardContent className="p-4 space-y-3.5">
+          {/* Main Filter Controls */}
+          <div className="flex flex-col md:flex-row items-center gap-3">
+            {/* Daily Roster Date Selector */}
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <Input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="h-10 text-xs px-3 rounded-xl border-slate-200 bg-white text-slate-700 font-medium w-full sm:w-44"
+              />
+            </div>
+
+            {/* Search */}
+            <div className="relative flex-1 w-full">
+              <Search className="size-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Input
+                placeholder="Search employee name or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 h-10 text-xs bg-white border-slate-200 rounded-xl"
+              />
+            </div>
+
+            {/* Department Filter */}
+            <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+              <select
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+                className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="ALL">All Departments</option>
+              </select>
+
+              {/* Status Filter */}
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="ALL">All Statuses</option>
+                <option value="PRESENT">Present</option>
+                <option value="LATE">Late</option>
+                <option value="ON_LEAVE">On Leave</option>
+                <option value="ABSENT">Absent</option>
+              </select>
+
+              {/* Employee Filter */}
+              <select
+                value={employeeFilter}
+                onChange={(e) => setEmployeeFilter(e.target.value)}
+                className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="ALL">All Staff Members</option>
+              </select>
+            </div>
           </div>
 
-          {/* Search */}
-          <div className="relative flex-1 w-full">
-            <Search className="size-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <Input
-              placeholder="Search employee name or ID..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 h-10 text-xs bg-white border-slate-200 rounded-xl"
-            />
-          </div>
+          {/* Date Range Attendance Export Section */}
+          <div className="pt-3 border-t border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs text-slate-600 font-medium">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-xs">
+                <FileSpreadsheet className="size-3.5 text-emerald-600" />
+                Date Range Attendance Export
+              </span>
+              <span className="hidden sm:inline text-slate-400">•</span>
+              <span className="text-slate-500 text-[11px] hidden sm:inline">Export full roster across active employees</span>
+            </div>
 
-          {/* Department Filter */}
-          <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-            <select
-              value={departmentFilter}
-              onChange={(e) => setDepartmentFilter(e.target.value)}
-              className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
-            >
-              <option value="ALL">All Departments</option>
-            </select>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-semibold text-slate-500">From</span>
+                <Input
+                  type="date"
+                  value={exportFromDate}
+                  onChange={(e) => setExportFromDate(e.target.value)}
+                  className="h-9 text-xs px-2.5 rounded-xl border-slate-200 bg-white text-slate-700 font-medium w-36"
+                />
+              </div>
 
-            {/* Status Filter */}
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
-            >
-              <option value="ALL">All Statuses</option>
-              <option value="PRESENT">Present</option>
-              <option value="LATE">Late</option>
-              <option value="ON_LEAVE">On Leave</option>
-              <option value="ABSENT">Absent</option>
-            </select>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-semibold text-slate-500">To</span>
+                <Input
+                  type="date"
+                  value={exportToDate}
+                  onChange={(e) => setExportToDate(e.target.value)}
+                  className="h-9 text-xs px-2.5 rounded-xl border-slate-200 bg-white text-slate-700 font-medium w-36"
+                />
+              </div>
 
-            {/* Employee Filter */}
-            <select
-              value={employeeFilter}
-              onChange={(e) => setEmployeeFilter(e.target.value)}
-              className="h-10 text-xs px-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
-            >
-              <option value="ALL">All Staff Members</option>
-            </select>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleExportExcel}
+                disabled={
+                  isExportingExcel ||
+                  !exportFromDate ||
+                  !exportToDate ||
+                  exportFromDate > exportToDate
+                }
+                title={
+                  exportFromDate > exportToDate
+                    ? "From Date cannot be later than To Date"
+                    : "Export attendance records to Excel (.xlsx)"
+                }
+                className="h-9 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl inline-flex items-center gap-1.5 shadow-xs cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FileSpreadsheet className={`size-3.5 ${isExportingExcel ? "animate-spin" : ""}`} />
+                {isExportingExcel ? "Generating Excel..." : "Export Excel"}
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

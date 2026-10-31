@@ -5,6 +5,7 @@ import { AuditService } from "./audit.service";
 import { ActivityService } from "./activity.service";
 import { HREngineService } from "./hr-engine.service";
 import { SettingsService } from "./settings.service";
+import ExcelJS from "exceljs";
 
 export class AttendanceService {
   /**
@@ -1864,4 +1865,300 @@ export class AttendanceService {
 
     return states;
   }
+
+  /**
+   * Generates a styled Excel (.xlsx) workbook for date range attendance export.
+   * Generates records for every active employee for every calendar day in the range.
+   * Exactly 5 columns in exact order: Employee Name | Date | In Time | Out Time | Status.
+   * Treats Sundays and official holidays as Holiday (not Absent).
+   */
+  static async generateDateRangeExcelReport(options: {
+    fromDate: string;
+    toDate: string;
+    departmentId?: string;
+  }): Promise<{ buffer: Buffer; filename: string; totalRecords: number }> {
+    const { fromDate, toDate, departmentId } = options;
+
+    const startRange = getStartOfDay(fromDate);
+    const endRange = getEndOfDay(toDate);
+
+    const activeStatuses: Prisma.EnumEmployeeStatusFilter = {
+      in: ["ACTIVE", "PROBATION", "CONFIRMED", "NOTICE_PERIOD", "ONBOARDING"] as any,
+    };
+    const empWhere: any = {
+      status: activeStatuses,
+      role: { name: { not: "ADMIN" } },
+    };
+    if (departmentId && departmentId !== "ALL") {
+      empWhere.departmentId = departmentId;
+    }
+
+    // 1. Fetch active employees
+    const employees = await prisma.employee.findMany({
+      where: empWhere,
+      select: {
+        id: true,
+        fullName: true,
+        employeeCode: true,
+        department: { select: { id: true, name: true } },
+      },
+      orderBy: { fullName: "asc" },
+    });
+
+    const employeeIds = employees.map((e) => e.id);
+
+    // 2. Fetch all attendances with sessions for these employees in range (Batch query)
+    const attendances = await prisma.attendance.findMany({
+      where: {
+        employeeId: { in: employeeIds },
+        date: {
+          gte: startRange,
+          lte: endRange,
+        },
+      },
+      include: {
+        sessions: {
+          orderBy: { punchIn: "asc" },
+        },
+      },
+    });
+
+    const attendanceMap = new Map<string, (typeof attendances)[0]>();
+    for (const att of attendances) {
+      const kDate = getKolkataDateString(att.date);
+      attendanceMap.set(`${att.employeeId}_${kDate}`, att);
+    }
+
+    // 3. Fetch active holidays in range (Batch query)
+    const holidays = await prisma.holiday.findMany({
+      where: {
+        status: "ACTIVE",
+        date: {
+          gte: startRange,
+          lte: endRange,
+        },
+      },
+    });
+    const holidayDateSet = new Set(holidays.map((h) => getKolkataDateString(h.date)));
+
+    // 4. Fetch approved leaves for these employees in range (Batch query)
+    const leaves = await prisma.leave.findMany({
+      where: {
+        status: "APPROVED",
+        employeeId: { in: employeeIds },
+        startDate: { lte: endRange },
+        endDate: { gte: startRange },
+      },
+    });
+
+    // 5. Safely fetch approved OD requests if table exists
+    const approvedODMap = new Map<string, any>();
+    try {
+      const ods = await (prisma as any).onDutyRequest.findMany({
+        where: {
+          status: "APPROVED",
+          employeeId: { in: employeeIds },
+          date: { gte: startRange, lte: endRange },
+        },
+      });
+      ods.forEach((od: any) => {
+        const kDate = getKolkataDateString(od.date);
+        approvedODMap.set(`${od.employeeId}_${kDate}`, od);
+      });
+    } catch {
+      // ignore if OD model is not in db
+    }
+
+    // 6. Generate rows for each date across all active employees
+    interface ExcelRowData {
+      employeeName: string;
+      date: string;
+      inTime: string;
+      outTime: string;
+      status: "Present" | "Absent" | "Holiday" | "Leave";
+    }
+
+    const rows: ExcelRowData[] = [];
+
+    const formatTimeIST = (d: Date | string | null | undefined): string => {
+      if (!d) return "—";
+      try {
+        const dateObj = typeof d === "string" ? new Date(d) : d;
+        return new Intl.DateTimeFormat("en-US", {
+          timeZone: "Asia/Kolkata",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }).format(dateObj);
+      } catch {
+        return "—";
+      }
+    };
+
+    const curr = new Date(fromDate + "T00:00:00+05:30");
+    const end = new Date(toDate + "T00:00:00+05:30");
+
+    while (curr <= end) {
+      const dateStr = getKolkataDateString(curr);
+      const [year, month, day] = dateStr.split("-");
+      const displayDate = `${day}-${month}-${year}`;
+
+      const dayOfWeek = new Date(dateStr + "T00:00:00+05:30").getDay();
+      const isSunday = dayOfWeek === 0;
+      const isOfficialHoliday = holidayDateSet.has(dateStr);
+
+      const dayStart = getStartOfDay(dateStr);
+      const dayEnd = getEndOfDay(dateStr);
+
+      for (const emp of employees) {
+        const att = attendanceMap.get(`${emp.id}_${dateStr}`);
+
+        // Check approved leave for this employee on this date
+        const hasApprovedLeave = leaves.some(
+          (l) => l.employeeId === emp.id && l.startDate <= dayEnd && l.endDate >= dayStart
+        );
+        const approvedOD = approvedODMap.get(`${emp.id}_${dateStr}`);
+
+        let status: "Present" | "Absent" | "Holiday" | "Leave" = "Absent";
+        let inTime = "—";
+        let outTime = "—";
+
+        if (att && (att.sessions.length > 0 || att.checkIn)) {
+          // Valid Punch In = Present
+          status = "Present";
+          const firstIn = att.sessions[0]?.punchIn || att.checkIn;
+          const activeSession = att.sessions.find((s) => !s.punchOut);
+          const lastSession = att.sessions.length > 0 ? att.sessions[att.sessions.length - 1] : null;
+          const lastOut = activeSession ? null : (lastSession?.punchOut || att.checkOut);
+
+          inTime = formatTimeIST(firstIn);
+          outTime = activeSession ? "—" : formatTimeIST(lastOut);
+        } else {
+          // No Punch In: evaluate priority
+          // 1. Sunday = Holiday
+          // 2. Official company holidays = Holiday
+          // 3. Approved leave = Leave
+          // 4. Approved full-day OD = Present
+          // 5. Applicable working day without Punch In = Absent
+          if (isSunday) {
+            status = "Holiday";
+          } else if (isOfficialHoliday) {
+            status = "Holiday";
+          } else if (hasApprovedLeave) {
+            status = "Leave";
+          } else if (approvedOD && approvedOD.sessionType === "FULL_DAY") {
+            status = "Present";
+          } else {
+            status = "Absent";
+          }
+          inTime = "—";
+          outTime = "—";
+        }
+
+        rows.push({
+          employeeName: emp.fullName,
+          date: displayDate,
+          inTime,
+          outTime,
+          status,
+        });
+      }
+
+      curr.setDate(curr.getDate() + 1);
+    }
+
+    // 7. Create professional ExcelJS Workbook
+    const wb = new ExcelJS.Workbook();
+    wb.creator = "BUZZSPIRE WORKHUB";
+    wb.created = new Date();
+
+    const ws = wb.addWorksheet("Attendance Report", {
+      views: [{ state: "frozen", xSplit: 0, ySplit: 1, activeCell: "A2" }],
+      pageSetup: {
+        paperSize: 9, // A4
+        orientation: "portrait",
+        fitToPage: true,
+        fitToWidth: 1,
+        fitToHeight: 0,
+      },
+    });
+
+    // Odd header/footer for printing & metadata
+    ws.headerFooter.oddHeader = `&L&BBUZZSPIRE WORKHUB — Attendance Report&R&D Date Range: ${fromDate} to ${toDate}`;
+    ws.headerFooter.oddFooter = "&LConfidential Operational Report&RPage &P of &N";
+
+    // Setup the 5 exact columns
+    ws.columns = [
+      { header: "Employee Name", key: "employeeName", width: 28 },
+      { header: "Date", key: "date", width: 16 },
+      { header: "In Time", key: "inTime", width: 16 },
+      { header: "Out Time", key: "outTime", width: 16 },
+      { header: "Status", key: "status", width: 16 },
+    ];
+
+    // Format Header Row (Row 1)
+    const headerRow = ws.getRow(1);
+    headerRow.height = 26;
+    headerRow.eachCell((cell, colNumber) => {
+      cell.font = { name: "Calibri", size: 11, bold: true, color: { argb: "FFFFFFFF" } };
+      cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF0F172A" } }; // Dark navy
+      cell.alignment = { vertical: "middle", horizontal: colNumber === 1 ? "left" : "center" };
+      cell.border = {
+        top: { style: "thin", color: { argb: "FF334155" } },
+        bottom: { style: "medium", color: { argb: "FF1E293B" } },
+        left: { style: "thin", color: { argb: "FF334155" } },
+        right: { style: "thin", color: { argb: "FF334155" } },
+      };
+    });
+
+    // Populate data rows with professional styling
+    for (const r of rows) {
+      const row = ws.addRow(r);
+      row.height = 20;
+
+      row.getCell(1).alignment = { vertical: "middle", horizontal: "left" };
+      row.getCell(2).alignment = { vertical: "middle", horizontal: "center" };
+      row.getCell(3).alignment = { vertical: "middle", horizontal: "center" };
+      row.getCell(4).alignment = { vertical: "middle", horizontal: "center" };
+      row.getCell(5).alignment = { vertical: "middle", horizontal: "center" };
+
+      // Apply light grid borders
+      for (let c = 1; c <= 5; c++) {
+        row.getCell(c).border = {
+          top: { style: "thin", color: { argb: "FFE2E8F0" } },
+          bottom: { style: "thin", color: { argb: "FFE2E8F0" } },
+          left: { style: "thin", color: { argb: "FFE2E8F0" } },
+          right: { style: "thin", color: { argb: "FFE2E8F0" } },
+        };
+      }
+
+      if (r.status === "Holiday") {
+        // Light blue background for entire Holiday row
+        for (let c = 1; c <= 5; c++) {
+          row.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFF0F9FF" } };
+        }
+        row.getCell(5).font = { bold: true, color: { argb: "FF0369A1" } };
+        row.getCell(5).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFE0F2FE" } };
+      } else if (r.status === "Present") {
+        row.getCell(5).font = { bold: true, color: { argb: "FF15803D" } };
+        row.getCell(5).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFDCFCE7" } };
+      } else if (r.status === "Absent") {
+        row.getCell(5).font = { bold: true, color: { argb: "FFB91C1C" } };
+        row.getCell(5).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFEE2E2" } };
+      } else if (r.status === "Leave") {
+        row.getCell(5).font = { bold: true, color: { argb: "FFB45309" } };
+        row.getCell(5).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFEF3C7" } };
+      }
+    }
+
+    const buffer = Buffer.from(await wb.xlsx.writeBuffer());
+    const filename = `Buzzspire_Attendance_${fromDate}_to_${toDate}.xlsx`;
+
+    return {
+      buffer,
+      filename,
+      totalRecords: rows.length,
+    };
+  }
+
 }
